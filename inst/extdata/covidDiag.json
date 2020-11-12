@@ -1,0 +1,1075 @@
+{
+  "ConceptSets": [
+    {
+      "id": 0,
+      "name": "COVID-19 (including asymptomatic)",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 37311061,
+              "CONCEPT_NAME": "Disease caused by severe acute respiratory syndrome coronavirus 2",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "840539006",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "name": "COVID-19 specific testing (pre-coordinated Measurements) - Positive",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 37310282,
+              "CONCEPT_NAME": "2019 novel coronavirus detected",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "1240581000000104",
+              "DOMAIN_ID": "Measurement",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "name": "COVID-19 specific testing (pre-coordinated Measurements excluded)",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 37310282,
+              "CONCEPT_NAME": "2019 novel coronavirus detected",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "1240581000000104",
+              "DOMAIN_ID": "Measurement",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 37310281,
+              "CONCEPT_NAME": "2019 novel coronavirus not detected",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "1240591000000102",
+              "DOMAIN_ID": "Measurement",
+              "VOCABULARY_ID": "SNOMED",
+              "CONCEPT_CLASS_ID": "Clinical Finding"
+            },
+            "isExcluded": true,
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 756055,
+              "CONCEPT_NAME": "Measurement of severe acute respiratory syndrome coronavirus 2",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "OMOP4873969",
+              "DOMAIN_ID": "Measurement",
+              "VOCABULARY_ID": "OMOP Extension",
+              "CONCEPT_CLASS_ID": "Procedure"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "name": "COVID-19 source codes",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 710158,
+              "CONCEPT_NAME": "COVID-19 (machine translation)",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "U07.100",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "ICD10CN",
+              "CONCEPT_CLASS_ID": "ICD10 code"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 710155,
+              "CONCEPT_NAME": "COVID-19 pneumonia (machine translation)",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "U07.100x003",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "ICD10CN",
+              "CONCEPT_CLASS_ID": "ICD10 code"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 710156,
+              "CONCEPT_NAME": "COVID-19 pneumonia (machine translation)",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "U07.100x001",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "ICD10CN",
+              "CONCEPT_CLASS_ID": "ICD10 code"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 710159,
+              "CONCEPT_NAME": "Confirmed COVID-19, excluding pneumonia (machine translation)",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "U07.100x002",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "ICD10CN",
+              "CONCEPT_CLASS_ID": "ICD10 code"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 45542411,
+              "CONCEPT_NAME": "Contact with and (suspected) exposure to other viral communicable diseases",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "Z20.828",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "ICD10CM",
+              "CONCEPT_CLASS_ID": "6-char billing code"
+            },
+            "isExcluded": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 710160,
+              "CONCEPT_NAME": "Emergency use of U07.1 | Disease caused by severe acute respiratory syndrome coronavirus 2",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "U07.1",
+              "DOMAIN_ID": "Observation",
+              "VOCABULARY_ID": "ICD10CN",
+              "CONCEPT_CLASS_ID": "ICD10 code"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 45756093,
+              "CONCEPT_NAME": "Emergency use of U07.1 | Disease caused by severe acute respiratory syndrome coronavirus 2",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "U07.1",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD10",
+              "CONCEPT_CLASS_ID": "ICD10 code"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 42501115,
+              "CONCEPT_NAME": "Emergency use of U07.1 | Disease caused by severe acute respiratory syndrome coronavirus 2",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "U07.1",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "KCD7",
+              "CONCEPT_CLASS_ID": "KCD7 code"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 586414,
+              "CONCEPT_NAME": "Novel coronavirus infection",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "U18.1",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "KCD7",
+              "CONCEPT_CLASS_ID": "KCD7 code"
+            },
+            "isExcluded": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 45600471,
+              "CONCEPT_NAME": "Other coronavirus as the cause of diseases classified elsewhere",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "B97.29",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD10CM",
+              "CONCEPT_CLASS_ID": "5-char billing code"
+            },
+            "isExcluded": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 586415,
+              "CONCEPT_NAME": "Provisional assignment of new diseases or emergency use",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "U18",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "KCD7",
+              "CONCEPT_CLASS_ID": "KCD7 code"
+            },
+            "isExcluded": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 710157,
+              "CONCEPT_NAME": "Suspected case of COVID-19 (machine translation)",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "Z03.800x001",
+              "DOMAIN_ID": "Condition",
+              "VOCABULARY_ID": "ICD10CN",
+              "CONCEPT_CLASS_ID": "ICD10 code"
+            },
+            "isExcluded": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "name": "[OHDSI Covid19 v1] Inpatient Visit",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_ID": 262,
+              "CONCEPT_NAME": "Emergency Room and Inpatient Visit",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "ERIP",
+              "DOMAIN_ID": "Visit",
+              "VOCABULARY_ID": "Visit",
+              "CONCEPT_CLASS_ID": "Visit"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_ID": 9201,
+              "CONCEPT_NAME": "Inpatient Visit",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "CONCEPT_CODE": "IP",
+              "DOMAIN_ID": "Visit",
+              "VOCABULARY_ID": "Visit",
+              "CONCEPT_CLASS_ID": "Visit"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    }
+  ],
+  "PrimaryCriteria": {
+    "CriteriaList": [
+      {
+        "VisitOccurrence": {
+          "CodesetId": 4,
+          "OccurrenceStartDate": {
+            "Value": "2019-12-01",
+            "Op": "gt"
+          }
+        }
+      }
+    ],
+    "ObservationWindow": {
+      "PriorDays": 0,
+      "PostDays": 0
+    },
+    "PrimaryCriteriaLimit": {
+      "Type": "All"
+    }
+  },
+  "AdditionalCriteria": {
+    "Type": "ANY",
+    "CriteriaList": [
+      {
+        "Criteria": {
+          "ConditionOccurrence": {
+            "CodesetId": 0
+          }
+        },
+        "StartWindow": {
+          "Start": {
+            "Days": 21,
+            "Coeff": -1
+          },
+          "End": {
+            "Coeff": 1
+          },
+          "UseEventEnd": false
+        },
+        "EndWindow": {
+          "Start": {
+            "Coeff": -1
+          },
+          "End": {
+            "Days": 0,
+            "Coeff": 1
+          },
+          "UseIndexEnd": true,
+          "UseEventEnd": false
+        },
+        "Occurrence": {
+          "Type": 2,
+          "Count": 1
+        }
+      },
+      {
+        "Criteria": {
+          "ConditionOccurrence": {
+            "ConditionSourceConcept": 3
+          }
+        },
+        "StartWindow": {
+          "Start": {
+            "Days": 21,
+            "Coeff": -1
+          },
+          "End": {
+            "Coeff": 1
+          },
+          "UseEventEnd": false
+        },
+        "EndWindow": {
+          "Start": {
+            "Coeff": -1
+          },
+          "End": {
+            "Days": 0,
+            "Coeff": 1
+          },
+          "UseIndexEnd": true,
+          "UseEventEnd": false
+        },
+        "Occurrence": {
+          "Type": 2,
+          "Count": 1
+        }
+      },
+      {
+        "Criteria": {
+          "Measurement": {
+            "CodesetId": 1
+          }
+        },
+        "StartWindow": {
+          "Start": {
+            "Days": 21,
+            "Coeff": -1
+          },
+          "End": {
+            "Coeff": 1
+          },
+          "UseEventEnd": false
+        },
+        "EndWindow": {
+          "Start": {
+            "Coeff": -1
+          },
+          "End": {
+            "Days": 0,
+            "Coeff": 1
+          },
+          "UseIndexEnd": true,
+          "UseEventEnd": false
+        },
+        "Occurrence": {
+          "Type": 2,
+          "Count": 1
+        }
+      },
+      {
+        "Criteria": {
+          "Measurement": {
+            "CodesetId": 2,
+            "ValueAsConcept": [
+              {
+                "CONCEPT_CODE": "260373001",
+                "CONCEPT_ID": 4126681,
+                "CONCEPT_NAME": "Detected",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "SNOMED"
+              },
+              {
+                "CONCEPT_CODE": "LA11882-0",
+                "CONCEPT_ID": 45877985,
+                "CONCEPT_NAME": "Detected",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "LOINC"
+              },
+              {
+                "CONCEPT_CODE": "10828004",
+                "CONCEPT_ID": 9191,
+                "CONCEPT_NAME": "Positive",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "SNOMED"
+              },
+              {
+                "CONCEPT_CODE": "52101004",
+                "CONCEPT_ID": 4181412,
+                "CONCEPT_NAME": "Present",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "SNOMED"
+              },
+              {
+                "CONCEPT_CODE": "LA9633-4",
+                "CONCEPT_ID": 45879438,
+                "CONCEPT_NAME": "Present",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "LOINC"
+              },
+              {
+                "CONCEPT_CODE": "LA6576-8",
+                "CONCEPT_ID": 45884084,
+                "CONCEPT_NAME": "Positive",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "LOINC"
+              }
+            ]
+          }
+        },
+        "StartWindow": {
+          "Start": {
+            "Days": 21,
+            "Coeff": -1
+          },
+          "End": {
+            "Coeff": 1
+          },
+          "UseEventEnd": false
+        },
+        "EndWindow": {
+          "Start": {
+            "Coeff": -1
+          },
+          "End": {
+            "Days": 0,
+            "Coeff": 1
+          },
+          "UseIndexEnd": true,
+          "UseEventEnd": false
+        },
+        "Occurrence": {
+          "Type": 2,
+          "Count": 1
+        }
+      },
+      {
+        "Criteria": {
+          "Observation": {
+            "CodesetId": 2,
+            "ValueAsConcept": [
+              {
+                "CONCEPT_CODE": "260373001",
+                "CONCEPT_ID": 4126681,
+                "CONCEPT_NAME": "Detected",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "SNOMED"
+              },
+              {
+                "CONCEPT_CODE": "LA11882-0",
+                "CONCEPT_ID": 45877985,
+                "CONCEPT_NAME": "Detected",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "LOINC"
+              },
+              {
+                "CONCEPT_CODE": "10828004",
+                "CONCEPT_ID": 9191,
+                "CONCEPT_NAME": "Positive",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "SNOMED"
+              },
+              {
+                "CONCEPT_CODE": "LA6576-8",
+                "CONCEPT_ID": 45884084,
+                "CONCEPT_NAME": "Positive",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "LOINC"
+              },
+              {
+                "CONCEPT_CODE": "52101004",
+                "CONCEPT_ID": 4181412,
+                "CONCEPT_NAME": "Present",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "SNOMED"
+              },
+              {
+                "CONCEPT_CODE": "LA9633-4",
+                "CONCEPT_ID": 45879438,
+                "CONCEPT_NAME": "Present",
+                "DOMAIN_ID": "Meas Value",
+                "INVALID_REASON_CAPTION": "Unknown",
+                "STANDARD_CONCEPT_CAPTION": "Unknown",
+                "VOCABULARY_ID": "LOINC"
+              }
+            ]
+          }
+        },
+        "StartWindow": {
+          "Start": {
+            "Days": 21,
+            "Coeff": -1
+          },
+          "End": {
+            "Coeff": 1
+          },
+          "UseEventEnd": false
+        },
+        "EndWindow": {
+          "Start": {
+            "Coeff": -1
+          },
+          "End": {
+            "Days": 0,
+            "Coeff": 1
+          },
+          "UseIndexEnd": true,
+          "UseEventEnd": false
+        },
+        "Occurrence": {
+          "Type": 2,
+          "Count": 1
+        }
+      },
+      {
+        "Criteria": {
+          "Observation": {
+            "ObservationSourceConcept": 3
+          }
+        },
+        "StartWindow": {
+          "Start": {
+            "Days": 21,
+            "Coeff": -1
+          },
+          "End": {
+            "Coeff": 1
+          },
+          "UseEventEnd": false
+        },
+        "EndWindow": {
+          "Start": {
+            "Coeff": -1
+          },
+          "End": {
+            "Days": 0,
+            "Coeff": 1
+          },
+          "UseIndexEnd": true,
+          "UseEventEnd": false
+        },
+        "Occurrence": {
+          "Type": 2,
+          "Count": 1
+        }
+      }
+    ],
+    "DemographicCriteriaList": [],
+    "Groups": []
+  },
+  "QualifiedLimit": {
+    "Type": "All"
+  },
+  "ExpressionLimit": {
+    "Type": "First"
+  },
+  "InclusionRules": [
+    {
+      "name": "age >=18",
+      "expression": {
+        "Type": "ALL",
+        "CriteriaList": [],
+        "DemographicCriteriaList": [
+          {
+            "Age": {
+              "Value": 18,
+              "Op": "gte"
+            }
+          }
+        ],
+        "Groups": []
+      }
+    },
+    {
+      "name": "has >=365d of prior observation",
+      "expression": {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "ObservationPeriod": {}
+            },
+            "StartWindow": {
+              "Start": {
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 365,
+                "Coeff": -1
+              },
+              "UseEventEnd": false
+            },
+            "EndWindow": {
+              "Start": {
+                "Days": 0,
+                "Coeff": -1
+              },
+              "End": {
+                "Coeff": 1
+              },
+              "UseIndexEnd": true,
+              "UseEventEnd": true
+            },
+            "Occurrence": {
+              "Type": 2,
+              "Count": 1
+            }
+          }
+        ],
+        "DemographicCriteriaList": [],
+        "Groups": []
+      }
+    },
+    {
+      "name": "does not have hospitalization for COVID19 in the 6 months preceding admission",
+      "expression": {
+        "Type": "ALL",
+        "CriteriaList": [
+          {
+            "Criteria": {
+              "VisitOccurrence": {
+                "CorrelatedCriteria": {
+                  "Type": "ANY",
+                  "CriteriaList": [
+                    {
+                      "Criteria": {
+                        "ConditionOccurrence": {
+                          "CodesetId": 0
+                        }
+                      },
+                      "StartWindow": {
+                        "Start": {
+                          "Days": 21,
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Coeff": 1
+                        },
+                        "UseEventEnd": false
+                      },
+                      "EndWindow": {
+                        "Start": {
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Days": 0,
+                          "Coeff": 1
+                        },
+                        "UseIndexEnd": true,
+                        "UseEventEnd": false
+                      },
+                      "Occurrence": {
+                        "Type": 2,
+                        "Count": 1
+                      }
+                    },
+                    {
+                      "Criteria": {
+                        "ConditionOccurrence": {
+                          "ConditionSourceConcept": 3
+                        }
+                      },
+                      "StartWindow": {
+                        "Start": {
+                          "Days": 21,
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Coeff": 1
+                        },
+                        "UseEventEnd": false
+                      },
+                      "EndWindow": {
+                        "Start": {
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Days": 0,
+                          "Coeff": 1
+                        },
+                        "UseIndexEnd": true,
+                        "UseEventEnd": false
+                      },
+                      "Occurrence": {
+                        "Type": 2,
+                        "Count": 1
+                      }
+                    },
+                    {
+                      "Criteria": {
+                        "Observation": {
+                          "ObservationSourceConcept": 3
+                        }
+                      },
+                      "StartWindow": {
+                        "Start": {
+                          "Days": 21,
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Coeff": 1
+                        },
+                        "UseEventEnd": false
+                      },
+                      "EndWindow": {
+                        "Start": {
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Days": 0,
+                          "Coeff": 1
+                        },
+                        "UseIndexEnd": true,
+                        "UseEventEnd": false
+                      },
+                      "Occurrence": {
+                        "Type": 2,
+                        "Count": 1
+                      }
+                    },
+                    {
+                      "Criteria": {
+                        "Measurement": {
+                          "CodesetId": 1
+                        }
+                      },
+                      "StartWindow": {
+                        "Start": {
+                          "Days": 21,
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Coeff": 1
+                        },
+                        "UseEventEnd": false
+                      },
+                      "EndWindow": {
+                        "Start": {
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Days": 0,
+                          "Coeff": 1
+                        },
+                        "UseIndexEnd": true,
+                        "UseEventEnd": false
+                      },
+                      "Occurrence": {
+                        "Type": 2,
+                        "Count": 1
+                      }
+                    },
+                    {
+                      "Criteria": {
+                        "Measurement": {
+                          "CodesetId": 2,
+                          "ValueAsConcept": [
+                            {
+                              "CONCEPT_CODE": "260373001",
+                              "CONCEPT_ID": 4126681,
+                              "CONCEPT_NAME": "Detected",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "SNOMED"
+                            },
+                            {
+                              "CONCEPT_CODE": "LA11882-0",
+                              "CONCEPT_ID": 45877985,
+                              "CONCEPT_NAME": "Detected",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "LOINC"
+                            },
+                            {
+                              "CONCEPT_CODE": "10828004",
+                              "CONCEPT_ID": 9191,
+                              "CONCEPT_NAME": "Positive",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "SNOMED"
+                            },
+                            {
+                              "CONCEPT_CODE": "LA6576-8",
+                              "CONCEPT_ID": 45884084,
+                              "CONCEPT_NAME": "Positive",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "LOINC"
+                            },
+                            {
+                              "CONCEPT_CODE": "52101004",
+                              "CONCEPT_ID": 4181412,
+                              "CONCEPT_NAME": "Present",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "SNOMED"
+                            },
+                            {
+                              "CONCEPT_CODE": "LA9633-4",
+                              "CONCEPT_ID": 45879438,
+                              "CONCEPT_NAME": "Present",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "LOINC"
+                            }
+                          ]
+                        }
+                      },
+                      "StartWindow": {
+                        "Start": {
+                          "Days": 21,
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Coeff": 1
+                        },
+                        "UseEventEnd": false
+                      },
+                      "EndWindow": {
+                        "Start": {
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Days": 0,
+                          "Coeff": 1
+                        },
+                        "UseIndexEnd": true,
+                        "UseEventEnd": false
+                      },
+                      "Occurrence": {
+                        "Type": 2,
+                        "Count": 1
+                      }
+                    },
+                    {
+                      "Criteria": {
+                        "Observation": {
+                          "CodesetId": 2,
+                          "ValueAsConcept": [
+                            {
+                              "CONCEPT_CODE": "260373001",
+                              "CONCEPT_ID": 4126681,
+                              "CONCEPT_NAME": "Detected",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "SNOMED"
+                            },
+                            {
+                              "CONCEPT_CODE": "LA11882-0",
+                              "CONCEPT_ID": 45877985,
+                              "CONCEPT_NAME": "Detected",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "LOINC"
+                            },
+                            {
+                              "CONCEPT_CODE": "10828004",
+                              "CONCEPT_ID": 9191,
+                              "CONCEPT_NAME": "Positive",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "SNOMED"
+                            },
+                            {
+                              "CONCEPT_CODE": "LA6576-8",
+                              "CONCEPT_ID": 45884084,
+                              "CONCEPT_NAME": "Positive",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "LOINC"
+                            },
+                            {
+                              "CONCEPT_CODE": "52101004",
+                              "CONCEPT_ID": 4181412,
+                              "CONCEPT_NAME": "Present",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "SNOMED"
+                            },
+                            {
+                              "CONCEPT_CODE": "LA9633-4",
+                              "CONCEPT_ID": 45879438,
+                              "CONCEPT_NAME": "Present",
+                              "DOMAIN_ID": "Meas Value",
+                              "INVALID_REASON_CAPTION": "Unknown",
+                              "STANDARD_CONCEPT_CAPTION": "Unknown",
+                              "VOCABULARY_ID": "LOINC"
+                            }
+                          ]
+                        }
+                      },
+                      "StartWindow": {
+                        "Start": {
+                          "Days": 21,
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Coeff": 1
+                        },
+                        "UseEventEnd": false
+                      },
+                      "EndWindow": {
+                        "Start": {
+                          "Coeff": -1
+                        },
+                        "End": {
+                          "Days": 0,
+                          "Coeff": 1
+                        },
+                        "UseIndexEnd": true,
+                        "UseEventEnd": false
+                      },
+                      "Occurrence": {
+                        "Type": 2,
+                        "Count": 1
+                      }
+                    }
+                  ],
+                  "DemographicCriteriaList": [],
+                  "Groups": []
+                },
+                "CodesetId": 4
+              }
+            },
+            "StartWindow": {
+              "Start": {
+                "Days": 180,
+                "Coeff": -1
+              },
+              "End": {
+                "Days": 1,
+                "Coeff": -1
+              },
+              "UseEventEnd": false
+            },
+            "Occurrence": {
+              "Type": 0,
+              "Count": 0
+            }
+          }
+        ],
+        "DemographicCriteriaList": [],
+        "Groups": []
+      }
+    }
+  ],
+  "EndStrategy": {
+    "DateOffset": {
+      "DateField": "EndDate",
+      "Offset": 0
+    }
+  },
+  "CensoringCriteria": [],
+  "CollapseSettings": {
+    "CollapseType": "ERA",
+    "EraPad": 0
+  },
+  "CensorWindow": {},
+  "cdmVersionRange": ">=5.0.0"
+}

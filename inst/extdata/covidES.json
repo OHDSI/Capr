@@ -1,0 +1,15 @@
+{
+  "MetaData": {
+    "ComponentClass": "EndStrategy",
+    "Name": "End Strategy Date Offset",
+    "Description": null
+  },
+  "CriteriaExpression": [
+    {
+      "DateField": "EndDate",
+      "Offset": 0
+    }
+  ],
+  "Limit": [],
+  "ConceptSetExpression": []
+}

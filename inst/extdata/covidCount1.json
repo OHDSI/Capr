@@ -1,0 +1,75 @@
+{
+  "MetaData": {
+    "ComponentClass": "Count",
+    "Name": "ConditionOccurrence Count",
+    "Description": null
+  },
+  "CriteriaExpression": [
+    {
+      "Criteria": {
+        "Domain": "ConditionOccurrence",
+        "CodesetId": "434d16ce-636c-43a5-8611-93d607422a35",
+        "Attributes": []
+      },
+      "Timeline": {
+        "StartWindow": {
+          "Event": "EventStarts",
+          "Start": {
+            "Days": 21,
+            "Coeff": "Before"
+          },
+          "End": {
+            "Days": "All",
+            "Coeff": "After"
+          },
+          "Index": "IndexStartDate"
+        },
+        "EndWindow": {
+          "Event": "EventStarts",
+          "Start": {
+            "Days": "All",
+            "Coeff": "Before"
+          },
+          "End": {
+            "Days": 0,
+            "Coeff": "After"
+          },
+          "Index": "IndexEndDate"
+        },
+        "RestrictVisit": false,
+        "IgnoreObservationPeriod": false
+      },
+      "Occurrence": {
+        "Type": "at_least",
+        "Count": 1,
+        "isDistinct": false
+      }
+    }
+  ],
+  "Limit": [],
+  "ConceptSetExpression": [
+    {
+      "id": "434d16ce-636c-43a5-8611-93d607422a35",
+      "Name": "COVID-19 (including asymptomatic)",
+      "Expression": [
+        {
+          "Concept": {
+            "CONCEPT_ID": 37311061,
+            "CONCEPT_NAME": "Disease caused by 2019-nCoV",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "840539006",
+            "DOMAIN_ID": "Condition",
+            "VOCABULARY_ID": "SNOMED",
+            "CONCEPT_CLASS_ID": "Clinical Finding"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        }
+      ]
+    }
+  ]
+}

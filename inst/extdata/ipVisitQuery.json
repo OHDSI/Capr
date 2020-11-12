@@ -1,0 +1,66 @@
+{
+  "MetaData": {
+    "ComponentClass": "Query",
+    "Name": "VisitOccurrence Query",
+    "Description": null
+  },
+  "CriteriaExpression": [
+    {
+      "Domain": "VisitOccurrence",
+      "CodesetId": "3135d342-a96b-460f-9741-cc0287a843c5",
+      "Attributes": [
+        {
+          "Name": "OccurrenceStartDate",
+          "Op": "gt",
+          "Contents": {
+            "Value": "2019-12-01",
+            "Extent": null
+          }
+        }
+      ]
+    }
+  ],
+  "Limit": [],
+  "ConceptSetExpression": [
+    {
+      "id": "3135d342-a96b-460f-9741-cc0287a843c5",
+      "Name": "InpatientVisit",
+      "Expression": [
+        {
+          "Concept": {
+            "CONCEPT_ID": 262,
+            "CONCEPT_NAME": "Emergency Room and Inpatient Visit",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "ERIP",
+            "DOMAIN_ID": "Visit",
+            "VOCABULARY_ID": "Visit",
+            "CONCEPT_CLASS_ID": "Visit"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 9201,
+            "CONCEPT_NAME": "Inpatient Visit",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "IP",
+            "DOMAIN_ID": "Visit",
+            "VOCABULARY_ID": "Visit",
+            "CONCEPT_CLASS_ID": "Visit"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        }
+      ]
+    }
+  ]
+}
