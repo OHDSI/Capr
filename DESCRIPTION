@@ -10,13 +10,13 @@ Description: The CAPR package develops cohort definitions to implement across an
     allows for the programmatic creation of OMOP cohorts that compile to the CIRCE-BE engine. CAPR utilizes s4 to construct
     component parts to the cohort definition (i.e. Primary Criteria, Inclusion Rules, Additional Criteria, Censoring Criteria,
     and End Strategy) and then packs them together into a Cohort Definition class. The Cohort Definition can be rendered into a 
-    CIRCE-BE object that will generate ohdiSQL to query against an OMOP dbms. CAPR adds component parts to the OMOP cohort
+    CIRCE-BE object that will generate ohdsiSQL to query against an OMOP dbms. CAPR adds component parts to the OMOP cohort
     definition in order to combine Concept Set Expressions with its definition logic in the same position, facilitating the 
     transition between scientific description and computational implmentation. 
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Depends: 
   R (>= 3.5.0),
   CirceR (>= 1.0.0),
@@ -30,22 +30,23 @@ Imports:
   rlang,
   uuid,
   SqlRender,
-  data.table
+  data.table,
+  dplyr
 Suggests:
-    dplyr,
     knitr,
     rmarkdown
 Collate: 
-    'lowLevelClasses.R'
-    'lowLevelUtilityFn.R'
-    'lowLevelBuildLangFn.R'
-    'lowLevelCoercionFn.R'
-    'lowLevelCreateFn.R'
-    'lowLevelLoadFn.R'
-    'lowLevelSaveFn.R'
-    'userCommands.R'
-    'userConceptLookupFn.R'
-    'userCreateAttributeFn.R'
-    'userCreateDomainFn.R'
-    'userCreateFn.R'
+    'Capr.R'
+    'LowLevelClasses.R'
+    'LowLevelUtilityFn.R'
+    'LowLevelBuildLangFn.R'
+    'LowLevelCoercionFn.R'
+    'LowLevelCreateFn.R'
+    'LowLevelLoadFn.R'
+    'LowLevelSaveFn.R'
+    'UserCommands.R'
+    'UserConceptLookupFn.R'
+    'UserCreateAttributeFn.R'
+    'UserCreateDomainFn.R'
+    'UserCreateFn.R'
 VignetteBuilder: knitr
