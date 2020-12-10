@@ -14,7 +14,55 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-#
+
+
+
+#' get concept id details
+#'
+#' For one or more concept id, get concept id details by querying the
+#' OMOP vocabulary in the database.
+#'
+#' @template     Connection
+#' @template     VocabularyDatabaseSchema
+#' @template     OracleTempSchema
+#' @param        conceptIds a vector of concept ids
+#' @return       a tibble data frame object with conceptId, conceptName, standardConcept,
+#'               standardConceptCaption, invalidReason, invalidReasonCaption, conceptCode,
+#'               domainId, vocabularyId, conceptClassId.
+#'
+#' @export
+getConceptIdDetails <- function(conceptIds,
+                                connectionDetails = NULL,
+                                connection = NULL,
+                                vocabularyDatabaseSchema = NULL,
+                                oracleTempSchema = NULL) {
+
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertVector(conceptIds, add = errorMessage)
+  checkmate::reportAssertions(collection = errorMessage)
+
+  # Set up connection to server ----------------------------------------------------
+  if (is.null(connection)) {
+    if (!is.null(connectionDetails)) {
+      connection <- DatabaseConnector::connect(connectionDetails)
+      on.exit(DatabaseConnector::disconnect(connection))
+    } else {
+      stop("No connection or connectionDetails provided.")
+    }
+  }
+
+  conceptQuery <- "SELECT * FROM @vocabularyDatabaseSchema.concept WHERE concept_id IN (@conceptId);"
+  conceptDetails <- DatabaseConnector::renderTranslateQuerySql(connection = connection,
+                                                               sql = conceptQuery,
+                                                               snakeCaseToCamelCase = TRUE,
+                                                               vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                                               oracleTempSchema = oracleTempSchema,
+                                                               conceptId = conceptIds) %>%
+    dplyr::tibble()
+  return(conceptDetails)
+}
+
+
 ##' Lookup Concepts by OMOP Concept Id
 #'
 #' This function looks up concepts using the OMOP concept id. Function requires a dbms connection to use
