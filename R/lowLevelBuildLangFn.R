@@ -56,17 +56,17 @@ getConceptSetCall <- function(x){
   mappingLang <- purrr::map2(seq_along(mapping),mapping, ~rlang::call2("<-",rlang::sym(paste0("conceptMapping",.x-1)),.y))
 
   #create an empty vector to store the concept set langs
-  conceptSetsLang <- vector('list', length=length(cs))
-  for(i in seq_along(conceptSetsLang)){ #for each item in the list do
+  conceptSetsLang <- vector('list', length = length(cs))
+  for (i in seq_along(conceptSetsLang)) { #for each item in the list do
     #create the object call for each of the assignment functions previously created
-    cid <- rlang::sym(paste0("cid",i-1)) #set the cid object
-    nm <- rlang::sym(paste0("nm",i-1)) #set the naming objects
-    mapping <- rlang::sym(paste0("conceptMapping",i-1)) #set the mapping objects
+    cid <- rlang::sym(paste0("cid",i - 1)) #set the cid object
+    nm <- rlang::sym(paste0("nm",i - 1)) #set the naming objects
+    mapping <- rlang::sym(paste0("conceptMapping",i - 1)) #set the mapping objects
     #create a temporary expression for the function. bang bang (!!) the object calls into the fexpression
     tmp <- rlang::expr(lookupConceptIds(conceptIds = !!cid, mapToStandard = FALSE) %>%
                   createConceptSetExpressionCustom(Name = !!nm,conceptMapping = !!mapping))
     #create the assignments for each of the conecept Sets
-    conceptSetsLang[[i]] <- rlang::call2("<-", rlang::sym(paste0("conceptSet",i-1)), tmp)
+    conceptSetsLang[[i]] <- rlang::call2("<-", rlang::sym(paste0("conceptSet",i -1)), tmp)
   }
 
   conceptSetsLang <- list(cidLang, nmLang, mappingLang, conceptSetsLang)
@@ -86,7 +86,7 @@ getConceptSetCall <- function(x){
 #' @include lowLevelUtilityFn.R
 #' @return r language to generate the concept set expressions of the cohort
 createAttributeCall <- function(x,objNm){
-  AttributeOptions <- list('Op' =c("Age", "OccurrenceStartDate", "OccurrenceEndDate", "AgeAtEnd",
+  AttributeOptions <- list('Op' = c("Age", "OccurrenceStartDate", "OccurrenceEndDate", "AgeAtEnd",
                                    "AgeAtStart", "PeriodLength", "ValueAsNumber", "RangeLow",
                                    "RangeHigh", "RangeLowRatio", "RangeHighRatio",
                                    "EraStartDate", "EraEndDate", "OccurrenceCount",
@@ -99,7 +99,7 @@ createAttributeCall <- function(x,objNm){
                                          "ValueAsConcept", "Qualifier", "Unit",
                                          "MeasurementType", "Operator", "DeathType",
                                          "DeviceType"),
-                           'Logical' =c("First", "DrugTypeExclude", "ConditionTypeExclude",
+                           'Logical' = c("First", "DrugTypeExclude", "ConditionTypeExclude",
                                         "VisitTypeExclude", "ProcedureTypeExclude",
                                         "ObservationTypeExclude", "MeasurementTypeExclude",
                                         "Abnormal", "DeathTypeExclude", "DeviceTypeExclude"),
@@ -107,34 +107,34 @@ createAttributeCall <- function(x,objNm){
                                                "ConditionSourceConcept", "ProcedureSourceConcept",
                                                "ObservationSourceConcept", "MeasurementSourceConcept",
                                                "DeathSourceConcept", "DeviceSourceConcept"),
-                           'TextFilter' =c("ValueAsString", "StopReason", "UniqueDeviceId"),
-                           'CorrelatedCriteria' =c("CorrelatedCriteria"))
+                           'TextFilter' = c("ValueAsString", "StopReason", "UniqueDeviceId"),
+                           'CorrelatedCriteria' = c("CorrelatedCriteria"))
   nm <- paste0("create",names(x),"Attribute") #paste all the Attribute Options with create to call the wrappers
-  jj<-vector('list',length(nm)) #initialize a list of attributes
-  for(i in seq_along(jj)){ #start for loop
-    if(any(AttributeOptions$Op %in% names(x)[i])){ #if the ith name is in the Op options do
+  jj <- vector('list',length(nm)) #initialize a list of attributes
+  for (i in seq_along(jj)) { #start for loop
+    if (any(AttributeOptions$Op %in% names(x)[i])){ #if the ith name is in the Op options do
       jj[[i]] <- rlang::call2(nm[i], Op=x[[i]]$Op, Value = x[[i]]$Value, Extent = x[[i]]$Extent)
       jj[[i]] <- rlang::call2("<-", rlang::sym(paste0("att",objNm,"_",i)), jj[[i]])
       #create the Op attribute call wrapper
       next
     }
-    if(any(AttributeOptions$Logical %in% names(x)[i])){ #if the ith name is in the Logical options do
+    if (any(AttributeOptions$Logical %in% names(x)[i])){ #if the ith name is in the Logical options do
       jj[[i]] <- rlang::call2(nm[i], logic=x[[i]]) #create the logical attribute call wapper
       jj[[i]] <- rlang::call2("<-", rlang::sym(paste0("att",objNm,"_",i)), jj[[i]])
       next
     }
-    if(any(AttributeOptions$SourceConcept %in% names(x)[i])){ #if the ith name is in the SourceConcept options do
+    if (any(AttributeOptions$SourceConcept %in% names(x)[i])){ #if the ith name is in the SourceConcept options do
       jj[[i]] <- rlang::call2(nm[i], ConceptSetExpression=rlang::sym(paste0("conceptSet",x[[i]]))) #create the logical attribute call wapper
       jj[[i]] <- rlang::call2("<-", rlang::sym(paste0("att",objNm,"_",i)), jj[[i]])
       next
     }
-    if(any(AttributeOptions$Concept %in% names(x)[i])){ #if the ith name is in the Concept options do
+    if (any(AttributeOptions$Concept %in% names(x)[i])){ #if the ith name is in the Concept options do
       conceptIds <- sapply(x[[i]], function(x) getElement(x, "CONCEPT_ID")) #get all concept Ids
       jj[[i]] <- rlang::call2(nm[i], conceptIds=conceptIds, mapToStandard = rlang::expr(FALSE)) #create the concept attribute call wapper
       jj[[i]] <- rlang::call2("<-", rlang::sym(paste0("att",objNm,"_",i)), jj[[i]])
       next
     }
-    if(any(AttributeOptions$CorrelatedCriteria %in% names(x)[i])){ #if the ith name is in the Concept options do
+    if (any(AttributeOptions$CorrelatedCriteria %in% names(x)[i])){ #if the ith name is in the Concept options do
       grpLang <- createGroupCall(x[[i]], "CorrelatedCriteria")
       ccCall <- rlang::call2(nm[i], Group = rlang::sym("CorrelatedCriteria"))
       ccAssign <- rlang::call2("<-", rlang::sym(paste0("att",objNm,"_",i)), ccCall)
@@ -159,14 +159,14 @@ createAttributeCall <- function(x,objNm){
 createQueryCall <- function(x,nm){
   domainFunction <- paste0("create", names(x)) #get domain name turn to domainFunction wrapper for createQuery
   check <- any("CodesetId" == names(x[[1]])) #check if codesetId is in names
-  if(check){ #if TRUE
+  if (check){ #if TRUE
     conceptSetObj <- rlang::sym(paste0("conceptSet", x[[1]]$CodesetId))# make object name conceptSet number from id
   } else{
     conceptSetObj <- NULL #otherwise make the object null, no concept set id. There is an attribute in the query
   }
   attributeList <- x[[1]] #get remaining slots which would be attributes
   attributeList$CodesetId <- NULL #null out the codeset id if its there
-  if(length(attributeList) ==0){
+  if (length(attributeList) ==0){
     attributeList <- NULL
     attLang <- NULL
     queryCall <- rlang::call2(domainFunction,#create the query call input create wrapped
@@ -218,17 +218,17 @@ createWindowCall <- function(x){
 #' @return r language to generate the timelines of the cohort
 createTimelineCall <- function(x,objectName){
   StartWindow <- createWindowCall(x$StartWindow) #Create the start window call
-  if(!is.null(x$EndWindow)){#if the end window is in list
+  if (!is.null(x$EndWindow)){#if the end window is in list
     EndWindow <- createWindowCall(x$EndWindow) #create the end window call
   } else{ #ow make null
     EndWindow <- NULL
   }
-  if(!is.null(x$IgnoreObservationPeriod)){# if ignore observation period is in list
+  if (!is.null(x$IgnoreObservationPeriod)){# if ignore observation period is in list
     IgnoreObservationPeriod <- x$IgnoreObservationPeriod #place it in variable
   } else{ #else make new var with default false
     IgnoreObservationPeriod <- FALSE
   }
-  if(!is.null(x$RestrictVisit)){ #if restrict visit is in list
+  if (!is.null(x$RestrictVisit)){ #if restrict visit is in list
     RestrictVisit <- x$RestrictVisit #place it in variable
   } else{#else make new var with default false
     RestrictVisit <- FALSE
@@ -253,7 +253,7 @@ createCountCall <- function(x, nm){
   Logic <- ifelse(x$Occurrence$Type ==2, "at_least", ifelse(x$Occurrence$Type ==1, "at_most", "exactly"))
   #get count and convert to integer
   Count <- as.integer(x$Occurrence$Count)
-  if(!is.null(x$IsDistinct)){##if isDistinct is not null
+  if (!is.null(x$IsDistinct)){##if isDistinct is not null
     IsDistinct <- x$IsDistinct #then assign it
   } else{#else create default of false
     IsDistinct <- FALSE
@@ -285,17 +285,17 @@ createCountCall <- function(x, nm){
 #' @importFrom rlang call2 expr sym !!! syms
 #' @return r language to generate the groups of the cohort
 createGroupCall <- function(x,nm,assignName =NULL){
-  if(is.null(assignName)){
+  if (is.null(assignName)){
     assignName <- nm
   }
   type <- x$Type # get type as input
-  if(!is.null(x$Count)){ #if count item is not null then make as integer
+  if (!is.null(x$Count)){ #if count item is not null then make as integer
     count <- as.integer(x$Count)
   }else{ #else keep null
     count <- NULL
   }
   #extract information and create Count calls in the criteria list (purrr::map2 used for 2 lists)
-  if(length(x$CriteriaList) >0){
+  if (length(x$CriteriaList) >0){
     criteriaListLang <- purrr::map2(x$CriteriaList, #extract pieces from criteria list
                                     seq_along(x$CriteriaList), #make indicies for objs created
                                     ~createCountCall(x =.x, nm= paste0(assignName,"_",.y))) #make the count call for all in list
@@ -307,7 +307,7 @@ createGroupCall <- function(x,nm,assignName =NULL){
   }
 
   #extract information and create Attributes for demographic criterias
-  if(length(x$DemographicCriteriaList) > 0){
+  if (length(x$DemographicCriteriaList) > 0){
     dclLang <- purrr::map2(x$DemographicCriteriaList, #extract pieces from demographic criteria list
                            seq_along(x$DemographicCriteriaList), #make indicies for objs created
                            ~createAttributeCall(x =.x, objNm= paste0("DemCrit_",assignName,"_",.y))) #make the attribute call for all in list
@@ -318,7 +318,7 @@ createGroupCall <- function(x,nm,assignName =NULL){
     dclNm <- NULL
   }
   #extract information and create Groups (recursively) for groups
-  if(length(x$Groups) > 0){
+  if (length(x$Groups) > 0){
     grpLang <- purrr::map2(x$Groups, #extract pieces from groups list
                            seq_along(x$Groups), #make indicies for objs created
                            ~createGroupCall(x =.x, nm= paste0("Grp_",assignName,"_",.y))) #make the group call for all in list
@@ -385,7 +385,7 @@ getPCCall <- function(x){
 #' @importFrom rlang call2 expr sym !!!
 #' @return r language to generate the additional criteria of the cohort
 getACCall <- function(x){
-  if(!is.null(x$AdditionalCriteria)){#if the additional criteria is not null
+  if (!is.null(x$AdditionalCriteria)){#if the additional criteria is not null
     grpLang <- createGroupCall(x$AdditionalCriteria, nm = "AC") #make the group call
     acNm <- rlang::sym("AC") #make a symbol of the assigned object
   } else{
@@ -412,7 +412,7 @@ getACCall <- function(x){
 #' @importFrom rlang call2 expr sym !!! syms
 #' @return r language to generate the inclusion rules of the cohort
 getIRSCall <- function(x){
-  if(length(x$InclusionRules) > 0){ #if inclusion rules list is greater than 0
+  if (length(x$InclusionRules) > 0){ #if inclusion rules list is greater than 0
     grpLang <- purrr::map2(x$InclusionRules,seq_along(x$InclusionRules), #create the group call for each inclusion rule
                            ~createGroupCall(x=.x$expression, nm=.x$name, assignName = paste0("InclusionRule",.y)))
     irsNm <- rlang::syms(paste0("InclusionRule", seq_along(x$InclusionRules))) #make the assingment names
@@ -440,15 +440,15 @@ getIRSCall <- function(x){
 #' @importFrom rlang call2 expr sym !!!
 #' @return r language to generate the end strategy of the cohort
 getESCall <- function(x){
-  if(!is.null(x$EndStrategy)){ #if end strategy is present in cohort definition list
+  if (!is.null(x$EndStrategy)){ #if end strategy is present in cohort definition list
     es <- x$EndStrategy #extract the end strategy
     esFnName <- paste0("create",names(es), "EndStrategy") #create the function call using the name of the end strategy
-    if(names(es) == "DateOffset"){ #if the end strategy is a date offset make this particular create funciton
+    if (names(es) == "DateOffset"){ #if the end strategy is a date offset make this particular create funciton
       esLang <- rlang::call2(esFnName, #use the function call name
                              offset = es$DateOffset$Offset, #add the offset input
                              eventDateOffset = es$DateOffset$DateField) #add the date field input
     }
-    if(names(es) == "CustomEra"){#if the end strategy is a custom era make this particular function call
+    if (names(es) == "CustomEra"){#if the end strategy is a custom era make this particular function call
       esLang <- rlang::call2(esFnName, #input the function call name, place the concept set expression associated with drug cid
                              ConceptSetExpression =rlang::sym(paste0("conceptSet", es$CustomEra$DrugCodesetId)),
                              gapDays = es$CustomEra$GapDays,#place gap days
@@ -471,7 +471,7 @@ getESCall <- function(x){
 #' @return r language to generate the censoring criteria of the cohort
 getCenCall <- function(x){
   cen <- x$CensoringCriteria
-  if(length(cen) >0){
+  if (length(cen) >0){
     queryLang <- purrr::map2(cen, #use the list of censoring criterias to get queries
                              seq_along(cen), #make and index for naming
                              ~createQueryCall(x = .x,nm = paste0("Cen",.y))) #create query calls
@@ -519,7 +519,7 @@ getCohortEraCall <- function(x){
 #' @include lowLevelUtilityFn.R
 #' @return r language to generate the cohort
 getCohortDefinitionCall <- function(x, nm =NULL){
-  if(is.null(nm)){
+  if (is.null(nm)){
     nm <- "CohortDefinition"
   }
   cdLang <- list('ConceptSets' = unlist(getConceptSetCall(x), use.names = FALSE),
@@ -532,7 +532,7 @@ getCohortDefinitionCall <- function(x, nm =NULL){
   cdNm <- vector('list', length(cdLang))
   names(cdNm) <- names(cdLang)
   for(i in seq_along(cdLang)){
-    if(is.null(cdLang[[i]])){
+    if (is.null(cdLang[[i]])){
       next
     } else{
       cdNm[[i]] <- rlang::sym(names(cdLang)[i])

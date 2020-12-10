@@ -1,0 +1,8 @@
+pandoc: 2.7.3
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  Capr_Attributes_Extended: Capr_Attributes_Extended.html
+  CAPR_tutorial: CAPR_tutorial.html
+last_built: 2020-12-10T18:45Z
+

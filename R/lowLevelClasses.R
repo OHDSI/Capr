@@ -40,7 +40,7 @@ setClass('MetaData',
 #' @slot End A list containing the days and coefficient for the end of the window
 #' @slot Index A character string either IndexStartDate or IndexEndDate Identifies where the index is relative to the window
 setClass("Window",
-         slots=c(Event = 'character',
+         slots = c(Event = 'character',
                  Start = 'list',
                  End = 'list',
                  Index = 'character'))
@@ -54,7 +54,7 @@ setClass("Window",
 #' @slot RestrictVisit a logic toggle where TRUE restricts to the same visit
 #' @slot IgnoreObservationPeriod a logic toggle where TRUE allows events outside the observation period
 setClass("Timeline",
-         slots=c(StartWindow = "Window",
+         slots = c(StartWindow = "Window",
                  EndWindow = "Window",
                  RestrictVisit = 'logical',
                  IgnoreObservationPeriod = 'logical'))
@@ -68,7 +68,7 @@ setClass("Timeline",
 #' @slot Count an integer value that provides the number of occurrences
 #' @slot isDistinct a logic toggle where if TRUE only counts distinct occurrences
 setClass("Occurrence", #a class counting the number of occurrences of the event
-         slots=c(Type = 'character',
+         slots = c(Type = 'character',
                  Count = 'integer',
                  isDistinct = 'logical'))
 
@@ -98,7 +98,7 @@ setMethod("initialize", "ExpressionType",
                    Type = "ALL",
                    Count = NA_integer_){
             .Object <- callNextMethod()
-            .Object@Type<- Type
+            .Object@Type <- Type
             .Object@Count <- Count
             .Object
           })
@@ -110,7 +110,7 @@ setMethod("initialize", "ExpressionType",
 #' @slot PriorDays minimal amount of time before event for it to be recorded
 #' @slot PostDays minimal amount of time after an event for it to be recorded
 setClass("ObservationWindow",#
-         slots =c(PriorDays = "integer", #
+         slots = c(PriorDays = "integer", #
                   PostDays = "integer")) #
 
 #' An S4 class for Limit
@@ -143,7 +143,7 @@ setClass("Concept",#a class that designates a concept
                    INVALID_REASON = "character",
                    INVALID_REASON_CAPTION = "character",
                    CONCEPT_CODE = "character",
-                   DOMAIN_ID ="character",
+                   DOMAIN_ID = "character",
                    VOCABULARY_ID = "character",
                    CONCEPT_CLASS_ID = "character"))
 
@@ -156,9 +156,9 @@ setClass("Concept",#a class that designates a concept
 #' @slot includeDescendants toggle if want to include descendants
 #' @slot includeMapped toggle if want to include map
 setClass("ConceptSetItem",
-         slots=c(Concept = "Concept",
+         slots = c(Concept = "Concept",
                  isExcluded = "logical",
-                 includeDescendants ="logical",
+                 includeDescendants = "logical",
                  includeMapped = "logical"))
 
 
@@ -180,8 +180,8 @@ setMethod("initialize", "ConceptSetItem",
                    includeDescendants = TRUE,
                    includeMapped = FALSE){
             .Object <- callNextMethod()
-            .Object@Concept<- Concept
-            .Object@isExcluded<- isExcluded
+            .Object@Concept <- Concept
+            .Object@isExcluded <- isExcluded
             .Object@includeDescendants <- includeDescendants
             .Object@includeMapped <- includeMapped
             .Object
@@ -195,7 +195,7 @@ setMethod("initialize", "ConceptSetItem",
 #' @slot Name the name of the concept set expression
 #' @slot Expression a list containing expressions. expressions include multiple conceptSetItem
 setClass("ConceptSetExpression",
-         slots= c(id = "character",
+         slots = c(id = "character",
                   Name = "character",
                   Expression = "list"))
 
