@@ -28,7 +28,7 @@
 #' @param PriorDays number of days prior to the initial event of continuous observation
 #' @param PostDays number of days of continous observation after index date
 #' @return This function returns a observation window class object providing prior and post days of observation
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 #' @importFrom methods new
 #' @export
 createObservationWindow <- function(PriorDays =0L,PostDays =0L){
@@ -54,7 +54,7 @@ createObservationWindow <- function(PriorDays =0L,PostDays =0L){
 #' @param EndCoeff where to end counting relative to index date: before or after
 #' @param EventStarts if TRUE then this counts from the start of an event otherwise from the end of an event
 #' @param IndexStart if TRUE then the index date is the start of event otherwise the end of an event
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 #' @importFrom methods new
 #' @return a new window class object
 #' @export
@@ -91,7 +91,7 @@ createWindow <- function(StartDays, StartCoeff =c("Before", "After"),
 #' default is NULL, initializing an empty window
 #' @param RestrictVisit a logic toggle where TRUE restricts to the same visit
 #' @param IgnoreObservationPeriod a logic toggle where TRUE allows events outside the observation period
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 #' @importFrom methods new is
 #' @return a new Timeline class object
 #' @export
@@ -130,9 +130,9 @@ createTimeline <- function(StartWindow, EndWindow =NULL, RestrictVisit = FALSE, 
 #' @param includeDescendants logic toggle where default true includes descendant concepts to the defined concept
 #' @param includeMapped logic toggle when true includes mapped concepts to the defined concept
 #' @return This function returns a component class object which contains the concept set expression
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
-#' @include lowLevelLoadFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
+#' @include LowLevelLoadFn.R
 #' @importFrom methods new is
 #' @export
 createConceptSetExpression <- function(conceptSet, Name, includeDescendants =TRUE,
@@ -248,9 +248,9 @@ toggleConceptMapping <- function(conceptMapping,
 #' includeDescendants, isExcluded or includeMapped. If the concept Mapping is left null then by default only the
 #' includeDescendants mapping will be true for all. others will remain false.
 #' @return This function returns a component class object which contains the concept set expression
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
-#' @include lowLevelLoadFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
+#' @include LowLevelLoadFn.R
 #' @importFrom methods new
 #' @export
 createConceptSetExpressionCustom <- function(conceptSet, Name, conceptMapping = NULL){
@@ -301,9 +301,9 @@ createConceptSetExpressionCustom <- function(conceptSet, Name, conceptMapping = 
 #' @param Description a character string describing the count object, this is optional so default is null
 #' @return This function returns a component class object which contains the count object and attached concept
 #' set expressions
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
+#' @include LowLevelUtilityFn.R
 #' @importFrom methods new
 #' @export
 createCount <- function(Query, Logic = c("at_least", "at_most", "exactly"), Count,
@@ -357,9 +357,9 @@ createCount <- function(Query, Logic = c("at_least", "at_most", "exactly"), Coun
 #' @param Description a character string describing the count object, this is optional so default is null
 #' @return This function returns a component class object which contains the group object and attached concept
 #' set expressions
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
+#' @include LowLevelUtilityFn.R
 #' @importFrom methods new
 #' @export
 createGroup <- function(Name,
@@ -434,8 +434,8 @@ createGroup <- function(Name,
 #' @param eventDateOffset an input only for DateOffset specifying whether to add an offset to the start or end of an event
 #' (i.e. StartDate, EndDate)
 #' @return This function returns a component class object which contains the end strategy object
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
 #' @importFrom methods new
 #' @export
 createDateOffsetEndStrategy <- function(offset, eventDateOffset = c("StartDate", "EndDate")){
@@ -462,9 +462,9 @@ createDateOffsetEndStrategy <- function(offset, eventDateOffset = c("StartDate",
 #' @param offset an integer value specifying padding to the cohort exit.
 #' @param gapDays the maximum allowable days between successive exposures.
 #' @return This function returns a component class object which contains the end strategy object
-#' @include lowLevelUtilityFn.R
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
+#' @include LowLevelUtilityFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
 #' @importFrom methods new
 #' @export
 createCustomEraEndStrategy <- function(ConceptSetExpression, gapDays,offset){
@@ -500,9 +500,9 @@ createCustomEraEndStrategy <- function(ConceptSetExpression, gapDays,offset){
 #' @param Limit how to limit initial events per person
 #' @param Description a character string describing the count object, this is optional so default is null
 #' @return new primary criteria component.
-#' @include lowLevelUtilityFn.R
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
+#' @include LowLevelUtilityFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
 #' @importFrom methods new is
 #' @export
 createPrimaryCriteria <- function(Name,
@@ -540,9 +540,9 @@ createPrimaryCriteria <- function(Name,
 #' @param Limit how to limit initial events per person
 #' @param Description a character string describing the count object, this is optional so default is null
 #' @return new additional criteria component.
-#' @include lowLevelUtilityFn.R
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
+#' @include LowLevelUtilityFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
 #' @importFrom methods new is
 #' @export
 createAdditionalCriteria <- function(Name,
@@ -580,9 +580,9 @@ createAdditionalCriteria <- function(Name,
 #' @param Limit how to limit initial events per person
 #' @param Description a character string describing the count object, this is optional so default is null
 #' @return new inclusion rules component.
-#' @include lowLevelUtilityFn.R
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
+#' @include LowLevelUtilityFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
 #' @importFrom methods new is
 #' @export
 createInclusionRules <- function(Name, Contents, Limit, Description = NULL){
@@ -608,9 +608,9 @@ createInclusionRules <- function(Name, Contents, Limit, Description = NULL){
 #' @param ComponentList a list of component class queries to be inserted into the censoring criteria.
 #' @param Description a character string describing the count object, this is optional so default is null
 #' @return new censoring criteria component.
-#' @include lowLevelUtilityFn.R
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
+#' @include LowLevelUtilityFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
 #' @importFrom methods new is
 #' @export
 createCensoringCriteria <- function(Name, ComponentList, Description = NULL){
@@ -638,9 +638,9 @@ createCensoringCriteria <- function(Name, ComponentList, Description = NULL){
 #' @param LeftCensorDate a date string that specifies the starting date of registration
 #' @param RightCensorDate a date string that specifies the end date of registration
 #' @return a cohort era component
-#' @include lowLevelUtilityFn.R
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
+#' @include LowLevelUtilityFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
 #' @importFrom methods new is
 #' @export
 createCohortEra <- function(EraPadDays = 0L,
@@ -698,9 +698,9 @@ createCohortEra <- function(EraPadDays = 0L,
 #' @param Author add an author name to cohort details, optional
 #' @param cdmVersionRange add a cdm version range typically >= 5.0.0, please specify if not v5
 #' @return cohort definition class object with defined inputs. This can now be compiled into ohdisql and converted to json
-#' @include lowLevelUtilityFn.R
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
+#' @include LowLevelUtilityFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
 #' @importFrom methods new is
 #' @export
 #' @export

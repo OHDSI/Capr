@@ -26,7 +26,7 @@
 #' @param saveName a name for the function you want to save
 #' @param savePath a path to a file to save. Default is the active working directory
 #' @return no return in r. json file written to a save point
-#' @include lowLevelSaveFn.R
+#' @include LowLevelSaveFn.R
 #' @export
 saveComponent <- function(x, saveName, savePath = getwd()){
   sc <- saveState(x) #run save state for component
@@ -41,7 +41,7 @@ saveComponent <- function(x, saveName, savePath = getwd()){
 #' This function loads the component from a json file to its s4 componentclass
 #' @param path a path to the file we wish to load
 #' @return returns a component
-#' @include lowLevelLoadFn.R
+#' @include LowLevelLoadFn.R
 #' @importFrom jsonlite read_json
 #' @export
 loadComponent <- function(path){
@@ -57,7 +57,7 @@ loadComponent <- function(path){
 #' This function reads a circe json an builds the cohort definition in an execution space
 #' @param jsonPath a path to the file we wish to import
 #' @return returns the cohort definition
-#' @include lowLevelBuildLangFn.R
+#' @include LowLevelBuildLangFn.R
 #' @importFrom jsonlite read_json
 #' @importFrom purrr map
 #' @importFrom magrittr %>%
@@ -84,7 +84,7 @@ readInCirce <- function(jsonPath){
 #' @param jsonPath a path to the file we wish to import
 #' @param txtPath a path to the txt file we wish to save
 #' @return no return but saves the CAPR calls to build a cohort in a txt file
-#' @include lowLevelBuildLangFn.R
+#' @include LowLevelBuildLangFn.R
 #' @importFrom jsonlite read_json
 #' @importFrom purrr map
 #' @export
@@ -109,7 +109,7 @@ writeCaprCall <- function(jsonPath, txtPath){
 #'
 #' @param CohortDefinition input cohort Definition class object
 #' @param generateOptions the options for building the ohdisql using CirceR::createGenerateOptions
-#' @include lowLevelCoercionFn.R
+#' @include LowLevelCoercionFn.R
 #' @importFrom CirceR cohortExpressionFromJson cohortPrintFriendly buildCohortQuery
 #' @importFrom RJSONIO toJSON
 #' @return A three tiered list containing the circe converted cohort definition, the circe json and ohisql.

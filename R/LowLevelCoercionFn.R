@@ -360,7 +360,7 @@ setMethod("as.Circe", "CensorWindow",
 #' Convert Primary Criteria Component to CIRCE
 #'
 #' @param x the component to convert
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertPrimaryCriteriaToCIRCE <- function(x){
   check <- componentClass(x)
@@ -376,7 +376,7 @@ convertPrimaryCriteriaToCIRCE <- function(x){
 #' Convert Additional Criteria Component to CIRCE
 #'
 #' @param x the component to convert
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertAdditionalCriteriaToCIRCE <- function(x){
   check <- componentClass(x)
@@ -396,7 +396,7 @@ convertAdditionalCriteriaToCIRCE <- function(x){
 #' Convert single rule (group) Component to CIRCE
 #'
 #' @param x the component to convert
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertRuleToCIRCE <- function(x){
   check <- componentClass(x)
@@ -415,7 +415,7 @@ convertRuleToCIRCE <- function(x){
 #' Convert Inclusion Rules Component to CIRCE
 #'
 #' @param x the component to convert
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertInclusionRulesToCIRCE <- function(x){
   check <- componentClass(x)
@@ -435,7 +435,7 @@ convertInclusionRulesToCIRCE <- function(x){
 #' Convert End Strategy Component to CIRCE
 #'
 #' @param x the component to convert
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertEndStrategyToCIRCE <- function(x){
   check <- componentClass(x)
@@ -454,7 +454,7 @@ convertEndStrategyToCIRCE <- function(x){
 #' Convert Censoring Criteria Component to CIRCE
 #'
 #' @param x the component to convert
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertCensoringCriteriaToCIRCE <- function(x){
   check <- componentClass(x)
@@ -468,7 +468,7 @@ convertCensoringCriteriaToCIRCE <- function(x){
 #' Convert CohortEra Component to CIRCE
 #'
 #' @param x the component to convert
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertCohortEraToCIRCE <- function(x){
   check <- componentClass(x)

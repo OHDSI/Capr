@@ -59,7 +59,7 @@ listAttributeOptions <- function(domain=NULL){
                                       "VisitTypeExclude",  "VisitSourceConcept","VisitLength", "Age",
                                       "Gender", "ProviderSpecialty", "PlaceOfService")
   )
-  if(!is.null(domain)){
+  if (!is.null(domain)){
     attOps <- attOps[[domain]]
   }
   return(attOps)
@@ -78,19 +78,19 @@ listAttributeOptions <- function(domain=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value a character string of the date
 #' @param Extent a character string of the extent only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of attribute class
 #' @export
 createOccurrenceStartDateAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.character(Value)){ #error handler for character date string
+  if (!is.character(Value)){ #error handler for character date string
     stop("Value must be a character string to use the dat attribute")
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.character(Extent)){ #error handler for character date string or null
+    if (!is.character(Extent)){ #error handler for character date string or null
       stop("Extent must be a character string if not NULL to use the date attribute")
     }
   }
@@ -109,19 +109,19 @@ createOccurrenceStartDateAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value a character string of the date
 #' @param Extent a character string of the extent only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of attribute class
 #' @export
 createOccurrenceEndDateAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.character(Value)){ #error handler for character date string
+  if (!is.character(Value)){ #error handler for character date string
     stop("Value must be a character string to use the dat attribute")
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.character(Extent)){ #error handler for character date string or null
+    if (!is.character(Extent)){ #error handler for character date string or null
       stop("Extent must be a character string if not NULL to use the date attribute")
     }
   }
@@ -140,19 +140,19 @@ createOccurrenceEndDateAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value a character string of the date
 #' @param Extent a character string of the extent only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of attribute class
 #' @export
 createEraStartDateAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.character(Value)){ #error handler for character date string
+  if (!is.character(Value)){ #error handler for character date string
     stop("Value must be a character string to use the dat attribute")
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.character(Extent)){ #error handler for character date string or null
+    if (!is.character(Extent)){ #error handler for character date string or null
       stop("Extent must be a character string if not NULL to use the date attribute")
     }
   }
@@ -170,19 +170,19 @@ createEraStartDateAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value a character string of the date
 #' @param Extent a character string of the extent only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of attribute class
 #' @export
 createEraEndDateAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.character(Value)){ #error handler for character date string
+  if (!is.character(Value)){ #error handler for character date string
     stop("Value must be a character string to use the dat attribute")
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.character(Extent)){ #error handler for character date string or null
+    if (!is.character(Extent)){ #error handler for character date string or null
       stop("Extent must be a character string if not NULL to use the date attribute")
     }
   }
@@ -200,19 +200,19 @@ createEraEndDateAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value a character string of the date
 #' @param Extent a character string of the extent only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of attribute class
 #' @export
 createPeriodStartDateAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.character(Value)){ #error handler for character date string
+  if (!is.character(Value)){ #error handler for character date string
     stop("Value must be a character string to use the dat attribute")
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.character(Extent)){ #error handler for character date string or null
+    if (!is.character(Extent)){ #error handler for character date string or null
       stop("Extent must be a character string if not NULL to use the date attribute")
     }
   }
@@ -230,19 +230,19 @@ createPeriodStartDateAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value a character string of the date
 #' @param Extent a character string of the extent only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of attribute class
 #' @export
 createPeriodEndDateAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.character(Value)){ #error handler for character date string
+  if (!is.character(Value)){ #error handler for character date string
     stop("Value must be a character string to use the dat attribute")
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.character(Extent)){ #error handler for character date string or null
+    if (!is.character(Extent)){ #error handler for character date string or null
       stop("Extent must be a character string if not NULL to use the date attribute")
     }
   }
@@ -262,19 +262,19 @@ createPeriodEndDateAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the age
 #' @param Extent an integer for the age only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createAgeAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -292,19 +292,19 @@ createAgeAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the EraLength
 #' @param Extent an integer for the EraLength only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createEraLengthAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -322,19 +322,19 @@ createEraLengthAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the AgeAtStart
 #' @param Extent an integer for the AgeAtStart only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createAgeAtStartAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -352,19 +352,19 @@ createAgeAtStartAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the AgeAtEnd
 #' @param Extent an integer for the AgeAtEnd only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createAgeAtEndAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -382,19 +382,19 @@ createAgeAtEndAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the GapDays
 #' @param Extent an integer for the GapDays only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createGapDaysAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -412,19 +412,19 @@ createGapDaysAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the Refills
 #' @param Extent an integer for the Refills only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createRefillsAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -442,19 +442,19 @@ createRefillsAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the Quantity
 #' @param Extent an integer for the Quantity only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createQuantityAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -472,19 +472,19 @@ createQuantityAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the DaysSupply
 #' @param Extent an integer for the DaysSupply only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createDaysSupplyAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -502,19 +502,19 @@ createDaysSupplyAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the EffectiveDrugDose
 #' @param Extent an integer for the EffectiveDrugDose only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createEffectiveDrugDoseAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -532,19 +532,19 @@ createEffectiveDrugDoseAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the ValueAsNumber
 #' @param Extent an integer for the ValueAsNumber only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createValueAsNumberAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -562,19 +562,19 @@ createValueAsNumberAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the RangeLow
 #' @param Extent an integer for the RangeLow only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createRangeLowAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -592,19 +592,19 @@ createRangeLowAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the RangeHigh
 #' @param Extent an integer for the RangeHigh only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createRangeHighAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -622,19 +622,19 @@ createRangeHighAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the RangeHighRatio
 #' @param Extent an integer for the RangeHighRatio only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createRangeHighRatioAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -652,19 +652,19 @@ createRangeHighRatioAttribute <- function(Op, Value, Extent=NULL){
 #' @param Op defines logic for interpreting the numeric or date value.
 #' @param Value an integer for the RangeLowRatio
 #' @param Extent an integer for the RangeLowRatio only used if the op is bt or !bt
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createRangeLowRatioAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if(!is.integer(Value)){ #error handler for character date string
+  if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
-  if(!is.null(Extent)){ #error handler for not null extent
-    if(Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if(!is.integer(Extent)){ #error handler for character date string or null
+    if (!is.integer(Extent)){ #error handler for character date string or null
       Extent <- as.integer(Extent)
     }
   }
@@ -680,7 +680,7 @@ createRangeLowRatioAttribute <- function(Op, Value, Extent=NULL){
 #' @param ConceptSetExpression the concepte set expression we wish to deploy as a source concept attribute
 #' This concept set expression should contain source codes, which may be non-standard.
 #' @return a source concept attribute component
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @export
 createConditionSourceConceptAttribute <- function(ConceptSetExpression){
   createSourceConceptAttribute("Condition", ConceptSetExpression = ConceptSetExpression)
@@ -691,7 +691,7 @@ createConditionSourceConceptAttribute <- function(ConceptSetExpression){
 #' @param ConceptSetExpression the concepte set expression we wish to deploy as a source concept attribute
 #' This concept set expression should contain source codes, which may be non-standard.
 #' @return a source concept attribute component
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @export
 createProcedureSourceConceptAttribute <- function(ConceptSetExpression){
   createSourceConceptAttribute("Procedure", ConceptSetExpression = ConceptSetExpression)
@@ -702,7 +702,7 @@ createProcedureSourceConceptAttribute <- function(ConceptSetExpression){
 #' @param ConceptSetExpression the concepte set expression we wish to deploy as a source concept attribute
 #' This concept set expression should contain source codes, which may be non-standard.
 #' @return a source concept attribute component
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @export
 createMeasurementSourceConceptAttribute <- function(ConceptSetExpression){
   createSourceConceptAttribute("Measurement", ConceptSetExpression = ConceptSetExpression)
@@ -713,7 +713,7 @@ createMeasurementSourceConceptAttribute <- function(ConceptSetExpression){
 #' @param ConceptSetExpression the concepte set expression we wish to deploy as a source concept attribute
 #' This concept set expression should contain source codes, which may be non-standard.
 #' @return a source concept attribute component
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @export
 createObservationSourceConceptAttribute <- function(ConceptSetExpression){
   createSourceConceptAttribute("Observation", ConceptSetExpression = ConceptSetExpression)
@@ -724,7 +724,7 @@ createObservationSourceConceptAttribute <- function(ConceptSetExpression){
 #' @param ConceptSetExpression the concepte set expression we wish to deploy as a source concept attribute
 #' This concept set expression should contain source codes, which may be non-standard.
 #' @return a source concept attribute component
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @export
 createDrugSourceConceptAttribute <- function(ConceptSetExpression){
   createSourceConceptAttribute("Drug", ConceptSetExpression = ConceptSetExpression)
@@ -735,7 +735,7 @@ createDrugSourceConceptAttribute <- function(ConceptSetExpression){
 #' @param ConceptSetExpression the concepte set expression we wish to deploy as a source concept attribute
 #' This concept set expression should contain source codes, which may be non-standard.
 #' @return a source concept attribute component
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @export
 createDeathSourceConceptAttribute <- function(ConceptSetExpression){
   createSourceConceptAttribute("Death", ConceptSetExpression = ConceptSetExpression)
@@ -746,7 +746,7 @@ createDeathSourceConceptAttribute <- function(ConceptSetExpression){
 #' @param ConceptSetExpression the concepte set expression we wish to deploy as a source concept attribute
 #' This concept set expression should contain source codes, which may be non-standard.
 #' @return a source concept attribute component
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @export
 createDeviceSourceConceptAttribute <- function(ConceptSetExpression){
   createSourceConceptAttribute("Device", ConceptSetExpression = ConceptSetExpression)
@@ -757,7 +757,7 @@ createDeviceSourceConceptAttribute <- function(ConceptSetExpression){
 #' @param ConceptSetExpression the concepte set expression we wish to deploy as a source concept attribute
 #' This concept set expression should contain source codes, which may be non-standard.
 #' @return a source concept attribute component
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @export
 createVisitSourceConceptAttribute <- function(ConceptSetExpression){
   createSourceConceptAttribute("Visit", ConceptSetExpression = ConceptSetExpression)
@@ -772,7 +772,7 @@ createVisitSourceConceptAttribute <- function(ConceptSetExpression){
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of attribute class
 #' @export
 createValueAsConceptAttribute <- function(conceptIds, mapToStandard =TRUE){
@@ -789,7 +789,7 @@ createValueAsConceptAttribute <- function(conceptIds, mapToStandard =TRUE){
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of attribute class
 #' @export
 createGenderAttribute <- function(conceptIds, mapToStandard =TRUE){
@@ -803,8 +803,8 @@ createGenderAttribute <- function(conceptIds, mapToStandard =TRUE){
 #'  Function to create an attribute for a correlated criteria
 #'
 #' @param Group a group object to add
-#' @include lowLevelClasses.R
-#' @include lowLevelCreateFn.R
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
 #' @importFrom methods new
 #' @return a correlated criteria attribute component
 #' @export
@@ -825,7 +825,7 @@ createCorrelatedCriteriaAttribute <- function(Group){
 #'
 #' This function creates a attribute for first occurrence
 #' @param logic toggle TRUE for first occurence
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createFirstAttribute <- function(logic =TRUE){
@@ -838,7 +838,7 @@ createFirstAttribute <- function(logic =TRUE){
 #'
 #' This function creates a attribute for exclusion
 #' @param logic toggle FALSE to not exclude
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createDrugTypeExcludeAttribute <- function(logic=FALSE){
@@ -851,7 +851,7 @@ createDrugTypeExcludeAttribute <- function(logic=FALSE){
 #'
 #' This function creates a attribute for exclusion
 #' @param logic toggle FALSE to not exclude
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createVisitTypeExcludeAttribute <- function(logic=FALSE){
@@ -864,7 +864,7 @@ createVisitTypeExcludeAttribute <- function(logic=FALSE){
 #'
 #' This function creates a attribute for exclusion
 #' @param logic toggle FALSE to not exclude
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createConditionTypeExcludeAttribute <- function(logic=FALSE){
@@ -877,7 +877,7 @@ createConditionTypeExcludeAttribute <- function(logic=FALSE){
 #'
 #' This function creates a attribute for exclusion
 #' @param logic toggle FALSE to not exclude
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createObservationTypeExcludeAttribute <- function(logic=FALSE){
@@ -889,7 +889,7 @@ createObservationTypeExcludeAttribute <- function(logic=FALSE){
 #'
 #' This function creates a attribute for exclusion
 #' @param logic toggle FALSE to not exclude
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createProcedureTypeExcludeAttribute <- function(logic=FALSE){
@@ -901,7 +901,7 @@ createProcedureTypeExcludeAttribute <- function(logic=FALSE){
 #'
 #' This function creates a attribute for exclusion
 #' @param logic toggle FALSE to not exclude
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createMeasurementTypeExcludeAttribute <- function(logic=FALSE){
@@ -913,7 +913,7 @@ createMeasurementTypeExcludeAttribute <- function(logic=FALSE){
 #'
 #' This function creates a attribute for exclusion
 #' @param logic toggle FALSE to not exclude
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createDeathTypeExcludeAttribute <- function(logic=FALSE){

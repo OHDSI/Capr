@@ -22,7 +22,7 @@
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createVisitOccurrence <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -37,7 +37,7 @@ createVisitOccurrence <- function(conceptSetExpression=NULL, attributeList =NULL
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createObservationPeriod <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -53,7 +53,7 @@ createObservationPeriod <- function(conceptSetExpression=NULL, attributeList =NU
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createConditionOccurrence <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -70,7 +70,7 @@ createConditionOccurrence <- function(conceptSetExpression=NULL, attributeList =
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createObservation <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -86,7 +86,7 @@ createObservation <- function(conceptSetExpression=NULL, attributeList =NULL){
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createConditionEra <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -101,7 +101,7 @@ createConditionEra <- function(conceptSetExpression=NULL, attributeList =NULL){
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createDrugEra <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -117,7 +117,7 @@ createDrugEra <- function(conceptSetExpression=NULL, attributeList =NULL){
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createDrugExposure <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -133,7 +133,7 @@ createDrugExposure <- function(conceptSetExpression=NULL, attributeList =NULL){
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createMeasurement <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -149,7 +149,7 @@ createMeasurement <- function(conceptSetExpression=NULL, attributeList =NULL){
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createProcedureOccurrence <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -165,7 +165,7 @@ createProcedureOccurrence <- function(conceptSetExpression=NULL, attributeList =
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createDeath <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -181,7 +181,7 @@ createDeath <- function(conceptSetExpression=NULL, attributeList =NULL){
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createDoseEra <- function(conceptSetExpression=NULL, attributeList =NULL){
@@ -197,7 +197,7 @@ createDoseEra <- function(conceptSetExpression=NULL, attributeList =NULL){
 #' @param conceptSetExpression place a component class concept set expression for domain. The concept set expressions
 #' must be adhere to the domain of the query
 #' @param attributeList a list of attributes to add to the query, if no attributes used then leave null
-#' @include lowLevelCreateFn.R
+#' @include LowLevelCreateFn.R
 #' @return a componet of query class
 #' @export
 createDeviceExposure <- function(conceptSetExpression=NULL, attributeList =NULL){

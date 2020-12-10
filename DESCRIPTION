@@ -30,22 +30,23 @@ Imports:
   rlang,
   uuid,
   SqlRender,
-  data.table
+  data.table,
+  dplyr
 Suggests:
-    dplyr,
     knitr,
     rmarkdown
 Collate: 
-    'lowLevelClasses.R'
-    'lowLevelUtilityFn.R'
-    'lowLevelBuildLangFn.R'
-    'lowLevelCoercionFn.R'
-    'lowLevelCreateFn.R'
-    'lowLevelLoadFn.R'
-    'lowLevelSaveFn.R'
-    'userCommands.R'
-    'userConceptLookupFn.R'
-    'userCreateAttributeFn.R'
-    'userCreateDomainFn.R'
-    'userCreateFn.R'
+    'Capr.R'
+    'LowLevelClasses.R'
+    'LowLevelUtilityFn.R'
+    'LowLevelBuildLangFn.R'
+    'LowLevelCoercionFn.R'
+    'LowLevelCreateFn.R'
+    'LowLevelLoadFn.R'
+    'LowLevelSaveFn.R'
+    'UserCommands.R'
+    'UserConceptLookupFn.R'
+    'UserCreateAttributeFn.R'
+    'UserCreateDomainFn.R'
+    'UserCreateFn.R'
 VignetteBuilder: knitr

@@ -24,7 +24,7 @@
 #' @param CriteriaExpression include anything for the criteria can be null
 #' @param Limit determine limit
 #' @param ConceptSetExpression add anny concept set expressions
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 #' @importFrom methods new
 createComponent <- function(Name,
                             Description = NULL,
@@ -87,7 +87,7 @@ createComponent <- function(Name,
 #' @param Op a type of operator
 #' @param Value a value either integer or character for dates
 #' @param Extent only if Op is bt or !bt, otherwise NULL. Value is either integer or character for dates
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 #' @importFrom methods new
 #' @export
 createOpAttribute <- function(Name, Op, Value, Extent = NULL){
@@ -125,7 +125,7 @@ createOpAttribute <- function(Name, Op, Value, Extent = NULL){
 #'  createSourceConceptAttribute
 #' @param Domain the type of domain for the source concept
 #' @param ConceptSetExpression the concept set expression component to add
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 #' @importFrom methods new
 #' @export
 createSourceConceptAttribute <- function(Domain,ConceptSetExpression){
@@ -144,7 +144,7 @@ createSourceConceptAttribute <- function(Domain,ConceptSetExpression){
 #' @param conceptIds the list of ids to lookup, need OMOP vocabulary connection
 #' @param mapToStandard whether to map concept ids to standard or leave as is default is TRUE
 #' @param name is the name of the attribute
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 #' @importFrom methods new
 #' @export
 createConceptAttribute <- function(conceptIds, mapToStandard = TRUE, name){
@@ -165,7 +165,7 @@ createConceptAttribute <- function(conceptIds, mapToStandard = TRUE, name){
 #'  createLogicalAttribue
 #' @param name is the name of the attribute
 #' @param logic whether the logic is true or false, default is true
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 #' @importFrom methods new
 #' @export
 createLogicalAttribute <- function(name, logic = TRUE){
@@ -184,7 +184,7 @@ createLogicalAttribute <- function(name, logic = TRUE){
 #' @param attributeList a list of attribute class components to add, if not attributes keep null
 #' @param Name is the name of query, optional
 #' @param Description an optional description of the query
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 #' @importFrom methods new
 createQuery <- function(Domain,
                         Component = NULL,

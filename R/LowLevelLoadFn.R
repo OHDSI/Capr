@@ -44,7 +44,7 @@
 #' @param x the object to coerce
 #' @return a concept class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.Concept <- function(x){
   new("Concept",
       CONCEPT_ID = as.integer(x$CONCEPT_ID),
@@ -66,7 +66,7 @@ as.Concept <- function(x){
 #' @param x the object to coerce
 #' @return a conceptSetItem class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.ConceptSetItem <- function(x){
   new("ConceptSetItem",
       Concept = as.Concept(x$Concept),
@@ -81,7 +81,7 @@ as.ConceptSetItem <- function(x){
 #' @param x the object to coerce
 #' @return a concept set expression class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.ConceptSetExpression <- function(x){
   new("ConceptSetExpression",
       id = x$id,
@@ -95,7 +95,7 @@ as.ConceptSetExpression <- function(x){
 #' @param x the object to coerce
 #' @return a meta data class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.MetaData <- function(x){
   md <- new("MetaData",
             ComponentClass = x$ComponentClass,
@@ -114,7 +114,7 @@ as.MetaData <- function(x){
 #' @param x the object to coerce
 #' @return a window class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.Window <- function(x){
   checkNames <- all(names(x) %in% c("Event", "Start", "End", "Index"))
   if(checkNames){
@@ -176,7 +176,7 @@ as.Window <- function(x){
 #' @param x the object to coerce
 #' @return a occurrence class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.Occurrence <- function(x){
   if(is.integer(x$Type)){
     x$Type  <- ifelse(x$Type ==2, "at_least",
@@ -199,7 +199,7 @@ as.Occurrence <- function(x){
 #' @param x the object to coerce
 #' @return a timeline class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.Timeline <- function(x){
   #create new timeline object
   tw <- new("Timeline",
@@ -234,7 +234,7 @@ as.Timeline <- function(x){
 #' @param x the object to coerce
 #' @return an expressionType class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.ExpressionType <- function(x){
   et <- new("ExpressionType",
             Type = x$Type)
@@ -253,7 +253,7 @@ as.ExpressionType <- function(x){
 #' @param x the object to coerce
 #' @return an observation window class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.ObservationWindow <- function(x){
   new("ObservationWindow",
       PriorDays = x$PriorDays,
@@ -265,7 +265,7 @@ as.ObservationWindow <- function(x){
 #' @param x the object to coerce
 #' @return a limit class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.Limit <- function(x){
   new("Limit",
       Type = x$Type)
@@ -276,7 +276,7 @@ as.Limit <- function(x){
 #' @param x the object to coerce
 #' @return a cohortEra class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.CohortEra <- function(x){
   cs <- x$CollapseSettings
   cw <- x$CensorWindow
@@ -317,7 +317,7 @@ as.CohortEra <- function(x){
 #' @param x the object to coerce
 #' @return a attribute class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.AttributeLoad <- function(x){
 
   if(all(names(x) %in% c("Name", "Op", "Contents"))){
@@ -364,7 +364,7 @@ as.AttributeLoad <- function(x){
 #' @param x the object to coerce
 #' @return a query class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.QueryLoad <- function(x){
   qq <- new("Query",
             Domain = x$Domain,
@@ -384,7 +384,7 @@ as.QueryLoad <- function(x){
 #' @param x the object to coerce
 #' @return a count class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.CountLoad <- function(x){
   new("Count",
       Criteria = as.QueryLoad(x$Criteria),
@@ -399,7 +399,7 @@ as.CountLoad <- function(x){
 #' @param x the object to coerce
 #' @return a group class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.GroupLoad <- function(x){
   new("Group",
       Type = as.ExpressionType(x$Type),
@@ -415,7 +415,7 @@ as.GroupLoad <- function(x){
 #' @param x the object to coerce
 #' @return a EndStrategy class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.EndStrategyLoad <- function(x){
   if("DateField" %in% names(x)){
     es <- new("DateOffsetEndStrategy",
@@ -439,7 +439,7 @@ as.EndStrategyLoad <- function(x){
 #' @param x the object to coerce
 #' @return a component class object
 #' @importFrom methods new
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 as.ComponentLoad <- function(x){
   if(x$MetaData$ComponentClass == "CohortEra"){
     comp <- as.CohortEra(x$CriteriaExpression)

@@ -83,7 +83,7 @@ getConceptSetCall <- function(x){
 #' @param objNm the naming convention to assign the object
 #' @importFrom purrr map map_int map2
 #' @importFrom rlang call2 expr sym !!
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelUtilityFn.R
 #' @return r language to generate the concept set expressions of the cohort
 createAttributeCall <- function(x,objNm){
   AttributeOptions <- list('Op' = c("Age", "OccurrenceStartDate", "OccurrenceEndDate", "AgeAtEnd",
@@ -154,7 +154,7 @@ createAttributeCall <- function(x,objNm){
 #' @param nm the naming convention to assign the object
 #' @importFrom purrr map map_int map2
 #' @importFrom rlang call2 sym !!! syms
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelUtilityFn.R
 #' @return r language to generate the concept set expressions of the cohort
 createQueryCall <- function(x,nm){
   domainFunction <- paste0("create", names(x)) #get domain name turn to domainFunction wrapper for createQuery
@@ -516,7 +516,7 @@ getCohortEraCall <- function(x){
 #' @param x the circe cohort definition
 #' @param nm the naming convention to assign the object
 #' @importFrom rlang call2 sym
-#' @include lowLevelUtilityFn.R
+#' @include LowLevelUtilityFn.R
 #' @return r language to generate the cohort
 getCohortDefinitionCall <- function(x, nm =NULL){
   if (is.null(nm)){

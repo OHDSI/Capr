@@ -26,7 +26,7 @@ setGeneric("componentClass", function(x){standardGeneric("componentClass")})
 #'
 #' @param x the component to check
 #' @return a character string with the component class
-#' @include lowLevelClasses.R
+#' @include LowLevelClasses.R
 #' @rdname componentClass-method
 #' @aliases componentClass
 setMethod("componentClass", "Component",
