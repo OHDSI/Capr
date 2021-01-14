@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ## Introduction 
 
-There are several attributes that are available in circe-be and found in ATLAS. In future releases, `Capr` will create a dedicated function signature to each attribute (subject to user feedback). In order to extend the usage of attributes that are not personalized, a few low level functions were made available to access a greater set of attributes. The functions are: `createOpAttribute` and `createConceptAttribute`. OpAttributes are for attributes that contain an operator and concept attribute include concept ids that are not part of the cohort concept set list. To view all possible attributes in Capr available for each domain, a helper function `listAttributeOptions` can be used. Below are some of the available attributes per attribute class. 
+There are several attributes that are available in circe-be and found in ATLAS. In future releases, `Capr` will create a dedicated function signature to each attribute (subject to user feedback). In order to extend the usage of attributes that are not personalized, a few low level functions were made available to access a greater set of attributes. The functions are: `createOpAttribute` and `createConceptAttribute`. OpAttributes are for attributes that contain an operator and concept attribute include concept ids that are not part of the cohort concept set list. To view all possible attribute in Capr available for each domain, a helper function `listAttributeOptions` can be used. Below are some of the available attribute per attribute class. 
 
 ```{r echo=FALSE}
 AttributeOptions <- list('Op' =c("Age", "OccurrenceStartDate", "OccurrenceEnd", "AgeAtEnd",

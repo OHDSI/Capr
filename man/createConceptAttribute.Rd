@@ -4,14 +4,40 @@
 \alias{createConceptAttribute}
 \title{createConceptAttribue}
 \usage{
-createConceptAttribute(conceptIds, mapToStandard = TRUE, name)
+createConceptAttribute(
+  conceptIds,
+  connectionDetails = NULL,
+  connection = NULL,
+  vocabularyDatabaseSchema = NULL,
+  oracleTempSchema = NULL,
+  mapToStandard = TRUE,
+  name
+)
 }
 \arguments{
 \item{conceptIds}{the list of ids to lookup, need OMOP vocabulary connection}
 
+\item{connectionDetails}{An object of type \code{connectionDetails} as created using the
+\code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+DatabaseConnector package. Can be left NULL if \code{connection} is
+provided.}
+
+\item{connection}{An object of type \code{connection} as created using the
+\code{\link[DatabaseConnector]{connect}} function in the
+DatabaseConnector package. Can be left NULL if \code{connectionDetails}
+is provided, in which case a new connection will be opened at the start
+of the function, and closed when the function finishes.}
+
+\item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides.
+Note that for SQL Server, this should include both the database and
+schema name, for example 'vocabulary.dbo'.}
+
+\item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
+privileges for storing temporary tables.}
+
 \item{mapToStandard}{whether to map concept ids to standard or leave as is default is TRUE}
 
-\item{name}{is the name of the attribute}
+\item{name}{name of the ttribute name}
 }
 \description{
 createConceptAttribue

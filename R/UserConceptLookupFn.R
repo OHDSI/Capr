@@ -26,16 +26,24 @@
 #' @template     VocabularyDatabaseSchema
 #' @template     OracleTempSchema
 #' @param        conceptIds a vector of concept ids
+#' @param        mapToStandard logic to map to standard OMOP concept
+#' @param        simplifyToDataframe logic to return dataframe or tibble. If are piping this function
+#'               to create a concept set expression keep as true. Coercion to concept set expressions
+#'               requires the use of a dataframe. If false returns a tiblle where $. retrieves the
+#'               dataframe
 #' @return       a tibble data frame object with conceptId, conceptName, standardConcept,
 #'               standardConceptCaption, invalidReason, invalidReasonCaption, conceptCode,
 #'               domainId, vocabularyId, conceptClassId.
 #'
 #' @export
+
 getConceptIdDetails <- function(conceptIds,
                                 connectionDetails = NULL,
                                 connection = NULL,
                                 vocabularyDatabaseSchema = NULL,
-                                oracleTempSchema = NULL) {
+                                oracleTempSchema = NULL,
+                                mapToStandard = TRUE,
+                                simplifyToDataframe = TRUE) {
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertVector(conceptIds, add = errorMessage)
@@ -59,60 +67,26 @@ getConceptIdDetails <- function(conceptIds,
                                                                oracleTempSchema = oracleTempSchema,
                                                                conceptId = conceptIds) %>%
     dplyr::tibble()
+
+  #if mapping to the standard concept join to concept_relationship----------------------------------
+  if (mapToStandard){
+    conceptIdToMap  <- conceptDetails$.$conceptId
+    mappingQuery <- "SELECT b.* FROM @vocabularyDatabaseSchema.concept_relationship a
+    JOIN  @vocabularyDatabaseSchema.concept b on b.concept_id = a.concept_id_2 AND a.relationship_id = '@relationship'
+    WHERE a.concept_id_1 in (@conceptId);"
+    conceptDetails <- DatabaseConnector::renderTranslateQuerySql(connection = connection,
+                                                                 sql = mappingQuery,
+                                                                 snakeCaseToCamelCase = TRUE,
+                                                                 vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                                                 oracleTempSchema = oracleTempSchema,
+                                                                 conceptId = conceptIdToMap,
+                                                                 relationship = "Maps to") %>%
+      dplyr::tibble()
+  }
+  if (simplifyToDataframe){
+    conceptDetails <- conceptDetails$.
+  }
   return(conceptDetails)
-}
-
-
-##' Lookup Concepts by OMOP Concept Id
-#'
-#' This function looks up concepts using the OMOP concept id. Function requires a dbms connection to use
-#'
-#' @param conceptIds standard concept id
-#' @param cdmDatabaseSchema designate cdm Database schema, if connected to cdm then leave NULL
-#' @param mapToStandard logic toggle to map the concepts to standard OMOP concepts
-#' @return a data frame is returned ordered:
-#' concept_id, concept_name, standard_concept, standard_concept_caption
-#' invalid_reason, invalid_reason_caption, concept_code, domain_id, vocabulary_id, concept_class_id.
-#' @importFrom DatabaseConnector querySql disconnect
-#' @importFrom SqlRender render translate
-#' @export
-
-lookupConceptIds <- function(conceptIds, cdmDatabaseSchema=NULL,mapToStandard =TRUE){
-
-  if (is.null(connectionDetails$conn)) {
-    conn <- conn
-  } else {
-    conn <- connectionDetails$conn
-  }
-
-  if(is.null(cdmDatabaseSchema)){
-    cdmDatabaseSchema <- connectionDetails$schema
-  }
-
-  conceptQuery <- "SELECT * FROM @cdmDatabaseSchema.concept WHERE concept_id IN (@conceptId);"
-
-
-  sql <- SqlRender::render(conceptQuery,cdmDatabaseSchema=cdmDatabaseSchema,
-                           conceptId = conceptIds)
-
-  sql <- SqlRender::translate(sql,targetDialect=connectionDetails$dbms)
-
-  concepts_df<-DatabaseConnector::querySql(conn,sql)
-
-  if(nrow(concepts_df)==0){
-    stop("Query returned empty table concept Id not in cdm")
-  }
-
-  concepts_df <- formatConceptTable(concepts_df)
-  if(mapToStandard){
-    concepts_df <- mapConceptToStandard(concepts_df)
-  }
-  return(concepts_df)
-
-  if (is.null(connectionDetails$conn)) {
-    DatabaseConnector::disconnect(conn)
-
-  }
 }
 
 
@@ -120,232 +94,142 @@ lookupConceptIds <- function(conceptIds, cdmDatabaseSchema=NULL,mapToStandard =T
 #'
 #' This function looks up concepts using the OMOP concept code and vocabulary. Function requires a dbms connection to use
 #'
-#' @param vocabulary source vocabulary to search (i.e. ICD10, SNOMED). Must be character string
-#' @param conceptCode source code of vocabulary to serach (example: if ICD10 E11 is T2D). Must be a character string.
-#' @param cdmDatabaseSchema designate cdm Database schema, if connected to cdm then leave NULL
-#' @param mapToStandard logic toggle to map the concepts to standard OMOP concepts
-#' @return a data frame is returned ordered:
-#' concept_id, concept_name, standard_concept, standard_concept_caption
-#' invalid_reason, invalid_reason_caption, concept_code, domain_id, vocabulary_id, concept_class_id.
-#' @importFrom DatabaseConnector querySql disconnect
-#' @importFrom SqlRender render translate
+#' @template     Connection
+#' @template     VocabularyDatabaseSchema
+#' @template     OracleTempSchema
+#' @param        conceptCode a character vector of concept codes
+#' @param        vocabulary a single character string with the vocabulary of the codes
+#' @param        mapToStandard logic to map to standard OMOP concept
+#' @param        simplifyToDataframe logic to return dataframe or tibble. If are piping this function
+#'               to create a concept set expression keep as true. Coercion to concept set expressions
+#'               requires the use of a dataframe. If false returns a tiblle where $. retrieves the
+#'               dataframe
+#' @return       a tibble data frame object with conceptId, conceptName, standardConcept,
+#'               standardConceptCaption, invalidReason, invalidReasonCaption, conceptCode,
+#'               domainId, vocabularyId, conceptClassId.
+#'
 #' @export
 
-lookupConceptCodes <- function(vocabulary, conceptCode, cdmDatabaseSchema=NULL, mapToStandard =TRUE){
+getConceptCodeDetails <- function(conceptCode,
+                                  vocabulary,
+                                  connectionDetails = NULL,
+                                  connection = NULL,
+                                  vocabularyDatabaseSchema = NULL,
+                                  oracleTempSchema = NULL,
+                                  mapToStandard = TRUE,
+                                  simplifyToDataframe = TRUE) {
 
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertVector(conceptCode, add = errorMessage)
+  checkmate::reportAssertions(collection = errorMessage)
 
-  #replace this with cdm connection utils
-  if (is.null(connectionDetails$conn)) {
-    conn <- conn
-  } else {
-    conn <- connectionDetails$conn
+  # Set up connection to server ----------------------------------------------------
+  if (is.null(connection)) {
+    if (!is.null(connectionDetails)) {
+      connection <- DatabaseConnector::connect(connectionDetails)
+      on.exit(DatabaseConnector::disconnect(connection))
+    } else {
+      stop("No connection or connectionDetails provided.")
+    }
   }
-
-  if(is.null(cdmDatabaseSchema)){
-    cdmDatabaseSchema <- connectionDetails$schema
-  }
-
-  conceptQuery <- "SELECT * FROM @cdmDatabaseSchema.concept
+  # Set up concept query -------------------------------------------------------
+  conceptQuery <- "SELECT * FROM @vocabularyDatabaseSchema.concept
   WHERE concept_code in ('@conceptCode') AND vocabulary_id = '@vocabulary';"
+  conceptDetails <- DatabaseConnector::renderTranslateQuerySql(connection = connection,
+                                                               sql = conceptQuery,
+                                                               snakeCaseToCamelCase = TRUE,
+                                                               vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                                               oracleTempSchema = oracleTempSchema,
+                                                               vocabulary = vocabulary,
+                                                               conceptCode = paste(conceptCode, collapse = "','")) %>%
+    dplyr::tibble()
 
-
-  sql <- SqlRender::render(conceptQuery,cdmDatabaseSchema=cdmDatabaseSchema,
-                           vocabulary = vocabulary,
-                           conceptCode = conceptCode)
-  if(length(conceptCode) > 1){
-
-    options(useFancyQuotes = FALSE)
-    sql<-sub(sQuote(paste0(conceptCode,collapse = ",")),paste0("'",conceptCode, "'",collapse = ",") ,sql)
-
+  #if mapping to the standard concept join to concept_relationship----------------------------------
+  if (mapToStandard){
+    conceptIdToMap  <- conceptDetails$.$conceptId
+    mappingQuery <- "SELECT b.* FROM @vocabularyDatabaseSchema.concept_relationship a
+    JOIN  @vocabularyDatabaseSchema.concept b on b.concept_id = a.concept_id_2 AND a.relationship_id = '@relationship'
+    WHERE a.concept_id_1 in (@conceptId);"
+    conceptDetails <- DatabaseConnector::renderTranslateQuerySql(connection = connection,
+                                                                 sql = mappingQuery,
+                                                                 snakeCaseToCamelCase = TRUE,
+                                                                 vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                                                 oracleTempSchema = oracleTempSchema,
+                                                                 conceptId = conceptIdToMap,
+                                                                 relationship = "Maps to") %>%
+      dplyr::tibble()
   }
-  sql <- SqlRender::translate(sql,targetDialect=connectionDetails$dbms)
 
-  concepts_df<-DatabaseConnector::querySql(conn,sql)
-  if(nrow(concepts_df)==0){
-    stop("Query returned empty table concept Id not in cdm")
-  }
-  concepts_df <- formatConceptTable(concepts_df)
-  if(mapToStandard){
-    concepts_df <- mapConceptToStandard(concepts_df)
+  if (simplifyToDataframe){ #simplify to dataframe use for conceptsetexpressions
+    conceptDetails <- conceptDetails$.
   }
 
-  return(concepts_df)
-
-  #replace this with cdm connection utils
-  if (is.null(connectionDetails$conn)) {
-    DatabaseConnector::disconnect(conn)
-
-  }
+  return(conceptDetails)
 }
-
-#' Lookup Concepts by Vocabulary
-#'
-#' This function looks up concepts using the OMOP concept code and vocabulary. Function requires a dbms connection to use
-#'
-#' @param vocabulary source vocabulary to search (i.e. ICD10, SNOMED). Must be character string
-#' @param cdmDatabaseSchema designate cdm Database schema, if connected to cdm then leave NULL
-#' @param mapToStandard logic toggle to map the concepts to standard OMOP concepts
-#' @return a data frame is returned ordered:
-#' concept_id, concept_name, standard_concept, standard_concept_caption
-#' invalid_reason, invalid_reason_caption, concept_code, domain_id, vocabulary_id, concept_class_id.
-#' @importFrom DatabaseConnector querySql disconnect
-#' @importFrom SqlRender render translate
-#' @export
-
-lookupVocabulary <- function(vocabulary, cdmDatabaseSchema=NULL, mapToStandard =TRUE){
-
-
-  #replace this with cdm connection utils
-  if (is.null(connectionDetails$conn)) {
-    conn <- conn
-  } else {
-    conn <- connectionDetails$conn
-  }
-
-  if(is.null(cdmDatabaseSchema)){
-    cdmDatabaseSchema <- connectionDetails$schema
-  }
-
-  conceptQuery <- "SELECT * FROM @cdmDatabaseSchema.concept
-  WHERE vocabulary_id = '@vocabulary';"
-
-
-  sql <- SqlRender::render(conceptQuery,cdmDatabaseSchema=cdmDatabaseSchema,
-                           vocabulary = vocabulary)
-  sql <- SqlRender::translate(sql,targetDialect=connectionDetails$dbms)
-
-  concepts_df<-DatabaseConnector::querySql(conn,sql)
-  if(nrow(concepts_df)==0){
-    stop("Query returned empty table concept Id not in cdm")
-  }
-
-  if(mapToStandard){
-    concepts_df <- suppressWarnings(formatConceptTable(concepts_df))
-    concepts_df <- mapConceptToStandard(concepts_df)
-  } else{
-    concepts_df <- formatConceptTable(concepts_df)
-  }
-
-  return(concepts_df)
-
-  #replace this with cdm connection utils
-  if (is.null(connectionDetails$conn)) {
-    DatabaseConnector::disconnect(conn)
-
-  }
-}
-
 
 #' Lookup concept name as a general search
 #'
 #' This function looks up concepts based on the concept name. It can be modified to conduct
 #' an exact name search or general search that contains the concept name in the concept.
 #'
-#' @param keyword a word a or phrase to search concepts
-#' @param search_type how to use keyword: a) like the keyword, b)exact keyword , or c) any match of keyword
-#' @param cdmDatabaseSchema designate cdm Database schema, if connected to cdm then leave NULL
-#' @return a data.table with all concepts found from the search
-#' @importFrom data.table data.table
-#' @importFrom DatabaseConnector querySql disconnect
-#' @importFrom SqlRender render translate
-#' @export
-
-lookupKeyword<-function(keyword,search_type = c("like", "exact" , "any"),
-                        cdmDatabaseSchema=NULL){
-
-
-  if (is.null(connectionDetails$conn)) {
-    conn <- conn
-  } else {
-    conn <- connectionDetails$conn
-  }
-
-  if(is.null(cdmDatabaseSchema)){
-    cdmDatabaseSchema <- connectionDetails$schema
-  }
-
-
-  search_type <- match.arg(search_type)
-
-  nameSearchQuery <- "SELECT * FROM @cdmDatabaseSchema.concept WHERE"
-
-  search_type <- match.arg(search_type)
-  searchTypeAdd <- switch(search_type,
-                          like = " LOWER(concept_name) LIKE '@keyword'",
-                          exact = " concept_name = '@keyword'",
-                          any = " concept_name LIKE '%@keyword%'")
-
-  nameSearchQuery <- paste0(nameSearchQuery, searchTypeAdd)
-
-
-
-  sql <- SqlRender::render(nameSearchQuery,cdmDatabaseSchema=cdmDatabaseSchema,
-                           keyword = keyword)
-
-  sql <- SqlRender::translate(sql,targetDialect=connectionDetails$dbms)
-
-  concept_search<-DatabaseConnector::querySql(conn,sql)
-  concept_search <- data.table::data.table(concept_search)
-  concept_search <- formatConceptTable(concept_search)
-
-  return(concept_search)
-
-
-  if (is.null(connectionDetails$conn)) {
-    DatabaseConnector::disconnect(conn)
-  }
-}
-
-
-#' Map to a Standard Concept
+#' @template     Connection
+#' @template     VocabularyDatabaseSchema
+#' @template     OracleTempSchema
+#' @param        keyword a character string used to search OMOP concepts
+#' @param        searchType options to aid search. Can use like match, exact match or any match
+#' @param        simplifyToDataframe logic to return dataframe or tibble. If are piping this function
+#'               to create a concept set expression keep as true. Coercion to concept set expressions
+#'               requires the use of a dataframe. If false returns a tiblle where $. retrieves the
+#'               dataframe. For keyword lookup it is suggested to keep option false.
+#' @return       a tibble data frame object with conceptId, conceptName, standardConcept,
+#'               standardConceptCaption, invalidReason, invalidReasonCaption, conceptCode,
+#'               domainId, vocabularyId, conceptClassId.
 #'
-#' This function allows you to map a non-standard concept to a standard concept.
-#' Necessary in order to run valid queries in the OMOP CDM
-#' @param conceptsDf a dataframe containing a concept id that can be mapped to standard. Use this in a pipe
-#' @param conceptId a non-standard concept Id used to map to a standard
-#' @param cdmDatabaseSchema designate cdm Database schema, if connected to cdm then leave NULL
-#' @return a dataframe containing that mapped standard concept id
-#' @importFrom DatabaseConnector querySql disconnect
-#' @importFrom SqlRender render translate
 #' @export
 
-mapConceptToStandard <- function(conceptsDf =NULL, conceptId = NULL, cdmDatabaseSchema = NULL){
+lookupKeyword<-function(keyword,
+                        searchType = c("like", "exact" , "any"),
+                        connectionDetails = NULL,
+                        connection = NULL,
+                        vocabularyDatabaseSchema = NULL,
+                        oracleTempSchema = NULL,
+                        simplifyToDataframe = FALSE) {
 
-  if (is.null(connectionDetails$conn)) {
-    conn <- conn
-  } else {
-    conn <- connectionDetails$conn
+  errorMessage <- checkmate::makeAssertCollection()
+  checkmate::assertVector(keyword, add = errorMessage)
+  checkmate::reportAssertions(collection = errorMessage)
+
+  # Set up connection to server ----------------------------------------------------
+  if (is.null(connection)) {
+    if (!is.null(connectionDetails)) {
+      connection <- DatabaseConnector::connect(connectionDetails)
+      on.exit(DatabaseConnector::disconnect(connection))
+    } else {
+      stop("No connection or connectionDetails provided.")
+    }
   }
+  # Set up concept query -------------------------------------------------------
 
-  if(is.null(cdmDatabaseSchema)){
-    cdmDatabaseSchema <- connectionDetails$schema
+
+  conceptQuery <- "SELECT * FROM @vocabularyDatabaseSchema.concept WHERE"
+  searchType <- match.arg(searchType)
+  searchType <- match.arg(searchType)
+  searchType <- switch(searchType,
+                       like = " LOWER(concept_name) LIKE '@keyword'",
+                       exact = " concept_name = '@keyword'",
+                       any = " concept_name LIKE '%@keyword%'")
+  conceptQuery <- paste0(conceptQuery, searchType)
+
+  conceptDetails <- DatabaseConnector::renderTranslateQuerySql(connection = connection,
+                                                               sql = conceptQuery,
+                                                               snakeCaseToCamelCase = TRUE,
+                                                               vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                                               oracleTempSchema = oracleTempSchema,
+                                                               keyword = keyword) %>%
+    dplyr::tibble()
+
+  if (simplifyToDataframe){ #simplify to dataframe use for conceptsetexpressions
+    conceptDetails <- conceptDetails$.
   }
-
-  if(missing(conceptId)){
-    conceptId <- conceptsDf$CONCEPT_ID
-  }
-
-
-  relationship <- "Maps to"
-  mappingQuery <- "SELECT * FROM @cdmDatabaseSchema.concept_relationship
-  JOIN  @cdmDatabaseSchema.concept on concept_id = concept_id_2 AND relationship_id = '@relationship'
-  WHERE concept_id_1 in (@conceptId);"
-
-
-  sql <- SqlRender::render(mappingQuery,cdmDatabaseSchema=cdmDatabaseSchema,
-                           conceptId = conceptId,
-                           relationship = relationship)
-
-  sql <- SqlRender::translate(sql,targetDialect=connectionDetails$dbms)
-
-  map <- DatabaseConnector::querySql(conn,sql)
-  map <- map[ ,c(7:16)]
-  map <- formatConceptTable(map)
-  return(map)
-
-  if (is.null(connectionDetails$conn)) {
-    DatabaseConnector::disconnect(conn)
-  }
-
+  return(conceptDetails)
 }
-

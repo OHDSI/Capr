@@ -55,6 +55,11 @@ loadComponent <- function(path){
 #' Function to read in a circe json
 #'
 #' This function reads a circe json an builds the cohort definition in an execution space
+#' @param connectionDetails   An object of type \code{connectionDetails} as created using the
+#'                            \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+#'                            DatabaseConnector package. Cannot be left NULL in this function.
+#' @template     VocabularyDatabaseSchema
+#' @template     OracleTempSchema
 #' @param jsonPath a path to the file we wish to import
 #' @return returns the cohort definition
 #' @include LowLevelBuildLangFn.R
@@ -62,12 +67,22 @@ loadComponent <- function(path){
 #' @importFrom purrr map
 #' @importFrom magrittr %>%
 #' @export
-readInCirce <- function(jsonPath){
+readInCirce <- function(jsonPath,
+                        connectionDetails,
+                        vocabularyDatabaseSchema = NULL,
+                        oracleTempSchema = NULL){
   cohort <- jsonlite::read_json(jsonPath) #read in json from file path
+  dbConnection <- createDatabaseConnectionLang(connectionDetails = connectionDetails,
+                                               vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                               oracleTempSchema = oracleTempSchema)
   cohortBuild <- getCohortDefinitionCall(cohort)$createCDCall #get the functions needed to build the cohort
   cohortCaller <- getCohortDefinitionCall(cohort)$CohortCall # get the caller function to make final cohort
   cohortBuild <- Filter(Negate(is.null),cohortBuild) #remove null spaces
   exeEnv <- new.env() #create an execution environemnt
+  for (i in seq_along(dbConnection)){
+    eval(dbConnection[[i]], envir = exeEnv) #run connection setup in execution environment
+  }
+
   for(i in seq_along(cohortBuild)){ #for each item in list
     purrr::map(cohortBuild[[i]], ~eval(.x, envir = exeEnv)) #evaluate expression in execution environment
   }
@@ -90,10 +105,14 @@ readInCirce <- function(jsonPath){
 #' @export
 writeCaprCall <- function(jsonPath, txtPath){
   cohort <- jsonlite::read_json(jsonPath) #read in json from file path
+  dbConnection <- unlist(createDatabaseConnectionLang(),use.names = FALSE) #use dummy credentials
   cohortBuilder <- getCohortDefinitionCall(cohort) #build cohort definition call
   tt <- unlist(cohortBuilder, use.names = FALSE) #unlist list
   sink(txtPath) #create place to save txt
-  for(i in seq_along(tt)){
+  for (i in seq_along(dbConnection)){
+    print(dbConnection[[i]]) #print through dummy credentials
+  }
+  for (i in seq_along(tt)){
     print(tt[[i]])#print through loop o R language
   }
   sink() #close file conn

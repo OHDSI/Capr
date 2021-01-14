@@ -257,12 +257,12 @@ createConceptSetExpressionCustom <- function(conceptSet, Name, conceptMapping = 
 
   concepts <- apply(conceptSet,1, function(x) as.Concept(as.list(x)))#convert data frame into list of concept class obj
   concepts <- unname(concepts) #unname object
-  if(is.null(conceptMapping)){ #if the conceptMapping is null
+  if (is.null(conceptMapping)){ #if the conceptMapping is null
     concepts <- lapply(concepts, function(x) {
-      new("ConceptSetItem", Concept=x) #for each concept convert into a default ConceptSetItem class
+      new("ConceptSetItem", Concept = x) #for each concept convert into a default ConceptSetItem class
     })#default is includeDescendants =TRUE, isExcluded =FALSE, includeMapped =FALSE
   } else{
-    for(i in seq_along(concepts)){#if the conceptMapping is not null
+    for (i in seq_along(concepts)){#if the conceptMapping is not null
       #set the custome conceptset item for each concept via mapping list
       concepts[[i]] <- new("ConceptSetItem", Concept = concepts[[i]],
                            includeDescendants = conceptMapping[[i]]$includeDescendants,

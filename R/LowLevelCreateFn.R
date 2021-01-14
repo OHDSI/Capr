@@ -141,15 +141,36 @@ createSourceConceptAttribute <- function(Domain,ConceptSetExpression){
 
 #Create Concept Attribute
 #'  createConceptAttribue
-#' @param conceptIds the list of ids to lookup, need OMOP vocabulary connection
-#' @param mapToStandard whether to map concept ids to standard or leave as is default is TRUE
-#' @param name is the name of the attribute
+#' @template     Connection
+#' @template     VocabularyDatabaseSchema
+#' @template     OracleTempSchema
+#' @param        conceptIds the list of ids to lookup, need OMOP vocabulary connection
+#' @param        mapToStandard whether to map concept ids to standard or leave as is default is TRUE
+#' @param        name name of the ttribute name
 #' @include LowLevelClasses.R
 #' @importFrom methods new
 #' @export
-createConceptAttribute <- function(conceptIds, mapToStandard = TRUE, name){
-  concepts <- lookupConceptIds(conceptIds = conceptIds, mapToStandard = mapToStandard)
-  concepts <- concepts[,c("CONCEPT_CODE", "CONCEPT_ID", "CONCEPT_NAME", "DOMAIN_ID", "VOCABULARY_ID")]
+createConceptAttribute <- function(conceptIds,
+                                    connectionDetails = NULL,
+                                    connection = NULL,
+                                    vocabularyDatabaseSchema = NULL,
+                                    oracleTempSchema = NULL,
+                                    mapToStandard = TRUE,
+                                    name){
+  #get concepts for attribute
+  concepts <- getConceptIdDetails(conceptIds = conceptIds,
+                                  connectionDetails = connectionDetails,
+                                  connection = connection,
+                                  vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                  oracleTempSchema = oracleTempSchema,
+                                  mapToStandard = mapToStandard,
+                                  simplifyToDataframe = TRUE)
+  concepts$INVALID_REASON_CAPTION <- "Unknown"
+  concepts$STANDARD_CONCEPT_CAPTION <- "Unknown"
+  concepts <- concepts[,c(7,1,2,3,11,12,4)]
+  names(concepts)[c(1:4,7)] <- c("CONCEPT_CODE","CONCEPT_ID",
+                                 "CONCEPT_NAME", "DOMAIN_ID",
+                                 "VOCABULARY_ID")
   concepts <- unname(apply(concepts,1,as.list))
   concepts <- lapply(concepts, function(x) {
     x$CONCEPT_ID <- as.integer(x$CONCEPT_ID)
@@ -162,6 +183,24 @@ createConceptAttribute <- function(conceptIds, mapToStandard = TRUE, name){
                           CriteriaExpression = list(att))
   return(comp)
 }
+#old function without concept connection
+# createConceptAttribute <- function(conceptIds, mapToStandard = TRUE, name){
+#   concepts <- lookupConceptIds(conceptIds = conceptIds, mapToStandard = mapToStandard)
+#   concepts <- concepts[,c("CONCEPT_CODE", "CONCEPT_ID", "CONCEPT_NAME", "DOMAIN_ID", "VOCABULARY_ID")]
+#   concepts <- unname(apply(concepts,1,as.list))
+#   concepts <- lapply(concepts, function(x) {
+#     x$CONCEPT_ID <- as.integer(x$CONCEPT_ID)
+#     return(x)})
+#   att <- new("ConceptAttribute",
+#              Name = name,
+#              Concepts = concepts)
+#   comp <- createComponent(Name = "ConceptAttribute",
+#                           ComponentClass = "Attribute",
+#                           CriteriaExpression = list(att))
+#   return(comp)
+# }
+
+
 #'  createLogicalAttribue
 #' @param name is the name of the attribute
 #' @param logic whether the logic is true or false, default is true

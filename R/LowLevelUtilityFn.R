@@ -139,35 +139,7 @@ createEmptyComponent <- function(){
 #                                            "DeathSourceConcept", "DeviceSourceConcept"),
 #                        'TextFilter' =c("ValueAsString", "StopReason", "UniqueDeviceId"))
 
-#'Format Concept Table
-#'
-#' This is an internal funcion to get concept to circe format
-#'
-#' @param concepts_df concept data frame to format
-formatConceptTable <- function(concepts_df){
-
-  if(sum(!is.na(concepts_df$INVALID_REASON)) > 0){
-    warning("Concept table contains Invalid Concepts")
-  }
-
-  concepts_df$INVALID_REASON_CAPTION<-ifelse(is.na(concepts_df$INVALID_REASON),"Valid", "Invalid")
-  concepts_df$INVALID_REASON <-ifelse(is.na(concepts_df$INVALID_REASON),"V", concepts_df$INVALID_REASON)
-  concepts_df$CONCEPT_ID<-as.integer(concepts_df$CONCEPT_ID)
-  concepts_df$STANDARD_CONCEPT_CAPTION <- ifelse(is.na(concepts_df$STANDARD_CONCEPT),"Non-Standard",
-                                                 ifelse(concepts_df$STANDARD_CONCEPT =="C", "Classification", "Standard"))
-  concepts_df$STANDARD_CONCEPT <- ifelse(is.na(concepts_df$STANDARD_CONCEPT), "N", concepts_df$STANDARD_CONCEPT)
 
 
-  # if(class(concepts_df)[1] == "data.frame"){
-  #
-  #   if(is.na(concepts_df$STANDARD_CONCEPT)){
-  #     warning("concept data frame contains a non-standard concept")
-  #   }
-  #
-  # }
 
-  concepts_df <- concepts_df[ ,c(1,2,6,11,10,12,7,3:5)]
-
-  return(concepts_df)
-}
 

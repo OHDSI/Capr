@@ -1,6 +1,6 @@
 Package: Capr
 Title: Cohort definition Application Programming in R
-Version: 0.0.1.99
+Version: 0.0.1.992
 Authors@R: 
     person(given = "Martin",
            family = "Lavallee",
@@ -31,7 +31,8 @@ Imports:
   uuid,
   SqlRender,
   data.table,
-  dplyr
+  dplyr,
+  checkmate
 Suggests:
     knitr,
     rmarkdown

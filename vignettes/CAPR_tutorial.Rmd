@@ -23,7 +23,7 @@ The objective of this vignette for `Capr` is to: 1) demonstrate creation of a co
 
 ### Set Up 
 
-Before building our cohort, we need to load some R packages to assist us and connect to an OMOP CDM. CAPR relies on accessibility to an OMOP Vocabulary schema to find concepts and leverage concept relationships. We should note to ensure that you are using the latest OMOP vocabulary when using CAPR.
+Before building our cohort, we need to load some R packages to assit us and connect to an OMOP CDM. CAPR relies on accessibility to an OMOP Vocabulary schema to find concepts and leverage relationships. We hope in the future we can set a public connection to ATHENA or an OMOP Vocabulary database to expand useability. We should note to ensure that you are using the latest OMOP vocabulary when using CAPR.
 
 ```{r setup, eval=FALSE}
 library(Capr) #the CAPR package to build cohorts in R
@@ -32,7 +32,7 @@ library(CirceR) #access the circe engine to generate ohdisql
 library(magrittr) #leverage piping
 
 connectionDetails <- createConnectionDetails(dbms="postgresql",
-                                             server="example.com/datasource",
+                                             server="example.com/datasourc",
                                              user="me",
                                              password="secret",
                                              schema="cdm",
@@ -47,15 +47,15 @@ library(DatabaseConnector) #to connect to our OMOP CDM
 library(CirceR) #access the circe engine to generate ohdisql
 library(magrittr) #leverage piping
 
-pc <- loadComponent(system.file("extdata","covidPC.json", package = "Capr"))
-ac <- loadComponent(system.file("extdata","covidAC.json", package = "Capr"))
-irs <- loadComponent(system.file("extdata","covidIRS.json", package = "Capr"))
-es <- loadComponent(system.file("extdata","covidES.json", package = "Capr"))
+PcCovidDiag <- loadComponent(system.file("extdata","PcCovidDiag.json", package = "Capr"))
+AcCovidDiag <- loadComponent(system.file("extdata","AcCovidDiag.json", package = "Capr"))
+IrsCovidDiag <- loadComponent(system.file("extdata","IrsCovidDiag.json", package = "Capr"))
+EsCovidDiag <- loadComponent(system.file("extdata","EsCovidDiag.json", package = "Capr"))
 cen <- loadComponent(system.file("extdata","exampleCen.json", package = "Capr"))
-covidCrit1 <- loadComponent(system.file("extdata","covidCount1.json", package = "Capr"))
-covidGroup <- loadComponent(system.file("extdata","covidGroup.json", package = "Capr"))
+CovidCountCriteria1 <- loadComponent(system.file("extdata","CovidCountCriteria1.json", package = "Capr"))
+CovidDiagGroup <- loadComponent(system.file("extdata","CovidDiagGroup.json", package = "Capr"))
 ipVisit <- loadComponent(system.file("extdata","ipVisit.json", package = "Capr"))
-ipVisitQuery <- loadComponent(system.file("extdata","ipVisitQuery.json", package = "Capr"))
+IpVisitCSE <- loadComponent(system.file("extdata","IpVisitCSE.json", package = "Capr"))
 exampleConceptLookup <- readRDS(system.file("extdata","exampleConceptLookup.rds", package = "Capr"))
 ```
 
@@ -118,7 +118,13 @@ Entry events will be combined into cohort eras if they are within 0 days of each
 The first thing to do in building a cohort is look up clinical concepts we want to use in the cohort. In the example below we want to lookup Inpatient Visits an Emergency Room and Inpatient Visit and an Inpatient Visit. With an existing database connection we can lookup some standard concept Ids in the vocabulary table. 
 
 ```{r lookup ids, eval=FALSE}
-lookupConceptIds(c(262,9201))
+getConceptIdDetails(conceptIds = c(262, #ERand IP Visit
+                                 9201), #IP Visit
+                                 connectionDetails = NULL,
+                                 connection = connection, #use connection since it is already open
+                                 vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                 oracleTempSchema = NULL,
+                                 mapToStandard = TRUE)
 ```
 
 ```{r echo = FALSE, eval=TRUE}
@@ -129,7 +135,14 @@ exampleConceptLookup[[1]]
 Say we do not have a standard OMOP concept id that we want to query but a code from a medical vocabulary like ICD10CM. We can look up this concept code and find the non-standard concept ID.
 
 ```{r lookup codes1, eval=FALSE}
-lookupConceptCodes(vocabulary = "ICD10CM", conceptCode = "E11", mapToStandard = FALSE)
+getConceptCodeDetails(conceptCode = "E11",
+                             vocabulary = "ICD10CM",
+                             connectionDetails = NULL,
+                             connection = connection, #use connection since it is already open
+                             vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                             oracleTempSchema = NULL,
+                             mapToStandard = FALSE)
+
 ```
 
 ```{r echo = FALSE, eval=TRUE}
@@ -139,17 +152,29 @@ exampleConceptLookup[[2]]
 If we only knew the concept code for ICD10CM but wanted it mapped to a standard concept, we can tell our function to `mapToStandard`. In this case we are returned the standard SNOMED concept. 
 
 ```{r lookup codes2}
-lookupConceptCodes(vocabulary = "ICD10CM", conceptCode = "E11", mapToStandard = TRUE)
+getConceptCodeDetails(conceptCode = "E11",
+                             vocabulary = "ICD10CM",
+                             connectionDetails = NULL,
+                             connection = connection, #use connection since it is already open
+                             vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                             oracleTempSchema = NULL,
+                             mapToStandard = TRUE)
 ```
 
 ```{r echo = FALSE, eval=TRUE}
 exampleConceptLookup[[3]]
 ```
 
-Finally if we only know the medical concept but not a specific code, we can do a keyword search to find any concepts that contain a character string of "Diabetes". In the code chunk below we only return the first 5 rows for demonstration purposes. Since we return a `data.table` in this function we can subset and search within this R object.  
+Finally if we only know the medical concept but not a specific code, we can do a keyword search to find any concepts that contain a character string of "Diabetes". In the code chunk below we only return the first 5 rows for demonstration purposes.  
 
 ```{r lookup keywords, warning=FALSE}
-lookupKeyword("Diabetes", "any")[1:5,]
+Diabetes <- lookupKeyword(keyword = "Diabetes",
+                          searchType = "any",
+                          connectionDetails = NULL,
+                          connection = connection, #use connection since it is already open
+                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                          oracleTempSchema = NULL)
+Diabetes$.[1:5,] #need dot to call data frame from object
 ```
 
 
@@ -164,40 +189,57 @@ diabetes
 Next we want to take this concept set and turn it into a concept set expression. The concept set expression contains the concept set item which sets how we want to use the concept. We can find descendant concept, exclude it from the list or include its mapped concepts to the expression. In `Capr` when a concept set expression is created the default is to include descendants. When we create the concept set expression we generate a global unique identifier for this component. In the OMOP cohort concept sets are referred to internally using an integer starting from 0. This identifier deploys the concept set expression within a component. With `Capr` we want these pieces to exist in isolation outside the cohort definition, so we dont have to rely on this arbitrary number within the cohort definition. This allows us to repurpose any concept set expression and parent component for a new cohort. In the structural print we see the guid in the concept set expression section of the component part. 
 
 ```{r cse}
-ipVisit <- lookupConceptIds(c(262,9201)) %>%
+IpVisitCSE <- getConceptIdDetails(conceptIds = c(262, #ERand IP Visit
+                                                 9201), #IP Visit
+                                  connectionDetails = NULL,
+                                  connection = connection, #use connection since it is already open
+                                  vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                  oracleTempSchema = NULL,
+                                  mapToStandard = TRUE) %>%
   createConceptSetExpression(Name = "InpatientVisit", includeDescendants = TRUE)
-str(ipVisit)
+
 ```
 
 ```{r echo=FALSE, eval=TRUE}
-str(ipVisit)
+str(IpVisitCSE)
 ```
 
 
 Returning to the idea of concept set items, we can customize the mapping of the concept set item. If we had three concepts in the set but only want to exclude one of them we can specify the position in the `createConceptMapping` function. 
 
 ```{r custom concept set items}
-cid2 <- c(37310282L, 37310281L, 756055L)
-nm2 <- "COVID-19 specific testing (pre-coordinated Measurements excluded)"
-n <- length(cid2)
-conceptMapping2 <- createConceptMapping(n, includeDescendants = rep(TRUE,n), isExcluded = c(TRUE,TRUE,FALSE))
-conceptSet2 <- lookupConceptIds(conceptIds = cid2, mapToStandard = FALSE) %>% 
-    createConceptSetExpressionCustom(Name = nm2, conceptMapping = conceptMapping2)
+cid <- c(37310282L, 37310281L, 756055L)
+nm <- "COVID-19 specific testing (pre-coordinated Measurements excluded)"
+n <- length(cid)
+#lookup up covid19 meausres
+MeasureOfCovid19 <- getConceptIdDetails(conceptIds = cid,
+                          connectionDetails = NULL,
+                          connection = connection, #use connection since it is already open
+                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                          oracleTempSchema = NULL,
+                          mapToStandard = FALSE)
+#create a custom mapping list
+conceptMapping <- createConceptMapping(n = n,
+                                        includeDescendants = rep(TRUE,n),
+                                        isExcluded = c(TRUE,TRUE,FALSE))
+
+MeasureOfCovid19CSE <- MeasureOfCovid19 %>% 
+  createConceptSetExpressionCustom(Name = nm, conceptMapping = conceptMapping)
 ```
 
 ### Building a Query
 
-Queries lookup a concept set in a domain table in the cdm and returns the set of persons in the table that satisfy this condition. A query contains a concept set expression and an attribute, which can be NULL. In this example we create an occurrence start date attribute. The create attribute signatures start with create and end with attribute. Sandwiched in the middle is the name of the attribute we wish to create. We can look up attributes using the command `listAttributeOptions`. In this example we start by building an occurrence start date attribute. We want the occurrence of the visit to take place any time after December 1st 2019.
+Queries lookup a concept set in a domain table in the cdm a returns the set of persons in the table that satisfy this condition. A query contains a concept set expression and an attribute, which can be NULL. In this example we create an occurrence start date attribute. The create attribute signatures start with create and end with attribute. Sandwhiched in the middle is the name of the attribute we wish to create. We can look up attributes using the command `listAttributeOptions`. In this example we start by building an occurrence start date attribute. We want the occurrence of the visit to take place any time after December 1st 2019.
 
 ```{r create an attribute}
-dateAtt <- createOccurrenceStartDateAttribute(Op = "gt", Value = "2019-12-01")
+DateAtt <- createOccurrenceStartDateAttribute(Op = "gt", Value = "2019-12-01")
 ```
 
-Next we create a visit occurrence query for the inpatient concept set expression and date attribute. Notice at every point we are building up our component container. 
+Next we create a visit occurence query for the inpatient concept set expression and date attribute. Notice at every point we are building up our component container. 
 
 ```{r create a query}
-ipVisitQuery <- createVisitOccurrence(conceptSetExpression = ipVisit, attributeList = list(dateAtt))
-str(ipVisitQuery)
+IpVisitQuery <- createVisitOccurrence(conceptSetExpression = IpVisitCSE,
+                                      attributeList = list(DateAtt))
 ```
 
 ```{r echo=FALSE, eval=TRUE}
@@ -208,16 +250,15 @@ str(ipVisitQuery)
 This query is what we use for the primary criteria of this cohort. All that remains, is adding an observation window and a limit (number of observations per person) to set the cohort entry. Notice again in the structural print the component inherits the query and evolves into a primary criteria component class. If one ever wants to check the component class they can use `componentClass(pc)`.
 
 ```{r create a primary criteria}
-pc <- createPrimaryCriteria(Name = "Inpatient Visit PC",
-                            ComponentList= list(ipVisitQuery),
+PcCovidDiag <- createPrimaryCriteria(Name = "Inpatient Visit Primary Criteria",
+                            ComponentList= list(IpVisitQuery),
                             ObservationWindow = createObservationWindow(0L,0L),
                             Limit = "All")
-str(pc)
 ```
 
 
 ```{r echo=FALSE, eval=TRUE}
-str(pc)
+str(PcCovidDiag)
 ```
 
 
@@ -226,28 +267,51 @@ str(pc)
 Count classes inherit queries and provide boolean logic and temporality. This class counts the number of occurrences of a query that fit within an observation period relative to the initial event. Counts are used in cohort restriction like in the additional criteria and inclusion rules. In this example we are going to build a count for COVID-19. We first look up the concept and include descendants in the mapping. Next we make the concept set expression into a query without any attributes. A count requires a timeline so we can create a time window relative to the initial evemt. 
 
 ```{r create a count}
-covid <- lookupConceptIds(37311061) %>%
-  createConceptSetExpression(Name="COVID-19 (including asymptomatic)")
+#lookup covid diagnosis in vocabulary
+CovidDiag <- getConceptIdDetails(conceptIds = 37311061,
+                                 connectionDetails = NULL,
+                                 connection = connection, #use connection since it is already open
+                                 vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                 oracleTempSchema = NULL,
+                                 mapToStandard = TRUE)
+#create concept set expression including descendant concepts
+CovidDiagCSE <- CovidDiag %>%
+  createConceptSetExpression(Name="COVID-19 (including asymptomatic)",
+                             includeDescendants = TRUE)
+#create a conditionOccurrence query
+CovidDiagQuery <- createConditionOccurrence(conceptSetExpression = CovidDiagCSE)
 
-covidQuery1 <- createConditionOccurrence(conceptSetExpression = covid)
-tw <- createTimeline(StartWindow = createWindow(StartDays = 21, StartCoeff = "Before", EndDays = "All", EndCoeff = "After"),
-                     EndWindow = createWindow(StartDays = "All", StartCoeff = "Before", EndDays = 0, EndCoeff = "After",
-                                              IndexStart = FALSE))
-covidCrit1 <- createCount(Query= covidQuery1,
+#create start window for timeline
+#start window to count occurrences from inpatient event (cohort entry)
+StartWindow1 <- createWindow(StartDays = 21, StartCoeff = "Before", # 21 days before IpVisit index start
+                             EndDays = "All",EndCoeff = "After") #to all days after IpVisit index start
+#create end window for timeline
+#end window to count occurrences from inpatient event (cohort entry)
+EndWindow1 <- createWindow(StartDays = "All", StartCoeff = "Before", #end all days before IpVisit index start
+                           EndDays = 0, EndCoeff = "After", #0 days after IpVisit index start
+                           IndexStart = FALSE) #toggle index end 
+#create timeline
+Timeline1 <- createTimeline(StartWindow = StartWindow1,
+                     EndWindow = EndWindow1)
+#create a count critera
+#at least 1 occurence of a covid diagnosis occuring
+#between a) 21 days before and all days after initial inpatient visit index start date
+#and b) all days before and 0 days after initial inpatient visit index end date
+CovidCountCriteria1 <- createCount(Query= CovidDiagQuery,
                           Logic = "at_least",
                           Count = 1,
-                          Timeline = tw)
-str(covidCrit1)
+                          Timeline = Timeline1)
+
 ```
 
 
 ```{r echo=FALSE, eval=TRUE}
-str(covidCrit1)
+str(CovidCountCriteria1)
 ```
 
 ### Creating a Group
 
-A group is a set of counts, queries, attributes and sub-groups that are deployed using boolean logic. We can combine multiple components and then describe if the patient needs to satisfy all these criteria to remain in the cohort or at least 1. A group is used for additional criteria and inclusion rules. It is also used for a nested criteria attribute. In this example we will construct multiple counts that comprise of a group. Within this section we also show sub-examples of nuances of `Capr` as we build up to the group. 
+A group is a set of counts, queries, attributes and sub-groups that are deployed using boolean logic. We can combine multiple components and then describe if the patient needs to satisfy all these criteria to remain in the cohort or at least 1. A group is used for additional criteria and inclusion rules. It is also used for a nested criteria attribute. In this example we will construct multiple counts that comprise of a group. Within this section we also show sub-examples of nuiances of `Capr` as we build up to the group. 
 
 
 #### Creating a Source Concept Attribute
@@ -255,33 +319,56 @@ A group is a set of counts, queries, attributes and sub-groups that are deployed
 In the code chunk below we want to use source concepts as an attribute for one of the criteria in the group. The patient must have at least 1 instance of these source concepts, excluding for 45542411, 586414, 45600471, 586415, 710157. We first creae a concept mapping for the length of the concept set and then toggle the mapping so that these five concepts have the item of isExcluded set to TRUE. Once the conceptMapping is set we can create the concept set Expression. The concept set expression known as covidSourceConcept can be used as a source concept attribute. Notice when we make the query in the `createConditionOccurrence` function we do not include the concept set expression like before. This is because we are making a special attribute for the source concepts. We should note that a query does not always contain a concept set expression. This is also the case when making an observation period. One should be careful on how they wish to apply the concept set expressions within the query, it may be an attribute. 
 
 ```{r create source concept criteria}
-cid3 <- c(710158L, 710155L, 710156L, 710159L, 45542411L, 710160L, 
-          45756093L, 42501115L, 586414L, 45600471L, 586415L, 710157L)
-nm3 <- "COVID-19 source codes"
-conceptMapping3 <- createConceptMapping(n = length(cid3))
-conceptMapping3 <- toggleConceptMapping(conceptMapping = conceptMapping3,pos = c(5,9:12), mapping = "isExcluded")
-covidSourceConcept <- lookupConceptIds(conceptIds = cid3, mapToStandard = FALSE) %>% 
-  createConceptSetExpressionCustom(Name = nm3, conceptMapping = conceptMapping3)
+CovidSourceConcepts <- getConceptIdDetails(conceptIds = c(710158L, 710155L, 710156L, 
+                                                          710159L, 45542411L, 710160L, 
+                                                          45756093L, 42501115L, 586414L, 
+                                                          45600471L, 586415L, 710157L),
+                                           connectionDetails = NULL,
+                                           connection = connection, #use connection since it is already open
+                                           vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                           oracleTempSchema = NULL,
+                                           mapToStandard = FALSE)
+#create a default mapping list includeDescendants, isExcluded, includeMapped all FALSE
+ConceptMappingSourceConcepts <- createConceptMapping(n = nrow(CovidSourceConcepts))
+#toggle TRUE the positions needed to alter
+ConceptMappingSourceConcepts <- toggleConceptMapping(conceptMapping = ConceptMappingSourceConcepts,
+                                                     pos = c(5,9:12), mapping = "isExcluded")
 
-sourceConceptAttribute <- createConditionSourceConceptAttribute(ConceptSetExpression = covidSourceConcept)
-covidQuery2 <- createConditionOccurrence(attributeList = list(sourceConceptAttribute))
-covidCrit2 <- createCount(Query = covidQuery2, Logic = "at_least", Count =1, Timeline = tw)
+#Create Concept Set Expression with custom mapping
+CovidSourceConceptCSE <- CovidSourceConcepts %>% 
+  createConceptSetExpressionCustom(Name = "COVID-19 source codes",
+                                   conceptMapping = ConceptMappingSourceConcepts)
+
+#Create a Source Concept Attribute for query
+SourceConceptAttribute <- createConditionSourceConceptAttribute(ConceptSetExpression = CovidSourceConceptCSE)
+
+#Create Query
+CovidSourceConceptQuery <- createConditionOccurrence(attributeList = list(SourceConceptAttribute))
+
+#create Count for covid source concepts
+CovidCountCriteria2 <- createCount(Query = CovidSourceConceptQuery,
+                                   Logic = "at_least",
+                                   Count =1,
+                                   Timeline = Timeline1)
 ```
 
 #### Forward Piping and Mutability of the Component Class
 
-Something you probably have noticed is most of `Capr` code contains forward pipes from the `magrittr` package in R. This usually looks a little nicer to avoid overuse of the assignment operator `<-`. However we use this deliberately to convey the mutability of the component container in `Capr`. Looking back at the structural prints from before we can see that component class changes as the object moves from a concept set expression, to a query, to a count and so forth. However the information from the previous state stays the same. The S4 component allows us to modify the structure while maintaining some rigid consistency across inheritance. In the code below, our look up returns a data.frame. The input for the `createConceptSetExpression` is a data.frame and the output is component object with a component class of conceptSetExpression. Next we mutate this component to build a query. One can always check the current component class of a component by using the function `componentClass`
+Something you probably have noticed is most of `Capr` code contains forward pipes from the `magrittr` package in R. This usually looks a little nicer to avoid overuse of the assignment operator `<-`. However we use this deliberately to convey the mutability of the component container in `Capr`. Looking back at the structural prints from before we can see that component class changes as the object moves from a concept set expression, to a query, to a count and so forth. However the information from the previous state stays the same. The S4 component allows us to modify the structure while maintaining some rigid consistency across inheritance. In the code below, our look up returns a data.frame. The input for the `createConceptSetExpression` is a data.frame and the output is component object with a component class of conceptSetExpression. Next we mutate this component to build a query. On can always check the current component class of a component by using the function `componentClass`
 
 ```{r using piping}
-covidCrit3 <- lookupConceptIds(37310282) %>%
+CovidCountCriteria3 <- getConceptIdDetails(conceptIds = 37310282,
+                                 connectionDetails = NULL,
+                                 connection = connection, #use connection since it is already open
+                                 vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                 oracleTempSchema = NULL,
+                                 mapToStandard = TRUE)%>%
   createConceptSetExpression(Name = "COVID-19 specific test") %>%
   createMeasurement(conceptSetExpression = .) %>%
-  createCount(Logic = "at_least", Count = 1, Timeline = tw)
-componentClass(covidCrit3)
-```
-
-```{r echo=FALSE, eval=TRUE}
-componentClass(covidCrit1)
+  createCount(Logic = "at_least",
+              Count = 1,
+              Timeline = Timeline1)
+componentClass(CovidCountCriteria3)
 ```
 
 #### Creating a Concept Attribute
@@ -289,7 +376,12 @@ componentClass(covidCrit1)
 Sometimes we want to apply concepts directly into a cohort as an attribute, without building them as a concept set expression in the cohort. In this case we are using different values as concepts for measurement of a COVID-19 test. Below we show a lookup as before for concept values. 
 
 ```{r}
-lookupConceptIds(c(4126681L,45877985L, 9191L, 4181412L, 45879438L, 45884084L))
+getConceptIdDetails(conceptIds = c(4126681L,45877985L, 9191L, 4181412L, 45879438L, 45884084L),
+                                 connectionDetails = NULL,
+                                 connection = connection, #use connection since it is already open
+                                 vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                 oracleTempSchema = NULL,
+                                 mapToStandard = TRUE)
 ```
 
 
@@ -300,35 +392,41 @@ exampleConceptLookup[[5]]
 If we wanted to use these concepts directly into an attribute we can search them from the function call. Underlying this function is the same lookup command as before in addition to some formatting changes for concepts that are incorporated within the cohort and not in the concept set list. 
 
 ```{r create a concept attribute}
+ValueAsConceptAtt <- createValueAsConceptAttribute(conceptIds = c(4126681L,45877985L, 9191L,
+                                                                  4181412L, 45879438L, 45884084L),
+                                                   connectionDetails = NULL,
+                                                   connection = connection, #use connection since it is already open
+                                                   vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                                   oracleTempSchema = NULL,
+                                                   mapToStandard = TRUE)
 
-valueAtt <- createValueAsConceptAttribute(c(4126681L,45877985L, 9191L,
-                                            4181412L, 45879438L, 45884084L))
-covidQuery4 <- createMeasurement(conceptSetExpression = conceptSet2, attributeList = list(valueAtt))
-covidCrit4 <- createCount(Query = covidQuery4, Logic = "at_least", Count=1, Timeline = tw)
+Covid19MeasuresQuery <- createMeasurement(conceptSetExpression = MeasureOfCovid19CSE,
+                                           attributeList = list(ValueAsConceptAtt))
+CovidCountCriteria4 <- createCount(Query = Covid19MeasuresQuery,
+                                   Logic = "at_least",
+                                   Count=1, Timeline = Timeline1)
 ```
 
 #### Resuing Component Parts
 
-`Capr` levarages the global environment in R to maintain objects that have been previously created in other parts of the cohort. In `Capr`, components and other objects can always exist in isolation so we can simply add them into a different function call. Notice that our object `tw` which represents the timeline of the restricted events has stayed the same for each new count. We are recycling the object from the global environment and do not need to recreate this every time. We will expand upon this idea in the save and load commands in `Capr`. Beyond reuse we can copy and modify aspects to generate new component objects. In the code chunk below we can build this count through our typical means: lookup the concept, create the mapping, make the concept set expression, set the query with attributes and then build the count. 
+`Capr` levarages the global environment in R to maintain objects that have been previously created in other parts of the cohort. In `Capr`, components and other objects can always exist in isolation so we can simply add them into a different function call. Notice that our object `Timeline1` which represents the timeline of the restricted events has stayed the same for each new count. We are recycling the object from the global environment and do not need to recreate this every time. We will expand upon this idea in the save and load commands in `Capr`. Beyond reuse we can copy and modify aspects to generate new component objects. In the code chunk below we can build this count through our typical means: lookup the concept, create the mapping, make the concept set expression, set the query with attributes and then build the count. 
 
 ```{r reusing a concept set for different domain}
-cid2 <- c(37310282L, 37310281L, 756055L)
-nm2 <- "COVID-19 specific testing (pre-coordinated Measurements excluded)"
-n <- length(cid2)
-conceptMapping2 <- createConceptMapping(n, includeDescendants = rep(TRUE,n), isExcluded = c(TRUE,TRUE,FALSE))
-conceptSet2 <- lookupConceptIds(conceptIds = cid2, mapToStandard = FALSE) %>% 
-    createConceptSetExpressionCustom(Name = nm2, conceptMapping = conceptMapping2)
-covidQuery5A <- createObservation(conceptSetExpression = conceptSet2,
-                           attributeList = list(valueAtt))
-covidCrit5A <- createCount(Query = covidQuery5A, Logic = "at_least", Count=1, Timeline = tw)
+Covid19ObservationMeasureQuery <- createObservation(conceptSetExpression = MeasureOfCovid19CSE,
+                                           attributeList = list(ValueAsConceptAtt))
+
+CovidCountCriteria5A <- createCount(Query = Covid19ObservationMeasureQuery,
+                                   Logic = "at_least",
+                                   Count = 1, 
+                                   Timeline = Timeline1)
 
 ```
 
-This is nearly identical to something we have created before, except it was a Measurement domain. Instead of recreating everything we can use the copy and modify principles in R to more quickly change this component to the new domain observation. 
+This is nearly identical to something we have created before, except it was a Measurment domain. Instead of recreating everything we can use the copy and modify principles in R to more quickly change this component to the new domain observation. 
 
 ```{r}
-covidCrit5 <- covidCrit4
-covidCrit5@CriteriaExpression[[1]]@Criteria@Domain <- "Observation" 
+CovidCountCriteria5 <- CovidCountCriteria4
+CovidCountCriteria5@CriteriaExpression[[1]]@Criteria@Domain <- "Observation" 
 ```
 
 #### Finally, Creating the group 
@@ -336,47 +434,65 @@ covidCrit5@CriteriaExpression[[1]]@Criteria@Domain <- "Observation"
 We need to make one more count for our group. Once this is created we can add all these components into a group. A group requires a name, some logic on what counts and the list of criterias, demographic criterias and sub groups. 
 
 ```{r creating the group}
-covidQuery6 <- createObservation(attributeList = list(createObservationSourceConceptAttribute(covidSourceConcept)))
-covidCrit6 <- createCount(Query = covidQuery6, Logic = "at_least", Count =1, Timeline = tw)
+CovidSourceConceptQueryObs <- createObservation(attributeList = list(
+  createObservationSourceConceptAttribute(CovidSourceConceptCSE)))
+CovidCountCriteria6 <- createCount(Query = CovidSourceConceptQueryObs,
+                          Logic = "at_least",
+                          Count =1,
+                          Timeline = Timeline1)
 
-covidGroup <- createGroup(Name = "COVID-19 Diag",
-                          type = "ANY", criteriaList = list(covidCrit1, covidCrit2,
-                                                            covidCrit3, covidCrit4, covidCrit5, covidCrit6))
+CovidDiagGroup <- createGroup(Name = "COVID-19 Diag",
+                          type = "ANY", 
+                          criteriaList = list(CovidCountCriteria1, CovidCountCriteria2,
+                                              CovidCountCriteria3, CovidCountCriteria4,
+                                              CovidCountCriteria5, CovidCountCriteria6))
+saveComponent(CovidDiagGroup,
+              saveName = "CovidDiagGroup",
+              savePath = "~/Documents")
 ```
 
-We can use this group to make an additional criteria like in the chunk below.
+We can use this group to make an additional criteria like in the chunk below. 
 
 ```{r creating an additional criteria}
-ac <- createAdditionalCriteria(Name = "Additional Crit for COVID cohort",Contents = covidGroup, Limit = "All")
-save(covidGroup, saveName = "covidGroup", savePath = "~/Documents/ComponentLibrary")
+AcCovidDiag <- createAdditionalCriteria(Name = "Additional Crit for COVID cohort",
+                               Contents = CovidDiagGroup, 
+                               Limit = "All")
 ```
 
-We can also use this same group as a nested (correlated) criteria for an inclusion rule. This is another example of the reusability of the components. We can make a group once and then use it in a variety of scenarios across the cohort definition. We can also save the group and use it another time in a different cohort if we plan to use it frequently across a family of like cohorts. 
+We can also use this same group as a nested (correlated) criteria for an inclusion rule. This is another example of the resuability of the components. We can make a group once and then use it in a variety of scenarios across the cohort definition. We can also save the group and use it another time in a different cohort if we plan to use it frequently across a family of like cohorts. 
 
 ```{r creating a correlated criteria}
-ccAtt <- createCorrelatedCriteriaAttribute(covidGroup)
-covidQuery7 <- createVisitOccurrence(conceptSetExpression = ipVisit,
-                           attributeList = list(ccAtt))
-tw3 <- createTimeline(StartWindow = createWindow(StartDays = 180, StartCoeff = "Before",
+#load an existing component
+CovidDiagGroupLoad <- loadComponent("~/Documents/CovidDiagGroup.json")
+CorrelatedCriteriaAtt <- createCorrelatedCriteriaAttribute(CovidDiagGroupLoad)
+InpatientVisitWCovidDiagQuery <- createVisitOccurrence(conceptSetExpression = IpVisitCSE,
+                                     attributeList = list(CorrelatedCriteriaAtt))
+Timeline2 <- createTimeline(StartWindow = createWindow(StartDays = 180, StartCoeff = "Before",
                                                  EndDays = 1, EndCoeff = "Before"))
 
-covidCritIR3 <- createCount(Query = covidQuery7,
+CovidCountInclusionRule3 <- createCount(Query = InpatientVisitWCovidDiagQuery,
                             Logic = "exactly",
-                            Count =0,
-                            Timeline = tw3)
-covidGroup4 <- createGroup(Name ="does not have hospitalization for COVID19 in the 6 months preceding admission",
+                            Count = 0,
+                            Timeline = Timeline2)
+CovidHospitalizationGroup <- createGroup(Name ="does not have hospitalization for COVID19 in the 6 months preceding admission",
                            type = "ALL",
-                           criteriaList = list(covidCritIR3))
+                           criteriaList = list(CovidCountInclusionRule3),
+                           demographicCriteriaList = NULL,
+                           Groups = NULL)
 ```
 
 
 #### Creating a Demographic Criteria
 
-In our groups sometimes we want to include a demographic criteria, for example persons 18 years or older. Demographic criterias are attributes, so we use the attribute functions to create them like before.  
+In our groups sometimes we want to include a demographic criteria for examples persons 18 years or older. Demographic criterias are attributes, so we use the attribute functions to create them like before.  
 
 ```{r creating demographic criteria}
-ageAtt <- createAgeAttribute(Op = "gte", Value=18)
-covidGroup2 <- createGroup(Name = ">=18 years old",type="ALL", demographicCriteriaList = list(ageAtt))
+AgeAtt <- createAgeAttribute(Op = "gte", Value = 18)
+Age18AndOlderGroup <- createGroup(Name = ">=18 years old",
+                           type="ALL", 
+                           criteriaList = NULL,
+                           demographicCriteriaList = list(AgeAtt),
+                           Groups = NULL)
 ```
 
 ### Creating Inclusion Rules
@@ -384,20 +500,25 @@ covidGroup2 <- createGroup(Name = ">=18 years old",type="ALL", demographicCriter
 Once we have a series of groups we are happy with we can bundle them together to create inclusion rules. The code chunk below shows how to make inclusion rules from the groups we have created before plus a group that is based on persons having at least 365 days of observation. 
 
 ```{r creating inclusion rules}
-tw2 <- createTimeline(StartWindow = createWindow(StartDays = "All", StartCoeff = "Before", EndDays = 365, EndCoeff = "Before"),
-                      EndWindow = createWindow(StartDays = 0, StartCoeff = "Before", EndDays = "All", EndCoeff = "After",
+Timeline3 <- createTimeline(StartWindow = createWindow(StartDays = "All", StartCoeff = "Before",
+                                                       EndDays = 365, EndCoeff = "Before"),
+                      EndWindow = createWindow(StartDays = 0, StartCoeff = "Before",
+                                               EndDays = "All", EndCoeff = "After",
                                                IndexStart = FALSE, EventStarts = FALSE))
 
-covidCritIR2 <- createCount(Query = createObservationPeriod(),
+CovidCountInclusionRule2 <- createCount(Query = createObservationPeriod(),
                             Logic = "at_least",
                             Count =1,
-                            Timeline = tw2)
-covidGroup3 <- createGroup(Name = "Has >= 365 of observation",
-                           type = "ALL", criteriaList = list(covidCritIR2))
+                            Timeline = Timeline3)
+Has365DaysObsGroup <- createGroup(Name = "Has >= 365 of observation",
+                           type = "ALL",
+                           criteriaList = list(CovidCountInclusionRule2))
 
-irs <- createInclusionRules(Name = "Inclusion Rules for covid Cohort",
-                 Contents = list(covidGroup2, covidGroup3, covidGroup4),
-                 Limit ="First")
+IrsCovidDiag <- createInclusionRules(Name = "Inclusion Rules for covid Cohort",
+                            Contents = list(Age18AndOlderGroup,
+                                            Has365DaysObsGroup,
+                                            CovidHospitalizationGroup),
+                            Limit ="First")
 ```
 
 
@@ -406,52 +527,65 @@ irs <- createInclusionRules(Name = "Inclusion Rules for covid Cohort",
 The cohort exit is defined by the end strategy and the censoring criteria. The end strategy by default is end of continuous observation, however we can create two additional strategies to define how persons exit the cohort. First we can use a date offset. The code chunk below shows an example.
 
 ```{r creating a Date Offset}
-es <- createDateOffsetEndStrategy(offset = 0, eventDateOffset = "EndDate")
+EsCovidDiag <- createDateOffsetEndStrategy(offset = 0, eventDateOffset = "EndDate")
 ```
 
-We can also create a custom era using a drug exposure to define the end point of a cohort. This example is not a part of the covid cohort but is included for demonstration. We first find a concept like warfarin, create the concept set expression and then apply this within the custom era. 
+We can aslo create a custom era using a drug exposure to define the end point of a cohort. This example is not a part of the covid cohort but is included for demonstration. We first find a concept like warfarin, create the concept set expression and then apply this within the custom era. 
 
 ```{r creating a custom era}
-warfarin <- lookupConceptIds(1310149) %>%
-  createConceptSetExpression(Name = "Warfarin")
-es2 <- createCustomEraEndStrategy(warfarin, gapDays = 3, offset = 0)
+WarfarinCSE <- getConceptIdDetails(conceptIds = 1310149, 
+                                  connectionDetails = NULL,
+                                  connection = connection, #use connection since it is already open
+                                  vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                  oracleTempSchema = NULL,
+                                  mapToStandard = TRUE) %>%
+  createConceptSetExpression(Name = "Warfarin", includeDescendants = TRUE)
+
+EndStrategyWithDrug <- createCustomEraEndStrategy(WarfarinCSE,
+                                                  gapDays = 3,
+                                                  offset = 0)
 ```
 
 Aside from the end strategy we can also define a censoring criteria as a way that persons exit the cohort. This is another example that is not part of the covid cohort but we include for the purpose of demonstration. Similar to a primary criteria we can build a concept set expression for what will be our censoring event. Then we create a query (we may also add an attribute) that defines the domain of the concept set expression. We can add any queries we wish to add to the censoring criteria to build this component. 
 
 ```{r creating a censoring criteria}
-infliximab <- lookupConceptIds(c(937368,937369)) %>%
-  createConceptSetExpression(Name = "Infliximab")
-infliximabQuery <-createDrugEra(conceptSetExpression = infliximab)
+InfliximabCSE <- getConceptIdDetails(conceptIds = c(937368,937369), 
+                                  connectionDetails = NULL,
+                                  connection = connection, #use connection since it is already open
+                                  vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                                  oracleTempSchema = NULL,
+                                  mapToStandard = TRUE) %>%
+  createConceptSetExpression(Name = "Infliximab", includeDescendants = TRUE)
+infliximabQuery <-createDrugEra(conceptSetExpression = InfliximabCSE)
 cen <-createCensoringCriteria(Name = "prev inflix", ComponentList =  list(infliximabQuery))
 ```
 
 ### Creating a Cohort Era
 
-The last piece of a cohort definition is to add the cohort era. This defines padding between events and censor window of when to begin recording events. Say in a cohort we only want to look at events after a certain date. All of this is defined in the cohort era. In many cases the cohort era can be composed of default settings (padding of 0 and no censor window) and does not need to to built for the cohort definition. 
+The last piece of a cohort definition is to add the cohort era. This defines padding between events and censor window of when to begin recording events. Say in a cohort we only we want to look at events after a certain date. All of this is defined in the cohort era. In many cases the cohort era can be composed of default settings (padding of 0 and no censor window) and does not need to to built for the cohort definition. 
 
 ```{r creating a cohort Era}
-cohortEra <- createCohortEra(LeftCensorDate = "1994-06-17")
+cohortEra <- createCohortEra(LeftCensorDate = "2019-12-17")
 ```
 
 ### Creating the cohort definition
 
-Once we are happy with the creation of all the sub-components we can build the cohort definition. This is pretty simple. We infuse the component parts necessary for the cohort definition and create. In the cohort definition we can add meta data about the cohort definition. This includes a name (required), description (optional), author (optional) and the cdm version compatibility. The default of the cdm version is ">= 5.0.0". If we had a different variation of this cohort definition, for example the primary criteria for inpatient has a different observation window, we can simply create a separate primary criteria object and then infuse that into a separate cohort definition. 
+Once we are happy with the creation of all the sub-components we can build the cohort definition. This is pretty simple. We infuse the component parts necessary for the cohort definition and create. In the cohort definition we can add meta data about the cohort definition. This includes a name (required), description (optional), author (optional) and the cdm version compatability. The default of the cdm version is ">= 5.0.0". If we had a different variation of this cohort definition, for example the primary criteria for inpatient has a different observation window, we can simply create a separate primary criteria object and then infuse that into a separate cohort definition. 
 
 ```{r create the cohort definition}
 desc <- "This cohort counts the number of inpatient visits from patients with COVID-19, this is counted as a covid diagnosis or from a measured covid test"
-cd <- createCohortDefinition(Name = "Inpatient COVID-19",
+cd <- createCohortDefinition(Name = "Inpatient COVID-19 Diag",
                              Description = desc,
-                             PrimaryCriteria = pc,
-                             AdditionalCriteria = ac,
-                             InclusionRules = irs,
-                             EndStrategy = es)
+                             PrimaryCriteria = PcCovidDiag,
+                             AdditionalCriteria = AcCovidDiag,
+                             InclusionRules = IrsCovidDiag,
+                             EndStrategy = EsCovidDiag)
 ```
 
 
 ## Deploying the Cohort
 
-Once the cohort definition has been created we want to run it against our OMOP cdm. To do so we need to use the OHDSI `CirceR` package to take the cohort definition and create the ohdisql to run on our local environment. `CirceR` will populate the parameterized sql if one sets the generate options. We need to tell what is the column for the cohort Id in the cohort table of the results schema, the id number in the results schema, the cdm schema, the table where the cohort is to be written, the results Schema where the table sits, the vocabulary schema to access concepts and a toggle to generate statistics on the cohort. We can take the cohort definition created in R and return ohdisql and Atlas compatible circe json objects to deploy this cohort across our OMOP system. The function `compileCohortDefinition` takes the R and builds the json that `CirceR` takes to get the cohort description and most importantly the ohdisql. `Capr` does some low level manipulation to get from the R object to the json and then relies on `CirceR` to build the ohdisql. Functions leveraged in the `compileCohortDefinition` functions from `CirceR` include `cohortExpressionFromJson` which activates the circe-be, `cohortPrintFriendly` which returns the english text of the cohort, and `buildCohortQuery` which creates the ohdisql from the input generate options.
+Once the cohort definition has been created we want to run it against our OMOP cdm. To do so we need to use the `CirceR` package to take the cohort definition and create the ohdisql to run on our local environment. `CirceR` will populate the parameterized sql if one sets the generate options. We need to tell what is the column for the cohort Id in the cohort table of the results schema, the id number in the results schema, the cdm schema, the table where the cohort is to be written, the results Schema where the table sits, the vocabulary schema to access concepts and a toggle to generate statistics on the cohort. We can take the cohort definition created in R and return objects to deploy this cohort across our OMOP system. The function `compileCohortDefinition` takes the R and builds the json that `CirceR` takes to get the cohort description and most importantly the ohdisql. `Capr` does some low level manipulation to get from the R object to the json and then relies on `CirceR` to build the ohdisql. Functions leveraged in the `compileCohortDefinition` functions from `CirceR` include `cohortExpressionFromJson` which activates the circe-be, `cohortPrintFriendly` which returns the enlish text of the cohort, and `buildCohortQuery` which creates the ohdisql from the input generate options.
 
 ```{r compile Cohort Definition}
 genOp <- CirceR::createGenerateOptions(cohortIdFieldName = "cohort_definition_id",
@@ -466,7 +600,7 @@ cohortInfo <- compileCohortDefinition(cd, genOp)
 
 The cohortInfo object in the chunk above is a list of 4 aspects: 
 1) the s3 cohort definition (`circeS3`) -- this is a intermediate structure for cohort definition that one can browse to debug errors
-2) the cohort json (`circeJson`) -- this returns the json of the cohort definition, identical to ATLAS. You can copy and paste this json to ATLAS to generate the same cohort. You can also save this for record keeping
+2) the cohort json (`circeJson`) -- this returns the json of the cohort definition, identical to ATLAS. You can copy an paste this json to ATLAS to generate the same cohort. You can also save this for record keeping
 3) the cohort description (`cohortRead`) -- this returns the english text of the cohort 
 4) the sql (`ohdisql`) -- the parameterized sql already filled in with the generate options.
 
@@ -477,15 +611,17 @@ DatabaseConnector::executeSql(connection = conn, sql=cohortInfo$ohdiSQL)
 ```
 
 
-## Saving and Loading Cohort designs
+## Saving and Loading Cohorts
 
-An important feature of `Capr` is the ability to save and load components. As mentioned before we may want to reuse a component in a different cohort design. Instead of rebuilding this object we can save the component and load it up to deploy on a different cohort. The idea here is to leverage the programatic environment of R to assist in cohort development and programming network studies. We encourage users to save and recycle cohort design components to assist them in study development. The code chunk below shows an example of saving a cohort additional criteria.  
+An important feature of `Capr` is the ability to save and load components. As mentioned before we may want to reuse a component in a different cohort. Instead of rebuilding this object we can save the component and load it up to deploy on a different cohort. The idea here is to leverage the programatic environment of R to assist in cohort development and programming network studies. We encourage users to save and recycle components to assist them in study development. The code chunk below shows an example of saving a cohort additional criteria.  
 
 ```{r save, eval=FALSE}
-saveComponent(ac, saveName = "covidAC", savePath = "~/Documents/ComponentLibrary/CovidInpatient")
+saveComponent(AcCovidDiag,
+              saveName = "covidAC", 
+              savePath = "~/Documents/ComponentLibrary/CovidInpatient")
 ```
 
-We can then load this additional criteria into the global R environment to utilize in a new iteration of a covid cohort design. Maybe this new cohort has a different primary criteria but the same in other places. Notice the saved components are written to json. Future releases may allow saving the S4 object as a binary, depending on user preference. 
+We can then load this additional criteria into the global environment to utilize in a new iteration of a covid cohort. Maybe this new cohort has a different primary criteria but the same in other places. Notice the saved components are written to json. Future releases may allow saving the S4 object as a binary, depending on user preference. 
 
 ```{r load}
 acCovidIp <- loadComponent("~/Documents/ComponentLibrary/CovidInpatient/covidAC.json")
@@ -500,9 +636,9 @@ cd2 <- createCohortDefinition(Name = "DifferentcovidDiagCohort",
 
 
 
-## Importing existing JSON Cohort Designs
+## Importing existing JSON Cohorts
 
-The OHDSI community has created many cohort definitions and has introduced a gold standard pheontype library, to maintain a list of ideal cohorts for medical constructs. This will encourage the reuse of best practice standard cohort designs for OHDSI network studies. We also may want to take an existing cohort design to use as a starting skeleton and make a slight modification. `Capr` allows us to import Circe Json and build the cohort definition to your global environment. With this cohort design imported into R you can modify as you see fit. In this example we load the cohort definition and a saved primary criteria. We modify the primary criteria to have an observation window of post days 365 and add this to our loaded cohort. We can build the ohdisql of this cohort quite quickly. 
+The OHDSI community has created thousands of cohorts and has introduced a gold standard pheontype library, maintaining a list of ideal cohorts for medical constructs. We do not want to rewrite good existing cohorts. We also may want to take an existing cohort skeleton and make a slight modification. `Capr` allows us to import Circe Json and build the cohort definition to your global environment. With this cohort uploaded you can modify as you see fit. In this example we upload the cohort definition and a saved primary criteria. We modify the primary criteria to have an observation window of post days 365 and add this to our loaded cohort. We can build the ohdisql of this cohort quite quickly. 
 
 ```{r import json cohort}
 cd2 <- readInCirce("~/Documents/NetworkStudy/COVID/inpatientCovid.json")
@@ -514,11 +650,11 @@ cohortInfo2 <- compileCohortDefinition(cd2, genOp)
 
 ## Cohort Building Language as Data
 
-A cool feature of R is its ability to do metaprogramming. We can save code as data and modify the code programatically. For those interested on learning the theoretical aspects of this in R, one should read Hadley Wickhams's Advanced R section 4 about Metaprogramming. `Capr` uses this feature when importing a CIRCE json. It creates structural calls in an execution environment and then evaluates them into the global environment, leaving only the cohort definition as its trace. `Capr` has a function that places the function calls into a txt file.  In summary this will generate the Capr R code equivalent of the original CIRCE json.
+A cool feature of R is its ability to do metaprogramming. We can save code as data and modify the code programatically. For those interested on learning the theoretical aspects of this in R, one should read Hadley Wickhams's Advanced R section 4 about Metaprogramming. `Capr` uses this feature when importing a CIRCE json. It creates structural calls in an execution environment and then evaluates them into the global environment, leaving only the cohort definition as its trace. `Capr` has a function that places the function calls into a txt file. 
 
 ```{r}
 writeCaprCall(jsonPath = "~/Documents/NetworkStudy/COVID/inpatientCovid.json",
               txtPath = "~/Documents/NetworkStudy/COVID/inpatientCovid.txt")
 ```
 
-While available to the user this function is really designed to interact with a webAPI, writing the machine legible R code to generate a cohort. This is an area of future exploration to modify cohort definitions programatically using the Capr R calls saved as data.
+While available to the user this function is really designed to interact with a webAPI, writing the machine legible R code to generate acohort. This is an area of future exploration to modify cohort definitions programatically using the R calls saved as data.
