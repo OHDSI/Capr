@@ -14,18 +14,77 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-#
+
+#' Create details for database connection
+#'
+#' This function will create the database connection in the script
+#'
+#' @param connectionDetails   An object of type \code{connectionDetails} as created using the
+#'                            \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+#'                            DatabaseConnector package. Can be left NULL which will create dummy credentials
+#' @template     VocabularyDatabaseSchema
+#' @template     OracleTempSchema
+#' @importFrom rlang call2 sym
+#' @return r language to generate the connection to dbms. Be cautious to not expose credentials
+createDatabaseConnectionLang <- function(connectionDetails = NULL,
+                                         vocabularyDatabaseSchema = NULL,
+                                         oracleTempSchema = NULL){
+  #if parameters dbms param is null specify dummy parameters
+  if (is.null(connectionDetails)){
+    connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "postgresql",
+                                                                    user = "me",
+                                                                    password = "secret",
+                                                                    server = "example.com/datasource",
+                                                                    port = "5432",
+                                                                    schema = "cdm")
+  }
+  #language to generate connection Details
+  cdVar <- rlang::call2("createConnectionDetails",
+                        dbms = connectionDetails$dbms,
+                        user = connectionDetails$user,
+                        password = connectionDetails$password,
+                        server = connectionDetails$server,
+                        port = connectionDetails$port,
+                        schema = connectionDetails$schema,
+                        extraSettings = connectionDetails$extraSettings,
+                        oracleDriver = connectionDetails$oracleDriver,
+                        pathToDriver = connectionDetails$pathToDriver)
+  connectionDetailsLang <- rlang::call2("<-",
+                                        rlang::sym("connectionDetails"),
+                                        cdVar)
+  #connect language
+  connectLang <- rlang::call2("<-",
+                              rlang::sym("connection"),
+                              rlang::call2("connect",
+                                           connectionDetails = rlang::sym("connectionDetails")))
+
+  if (is.null(vocabularyDatabaseSchema)){
+    vocabularyDatabaseSchema <- "vocabulary"
+  }
+  vdsLang <- rlang::call2("<-",
+                          rlang::sym("vocabularyDatabaseSchema"),
+                          vocabularyDatabaseSchema)
+  otsLang <- rlang::call2("<-",
+                          rlang::sym("oracleTempSchema"),
+                          oracleTempSchema)
+  connLang <- list(connectionDetailsLang, vdsLang, otsLang, connectLang)
+  return(connLang)
+
+
+}
+
+
 #' Get concept sets from cohort expression and prepare R language
 #'
 #' This function takes the concept sets from the circe cohort definition
 #' and generates R functions to create them in the R environment. The data
 #' saved is R language to generate the objects. They are evaluated separately
-#'
 #' @param x the circe cohort definition
 #' @importFrom purrr map map_int map2
 #' @importFrom rlang call2 expr sym !!
 #' @importFrom magrittr %>%
 #' @return r language to generate the concept set expressions of the cohort
+#'
 getConceptSetCall <- function(x){
   cs <- x$ConceptSets
   `%notin%` <- Negate("%in%") #negate the %in% function
@@ -62,9 +121,17 @@ getConceptSetCall <- function(x){
     cid <- rlang::sym(paste0("cid",i - 1)) #set the cid object
     nm <- rlang::sym(paste0("nm",i - 1)) #set the naming objects
     mapping <- rlang::sym(paste0("conceptMapping",i - 1)) #set the mapping objects
+    connection <- rlang::sym("connection")
+    vocabularyDatabaseSchema <- rlang::sym("vocabularyDatabaseSchema")
+    oracleTempSchema <- rlang::sym("oracleTempSchema")
     #create a temporary expression for the function. bang bang (!!) the object calls into the fexpression
-    tmp <- rlang::expr(lookupConceptIds(conceptIds = !!cid, mapToStandard = FALSE) %>%
-                  createConceptSetExpressionCustom(Name = !!nm,conceptMapping = !!mapping))
+    tmp <- rlang::expr(getConceptIdDetails(conceptIds = !!cid,
+                                           connection = !!connection,
+                                           connectionDetails = NULL,
+                                           vocabularyDatabaseSchema = !!vocabularyDatabaseSchema,
+                                           oracleTempSchema = !!oracleTempSchema,
+                                           mapToStandard = FALSE) %>%
+                         createConceptSetExpressionCustom(Name = !!nm,conceptMapping = !!mapping))
     #create the assignments for each of the conecept Sets
     conceptSetsLang[[i]] <- rlang::call2("<-", rlang::sym(paste0("conceptSet",i -1)), tmp)
   }
@@ -72,6 +139,54 @@ getConceptSetCall <- function(x){
   conceptSetsLang <- list(cidLang, nmLang, mappingLang, conceptSetsLang)
   return(conceptSetsLang)
 }
+
+#Old function without concept connection
+# getConceptSetCall <- function(x){
+#   cs <- x$ConceptSets
+#   `%notin%` <- Negate("%in%") #negate the %in% function
+#   #get concept ids from concept set expressions
+#   cid <- purrr::map(purrr::map(cs, function(x) x$expression$items),
+#                     function(y) purrr::map_int(y, function(z) z$concept$CONCEPT_ID))
+#   #get names from concept set expressions
+#   nm <- purrr::map(cs, function(x) x$name)
+#   #get mapping from concept set exrpessions (i.e includeDescendants, isExcluded)
+#   #if there is no mapping the function will return a NULL
+#   mapping <- purrr::map(purrr::map(cs, function(x) x$expression$items),
+#                         function(y) purrr::map(y, function(z) names(z)[names(z) %notin% "concept"]))
+#   #create a function to check if each type of mapping is available in CAPR.
+#   #if it is check the list for this input as true
+#   getMappings <- function(x){
+#     list('includeDescendants' = "includeDescendants" %in% x,
+#          'isExcluded' = "isExcluded" %in% x,
+#          'includeMapped' = "includeMapped" %in% x)
+#   }
+#   #run the get mappings function
+#   mapping <- purrr::map(mapping, function(x) purrr::map(x,getMappings))
+#   #create the R language saves of the assignment functions that were inputed
+#   #convert each concept set id vector into an assignment function
+#   cidLang <- purrr::map2(seq_along(cid),cid, ~rlang::call2("<-",rlang::sym(paste0("cid",.x-1)),.y))
+#   #convert each name into an assignment function
+#   nmLang <- purrr::map2(seq_along(nm),nm, ~rlang::call2("<-",rlang::sym(paste0("nm",.x-1)),.y))
+#   #convert each mapping into an assignment funciton
+#   mappingLang <- purrr::map2(seq_along(mapping),mapping, ~rlang::call2("<-",rlang::sym(paste0("conceptMapping",.x-1)),.y))
+#
+#   #create an empty vector to store the concept set langs
+#   conceptSetsLang <- vector('list', length = length(cs))
+#   for (i in seq_along(conceptSetsLang)) { #for each item in the list do
+#     #create the object call for each of the assignment functions previously created
+#     cid <- rlang::sym(paste0("cid",i - 1)) #set the cid object
+#     nm <- rlang::sym(paste0("nm",i - 1)) #set the naming objects
+#     mapping <- rlang::sym(paste0("conceptMapping",i - 1)) #set the mapping objects
+#     #create a temporary expression for the function. bang bang (!!) the object calls into the fexpression
+#     tmp <- rlang::expr(lookupConceptIds(conceptIds = !!cid, mapToStandard = FALSE) %>%
+#                   createConceptSetExpressionCustom(Name = !!nm,conceptMapping = !!mapping))
+#     #create the assignments for each of the conecept Sets
+#     conceptSetsLang[[i]] <- rlang::call2("<-", rlang::sym(paste0("conceptSet",i -1)), tmp)
+#   }
+#
+#   conceptSetsLang <- list(cidLang, nmLang, mappingLang, conceptSetsLang)
+#   return(conceptSetsLang)
+# }
 
 
 #' Get attributes from cohort expression and prepare R language
@@ -128,9 +243,15 @@ createAttributeCall <- function(x,objNm){
       jj[[i]] <- rlang::call2("<-", rlang::sym(paste0("att",objNm,"_",i)), jj[[i]])
       next
     }
+    #fix this to add connection
     if (any(AttributeOptions$Concept %in% names(x)[i])){ #if the ith name is in the Concept options do
       conceptIds <- sapply(x[[i]], function(x) getElement(x, "CONCEPT_ID")) #get all concept Ids
-      jj[[i]] <- rlang::call2(nm[i], conceptIds=conceptIds, mapToStandard = rlang::expr(FALSE)) #create the concept attribute call wapper
+      jj[[i]] <- rlang::call2(nm[i], conceptIds=conceptIds,
+                              connectionDetails = NULL,
+                              connection = rlang::sym("connection"),
+                              vocabularyDatabaseSchema = rlang::sym("vocabularyDatabaseSchema"),
+                              oracleTempSchema = rlang::sym("oracleTempSchema"),
+                              mapToStandard = rlang::expr(FALSE)) #create the concept attribute call wapper
       jj[[i]] <- rlang::call2("<-", rlang::sym(paste0("att",objNm,"_",i)), jj[[i]])
       next
     }
@@ -552,25 +673,3 @@ getCohortDefinitionCall <- function(x, nm =NULL){
   return(rr)
 }
 
-
-
-# cs <- getConceptSetCall(cohort1$ConceptSets)
-# pc <- createPCCall(cohort1)
-# ac <- createACCall(cohort1)
-# ir <- createIRSCall(cohort1)
-# cd <-unlist(list(cs,pc,ac,ir), use.names = FALSE)
-# sink("~/Documents/testCAPRCallOutput.txt")
-# for(i in seq_along(cd)){
-#   print(cd[[i]])
-# }
-# sink()
-# #
-# pcLang <- call2("createPrimaryCriteria2",ComponentList = queryLang,
-#                 call2("createObservationWindow", PriorDays=0L, PostDays =0L),
-#                 Limit = sym("All"))
-#
-# pcLang <- expr(createPrimaryCriteria2(Name = "PrimaryCriteria",
-#                                       ComponentList = list(query1),
-#                                       ObservationWindow = createObservationWindow(PriorDays = 0L, PostDays = 0L),
-#                                       Limit = "All"))
-# str(eval(pcLang))

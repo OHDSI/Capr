@@ -15,26 +15,6 @@
 # limitations under the License.
 #
 #
-######---Functions for load----######
-###########--------------Coerce to CAPR--------------#####
-
-# setGeneric("as.Concept", function(x){standardGeneric("as.Concept")})
-# setMethod("as.Concept", "list",
-#           function(x){
-#             con <- new("Concept",
-#                        CONCEPT_ID = as.integer(x$CONCEPT_ID),
-#                        CONCEPT_NAME = as.character(x$CONCEPT_NAME),
-#                        STANDARD_CONCEPT = as.character(x$STANDARD_CONCEPT),
-#                        STANDARD_CONCEPT_CAPTION = as.character(x$STANDARD_CONCEPT_CAPTION),
-#                        INVALID_REASON = as.character(x$INVALID_REASON),
-#                        INVALID_REASON_CAPTION = as.character(x$INVALID_REASON_CAPTION),
-#                        CONCEPT_CODE = as.character(x$CONCEPT_CODE),
-#                        DOMAIN_ID =as.character(x$DOMAIN_ID),
-#                        VOCABULARY_ID = as.character(x$VOCABULARY_ID),
-#                        CONCEPT_CLASS_ID = as.character(x$CONCEPT_CLASS_ID))
-#             return(con)
-#           })
-
 
 #Concept
 #' A coercion function to convert to a CAPR concept
@@ -46,6 +26,35 @@
 #' @importFrom methods new
 #' @include LowLevelClasses.R
 as.Concept <- function(x){
+
+  x$INVALID_REASON_CAPTION <- ifelse(is.na(x$invalidReason),"Valid", "Invalid")
+  x$INVALID_REASON <- ifelse(is.na(x$invalidReason),"V", x$invalidReason)
+  x$STANDARD_CONCEPT_CAPTION <- ifelse(is.na(x$standardConcept),"Non-Standard",
+                                       ifelse(x$standardConcept =="C", "Classification", "Standard"))
+  x$STANDARD_CONCEPT <- ifelse(is.na(x$standardConcept), "N", x$standardConcept)
+
+  new("Concept",
+      CONCEPT_ID = as.integer(x$conceptId),
+      CONCEPT_NAME = as.character(x$conceptName),
+      STANDARD_CONCEPT = as.character(x$STANDARD_CONCEPT),
+      STANDARD_CONCEPT_CAPTION = as.character(x$STANDARD_CONCEPT_CAPTION),
+      INVALID_REASON = as.character(x$INVALID_REASON),
+      INVALID_REASON_CAPTION = as.character(x$INVALID_REASON_CAPTION),
+      CONCEPT_CODE = as.character(x$conceptCode),
+      DOMAIN_ID =as.character(x$domainId),
+      VOCABULARY_ID = as.character(x$vocabularyId),
+      CONCEPT_CLASS_ID = as.character(x$conceptClassId))
+}
+
+#' A coercion function to load to a CAPR concept
+#'
+#' This function takes a data frame containing information about a concept and converts it into the Concept class
+#'
+#' @param x the object to coerce
+#' @return a concept class object
+#' @importFrom methods new
+#' @include LowLevelClasses.R
+as.ConceptLoad <- function(x){
   new("Concept",
       CONCEPT_ID = as.integer(x$CONCEPT_ID),
       CONCEPT_NAME = as.character(x$CONCEPT_NAME),
@@ -69,7 +78,7 @@ as.Concept <- function(x){
 #' @include LowLevelClasses.R
 as.ConceptSetItem <- function(x){
   new("ConceptSetItem",
-      Concept = as.Concept(x$Concept),
+      Concept = as.ConceptLoad(x$Concept),
       isExcluded = x$isExcluded,
       includeDescendants = x$includeDescendants,
       includeMapped = x$includeMapped)
