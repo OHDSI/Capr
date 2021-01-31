@@ -20,18 +20,18 @@
 #################
 #function to check the component class
 #' @export
-setGeneric("componentClass", function(x){standardGeneric("componentClass")})
+setGeneric("componentType", function(x){standardGeneric("componentType")})
 
 #' Function to find the Component Class
 #'
 #' @param x the component to check
 #' @return a character string with the component class
 #' @include LowLevelClasses.R
-#' @rdname componentClass-method
-#' @aliases componentClass
-setMethod("componentClass", "Component",
+#' @rdname componentType-method
+#' @aliases componentType
+setMethod("componentType", "Component",
           function(x){
-            x@MetaData@ComponentClass
+            x@MetaData@ComponentType
           })
 
 #' @export
@@ -60,6 +60,13 @@ setGeneric("getConceptSetId", function(x){standardGeneric("getConceptSetId")})
 setMethod("getConceptSetId", "ConceptSetExpression",
           function(x){
             x@id
+          })
+
+#' @rdname getConceptSetId-method
+#' @aliases getConceptSetId
+setMethod("getConceptSetId", "Query",
+          function(x){
+            x@CodesetId
           })
 
 ##################
@@ -111,7 +118,7 @@ mapOperator <- function(op){
 #'
 #'@return an empty component
 createEmptyComponent <- function(){
-  createComponent(Name = NA_character_, ComponentClass = "Empty")
+  createComponent(Name = NA_character_, ComponentType = "Empty")
 }
 
 ###Atribute Options list

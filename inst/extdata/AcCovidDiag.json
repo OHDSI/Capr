@@ -1,6 +1,6 @@
 {
   "MetaData": {
-    "ComponentClass": "AdditionalCriteria",
+    "ComponentType": "AdditionalCriteria",
     "Name": "Additional Crit for COVID cohort",
     "Description": null
   },

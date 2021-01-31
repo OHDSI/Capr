@@ -3,9 +3,12 @@
 \name{getConceptSetId,ConceptSetExpression-method}
 \alias{getConceptSetId,ConceptSetExpression-method}
 \alias{getConceptSetId}
+\alias{getConceptSetId,Query-method}
 \title{Function to find the ConceptSetId}
 \usage{
 \S4method{getConceptSetId}{ConceptSetExpression}(x)
+
+\S4method{getConceptSetId}{Query}(x)
 }
 \arguments{
 \item{x}{the component to check}

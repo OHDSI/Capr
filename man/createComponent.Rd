@@ -7,7 +7,7 @@
 createComponent(
   Name,
   Description = NULL,
-  ComponentClass = c("ConceptSetExpression", "Group", "Query", "Count", "Attribute",
+  ComponentType = c("ConceptSetExpression", "Group", "Query", "Count", "Attribute",
     "PrimaryCriteria", "AdditionalCriteria", "InclusionRules", "EndStrategy",
     "CensoringCriteria", "CohortEra", "Empty"),
   CriteriaExpression = NULL,
@@ -20,7 +20,7 @@ createComponent(
 
 \item{Description}{a description default null}
 
-\item{ComponentClass}{match an arg from vector}
+\item{ComponentType}{match an arg from vector}
 
 \item{CriteriaExpression}{include anything for the criteria can be null}
 

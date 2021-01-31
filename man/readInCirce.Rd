@@ -8,7 +8,8 @@ readInCirce(
   jsonPath,
   connectionDetails,
   vocabularyDatabaseSchema = NULL,
-  oracleTempSchema = NULL
+  oracleTempSchema = NULL,
+  returnHash = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ schema name, for example 'vocabulary.dbo'.}
 
 \item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
 privileges for storing temporary tables.}
+
+\item{returnHash}{if true returns a has table with all components necessary to build the
+cohort definition including the cohort definition}
 }
 \value{
 returns the cohort definition

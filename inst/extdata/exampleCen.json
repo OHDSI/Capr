@@ -1,6 +1,6 @@
 {
   "MetaData": {
-    "ComponentClass": "CensoringCriteria",
+    "ComponentType": "CensoringCriteria",
     "Name": "prev inflix",
     "Description": null
   },

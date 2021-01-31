@@ -1,6 +1,6 @@
 {
   "MetaData": {
-    "ComponentClass": "ConceptSetExpression",
+    "ComponentType": "ConceptSetExpression",
     "Name": "InpatientVisit",
     "Description": null
   },
