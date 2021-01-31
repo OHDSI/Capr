@@ -9,7 +9,7 @@ printComponent(x, showFullConceptSetExpressions = FALSE)
 \arguments{
 \item{x}{the component s4 class you want to preview}
 
-\item{showConceptSetExpressions}{T/F options to include concept expression list in print}
+\item{showFullConceptSetExpressions}{T/F options to include full details of concept expressions}
 }
 \value{
 A console print summarizing the s4 component part

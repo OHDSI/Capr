@@ -223,7 +223,7 @@ setMethod("printCapr", "Group",
 #' need to be implemented
 #'
 #' @param x the component s4 class you want to preview
-#' @param showConceptSetExpressions T/F options to include concept expression list in print
+#' @param showFullConceptSetExpressions T/F options to include full details of concept expressions
 #' @importFrom methods is
 #' @return A console print summarizing the s4 component part
 #' @export
@@ -249,7 +249,7 @@ printComponent <- function(x, showFullConceptSetExpressions = FALSE){
     } else if (componentType(x) == "InclusionRules") {
       for (i in seq_along(x@CriteriaExpression)) {
         cat(paste0(i, ") "))
-        showComponent(x@CriteriaExpression[[i]], showFullConceptSetExpressions = showFullConceptSetExpressions)
+        printComponent(x@CriteriaExpression[[i]], showFullConceptSetExpressions = showFullConceptSetExpressions)
       }
     } else {
       for (i in seq_along(x@CriteriaExpression)) {
