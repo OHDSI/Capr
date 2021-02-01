@@ -28,6 +28,7 @@ privileges for storing temporary tables.}
 
 \item{returnHash}{if true returns a has table with all components necessary to build the
 cohort definition including the cohort definition}
+
 }
 \value{
 returns the cohort definition

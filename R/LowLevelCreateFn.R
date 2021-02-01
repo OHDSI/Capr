@@ -196,6 +196,7 @@ createConceptAttribute <- function(conceptIds,
 #              Concepts = concepts)
 #   comp <- createComponent(Name = "ConceptAttribute",
 #                           ComponentType = "Attribute",
+#                           ComponentClass = "Attribute",
 #                           CriteriaExpression = list(att))
 #   return(comp)
 # }

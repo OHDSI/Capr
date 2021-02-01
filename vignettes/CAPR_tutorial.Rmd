@@ -356,6 +356,7 @@ CovidCountCriteria2 <- createCount(Query = CovidSourceConceptQuery,
 
 Something you probably have noticed is most of `Capr` code contains forward pipes from the `magrittr` package in R. This usually looks a little nicer to avoid overuse of the assignment operator `<-`. However we use this deliberately to convey the mutability of the component container in `Capr`. Looking back at the structural prints from before we can see that component class changes as the object moves from a concept set expression, to a query, to a count and so forth. However the information from the previous state stays the same. The S4 component allows us to modify the structure while maintaining some rigid consistency across inheritance. In the code below, our look up returns a data.frame. The input for the `createConceptSetExpression` is a data.frame and the output is component object with a component class of conceptSetExpression. Next we mutate this component to build a query. On can always check the current component class of a component by using the function `componentType`
 
+
 ```{r using piping}
 CovidCountCriteria3 <- getConceptIdDetails(conceptIds = 37310282,
                                  connectionDetails = NULL,
