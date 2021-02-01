@@ -15,13 +15,20 @@ Installation
 Requires R (version 3.5.0 or higher). 
 You will also require installation of OHDSI CirceR and OHDSI DatabaseConnector. For installation details of those packages see: https://github.com/OHDSI/CirceR and https://github.com/OHDSI/DatabaseConnector. 
 
-Operational
+# Installation Instructions
+
+```r
+install.packages("remotes")
+remotes::install_github("ohdsi/Capr")
+```
+
+# Operational
 This package requires a connection to an OMOP vocabulary database to query concepts. The database connection is made using OHDSI DatabaseConnector.
 
 # Contributors
 Martin Lavallee, Lee Evans 
 
-#Tutorial
+# Tutorial
 
 An R package vignette is included with this package which can be found upon install:
 
