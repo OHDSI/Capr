@@ -113,6 +113,37 @@ createTimeline <- function(StartWindow, EndWindow =NULL, RestrictVisit = FALSE, 
   return(tim)
 }
 
+#' Create Concept Set list
+#'
+#' This function takes a data frame of OMOP concepts, establishes the mapping logic and bundles them together as
+#' a concept set item.
+#' With this function, toggling the mapping options sets the logic for all concepts in the concept set expression. If the
+#' user wants to set a custom mapping for each concept in the expression the user should use createConceptSetExpressionCustom.
+#' This is an evolving function.
+#'
+#' @param conceptSet a dataframe containing the concepts one would like to add to the concept set. The data frame
+#' of concepts can be queried using the lookup concept functions (requires a connection to an OMOP CDM).
+#' @param isExcluded logic toggle when true excludes the defined concept when attached to a concept set expression
+#' @param includeDescendants logic toggle where default true includes descendant concepts to the defined concept
+#' @param includeMapped logic toggle when true includes mapped concepts to the defined concept
+#' @return This function returns a concept set item object
+#' @include LowLevelClasses.R
+#' @include LowLevelCreateFn.R
+#' @include LowLevelLoadFn.R
+#' @importFrom methods new is
+#' @export
+createConceptSet <- function(conceptSet, includeDescendants =TRUE,
+                                 isExcluded =FALSE, includeMapped = FALSE){
+  concepts <- apply(conceptSet, 1, function(x) as.Concept(as.list(x))) #convert data frame into list of concept class obj
+  concepts <- unname(concepts) #remove names
+  concepts <- lapply(concepts, function(x) { #for each concept in the list set the concept set item
+    new("ConceptSetItem", Concept=x,
+        isExcluded = isExcluded,
+        includeDescendants = includeDescendants,
+        includeMapped = includeMapped)
+  })
+  return(concepts)
+}
 
 #' Create Concept Set Expression
 #'
@@ -137,20 +168,24 @@ createTimeline <- function(StartWindow, EndWindow =NULL, RestrictVisit = FALSE, 
 #' @export
 createConceptSetExpression <- function(conceptSet, Name, includeDescendants =TRUE,
                                         isExcluded =FALSE, includeMapped = FALSE){
-  concepts <- apply(conceptSet,1, function(x) as.Concept(as.list(x))) #convert data frame into list of concept class obj
-  concepts <- unname(concepts) #remove names
-  concepts <- lapply(concepts, function(x) { #for each concept in the list set the concept set item
-    new("ConceptSetItem", Concept=x,
-        isExcluded = isExcluded,
-        includeDescendants = includeDescendants,
-        includeMapped = includeMapped)
-  })
+  # concepts <- apply(conceptSet,1, function(x) as.Concept(as.list(x))) #convert data frame into list of concept class obj
+  # concepts <- unname(concepts) #remove names
+  # concepts <- lapply(concepts, function(x) { #for each concept in the list set the concept set item
+  #   new("ConceptSetItem", Concept=x,
+  #       isExcluded = isExcluded,
+  #       includeDescendants = includeDescendants,
+  #       includeMapped = includeMapped)
+  # })
+  concepts <- createConceptSet(conceptSet = conceptSet,
+                                   includeDescendants = includeDescendants,
+                                   isExcluded = isExcluded,
+                                   includeMapped = includeMapped)
   #create the a new concept set expression from the concept set, this also sets the guid concept id
   cse <- new("ConceptSetExpression", Name = Name, Expression = concepts)
 
   #attach the concept set expressions to a component class object
   comp <- createComponent(Name = Name,
-                          ComponentClass = "ConceptSetExpression",
+                          ComponentType = "ConceptSetExpression",
                           ConceptSetExpression = list(cse))
 
   return(comp)
@@ -275,7 +310,7 @@ createConceptSetExpressionCustom <- function(conceptSet, Name, conceptMapping = 
 
   #attach the concept set expressions to a component class object
   comp <- createComponent(Name = Name,
-                          ComponentClass = "ConceptSetExpression",
+                          ComponentType = "ConceptSetExpression",
                           ConceptSetExpression = list(cse))
 
   return(comp)
@@ -309,7 +344,7 @@ createConceptSetExpressionCustom <- function(conceptSet, Name, conceptMapping = 
 createCount <- function(Query, Logic = c("at_least", "at_most", "exactly"), Count,
                         isDistinct=FALSE, Timeline,
                         Name =NULL, Description=NULL){
-  if(componentClass(Query) != "Query"){
+  if(componentType(Query) != "Query"){
     stop("Query Input must be a Query Class") # if query input is not query class return error
   }
   if(is.null(Name)){ #create a name for the component part when null
@@ -328,7 +363,7 @@ createCount <- function(Query, Logic = c("at_least", "at_most", "exactly"), Coun
 
   comp <- createComponent(Name = Name, #place count class object in component container
                           Description = Description,
-                          ComponentClass = "Count",
+                          ComponentType = "Count",
                           CriteriaExpression = list(ct),
                           ConceptSetExpression = cse) #attach concept set expressions
   return(comp)
@@ -413,7 +448,7 @@ createGroup <- function(Name,
   #create the component containing the group
   comp <- createComponent(Name = Name,
                           Description = Description,
-                          ComponentClass = "Group",
+                          ComponentType = "Group",
                           CriteriaExpression = list(grp),
                           ConceptSetExpression = cse)
   return(comp)
@@ -444,7 +479,7 @@ createDateOffsetEndStrategy <- function(offset, eventDateOffset = c("StartDate",
             DateField = eventDateOffset,
             Offset = as.integer(offset))
   createComponent(Name = "End Strategy Date Offset",
-                          ComponentClass = "EndStrategy",
+                          ComponentType = "EndStrategy",
                           CriteriaExpression = list(es))
 }
 
@@ -468,7 +503,7 @@ createDateOffsetEndStrategy <- function(offset, eventDateOffset = c("StartDate",
 #' @importFrom methods new
 #' @export
 createCustomEraEndStrategy <- function(ConceptSetExpression, gapDays,offset){
-  check <- componentClass(ConceptSetExpression)
+  check <- componentType(ConceptSetExpression)
   if(check != "ConceptSetExpression"){
     stop("Component Class is not ConceptSetExpression")
   }
@@ -477,7 +512,7 @@ createCustomEraEndStrategy <- function(ConceptSetExpression, gapDays,offset){
             GapDays = as.integer(gapDays),
             Offset = as.integer(offset))
   createComponent(Name = "End Strategy Custom Drug Era",
-                          ComponentClass = "EndStrategy",
+                          ComponentType = "EndStrategy",
                           CriteriaExpression = list(es),
                           ConceptSetExpression = list(ConceptSetExpression@ConceptSetExpression[[1]]))
 }
@@ -521,7 +556,7 @@ createPrimaryCriteria <- function(Name,
   cse <- lapply(ComponentList, function(x) x@ConceptSetExpression[[1]])
   pc <- createComponent(Name = Name,
                                 Description = Description,
-                                ComponentClass = "PrimaryCriteria",
+                                ComponentType = "PrimaryCriteria",
                                 CriteriaExpression = list('CriteriaList' = cl,
                                                   'ObservationWindow' = ObservationWindow),
                                 Limit = Limit,
@@ -555,14 +590,14 @@ createAdditionalCriteria <- function(Name,
     }
     ac <- createComponent(Name = Name,
                           Description = Description,
-                          ComponentClass = "AdditionalCriteria",
+                          ComponentType = "AdditionalCriteria",
                           CriteriaExpression = Contents@CriteriaExpression,
                           Limit = Limit,
                           ConceptSetExpression = Contents@ConceptSetExpression)
   } else {
     ac <- createComponent(Name = Name,
                           Description = Description,
-                          ComponentClass = "AdditionalCriteria",
+                          ComponentType = "AdditionalCriteria",
                           CriteriaExpression = NULL,
                           Limit = Limit,
                           ConceptSetExpression = NULL)
@@ -594,7 +629,7 @@ createInclusionRules <- function(Name, Contents, Limit, Description = NULL){
 
   irs <- createComponent(Name = Name,
                         Description = Description,
-                        ComponentClass = "InclusionRules",
+                        ComponentType = "InclusionRules",
                         CriteriaExpression = Contents,
                         Limit = Limit)
   return(irs)
@@ -622,7 +657,7 @@ createCensoringCriteria <- function(Name, ComponentList, Description = NULL){
   cse <- lapply(ComponentList, function(x) x@ConceptSetExpression[[1]])
   cen <- createComponent(Name = Name,
                          Description = Description,
-                         ComponentClass = "CensoringCriteria",
+                         ComponentType = "CensoringCriteria",
                          CriteriaExpression = cl,
                          ConceptSetExpression =  cse)
   return(cen)
@@ -670,7 +705,7 @@ createCohortEra <- function(EraPadDays = 0L,
 
   comp <-createComponent(Name = "Cohort Era Details",
                          Description = NULL,
-                         ComponentClass = "CohortEra",
+                         ComponentType = "CohortEra",
                          CriteriaExpression = list('CollapseSettings' = CollapseSettings,
                                                    'CensorWindow' = CensorWindow))
   return(comp)
@@ -724,7 +759,7 @@ createCohortDefinition <- function(Name,
   cd <- new("CohortDefinition", CohortDetails = md)
 
   #Handle primaryCriteria
-  if(componentClass(PrimaryCriteria) != "PrimaryCriteria"){
+  if(componentType(PrimaryCriteria) != "PrimaryCriteria"){
     stop("The Primary Criteria Component is not a PrimaryCriteria Component class")
   }
 
@@ -734,7 +769,7 @@ createCohortDefinition <- function(Name,
   if(is.null(AdditionalCriteria)){
     cd@AdditionalCriteria <- createEmptyComponent()
   } else{
-    if(componentClass(AdditionalCriteria) != "AdditionalCriteria"){
+    if(componentType(AdditionalCriteria) != "AdditionalCriteria"){
       stop("The Additional Criteria Component is not a AdditionalCriteria Component class")
     }
     cd@AdditionalCriteria <- AdditionalCriteria
@@ -744,7 +779,7 @@ createCohortDefinition <- function(Name,
   if(is.null(InclusionRules)){
     cd@InclusionRules <- createEmptyComponent()
   } else{
-    if(componentClass(InclusionRules) != "InclusionRules"){
+    if(componentType(InclusionRules) != "InclusionRules"){
       stop("The Inclusion Rules Component is not a InclusionRules Component class")
     }
     cd@InclusionRules <- InclusionRules
@@ -753,10 +788,10 @@ createCohortDefinition <- function(Name,
 
   if(is.null(EndStrategy)){
     cd@EndStrategy <- createComponent(Name = "End Strategy End of Continuous Observation",
-                                      ComponentClass = "EndStrategy",
+                                      ComponentType = "EndStrategy",
                                       CriteriaExpression = list(new("EndOfCtsObsEndStrategy")))
   } else{
-    if(componentClass(EndStrategy) != "EndStrategy"){
+    if(componentType(EndStrategy) != "EndStrategy"){
       stop("The End Strategy Component is not a EndStrategy Component class")
     }
     cd@EndStrategy <- EndStrategy
@@ -766,7 +801,7 @@ createCohortDefinition <- function(Name,
   if(is.null(CensoringCriteria)){
     cd@CensoringCriteria <- createEmptyComponent()
   } else{
-    if(componentClass(CensoringCriteria) != "CensoringCriteria"){
+    if(componentType(CensoringCriteria) != "CensoringCriteria"){
       stop("The Censoring Criteria Component is not a CensoringCriteria Component class")
     }
     cd@CensoringCriteria <- CensoringCriteria
@@ -776,7 +811,7 @@ createCohortDefinition <- function(Name,
   if(is.null(CohortEra)){
     cd@CohortEra <- createCohortEra()
   } else{
-    if(componentClass(CohortEra) != "CohortEra"){
+    if(componentType(CohortEra) != "CohortEra"){
       stop("The A Cohort Era Component is not a CohortEraComponent class")
     }
     cd@CohortEra  <- CohortEra

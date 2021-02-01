@@ -12,7 +12,7 @@ consistency between the expression of the cohort criteria and the actionable con
 bundles the concept set expression and the criteria expression into one object that is saveable and inheritable.
 Smaller classes are stored within the container and when they are converted into a superior class the component container
 is modified but the previous information is kept in tact. A component consists of 4 parts: meta data which stores
-the name, description and the componentClass. The componentClass identifies what kind of component one is using. Next
+the name, description and the ComponentType. The ComponentType identifies what kind of component one is using. Next
 the criteriaExpression stores any information about the deployment of the medical concept. This includes queries, counts,
 groups, attributes and other structures that detail the information of the specific component class. The limit
 is a section that specifies the limit of entry for person events. Is it the first event, all events or last event for

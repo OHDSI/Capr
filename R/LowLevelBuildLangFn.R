@@ -93,6 +93,7 @@ getConceptSetCall <- function(x){
                     function(y) purrr::map_int(y, function(z) z$concept$CONCEPT_ID))
   #get names from concept set expressions
   nm <- purrr::map(cs, function(x) x$name)
+  oid <- purrr::map_int(cs, function(x) x$id) #get original concept ids from json to keep order
   #get mapping from concept set exrpessions (i.e includeDescendants, isExcluded)
   #if there is no mapping the function will return a NULL
   mapping <- purrr::map(purrr::map(cs, function(x) x$expression$items),
@@ -108,19 +109,20 @@ getConceptSetCall <- function(x){
   mapping <- purrr::map(mapping, function(x) purrr::map(x,getMappings))
   #create the R language saves of the assignment functions that were inputed
   #convert each concept set id vector into an assignment function
-  cidLang <- purrr::map2(seq_along(cid),cid, ~rlang::call2("<-",rlang::sym(paste0("cid",.x-1)),.y))
+  cidLang <- purrr::map2(oid,cid, ~rlang::call2("<-",rlang::sym(paste0("cid",.x)),.y))
   #convert each name into an assignment function
-  nmLang <- purrr::map2(seq_along(nm),nm, ~rlang::call2("<-",rlang::sym(paste0("nm",.x-1)),.y))
+  nmLang <- purrr::map2(oid,nm, ~rlang::call2("<-",rlang::sym(paste0("nm",.x)),.y))
   #convert each mapping into an assignment funciton
-  mappingLang <- purrr::map2(seq_along(mapping),mapping, ~rlang::call2("<-",rlang::sym(paste0("conceptMapping",.x-1)),.y))
+  mappingLang <- purrr::map2(oid,mapping,
+                             ~rlang::call2("<-",rlang::sym(paste0("conceptMapping",.x)),.y))
 
   #create an empty vector to store the concept set langs
   conceptSetsLang <- vector('list', length = length(cs))
   for (i in seq_along(conceptSetsLang)) { #for each item in the list do
     #create the object call for each of the assignment functions previously created
-    cid <- rlang::sym(paste0("cid",i - 1)) #set the cid object
-    nm <- rlang::sym(paste0("nm",i - 1)) #set the naming objects
-    mapping <- rlang::sym(paste0("conceptMapping",i - 1)) #set the mapping objects
+    cid <- rlang::sym(paste0("cid",oid[i])) #set the cid object
+    nm <- rlang::sym(paste0("nm",oid[i])) #set the naming objects
+    mapping <- rlang::sym(paste0("conceptMapping",oid[i])) #set the mapping objects
     connection <- rlang::sym("connection")
     vocabularyDatabaseSchema <- rlang::sym("vocabularyDatabaseSchema")
     oracleTempSchema <- rlang::sym("oracleTempSchema")
@@ -133,7 +135,7 @@ getConceptSetCall <- function(x){
                                            mapToStandard = FALSE) %>%
                          createConceptSetExpressionCustom(Name = !!nm,conceptMapping = !!mapping))
     #create the assignments for each of the conecept Sets
-    conceptSetsLang[[i]] <- rlang::call2("<-", rlang::sym(paste0("conceptSet",i -1)), tmp)
+    conceptSetsLang[[i]] <- rlang::call2("<-", rlang::sym(paste0("conceptSet",oid[i])), tmp)
   }
 
   conceptSetsLang <- list(cidLang, nmLang, mappingLang, conceptSetsLang)
@@ -507,8 +509,8 @@ getPCCall <- function(x){
 #' @return r language to generate the additional criteria of the cohort
 getACCall <- function(x){
   if (!is.null(x$AdditionalCriteria)){#if the additional criteria is not null
-    grpLang <- createGroupCall(x$AdditionalCriteria, nm = "AC") #make the group call
-    acNm <- rlang::sym("AC") #make a symbol of the assigned object
+    grpLang <- createGroupCall(x$AdditionalCriteria, nm = "ACgrp") #make the group call
+    acNm <- rlang::sym("ACgrp") #make a symbol of the assigned object
   } else{
     grpLang <- NULL #if no Additional Criteria in list than make both null
     acNm <- NULL

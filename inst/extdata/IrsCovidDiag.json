@@ -1,13 +1,13 @@
 {
   "MetaData": {
-    "ComponentClass": "InclusionRules",
+    "ComponentType": "InclusionRules",
     "Name": "Inclusion Rules for covid Cohort",
     "Description": null
   },
   "CriteriaExpression": [
     {
       "MetaData": {
-        "ComponentClass": "Group",
+        "ComponentType": "Group",
         "Name": ">=18 years old",
         "Description": null
       },
@@ -36,7 +36,7 @@
     },
     {
       "MetaData": {
-        "ComponentClass": "Group",
+        "ComponentType": "Group",
         "Name": "Has >= 365 of observation",
         "Description": null
       },
@@ -97,7 +97,7 @@
     },
     {
       "MetaData": {
-        "ComponentClass": "Group",
+        "ComponentType": "Group",
         "Name": "does not have hospitalization for COVID19 in the 6 months preceding admission",
         "Description": null
       },

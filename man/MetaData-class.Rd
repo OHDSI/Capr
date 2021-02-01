@@ -10,7 +10,7 @@ A class for meta data, info about component structure
 \section{Slots}{
 
 \describe{
-\item{\code{ComponentClass}}{name of component class (this is formally defined)}
+\item{\code{ComponentType}}{name of component class (this is formally defined)}
 
 \item{\code{Name}}{name for component customized by user}
 

@@ -1,6 +1,6 @@
 {
   "MetaData": {
-    "ComponentClass": "Query",
+    "ComponentType": "Query",
     "Name": "VisitOccurrence Query",
     "Description": null
   },

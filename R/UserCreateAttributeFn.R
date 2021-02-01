@@ -1258,7 +1258,7 @@ createCorrelatedCriteriaAttribute <- function(Group){
              Name = "CorrelatedCriteria",
              Group = Group@CriteriaExpression[[1]])
   comp <- createComponent(Name = "CorrelatedCriteriaAttribute",
-                          ComponentClass = "Attribute",
+                          ComponentType = "Attribute",
                           CriteriaExpression = list(att),
                           ConceptSetExpression = Group@ConceptSetExpression)
   return(comp)

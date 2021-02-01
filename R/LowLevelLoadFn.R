@@ -107,7 +107,7 @@ as.ConceptSetExpression <- function(x){
 #' @include LowLevelClasses.R
 as.MetaData <- function(x){
   md <- new("MetaData",
-            ComponentClass = x$ComponentClass,
+            ComponentType = x$ComponentType,
             Name = x$Name)
   if(is.null(x$Description)){
     md@Description <- NA_character_
@@ -310,7 +310,7 @@ as.CohortEra <- function(x){
   }
   comp <- createComponent(Name = "Cohort Era Details",
                           Description = NULL,
-                          ComponentClass = "CohortEra",
+                          ComponentType = "CohortEra",
                           CriteriaExpression = list('CollapseSettings' = cs,
                                                     'CensorWindow' = cw))
   return(comp)
@@ -450,14 +450,14 @@ as.EndStrategyLoad <- function(x){
 #' @importFrom methods new
 #' @include LowLevelClasses.R
 as.ComponentLoad <- function(x){
-  if(x$MetaData$ComponentClass == "CohortEra"){
+  if(x$MetaData$ComponentType == "CohortEra"){
     comp <- as.CohortEra(x$CriteriaExpression)
   } else{
     comp <- new("Component",
                 MetaData = as.MetaData(x$MetaData),
                 Limit = lapply(x$Limit, as.Limit),
                 ConceptSetExpression = lapply(x$ConceptSetExpression, as.ConceptSetExpression))
-    compClass <- componentClass(comp)
+    compClass <- componentType(comp)
     comp@CriteriaExpression <- switch(compClass,
                                       PrimaryCriteria = list('CriteriaList' = lapply(x$CriteriaExpression$CriteriaList, as.QueryLoad),
                                                              'ObservationWindow' = as.ObservationWindow(x$CriteriaExpression$ObservationWindow)),

@@ -1,6 +1,6 @@
 {
   "MetaData": {
-    "ComponentClass": "Count",
+    "ComponentType": "Count",
     "Name": "ConditionOccurrence Count",
     "Description": null
   },

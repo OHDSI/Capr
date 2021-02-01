@@ -1,6 +1,6 @@
 {
   "MetaData": {
-    "ComponentClass": "PrimaryCriteria",
+    "ComponentType": "PrimaryCriteria",
     "Name": "Inpatient Visit Primary Criteria",
     "Description": null
   },

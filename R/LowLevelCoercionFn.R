@@ -363,7 +363,7 @@ setMethod("as.Circe", "CensorWindow",
 #' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertPrimaryCriteriaToCIRCE <- function(x){
-  check <- componentClass(x)
+  check <- componentType(x)
   if(check != "PrimaryCriteria"){
     stop("The Component is not a Primary Criteria. Cannot coerce")
   }
@@ -379,7 +379,7 @@ convertPrimaryCriteriaToCIRCE <- function(x){
 #' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertAdditionalCriteriaToCIRCE <- function(x){
-  check <- componentClass(x)
+  check <- componentType(x)
   if(check != "AdditionalCriteria"){
     stop("The Component is not a Additonal Criteria. Cannot coerce")
   }
@@ -399,7 +399,7 @@ convertAdditionalCriteriaToCIRCE <- function(x){
 #' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertRuleToCIRCE <- function(x){
-  check <- componentClass(x)
+  check <- componentType(x)
   if(check != "Group"){
     stop("The Component is not a Group. Cannot coerce")
   }
@@ -418,7 +418,7 @@ convertRuleToCIRCE <- function(x){
 #' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertInclusionRulesToCIRCE <- function(x){
-  check <- componentClass(x)
+  check <- componentType(x)
   if(check != "InclusionRules"){
     stop("The Component is not a InclusionRules. Cannot coerce")
   }
@@ -438,7 +438,7 @@ convertInclusionRulesToCIRCE <- function(x){
 #' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertEndStrategyToCIRCE <- function(x){
-  check <- componentClass(x)
+  check <- componentType(x)
   if(check != "EndStrategy"){
     stop("The Component is not a EndStrategy. Cannot coerce")
   }
@@ -457,7 +457,7 @@ convertEndStrategyToCIRCE <- function(x){
 #' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertCensoringCriteriaToCIRCE <- function(x){
-  check <- componentClass(x)
+  check <- componentType(x)
   if(check != "CensoringCriteria"){
     stop("The Component is not a Censoring Criteria. Cannot coerce")
   }
@@ -471,7 +471,7 @@ convertCensoringCriteriaToCIRCE <- function(x){
 #' @include LowLevelUtilityFn.R
 #' @return a circe converted component
 convertCohortEraToCIRCE <- function(x){
-  check <- componentClass(x)
+  check <- componentType(x)
   if(check != "CohortEra"){
     stop("The Component is not a CohortEra. Cannot coerce")
   }
@@ -485,7 +485,7 @@ convertCohortEraToCIRCE <- function(x){
 #' @aliases as.Circe,Component-method
 setMethod("as.Circe", "Component",
           function(x){
-            class <- componentClass(x)
+            class <- componentType(x)
             comp <- switch(class,
                            Empty = list(),
                            PrimaryCriteria = convertPrimaryCriteriaToCIRCE(x),
@@ -570,7 +570,7 @@ setMethod("UpdateCirceCodesetId", "CustomEraEndStrategy",
 #' @param conceptTable a merge table to match guid to codeset id integer
 #' @return an object with updated codeset id
 UpdateCodesetIdRule <- function(x,conceptTable){
-  check <- componentClass(x)
+  check <- componentType(x)
   if(check != "Group"){
     stop("The Component is not a Group. Cannot coerce")
   }
@@ -585,7 +585,7 @@ UpdateCodesetIdRule <- function(x,conceptTable){
 #' @param conceptTable a merge table to match guid to codeset id integer
 #' @return an object with updated codeset id
 UpdateAndConvert <- function(x, conceptTable){
-  check <- componentClass(x)
+  check <- componentType(x)
   if(check == "PrimaryCriteria"){
     x@CriteriaExpression$CriteriaList <- lapply(x@CriteriaExpression$CriteriaList,
                                                 UpdateCirceCodesetId, conceptTable = conceptTable)
@@ -652,34 +652,36 @@ convertCohortDefinitionToCIRCE <- function(x){
   #remove duplicate concept set expressions
   cse <- removeDupCSE(cse)
   cse <- lapply(cse, as.Circe)
-  conceptTable <- data.frame('id' =sapply(cse,"[[", "id"),
+  conceptTable <- data.frame('id' = sapply(cse,"[[", "id"),
                              'index' = as.integer(seq_along(sapply(cse,"[[", "id")) -1),
                              stringsAsFactors = FALSE)
-  for(i in seq_along(cse)){
-    cse[[i]]$id <- merge(cse[[i]]$id,conceptTable,by.x="x", by.y="id")$index
+  for (i in seq_along(cse)){
+    cse[[i]]$id <- merge(cse[[i]]$id, conceptTable, by.x = "x", by.y = "id")$index
   }
   #Update AC and IRS do first so can manage empty lists
-  ac <- UpdateAndConvert(x@AdditionalCriteria, conceptTable = conceptTable) #update and convert ac
-  if(length(ac) ==0){#if the previous function reutrns a list length zero
-    qualLimit <- list('Type'="First") #default qualified limit to First
+  ac1 <- UpdateAndConvert(x@AdditionalCriteria, conceptTable = conceptTable) #update and convert ac
+  if (length(ac1) == 0){#if the previous function reutrns a list length zero
+    qualLimit <- list('Type' = "First") #default qualified limit to First
+    ac <- list()
   } else{ #ow
-    ac2 <- ac$AdditionalCriteria #update ac to be additional criteria part of update
-    qualLimit <- ac$QualifiedLimit #get qualified limit
+    ac <- ac1$AdditionalCriteria #update ac to be additional criteria part of update
+    qualLimit <- ac1$QualifiedLimit #get qualified limit
   }
-  irs <- UpdateAndConvert(x@InclusionRules, conceptTable = conceptTable) #update and convert irs
-  if(length(irs)==0){#if previous function returns a list length zero
-    expLimit <- list('Type'= "First") #default expression limit to first
+  irs1 <- UpdateAndConvert(x@InclusionRules, conceptTable = conceptTable) #update and convert irs
+  if(length(irs1) == 0){#if previous function returns a list length zero
+    expLimit <- list('Type' = "First") #default expression limit to first
+    irs <- list()
   } else{
-    irs2 <- irs$InclusionRules#extract inclusion rules
-    expLimit <- irs$ExpressionLimit #extract expression limit
+    irs <- irs1$InclusionRules#extract inclusion rules
+    expLimit <- irs1$ExpressionLimit #extract expression limit
   }
   #place created objects or update and convert
   cd <- list('ConceptSets' = cse,
              'PrimaryCriteria' = UpdateAndConvert(x@PrimaryCriteria, conceptTable = conceptTable),
-             'AdditionalCriteria'= ac2,
+             'AdditionalCriteria'= ac,
              'QualifiedLimit' = qualLimit,
              'ExpressionLimit' =expLimit,
-             'InclusionRules' = irs2,
+             'InclusionRules' = irs,
              'EndStrategy' = UpdateAndConvert(x@EndStrategy, conceptTable = conceptTable),
              'CensoringCriteria' = UpdateAndConvert(x@CensoringCriteria, conceptTable = conceptTable),
              'CollapseSettings' = UpdateAndConvert(x@CohortEra, conceptTable = conceptTable)$CollapseSettings,

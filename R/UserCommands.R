@@ -61,6 +61,8 @@ loadComponent <- function(path){
 #' @template     VocabularyDatabaseSchema
 #' @template     OracleTempSchema
 #' @param jsonPath a path to the file we wish to import
+#' @param returnHash if true returns a has table with all components necessary to build the
+#' cohort definition including the cohort definition
 #' @return returns the cohort definition
 #' @include LowLevelBuildLangFn.R
 #' @importFrom jsonlite read_json
@@ -70,7 +72,8 @@ loadComponent <- function(path){
 readInCirce <- function(jsonPath,
                         connectionDetails,
                         vocabularyDatabaseSchema = NULL,
-                        oracleTempSchema = NULL){
+                        oracleTempSchema = NULL,
+                        returnHash = FALSE){
   cohort <- jsonlite::read_json(jsonPath) #read in json from file path
   dbConnection <- createDatabaseConnectionLang(connectionDetails = connectionDetails,
                                                vocabularyDatabaseSchema = vocabularyDatabaseSchema,
@@ -86,8 +89,16 @@ readInCirce <- function(jsonPath,
   for(i in seq_along(cohortBuild)){ #for each item in list
     purrr::map(cohortBuild[[i]], ~eval(.x, envir = exeEnv)) #evaluate expression in execution environment
   }
+  DatabaseConnector::disconnect(exeEnv$connection) #disconnect
   eval(cohortCaller, envir = exeEnv) #evaluate the cohort Caller in the execution environemnt
-  return(exeEnv$CohortDefinition) #return the cohort definition as CAPR object
+  if (returnHash) {
+    rm(connection, connectionDetails, vocabularyDatabaseSchema, oracleTempSchema,
+       envir = exeEnv)
+    ret <- exeEnv
+  } else {
+    ret <- exeEnv$CohortDefinition #if return Hash is false returns the cohort definition
+  }
+  return(ret) #return the cohort definition as CAPR object
 }
 
 
@@ -131,7 +142,7 @@ writeCaprCall <- function(jsonPath, txtPath){
 #' @include LowLevelCoercionFn.R
 #' @importFrom CirceR cohortExpressionFromJson cohortPrintFriendly buildCohortQuery
 #' @importFrom RJSONIO toJSON
-#' @return A three tiered list containing the circe converted cohort definition, the circe json and ohisql.
+#' @return A three tiered list containing the the circe json, a text read and ohisql.
 #' If an error occurs the ohdisql slot will be NA and the user should review the circe cohort definition for potential errors.
 #' @export
 compileCohortDefinition <- function(CohortDefinition, generateOptions){
@@ -151,11 +162,13 @@ compileCohortDefinition <- function(CohortDefinition, generateOptions){
   #                     })#end try catch error
 
   #create list with cohort definition converted to circe, circe json and ohdiSQL
-  cohortList <- list('circeS3' = circeS3,
-                     'circeJson' = circeJson,
+  cohortList <- list('circeJson' = circeJson,
                      'cohortRead' = cohortRead,
                      'ohdiSQL' = ohdisql)
   #return cohort list
   return(cohortList)
   #end of function
 }
+
+
+

@@ -1,6 +1,6 @@
 {
   "MetaData": {
-    "ComponentClass": "Group",
+    "ComponentType": "Group",
     "Name": "COVID-19 Diag",
     "Description": null
   },

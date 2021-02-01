@@ -54,7 +54,7 @@ EsCovidDiag <- loadComponent(system.file("extdata","EsCovidDiag.json", package =
 cen <- loadComponent(system.file("extdata","exampleCen.json", package = "Capr"))
 CovidCountCriteria1 <- loadComponent(system.file("extdata","CovidCountCriteria1.json", package = "Capr"))
 CovidDiagGroup <- loadComponent(system.file("extdata","CovidDiagGroup.json", package = "Capr"))
-ipVisit <- loadComponent(system.file("extdata","ipVisit.json", package = "Capr"))
+IpVisitQuery <- loadComponent(system.file("extdata","IpVisitQuery.json", package = "Capr"))
 IpVisitCSE <- loadComponent(system.file("extdata","IpVisitCSE.json", package = "Capr"))
 exampleConceptLookup <- readRDS(system.file("extdata","exampleConceptLookup.rds", package = "Capr"))
 ```
@@ -243,11 +243,11 @@ IpVisitQuery <- createVisitOccurrence(conceptSetExpression = IpVisitCSE,
 ```
 
 ```{r echo=FALSE, eval=TRUE}
-str(ipVisitQuery)
+str(IpVisitQuery)
 ```
 
 
-This query is what we use for the primary criteria of this cohort. All that remains, is adding an observation window and a limit (number of observations per person) to set the cohort entry. Notice again in the structural print the component inherits the query and evolves into a primary criteria component class. If one ever wants to check the component class they can use `componentClass(pc)`.
+This query is what we use for the primary criteria of this cohort. All that remains, is adding an observation window and a limit (number of observations per person) to set the cohort entry. Notice again in the structural print the component inherits the query and evolves into a primary criteria component class. If one ever wants to check the component class they can use `componentType(pc)`.
 
 ```{r create a primary criteria}
 PcCovidDiag <- createPrimaryCriteria(Name = "Inpatient Visit Primary Criteria",
@@ -354,7 +354,8 @@ CovidCountCriteria2 <- createCount(Query = CovidSourceConceptQuery,
 
 #### Forward Piping and Mutability of the Component Class
 
-Something you probably have noticed is most of `Capr` code contains forward pipes from the `magrittr` package in R. This usually looks a little nicer to avoid overuse of the assignment operator `<-`. However we use this deliberately to convey the mutability of the component container in `Capr`. Looking back at the structural prints from before we can see that component class changes as the object moves from a concept set expression, to a query, to a count and so forth. However the information from the previous state stays the same. The S4 component allows us to modify the structure while maintaining some rigid consistency across inheritance. In the code below, our look up returns a data.frame. The input for the `createConceptSetExpression` is a data.frame and the output is component object with a component class of conceptSetExpression. Next we mutate this component to build a query. On can always check the current component class of a component by using the function `componentClass`
+Something you probably have noticed is most of `Capr` code contains forward pipes from the `magrittr` package in R. This usually looks a little nicer to avoid overuse of the assignment operator `<-`. However we use this deliberately to convey the mutability of the component container in `Capr`. Looking back at the structural prints from before we can see that component class changes as the object moves from a concept set expression, to a query, to a count and so forth. However the information from the previous state stays the same. The S4 component allows us to modify the structure while maintaining some rigid consistency across inheritance. In the code below, our look up returns a data.frame. The input for the `createConceptSetExpression` is a data.frame and the output is component object with a component class of conceptSetExpression. Next we mutate this component to build a query. On can always check the current component class of a component by using the function `componentType`
+
 
 ```{r using piping}
 CovidCountCriteria3 <- getConceptIdDetails(conceptIds = 37310282,
@@ -368,7 +369,7 @@ CovidCountCriteria3 <- getConceptIdDetails(conceptIds = 37310282,
   createCount(Logic = "at_least",
               Count = 1,
               Timeline = Timeline1)
-componentClass(CovidCountCriteria3)
+componentType(CovidCountCriteria3)
 ```
 
 #### Creating a Concept Attribute

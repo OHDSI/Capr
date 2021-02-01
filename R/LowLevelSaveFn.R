@@ -185,7 +185,7 @@ setMethod("saveState", "Group",
 #' @aliases saveState,MetaData-method
 setMethod("saveState", "MetaData",
           function(x){
-            list('ComponentClass' = x@ComponentClass,
+            list('ComponentType' = x@ComponentType,
                  'Name' = x@Name,
                  'Description' = x@Description)
           })
@@ -234,7 +234,7 @@ setMethod("saveState", "CensorWindow",
 #' @aliases saveState,Component-method
 setMethod("saveState", "Component",
           function(x){
-            if(x@MetaData@ComponentClass == "PrimaryCriteria"){
+            if(x@MetaData@ComponentType == "PrimaryCriteria"){
               cl <- lapply(x@CriteriaExpression$CriteriaList, saveState)
               ow <- saveState(x@CriteriaExpression$ObservationWindow)
               ll <-  list('MetaData' = saveState(x@MetaData),
@@ -242,7 +242,7 @@ setMethod("saveState", "Component",
                                                       'ObservationWindow' = ow),
                           'Limit' = lapply(x@Limit, saveState),
                           'ConceptSetExpression' = lapply(x@ConceptSetExpression, saveState))
-            } else if(x@MetaData@ComponentClass == "CohortEra"){
+            } else if(x@MetaData@ComponentType == "CohortEra"){
               ll <-  list('MetaData' = saveState(x@MetaData),
                           'CriteriaExpression' = list('CollapseSettings' = saveState(x@CriteriaExpression$CollapseSettings),
                                                       'CensorWindow' = saveState(x@CriteriaExpression$CensorWindow)),

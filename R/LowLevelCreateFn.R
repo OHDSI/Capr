@@ -20,7 +20,7 @@
 #' createComponent
 #' @param Name a name
 #' @param Description a description default null
-#' @param ComponentClass match an arg from vector
+#' @param ComponentType match an arg from vector
 #' @param CriteriaExpression include anything for the criteria can be null
 #' @param Limit determine limit
 #' @param ConceptSetExpression add anny concept set expressions
@@ -28,7 +28,7 @@
 #' @importFrom methods new
 createComponent <- function(Name,
                             Description = NULL,
-                            ComponentClass = c("ConceptSetExpression",
+                            ComponentType = c("ConceptSetExpression",
                                                "Group",
                                                "Query",
                                                "Count",
@@ -49,14 +49,14 @@ createComponent <- function(Name,
   }
   #create the meta data
   md <- new("MetaData",
-            ComponentClass = ComponentClass,
+            ComponentType = ComponentType,
             Name = Name,
             Description = Description)
-  if(ComponentClass == "PrimaryCriteria"){
+  if(ComponentType == "PrimaryCriteria"){
     Limit <- list('PrimaryCriteriaLimit' = new('Limit', Type = Limit))
-  } else if(ComponentClass == "AdditionalCriteria"){
+  } else if(ComponentType == "AdditionalCriteria"){
     Limit <- list('QualifiedLimit' = new('Limit', Type = Limit))
-  } else if(ComponentClass == "InclusionRules"){
+  } else if(ComponentType == "InclusionRules"){
     Limit <- list('ExpressionLimit' = new('Limit', Type = Limit))
   } else{
     Limit <- list()
@@ -114,7 +114,7 @@ createOpAttribute <- function(Name, Op, Value, Extent = NULL){
              Op = Op,
              Contents =Contents)
   comp <- createComponent(Name = "OpAttribute",
-                          ComponentClass = "Attribute",
+                          ComponentType = "Attribute",
                           CriteriaExpression = list(att))
   return(comp)
 
@@ -133,7 +133,7 @@ createSourceConceptAttribute <- function(Domain,ConceptSetExpression){
              Name = paste0(Domain, "SourceConcept"),
              SourceCodesetId = ConceptSetExpression@ConceptSetExpression[[1]]@id)
   comp <- createComponent(Name = "SourceConceptAttribute",
-                          ComponentClass = "Attribute",
+                          ComponentType = "Attribute",
                           CriteriaExpression = list(att),
                           ConceptSetExpression = ConceptSetExpression@ConceptSetExpression)
   return(comp)
@@ -179,7 +179,7 @@ createConceptAttribute <- function(conceptIds,
              Name = name,
              Concepts = concepts)
   comp <- createComponent(Name = "ConceptAttribute",
-                          ComponentClass = "Attribute",
+                          ComponentType = "Attribute",
                           CriteriaExpression = list(att))
   return(comp)
 }
@@ -195,6 +195,7 @@ createConceptAttribute <- function(conceptIds,
 #              Name = name,
 #              Concepts = concepts)
 #   comp <- createComponent(Name = "ConceptAttribute",
+#                           ComponentType = "Attribute",
 #                           ComponentClass = "Attribute",
 #                           CriteriaExpression = list(att))
 #   return(comp)
@@ -210,7 +211,7 @@ createConceptAttribute <- function(conceptIds,
 createLogicalAttribute <- function(name, logic = TRUE){
   att <- new("LogicAttribute", Name = name, Logic = logic)
   comp <- createComponent(Name = "LogicAttribute",
-                          ComponentClass = "Attribute",
+                          ComponentType = "Attribute",
                           CriteriaExpression = list(att))
   return(comp)
 }
@@ -247,7 +248,7 @@ createQuery <- function(Domain,
   }
 
   #check attributes are all attributes
-  check <- lapply(attributeList,componentClass)
+  check <- lapply(attributeList,componentType)
   if(!all(grepl("Attribute",check))){
     stop("not all additional parameters are attributes")
   }
@@ -265,7 +266,7 @@ createQuery <- function(Domain,
 
   comp <- createComponent(Name = Name,
                           Description = Description,
-                          ComponentClass = "Query",
+                          ComponentType = "Query",
                           CriteriaExpression = list(query),
                           ConceptSetExpression = cse)
   return(comp)

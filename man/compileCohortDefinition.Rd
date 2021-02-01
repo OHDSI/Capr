@@ -12,7 +12,7 @@ compileCohortDefinition(CohortDefinition, generateOptions)
 \item{generateOptions}{the options for building the ohdisql using CirceR::createGenerateOptions}
 }
 \value{
-A three tiered list containing the circe converted cohort definition, the circe json and ohisql.
+A three tiered list containing the the circe json, a text read and ohisql.
 If an error occurs the ohdisql slot will be NA and the user should review the circe cohort definition for potential errors.
 }
 \description{
