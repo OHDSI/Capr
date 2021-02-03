@@ -55,9 +55,7 @@ loadComponent <- function(path){
 #' Function to read in a circe json
 #'
 #' This function reads a circe json an builds the cohort definition in an execution space
-#' @param connectionDetails   An object of type \code{connectionDetails} as created using the
-#'                            \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
-#'                            DatabaseConnector package. Cannot be left NULL in this function.
+#' @template     Connection
 #' @template     VocabularyDatabaseSchema
 #' @template     OracleTempSchema
 #' @param jsonPath a path to the file we wish to import
@@ -71,6 +69,7 @@ loadComponent <- function(path){
 #' @export
 readInCirce <- function(jsonPath,
                         connectionDetails,
+                        connection = NULL,
                         vocabularyDatabaseSchema = NULL,
                         oracleTempSchema = NULL,
                         returnHash = FALSE){
