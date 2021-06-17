@@ -34,8 +34,11 @@ Imports:
   dplyr,
   checkmate
 Suggests:
+    testthat (>= 3.0.0),
     knitr,
     rmarkdown
+Remotes:
+    ohdsi/CirceR
 Collate: 
     'Capr.R'
     'LowLevelClasses.R'
@@ -53,3 +56,4 @@ Collate:
     'UserEditFn.R'
     'UserPrintFn.R'
 VignetteBuilder: knitr
+Config/testthat/edition: 3
