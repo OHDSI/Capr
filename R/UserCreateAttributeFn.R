@@ -87,7 +87,7 @@ createOccurrenceStartDateAttribute <- function(Op, Value, Extent=NULL){
     stop("Value must be a character string to use the dat attribute")
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.character(Extent)){ #error handler for character date string or null
@@ -118,7 +118,7 @@ createOccurrenceEndDateAttribute <- function(Op, Value, Extent=NULL){
     stop("Value must be a character string to use the dat attribute")
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.character(Extent)){ #error handler for character date string or null
@@ -149,7 +149,7 @@ createEraStartDateAttribute <- function(Op, Value, Extent=NULL){
     stop("Value must be a character string to use the dat attribute")
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.character(Extent)){ #error handler for character date string or null
@@ -179,7 +179,7 @@ createEraEndDateAttribute <- function(Op, Value, Extent=NULL){
     stop("Value must be a character string to use the dat attribute")
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.character(Extent)){ #error handler for character date string or null
@@ -209,7 +209,7 @@ createPeriodStartDateAttribute <- function(Op, Value, Extent=NULL){
     stop("Value must be a character string to use the dat attribute")
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.character(Extent)){ #error handler for character date string or null
@@ -239,7 +239,7 @@ createPeriodEndDateAttribute <- function(Op, Value, Extent=NULL){
     stop("Value must be a character string to use the dat attribute")
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.character(Extent)){ #error handler for character date string or null
@@ -265,13 +265,13 @@ createPeriodEndDateAttribute <- function(Op, Value, Extent=NULL){
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
-createAgeAttribute <- function(Op, Value, Extent=NULL){
+createAgeAttribute <- function(Op, Value, Extent = NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
   if (!is.integer(Value)){ #error handler for character date string
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -301,7 +301,7 @@ createEraLengthAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -331,7 +331,7 @@ createAgeAtStartAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -361,7 +361,7 @@ createAgeAtEndAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -391,7 +391,7 @@ createGapDaysAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -421,7 +421,7 @@ createRefillsAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -451,7 +451,7 @@ createQuantityAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -481,7 +481,7 @@ createDaysSupplyAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -511,7 +511,7 @@ createEffectiveDrugDoseAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -541,7 +541,7 @@ createValueAsNumberAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -571,7 +571,7 @@ createRangeLowAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -601,7 +601,7 @@ createRangeHighAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -631,7 +631,7 @@ createRangeHighRatioAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null
@@ -661,7 +661,7 @@ createRangeLowRatioAttribute <- function(Op, Value, Extent=NULL){
     Value <- as.integer(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
-    if (Op != "bt" | Op != "!bt"){ #error handler for bt and !bt
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
     if (!is.integer(Extent)){ #error handler for character date string or null

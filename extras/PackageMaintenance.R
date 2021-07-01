@@ -17,7 +17,7 @@
 # limitations under the License.
 
 # Format and check code
-# OhdsiRTools::formatRFolder()
+OhdsiRTools::formatRFolder()
 OhdsiRTools::checkUsagePackage("Capr")
 OhdsiRTools::updateCopyrightYearFolder()
 devtools::spell_check()
@@ -33,6 +33,8 @@ rmarkdown::render("vignettes/CAPR_tutorial.Rmd",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
                                           toc = TRUE,
                                           number_sections = TRUE))
+unlink("inst/doc/CAPR_tutorial.tex")
 
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
+

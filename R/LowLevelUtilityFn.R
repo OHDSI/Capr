@@ -72,6 +72,31 @@ setMethod("getConceptSetId", "Query",
 ##################
 #Utilities
 #################
+
+#' Function to get concept ids from concept set expression in object
+#'
+#' @param x the object to check
+#' @return a list or vector of concept id integers
+#' @include LowLevelClasses.R
+#' @export
+checkConceptIds <- function(x) {
+  #if object is a concept set expression
+  if (is(x) == "ConceptSetExpression") {
+    #extract expression
+    dd <- x@Expression
+    #extract concept id  from concept set item
+    rr <- purrr::map_int(dd, ~slot(slot(.x, name = "Concept"), name = "CONCEPT_ID"))
+  }
+
+  #if the oject is a component
+  if (is(x) == "Component") {
+    #recurisvely run the funtion
+    rr <- purrr::map(x@ConceptSetExpression, ~checkConceptIds(.x))
+  }
+  return(rr)
+}
+
+
 #function to remove duplicate concept set expressions
 #' Function that removes duplicate concept set expressions
 #'

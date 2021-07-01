@@ -251,7 +251,7 @@ This query is what we use for the primary criteria of this cohort. All that rema
 
 ```{r create a primary criteria}
 PcCovidDiag <- createPrimaryCriteria(Name = "Inpatient Visit Primary Criteria",
-                            ComponentList= list(IpVisitQuery),
+                            ComponentList = list(IpVisitQuery),
                             ObservationWindow = createObservationWindow(0L,0L),
                             Limit = "All")
 ```
@@ -348,7 +348,7 @@ CovidSourceConceptQuery <- createConditionOccurrence(attributeList = list(Source
 #create Count for covid source concepts
 CovidCountCriteria2 <- createCount(Query = CovidSourceConceptQuery,
                                    Logic = "at_least",
-                                   Count =1,
+                                   Count = 1,
                                    Timeline = Timeline1)
 ```
 
@@ -363,7 +363,7 @@ CovidCountCriteria3 <- getConceptIdDetails(conceptIds = 37310282,
                                  connection = connection, #use connection since it is already open
                                  vocabularyDatabaseSchema = vocabularyDatabaseSchema,
                                  oracleTempSchema = NULL,
-                                 mapToStandard = TRUE)%>%
+                                 mapToStandard = TRUE) %>%
   createConceptSetExpression(Name = "COVID-19 specific test") %>%
   createMeasurement(conceptSetExpression = .) %>%
   createCount(Logic = "at_least",
