@@ -1,6 +1,8 @@
 #context("Lookup Concepts") #depreciated testthat v3
 library(Capr)
 library(dplyr)
+library(tibble)
+
 
 test_that("Lookup concepts by id", {
   #set up connection details to test db
@@ -8,7 +10,7 @@ test_that("Lookup concepts by id", {
     dbms = "postgresql",
     server = Sys.getenv("CDM5_POSTGRESQL_SERVER"),
     user = Sys.getenv("CDM5_POSTGRESQL_USER"),
-    password = Sys.getenv("CDM5_POSTGRESQL_PASSWORD"),
+    password = URLdecode(Sys.getenv("CDM5_POSTGRESQL_PASSWORD")),
     port = 5432
   )
   #connect to test db
@@ -34,7 +36,7 @@ test_that("Lookup concepts by code and vocabulary", {
     dbms = "postgresql",
     server = Sys.getenv("CDM5_POSTGRESQL_SERVER"),
     user = Sys.getenv("CDM5_POSTGRESQL_USER"),
-    password = Sys.getenv("CDM5_POSTGRESQL_PASSWORD"),
+    password = URLdecode(Sys.getenv("CDM5_POSTGRESQL_PASSWORD")),
     port = 5432
   )
   #connect to test db
@@ -62,7 +64,7 @@ test_that("Lookup keywords", {
     dbms = "postgresql",
     server = Sys.getenv("CDM5_POSTGRESQL_SERVER"),
     user = Sys.getenv("CDM5_POSTGRESQL_USER"),
-    password = Sys.getenv("CDM5_POSTGRESQL_PASSWORD"),
+    password = URLdecode(Sys.getenv("CDM5_POSTGRESQL_PASSWORD")),
     port = 5432
   )
   #connect to test db

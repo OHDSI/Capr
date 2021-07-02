@@ -30,9 +30,10 @@ Imports:
   rlang,
   uuid,
   SqlRender,
-  data.table,
   dplyr,
-  checkmate
+  checkmate,
+  tibble,
+  withr
 Suggests:
     testthat (>= 3.0.0),
     knitr,

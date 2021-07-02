@@ -138,18 +138,35 @@ writeCaprCall <- function(jsonPath, txtPath){
 #'
 #' @param CohortDefinition input cohort Definition class object
 #' @param generateOptions the options for building the ohdisql using CirceR::createGenerateOptions
+#' If generateOptions is left NULL, then this function will give a lite return of just the json to be activated.
+#' with circe R.
 #' @include LowLevelCoercionFn.R
 #' @importFrom CirceR cohortExpressionFromJson cohortPrintFriendly buildCohortQuery
 #' @importFrom RJSONIO toJSON
-#' @return A three tiered list containing the the circe json, a text read and ohisql.
-#' If an error occurs the ohdisql slot will be NA and the user should review the circe cohort definition for potential errors.
+#' @return If the generate options is supplied this function returns a three
+#' tiered list containing the the circe json, a text read and ohisql.
+#' If an error occurs the ohdisql slot will be NA and the user should review the
+#'  circe cohort definition for potential errors.
+#' If the generateOptions is not supplied it will just return the json
 #' @export
-compileCohortDefinition <- function(CohortDefinition, generateOptions){
+compileCohortDefinition <- function(CohortDefinition, generateOptions = NULL){
+
   circeS3 <- convertCohortDefinitionToCIRCE(CohortDefinition) #convert cohort definition to circe s3 object
   circeJson <- RJSONIO::toJSON(circeS3)
-  circeJson2 <- CirceR::cohortExpressionFromJson(circeJson)
-  cohortRead <- CirceR::cohortPrintFriendly(circeJson2)
-  ohdisql <- CirceR::buildCohortQuery(circeJson2, generateOptions)
+  if (!is.null(generateOptions)) {
+    circeJson2 <- CirceR::cohortExpressionFromJson(circeJson)
+    cohortRead <- CirceR::cohortPrintFriendly(circeJson2)
+    ohdisql <- CirceR::buildCohortQuery(circeJson2, generateOptions)
+    #create list with cohort definition converted to circe, circe json and ohdiSQL
+    cohortList <- list('circeJson' = circeJson,
+                       'cohortRead' = cohortRead,
+                       'ohdiSQL' = ohdisql)
+  } else {
+    cohortList <- circeJson
+  }
+
+  #return cohort list
+  return(cohortList)
 
   #old
   #circeJson <-jsonlite::toJSON(circe, pretty=T, auto_unbox = TRUE) #convert circe object to json
@@ -160,12 +177,8 @@ compileCohortDefinition <- function(CohortDefinition, generateOptions){
   #                       NA_character_#return NA since compilation failed
   #                     })#end try catch error
 
-  #create list with cohort definition converted to circe, circe json and ohdiSQL
-  cohortList <- list('circeJson' = circeJson,
-                     'cohortRead' = cohortRead,
-                     'ohdiSQL' = ohdisql)
-  #return cohort list
-  return(cohortList)
+
+
   #end of function
 }
 
