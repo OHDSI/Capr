@@ -22,40 +22,40 @@
 #' @return A dataframe with the list of options for attributes we can use specified per domain.
 #' @export
 listAttributeOptions <- function(domain=NULL){
-  attOps <- list('ConditionOccurrence'=c("First", "OccurrenceStartDate", "OccurrenceEndDate", "ConditionType",
+  attOps <- list('ConditionOccurrence' = c("First", "OccurrenceStartDate", "OccurrenceEndDate", "ConditionType",
                                          "ConditionTypeExclude", "StopReason", "ConditionSourceConcept", "Age",
                                          "Gender", "ProviderSpecialty", "VisitType"),
-                 'ConditionEra'=c("First", "EraStartDate", "EraEndDate", "OccurrenceCount", "EraLength",
+                 'ConditionEra' = c("First", "EraStartDate", "EraEndDate", "OccurrenceCount", "EraLength",
                                   "AgeAtStart","AgeAtEnd", "Gender"),
-                 'Death'=c("First", "OccurrenceStartDate", "DeathType",
+                 'Death' = c("First", "OccurrenceStartDate", "DeathType",
                            "DeathTypeExclude","DeathSourceConcept", "Age","Gender"),
-                 'DeviceExposure'=c("First", "OccurrenceStartDate", "OccurrenceEndDate", "DeviceType",
+                 'DeviceExposure' = c("First", "OccurrenceStartDate", "OccurrenceEndDate", "DeviceType",
                                     "DeviceTypeExclude", "UniqueDeviceId", "DeviceSourceConcept", "Age",
                                     "Gender", "ProviderSpecialty", "VisitType","Quantity"),
-                 'DoseEra'=c("First", "EraStartDate", "EraEndDate", "Unit","DoseValue", "EraLength",
+                 'DoseEra' = c("First", "EraStartDate", "EraEndDate", "Unit","DoseValue", "EraLength",
                             "AgeAtStart","AgeAtEnd", "Gender"),
-                 'DrugEra' =c("First", "EraStartDate", "EraEndDate", "OccurrenceCount","GapDays", "EraLength",
+                 'DrugEra'  = c("First", "EraStartDate", "EraEndDate", "OccurrenceCount","GapDays", "EraLength",
                               "AgeAtStart","AgeAtEnd", "Gender"),
-                 'DrugExposure'=c("First", "OccurrenceStartDate", "OccurrenceEndDate", "DrugType",
+                 'DrugExposure' = c("First", "OccurrenceStartDate", "OccurrenceEndDate", "DrugType",
                                   "DrugTypeExclude", "StopReason", "DrugSourceConcept", "Age",
                                   "Gender", "ProviderSpecialty", "VisitType",
                                   "Refills", "Quantity", "DaysSupply", "RouteConcept", "EffectiveDrugDose",
                                   "DoseUnit", "LotNumber"),
-                 'Measurement'=c("First", "OccurrenceStartDate",  "MeasurementType",
+                 'Measurement' = c("First", "OccurrenceStartDate",  "MeasurementType",
                                  "MeasurementTypeExclude", "Operator", "MeasurementSourceConcept", "Age",
                                  "Gender", "ProviderSpecialty", "VisitType",
                                  "ValueAsNumber", "ValueAsConcept", "Unit", "RangeLow", "RangeHigh",
                                  "RangeLowRatio", "RangeHighRatio", "Abnormal"),
-                 'Observation'=c("First", "OccurrenceStartDate", "ObservationType",
+                 'Observation' = c("First", "OccurrenceStartDate", "ObservationType",
                                  "ObservationTypeExclude",  "ObservationSourceConcept", "Age",
                                  "Gender", "ProviderSpecialty", "VisitType",
                                  "ValueAsNumber", "ValueAsConcept","ValueAsString", "Qualifier"),
-                 'ObservationPeriod'=c("First", "PeriodStartDate", "PeriodEndDate", "PeriodType",
+                 'ObservationPeriod' = c("First", "PeriodStartDate", "PeriodEndDate", "PeriodType",
                                        "PeriodLength", "AgeAtStart", "AgeAtEnd"),
-                 'ProcedureOccurrence'=c("First", "OccurrenceStartDate", "ProcedureType",
+                 'ProcedureOccurrence' = c("First", "OccurrenceStartDate", "ProcedureType",
                                          "ProcedureTypeExclude", "Modifier", "ProcedureSourceConcept", "Age",
                                          "Gender", "ProviderSpecialty", "VisitType"),
-                 'VisitOccurrence'= c("First", "OccurrenceStartDate", "OccurrenceEndDate", "VisitType",
+                 'VisitOccurrence' =  c("First", "OccurrenceStartDate", "OccurrenceEndDate", "VisitType",
                                       "VisitTypeExclude",  "VisitSourceConcept","VisitLength", "Age",
                                       "Gender", "ProviderSpecialty", "PlaceOfService")
   )
@@ -69,7 +69,7 @@ listAttributeOptions <- function(domain=NULL){
 ##########----------------createOpAttributes-------------################
 ##########----------------Dates---------------------------##############
 
-#Occurrence Start Date Attribute wrapped for createOpAttribute2
+#Occurrence Start Date Attribute wrapped for createOpAttribute
 #' create occurrence Start Date Attribute
 #'
 #' This function creates an Operator attribute for the occurrence start date. The user selects the type of
@@ -79,18 +79,18 @@ listAttributeOptions <- function(domain=NULL){
 #' @param Value a character string of the date
 #' @param Extent a character string of the extent only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
-#' @return a componet of attribute class
+#' @return a component of attribute class
 #' @export
-createOccurrenceStartDateAttribute <- function(Op, Value, Extent=NULL){
+createOccurrenceStartDateAttribute <- function(Op, Value, Extent = NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.character(Value)){ #error handler for character date string
+  if (!is.character(Value)) { #error handler for character date string
     stop("Value must be a character string to use the dat attribute")
   }
-  if (!is.null(Extent)){ #error handler for not null extent
-    if (!grepl("bt", Op)){ #error handler for bt and !bt
+  if (!is.null(Extent)) { #error handler for not null extent
+    if (!grepl("bt", Op)) { #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.character(Extent)){ #error handler for character date string or null
+    if (!is.character(Extent)) { #error handler for character date string or null
       stop("Extent must be a character string if not NULL to use the date attribute")
     }
   }
@@ -112,7 +112,7 @@ createOccurrenceStartDateAttribute <- function(Op, Value, Extent=NULL){
 #' @include LowLevelCreateFn.R
 #' @return a componet of attribute class
 #' @export
-createOccurrenceEndDateAttribute <- function(Op, Value, Extent=NULL){
+createOccurrenceEndDateAttribute <- function(Op, Value, Extent = NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
   if (!is.character(Value)){ #error handler for character date string
     stop("Value must be a character string to use the dat attribute")

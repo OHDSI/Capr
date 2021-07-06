@@ -1,6 +1,6 @@
 Package: Capr
 Title: Cohort definition Application Programming in R
-Version: 0.0.1.995
+Version: 0.0.1.996
 Authors@R: 
     person(given = "Martin",
            family = "Lavallee",
@@ -49,6 +49,7 @@ Collate:
     'LowLevelCreateFn.R'
     'LowLevelLoadFn.R'
     'LowLevelSaveFn.R'
+    'UserAttributeEdit.R'
     'UserCommands.R'
     'UserConceptLookupFn.R'
     'UserCreateAttributeFn.R'

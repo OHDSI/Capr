@@ -283,7 +283,7 @@ setMethod("initialize", "Query",
 #' @slot Timeline a timeline class object
 #' @slot Occurrence an occurrence class object
 setClass("Count",
-         slots =c(Criteria = "Query",
+         slots = c(Criteria = "Query",
                   Timeline = "Timeline",
                   Occurrence = "Occurrence"))
 
@@ -298,9 +298,9 @@ setClass("Count",
 #' @slot Op the operator gt,lt,gte,lte,eq,neq,bt,!bt
 #' @slot Contents the contents of the attribute as a list. includes the value and the extent
 setClass("OpAttribute",
-         slots =c(Name = "character",
+         slots = c(Name = "character",
                   Op = "character",
-                  Contents= "list"))
+                  Contents = "list"))
 
 #' An S4 class for SourceConceptAttribute
 #'
@@ -309,7 +309,7 @@ setClass("OpAttribute",
 #' @slot Name name of the attribute
 #' @slot SourceCodesetId a source concept id, conection to concept set expression
 setClass("SourceConceptAttribute",
-         slots=c(Name = "character",#
+         slots = c(Name = "character",#
                  SourceCodesetId = "character"))#
 
 #' An S4 class for Concept Attribute
