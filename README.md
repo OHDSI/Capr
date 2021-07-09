@@ -2,7 +2,7 @@ Capr
 ====
 
 [![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/<reponame>/actions?query=workflow%3AR-CMD-check)
-[![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=master)](https://codecov.io/github/OHDSI/Capr?branch=master)
+[![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/Capr?branch=main)
 
 Capr is part of [HADES](https://ohdsi.github.io/Hades).
 
@@ -58,7 +58,7 @@ Documentation can be found on the [package website](https://ohdsi.github.io/Capr
 
 PDF versions of the documentation are also available:
 * Vignette: [Running multiple analyses at once using the CohortMethod package](https://raw.githubusercontent.com/OHDSI/CohortMethod/master/inst/doc/MultipleAnalyses.pdf)
-* Package manual: [Capr.pdf](https://raw.githubusercontent.com/OHDSI/Capr/master/extras/Capr.pdf)
+* Package manual: [Capr.pdf](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
 
 Support
 =======

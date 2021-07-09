@@ -14,5 +14,7 @@ inclusion rules, censoring criteria and cohort eras).
 
 4. Import circe json and convert into Capr objects
 
-5. Print Capr R script to produce cohort definitions
+5. Print Capr R script that produces equivalent cohort definitions in Capr   
+
+6. Preliminary helper and edit functions for working with cohorts
 

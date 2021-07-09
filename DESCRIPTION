@@ -1,6 +1,6 @@
 Package: Capr
 Title: Cohort definition Application Programming in R
-Version: 0.0.1.996
+Version: 1.0.0
 Authors@R: 
     person(given = "Martin",
            family = "Lavallee",
