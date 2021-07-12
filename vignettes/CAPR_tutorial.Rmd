@@ -32,7 +32,7 @@ library(CirceR) #access the circe engine to generate ohdisql
 library(magrittr) #leverage piping
 
 connectionDetails <- createConnectionDetails(dbms="postgresql",
-                                             server="example.com/datasourc",
+                                             server="example.com/datasource",
                                              user="me",
                                              password="secret",
                                              schema="cdm",
