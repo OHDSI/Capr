@@ -26,11 +26,11 @@ devtools::spell_check()
 # Create manual and vignettes:
 unlink("extras/Capr.pdf")
 
-#for linux
+# for linux
 system("R CMD Rd2pdf ./ --output=extras/Capr.pdf")
 
-#for windows
-#shell("R CMD Rd2pdf ./ --output=extras/Capr.pdf")
+# for windows
+#shell('R CMD Rd2pdf ./ --output=extras/Capr.pdf')
 
 # Capr_tutorial vignette
 dir.create(path = "./inst/doc/", showWarnings = FALSE)
@@ -45,12 +45,12 @@ unlink("inst/doc/CAPR_tutorial.tex")
 dir.create(path = "./inst/doc/", showWarnings = FALSE)
 rmarkdown::render("vignettes/complex-cohort-example.Rmd",
                   output_file = "../inst/doc/complex-cohort-example.pdf",
-                  rmarkdown::pdf_document(latex_engine = "pdflatex",
-   toc = TRUE, number_sections = TRUE))
+
+  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
 unlink("inst/doc/complex-cohort-example.tex")
 
 
-#build site
+# build site
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
 

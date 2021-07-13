@@ -14,8 +14,6 @@ Introduction
 
 Capr is an R package to develop and manipulate OHDSI cohort definitions. This package assists in creating a cohort definition that can be compiled by circe-be using CirceR. Cohort definitions developed in Capr are compatible with OHDSI ATLAS. Additionally the package allows for development of cohort design components, sub-items of a cohort design that are meant to be reusable and mutable to assist creating cohorts in study development. 
 
-Note this package is an early release and is still under development. Capr was developed by LTS Computing LLC and has been released as open source for the OHDSI community.
-
 
 System Requirements
 ============
@@ -57,7 +55,8 @@ User Documentation
 Documentation can be found on the [package website](https://ohdsi.github.io/Capr).
 
 PDF versions of the documentation are also available:
-* Vignette: [Running multiple analyses at once using the CohortMethod package](https://raw.githubusercontent.com/OHDSI/CohortMethod/master/inst/doc/MultipleAnalyses.pdf)
+* Vignette: [Capr Tutorial](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Capr_Tutorial.pdf)
+* Vignette: [Capr Complex Cohort Example](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/complex-cohort-example.pdf)
 * Package manual: [Capr.pdf](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
 
 Support

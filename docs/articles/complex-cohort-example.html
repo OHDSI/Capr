@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.994</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
 <p>Capr is helpful for cohort definition creation because components of a cohort definition can be split into isolated objects, independent of the full cohort definition. Using Capr, we can now construct smaller pieces of the cohort definition such as queries, counts or groups that can be reincorportated across the cohort definition. The idea of reusable component parts is to construct smaller and simpler objects that can be saved to disk (or in the global environment) to be used as an input to a more complex feature of the cohort definition. In this vignette, we show how we can leverage Capr to create complex cohorts and lay the foundations for more advanced use cases like cohort templating.</p>
 <p>The example detailed in this vignette follows follows a complex cohort definition creation example detailed in the following <a href="https://www.youtube.com/watch?v=2d0qLHEzVYU&amp;ab_channel=ChrisKnoll">video</a>. Our goal is to create the <a href="https://phekb.org/phenotype/type-2-diabetes-mellitus">PheKB type 2 diabetes cohort definition</a> that contains five paths that logically defines a case of type 2 diabetes. In this example we construct smaller pieces of the cohort definition that we can reuse during the construction of the cohort.</p>
 <p>The PheKB Type 2 Diabetes Mellitus cohort definition is described by the flowchart:</p>
-<p><img src="../../../../../../tmp/RtmpEK4NDd/temp_libpath11f11a25ace1ca/Capr/images/t2d_001.png" width="192"></p>
+<p><img src="../../../../R/x86_64-pc-linux-gnu-library/4.1/Capr/images/t2d_001.png" width="192"></p>
 <p>To build this cohort we first start with a initial set of presumed cases of T2DM. Patient initially in this cohort must have all of the following: a diagnosis of T2DM (T2Dx), a prescribed medication for T2DM (T2Rx), and presence of an abnormal lab for T2DM. An abnormal lab can be described by any of: <span class="math inline">\(\geq 125\)</span> mg/dl for fasting glucose, <span class="math inline">\(\geq 200\)</span> mg/dl for random glucose or <span class="math inline">\(\geq6\%\)</span> for HbA1c. From this initial set we need to restrict initial events to not included persons with a type 1 Diabetes diagnosis. With this a set of presumed cases, we can now confirm T2DM diagnosis using an algorithm composed of 5 pathways based on the above figure:</p>
 <p>Path 1: exactly 0 T2Dx, at least 1 T2Rx and at least 1 AbLab</p>
 <p>Path 2: at least 1 T2Dx, exactly 0 T1Rx, exactly 0 T2Rx, and at least 1 AbLab</p>

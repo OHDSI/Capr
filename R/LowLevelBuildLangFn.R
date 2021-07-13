@@ -44,7 +44,6 @@ createDatabaseConnectionLang <- function(connectionDetails = NULL,
                         password = connectionDetails$password(),
                         server = connectionDetails$server(),
                         port = connectionDetails$port(),
-                        #schema = connectionDetails$schema,
                         extraSettings = connectionDetails$extraSettings,
                         oracleDriver = connectionDetails$oracleDriver,
                         pathToDriver = connectionDetails$pathToDriver)
