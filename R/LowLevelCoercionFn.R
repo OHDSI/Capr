@@ -1,4 +1,4 @@
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -40,24 +40,24 @@ setMethod('as.Circe',
                         'End' = x@End,
                         'UseEventEnd' = x@Event,
                         'UseIndexEnd' = x@Index)
-            if(win$Start$Days == "All"){
+            if(win$Start$Days == "All") {
               win$Start$Days <- NULL
             }
 
-            if(win$End$Days == "All"){
+            if(win$End$Days == "All") {
               win$End$Days <- NULL
             }
 
-            if(win$Start$Coeff == "Before"){
+            if(win$Start$Coeff == "Before") {
               win$Start$Coeff <- -1L
             }
-            if(win$End$Coeff == "Before"){
+            if(win$End$Coeff == "Before") {
               win$End$Coeff <- -1L
             }
-            if(win$Start$Coeff == "After"){
+            if(win$Start$Coeff == "After") {
               win$Start$Coeff <- 1L
             }
-            if(win$End$Coeff == "After"){
+            if(win$End$Coeff == "After") {
               win$End$Coeff <- 1L
             }
             win$UseEventEnd <- ifelse(win$UseEventEnd == "EventStarts", FALSE, TRUE)
@@ -69,15 +69,15 @@ setMethod('as.Circe',
 #' @rdname as.Circe-method
 #' @aliases as.Circe,Timeline-method
 setMethod('as.Circe', 'Timeline',
-          function(x){
+          function(x) {
 
-            if(length(x@EndWindow@Event)==0){
+            if(length(x@EndWindow@Event)==0) {
               ew <- NA_character_
             }else{
               ew <- as.Circe(x@EndWindow)
             }
 
-            if(length(x@StartWindow@Event)==0){
+            if(length(x@StartWindow@Event)==0) {
               sw <- NA_character_
             }else{
               sw <- as.Circe(x@StartWindow)
@@ -87,16 +87,16 @@ setMethod('as.Circe', 'Timeline',
                        'RestrictVisit' = x@RestrictVisit,
                        'IgnoreObservationPeriod' = x@IgnoreObservationPeriod)
 
-            if(length(tl$StartWindow) == 1){
+            if(length(tl$StartWindow) == 1) {
               tl$StartWindow <-NULL
             }
-            if(length(tl$EndWindow) == 1){
+            if(length(tl$EndWindow) == 1) {
               tl$EndWindow <- NULL
             }
-            if(!tl$RestrictVisit){
+            if(!tl$RestrictVisit) {
               tl$RestrictVisit <- NULL #null out RestrictVisit if FALSE
             }
-            if(!tl$IgnoreObservationPeriod){
+            if(!tl$IgnoreObservationPeriod) {
               tl$IgnoreObservationPeriod <- NULL #null out if IgnoreObservationPeriod is FALSE
             }
             return(tl)
@@ -104,11 +104,11 @@ setMethod('as.Circe', 'Timeline',
 #' @rdname as.Circe-method
 #' @aliases as.Circe,Occurrence-method
 setMethod("as.Circe", "Occurrence",
-          function(x){
+          function(x) {
             occ <- list('Type' = x@Type,
                         'Count' = x@Count,
                         'IsDistinct' = x@isDistinct) #create occurrence
-            if(!occ$IsDistinct){
+            if(!occ$IsDistinct) {
               occ$IsDistinct <- NULL #null out isDistinct if FALSE
             }
 
@@ -119,7 +119,7 @@ setMethod("as.Circe", "Occurrence",
 #' @rdname as.Circe-method
 #' @aliases as.Circe,ObservationWindow-method
 setMethod('as.Circe', 'ObservationWindow',
-          function(x){
+          function(x) {
             ow <- list(PriorDays = x@PriorDays,
                        PostDays = x@PostDays)
             return(ow)
@@ -128,17 +128,17 @@ setMethod('as.Circe', 'ObservationWindow',
 #' @rdname as.Circe-method
 #' @aliases as.Circe,Limit-method
 setMethod('as.Circe', 'Limit',
-          function(x){
+          function(x) {
              ll <- list('Type' = x@Type)
             return(ll)
           })
 #' @rdname as.Circe-method
 #' @aliases as.Circe,ExpressionType-method
 setMethod('as.Circe', 'ExpressionType',
-          function(x){
+          function(x) {
             ll <- list('Type' = x@Type,
                        'Count' = x@Count)
-            if(is.na(ll$Count)){
+            if(is.na(ll$Count)) {
               ll$Count <- NULL
             }
             return(ll)
@@ -147,7 +147,7 @@ setMethod('as.Circe', 'ExpressionType',
 #' @rdname as.Circe-method
 #' @aliases as.Circe,Concept-method
 setMethod("as.Circe", "Concept",
-          function(x){
+          function(x) {
             con <- list('CONCEPT_ID' = x@CONCEPT_ID,
                         'CONCEPT_NAME' = x@CONCEPT_NAME,
                         'STANDARD_CONCEPT'= x@STANDARD_CONCEPT,
@@ -164,18 +164,18 @@ setMethod("as.Circe", "Concept",
 #' @rdname as.Circe-method
 #' @aliases as.Circe,ConceptSetItem-method
 setMethod("as.Circe", "ConceptSetItem",
-          function(x){
+          function(x) {
             cr <- list('concept' = as.Circe(x@Concept),
                        'isExcluded' = x@isExcluded,
                        'includeDescendants' = x@includeDescendants,
                        'includeMapped' = x@includeMapped)
-            if(!cr$isExcluded){
+            if(!cr$isExcluded) {
               cr$isExcluded <- NULL
             }
-            if(!cr$includeDescendants){
+            if(!cr$includeDescendants) {
               cr$includeDescendants <- NULL
             }
-            if(!cr$includeMapped){
+            if(!cr$includeMapped) {
               cr$includeMapped <- NULL
             }
             return(cr)
@@ -184,7 +184,7 @@ setMethod("as.Circe", "ConceptSetItem",
 #' @rdname as.Circe-method
 #' @aliases as.Circe,ConceptSetExpression-method
 setMethod("as.Circe", "ConceptSetExpression",
-          function(x){
+          function(x) {
             cse <- list('id'= x@id,
                         'name' = x@Name,
                         'expression'= list('items' = lapply(x@Expression, as.Circe)))
@@ -197,14 +197,14 @@ setMethod("as.Circe", "ConceptSetExpression",
 #' @rdname as.Circe-method
 #' @aliases as.Circe,OpAttribute-method
 setMethod('as.Circe', 'OpAttribute',
-          function(x){
-            if(x@Op != "bt" | x@Op != "!bt"){
+          function(x) {
+            if (x@Op != "bt" | x@Op != "!bt") {
               att <- list(list('Value' = x@Contents$Value,
-                               'Op' =x@Op))
+                               'Op' = x@Op))
             } else{
               att <- list(list('Value' = x@Contents$Value,
                                'Extent' = x@Contents$Extent,
-                               'Op' =x@Op))
+                               'Op' = x@Op))
             }
             names(att) <- x@Name
             return(att)
@@ -213,9 +213,9 @@ setMethod('as.Circe', 'OpAttribute',
 #' @rdname as.Circe-method
 #' @aliases as.Circe,SourceConceptAttribute-method
 setMethod('as.Circe', "SourceConceptAttribute",
-          function(x){
+          function(x) {
             att <- x@SourceCodesetId
-            att <- ifelse(nchar(att) ==36, as.character(att), as.integer(att))
+            att <- ifelse(nchar(att) == 36, as.character(att), as.integer(att))
             names(att) <- x@Name
             return(att)
           })
@@ -223,7 +223,7 @@ setMethod('as.Circe', "SourceConceptAttribute",
 #' @rdname as.Circe-method
 #' @aliases as.Circe,ConceptAttribute-method
 setMethod('as.Circe', "ConceptAttribute",
-          function(x){
+          function(x) {
             att <- list(x@Concepts)
             names(att) <- x@Name
             return(att)
@@ -231,7 +231,7 @@ setMethod('as.Circe', "ConceptAttribute",
 #' @rdname as.Circe-method
 #' @aliases as.Circe,LogicAttribute-method
 setMethod('as.Circe', "LogicAttribute",
-          function(x){
+          function(x) {
             att <- x@Logic
             names(att) <- x@Name
             return(att)
@@ -254,14 +254,14 @@ setMethod('as.Circe', "CorrelatedCriteriaAttribute",
 setMethod('as.Circe', 'Query',
           function(x){
             cid <- x@CodesetId
-            cid <-ifelse(nchar(cid)==36, as.character(cid), as.integer(cid))
+            cid <- ifelse(nchar(cid) == 36, as.character(cid), as.integer(cid))
             qq <- list('CodesetId' = cid)
-            if(length(x@Attributes) >0){
-              for(i in 1:length(x@Attributes)){
+            if(length(x@Attributes) > 0) {
+              for(i in 1:length(x@Attributes)) {
                 qq <- append(qq, as.Circe(x@Attributes[[i]]))
               }
             }
-            if(is.na(x@CodesetId)){ #if codeset id has 0 length null out
+            if(is.na(x@CodesetId)) { #if codeset id has 0 length null out
               qq$CodesetId <-NULL
             }
             query <- list(qq)

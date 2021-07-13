@@ -1,8 +1,9 @@
-pandoc: 2.7.3
+pandoc: 2.11.4
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  Capr_Attributes_Extended: Capr_Attributes_Extended.html
   CAPR_tutorial: CAPR_tutorial.html
-last_built: 2020-12-10T18:45Z
+  Capr_Attributes_Extended: Capr_Attributes_Extended.html
+  complex-cohort-example: complex-cohort-example.html
+last_built: 2021-07-13T15:47Z
 

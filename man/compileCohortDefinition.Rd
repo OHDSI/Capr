@@ -4,16 +4,21 @@
 \alias{compileCohortDefinition}
 \title{Convert cohort definition object to CIRCE and run through circe compiler}
 \usage{
-compileCohortDefinition(CohortDefinition, generateOptions)
+compileCohortDefinition(CohortDefinition, generateOptions = NULL)
 }
 \arguments{
 \item{CohortDefinition}{input cohort Definition class object}
 
-\item{generateOptions}{the options for building the ohdisql using CirceR::createGenerateOptions}
+\item{generateOptions}{the options for building the ohdisql using CirceR::createGenerateOptions
+If generateOptions is left NULL, then this function will give a lite return of just the json to be activated.
+with circe R.}
 }
 \value{
-A three tiered list containing the the circe json, a text read and ohisql.
-If an error occurs the ohdisql slot will be NA and the user should review the circe cohort definition for potential errors.
+If the generate options is supplied this function returns a three
+tiered list containing the the circe json, a text read and ohisql.
+If an error occurs the ohdisql slot will be NA and the user should review the
+ circe cohort definition for potential errors.
+If the generateOptions is not supplied it will just return the json
 }
 \description{
 This function converts a Cohort Definition class object to a CIRCE expression, creates the json and compiles the

@@ -1,0 +1,391 @@
+{
+  "MetaData": {
+    "ComponentType": "Group",
+    "Name": "T2DMGroup",
+    "Description": null
+  },
+  "CriteriaExpression": [
+    {
+      "Type": {
+        "Type": "ALL",
+        "Count": "NA"
+      },
+      "CriteriaList": [
+        {
+          "Criteria": {
+            "Domain": "ConditionOccurrence",
+            "CodesetId": "72cc8ac2-0766-4e94-82bf-c5eacfde2105",
+            "Attributes": []
+          },
+          "Timeline": {
+            "StartWindow": {
+              "Event": "EventStarts",
+              "Start": {
+                "Days": "All",
+                "Coeff": "Before"
+              },
+              "End": {
+                "Days": 0,
+                "Coeff": "After"
+              },
+              "Index": "IndexStartDate"
+            },
+            "EndWindow": {
+              "Event": [],
+              "Start": [],
+              "End": [],
+              "Index": []
+            },
+            "RestrictVisit": false,
+            "IgnoreObservationPeriod": false
+          },
+          "Occurrence": {
+            "Type": "exactly",
+            "Count": 0,
+            "isDistinct": false
+          }
+        },
+        {
+          "Criteria": {
+            "Domain": "DrugExposure",
+            "CodesetId": "664a5c53-4429-4717-9bf7-ca6c23960a4a",
+            "Attributes": []
+          },
+          "Timeline": {
+            "StartWindow": {
+              "Event": "EventStarts",
+              "Start": {
+                "Days": "All",
+                "Coeff": "Before"
+              },
+              "End": {
+                "Days": "All",
+                "Coeff": "After"
+              },
+              "Index": "IndexStartDate"
+            },
+            "EndWindow": {
+              "Event": [],
+              "Start": [],
+              "End": [],
+              "Index": []
+            },
+            "RestrictVisit": false,
+            "IgnoreObservationPeriod": false
+          },
+          "Occurrence": {
+            "Type": "at_least",
+            "Count": 1,
+            "isDistinct": false
+          }
+        }
+      ],
+      "DemographicCriteriaList": [],
+      "Groups": []
+    }
+  ],
+  "Limit": [],
+  "ConceptSetExpression": [
+    {
+      "id": "72cc8ac2-0766-4e94-82bf-c5eacfde2105",
+      "Name": "Type 2 Diabetes Mellitus Diagnosis",
+      "Expression": [
+        {
+          "Concept": {
+            "CONCEPT_ID": 201826,
+            "CONCEPT_NAME": "Type 2 diabetes mellitus",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "44054006",
+            "DOMAIN_ID": "Condition",
+            "VOCABULARY_ID": "SNOMED",
+            "CONCEPT_CLASS_ID": "Clinical Finding"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        }
+      ]
+    },
+    {
+      "id": "664a5c53-4429-4717-9bf7-ca6c23960a4a",
+      "Name": "Type 2 Diabetes Meds",
+      "Expression": [
+        {
+          "Concept": {
+            "CONCEPT_ID": 1594973,
+            "CONCEPT_NAME": "chlorpropamide",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "2404",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1515249,
+            "CONCEPT_NAME": "troglitazone",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "72610",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1580747,
+            "CONCEPT_NAME": "sitagliptin",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "593411",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1597756,
+            "CONCEPT_NAME": "glimepiride",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "25789",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1525215,
+            "CONCEPT_NAME": "pioglitazone",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "33738",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1510202,
+            "CONCEPT_NAME": "miglitol",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "30009",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1530014,
+            "CONCEPT_NAME": "acetohexamide",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "173",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1502826,
+            "CONCEPT_NAME": "nateglinide",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "274332",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1503297,
+            "CONCEPT_NAME": "metformin",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "6809",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1502809,
+            "CONCEPT_NAME": "tolazamide",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "10633",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1560171,
+            "CONCEPT_NAME": "glipizide",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "4821",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1583722,
+            "CONCEPT_NAME": "exenatide",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "60548",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1529331,
+            "CONCEPT_NAME": "acarbose",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "16681",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1547504,
+            "CONCEPT_NAME": "rosiglitazone",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "84108",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1559684,
+            "CONCEPT_NAME": "glyburide",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "4815",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        },
+        {
+          "Concept": {
+            "CONCEPT_ID": 1516766,
+            "CONCEPT_NAME": "repaglinide",
+            "STANDARD_CONCEPT": "S",
+            "STANDARD_CONCEPT_CAPTION": "Standard",
+            "INVALID_REASON": "V",
+            "INVALID_REASON_CAPTION": "Valid",
+            "CONCEPT_CODE": "73044",
+            "DOMAIN_ID": "Drug",
+            "VOCABULARY_ID": "RxNorm",
+            "CONCEPT_CLASS_ID": "Ingredient"
+          },
+          "isExcluded": false,
+          "includeDescendants": true,
+          "includeMapped": false
+        }
+      ]
+    }
+  ]
+}

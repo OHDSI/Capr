@@ -1,4 +1,4 @@
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -35,17 +35,16 @@ createDatabaseConnectionLang <- function(connectionDetails = NULL,
                                                                     user = "me",
                                                                     password = "secret",
                                                                     server = "example.com/datasource",
-                                                                    port = "5432",
-                                                                    schema = "cdm")
+                                                                    port = "5432")
   }
   #language to generate connection Details
   cdVar <- rlang::call2("createConnectionDetails",
                         dbms = connectionDetails$dbms,
-                        user = connectionDetails$user,
-                        password = connectionDetails$password,
-                        server = connectionDetails$server,
-                        port = connectionDetails$port,
-                        schema = connectionDetails$schema,
+                        user = connectionDetails$user(),
+                        password = connectionDetails$password(),
+                        server = connectionDetails$server(),
+                        port = connectionDetails$port(),
+                        #schema = connectionDetails$schema,
                         extraSettings = connectionDetails$extraSettings,
                         oracleDriver = connectionDetails$oracleDriver,
                         pathToDriver = connectionDetails$pathToDriver)

@@ -12,8 +12,8 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -74,7 +74,7 @@ to be connected to an OMOP vocabulary to use the lookup functions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.99</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -82,12 +82,15 @@ to be connected to an OMOP vocabulary to use the lookup functions." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -97,16 +100,21 @@ to be connected to an OMOP vocabulary to use the lookup functions." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CAPR_tutorial.html">CAPR_tutorial</a>
+    </li>
+    <li>
       <a href="../articles/Capr_Attributes_Extended.html">Capr_Attributes_Extended</a>
     </li>
     <li>
-      <a href="../articles/CAPR_tutorial.html">CAPR_tutorial</a>
+      <a href="../articles/complex-cohort-example.html">complex-cohort-example</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -131,7 +139,14 @@ One must clarify if the concept ids should be mapped to standard (default is TRU
 to be connected to an OMOP vocabulary to use the lookup functions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>createValueAsConceptAttribute</span><span class='op'>(</span><span class='va'>conceptIds</span>, mapToStandard <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>createValueAsConceptAttribute</span><span class='op'>(</span>
+  <span class='va'>conceptIds</span>,
+  connectionDetails <span class='op'>=</span> <span class='cn'>NULL</span>,
+  connection <span class='op'>=</span> <span class='cn'>NULL</span>,
+  vocabularyDatabaseSchema <span class='op'>=</span> <span class='cn'>NULL</span>,
+  oracleTempSchema <span class='op'>=</span> <span class='cn'>NULL</span>,
+  mapToStandard <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,6 +154,32 @@ to be connected to an OMOP vocabulary to use the lookup functions.</p>
     <tr>
       <th>conceptIds</th>
       <td><p>a vector of concept ids. Must be connected to an OMOP vocabulary to use function</p></td>
+    </tr>
+    <tr>
+      <th>connectionDetails</th>
+      <td><p>An object of type <code>connectionDetails</code> as created using the
+<code><a href='https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html'>createConnectionDetails</a></code> function in the
+DatabaseConnector package. Can be left NULL if <code>connection</code> is
+provided.</p></td>
+    </tr>
+    <tr>
+      <th>connection</th>
+      <td><p>An object of type <code>connection</code> as created using the
+<code><a href='https://ohdsi.github.io/DatabaseConnector/reference/connect.html'>connect</a></code> function in the
+DatabaseConnector package. Can be left NULL if <code>connectionDetails</code>
+is provided, in which case a new connection will be opened at the start
+of the function, and closed when the function finishes.</p></td>
+    </tr>
+    <tr>
+      <th>vocabularyDatabaseSchema</th>
+      <td><p>Schema name where your OMOP vocabulary format resides. Note that
+for SQL Server, this should include both the database and schema
+name, for example 'vocabulary.dbo'.</p></td>
+    </tr>
+    <tr>
+      <th>oracleTempSchema</th>
+      <td><p>Should be used in Oracle to specify a schema where the user has write
+privileges for storing temporary tables.</p></td>
     </tr>
     <tr>
       <th>mapToStandard</th>

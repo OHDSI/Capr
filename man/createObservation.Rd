@@ -13,7 +13,7 @@ must be adhere to the domain of the query}
 \item{attributeList}{a list of attributes to add to the query, if no attributes used then leave null}
 }
 \value{
-a componet of query class
+a component of query class
 }
 \description{
 This function creates a query based on Observation. Input pertinent conceptSetExpression and attirbuteList

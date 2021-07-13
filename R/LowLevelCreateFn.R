@@ -1,4 +1,4 @@
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -44,7 +44,7 @@ createComponent <- function(Name,
                             Limit = NULL,
                             ConceptSetExpression = NULL){
   #if description is null than make string NA
-  if(is.null(Description)){
+  if(is.null(Description)) {
     Description <- NA_character_
   }
   #create the meta data
@@ -52,22 +52,22 @@ createComponent <- function(Name,
             ComponentType = ComponentType,
             Name = Name,
             Description = Description)
-  if(ComponentType == "PrimaryCriteria"){
+  if(ComponentType == "PrimaryCriteria") {
     Limit <- list('PrimaryCriteriaLimit' = new('Limit', Type = Limit))
-  } else if(ComponentType == "AdditionalCriteria"){
+  } else if(ComponentType == "AdditionalCriteria") {
     Limit <- list('QualifiedLimit' = new('Limit', Type = Limit))
-  } else if(ComponentType == "InclusionRules"){
+  } else if(ComponentType == "InclusionRules") {
     Limit <- list('ExpressionLimit' = new('Limit', Type = Limit))
   } else{
     Limit <- list()
   }
-  if(is.null(CriteriaExpression)){
+  if(is.null(CriteriaExpression)) {
     CriteriaExpression <- list()
   }
   if(is.null(Limit)){
-    Limit<- list()
+    Limit <- list()
   }
-  if(is.null(ConceptSetExpression)){
+  if(is.null(ConceptSetExpression)) {
     ConceptSetExpression <- list()
   }
   comp <- new("Component",
@@ -101,18 +101,18 @@ createOpAttribute <- function(Name, Op, Value, Extent = NULL){
   if(is.null(Extent)){
     Extent <- NA_integer_
   }
-  Contents <- list(Value=Value,Extent=Extent)
+  Contents <- list(Value = Value, Extent = Extent)
 
-  if(grepl("Date", Name)){
-    Contents <- lapply(Contents,as.character)
+  if (grepl("Date", Name)) {
+    Contents <- lapply(Contents, as.character)
   } else{
-    Contents <- lapply(Contents,as.integer)
+    Contents <- lapply(Contents, as.integer)
   }
 
   att <- new("OpAttribute",
-             Name =Name,
+             Name = Name,
              Op = Op,
-             Contents =Contents)
+             Contents = Contents)
   comp <- createComponent(Name = "OpAttribute",
                           ComponentType = "Attribute",
                           CriteriaExpression = list(att))

@@ -14,7 +14,7 @@ createOccurrenceStartDateAttribute(Op, Value, Extent = NULL)
 \item{Extent}{a character string of the extent only used if the op is bt or !bt}
 }
 \value{
-a componet of attribute class
+a component of attribute class
 }
 \description{
 This function creates an Operator attribute for the occurrence start date. The user selects the type of
