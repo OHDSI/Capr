@@ -62,7 +62,6 @@ test_that("Save and Load functions working properly", {
   saveComponent(T2DMGroup, saveName = "T2DMGroup",
                 savePath = Sys.getenv("Capr_Save_Space"))
 
-  #readLines("~/Documents/github/Capr/tests/testthat/resources/T2DMGroup.json")
 
   #read json file
   pathJson <- file.path(Sys.getenv("Capr_Save_Space"), "T2DMGroup.json")

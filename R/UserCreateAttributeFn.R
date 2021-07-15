@@ -1266,7 +1266,7 @@ createCorrelatedCriteriaAttribute <- function(Group){
 
 ##########----------------createLogicalAttributes-------------################
 #First Attribute
-#' create First Attribute
+#' create First Occurrence Attribute
 #'
 #' This function creates a attribute for first occurrence
 #' @param logic toggle TRUE for first occurence

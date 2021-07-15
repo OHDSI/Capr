@@ -4,6 +4,7 @@ library(dplyr)
 library(tibble)
 
 
+
 test_that("Lookup concepts by id", {
   #set up connection details to test db
   connectionDetails <- DatabaseConnector::createConnectionDetails(
