@@ -7,7 +7,6 @@
 readInCirce(
   jsonPath,
   connectionDetails,
-  connection = NULL,
   vocabularyDatabaseSchema = NULL,
   oracleTempSchema = NULL,
   returnHash = FALSE
@@ -18,14 +17,7 @@ readInCirce(
 
 \item{connectionDetails}{An object of type \code{connectionDetails} as created using the
 \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
-DatabaseConnector package. Can be left NULL if \code{connection} is
-provided.}
-
-\item{connection}{An object of type \code{connection} as created using the
-\code{\link[DatabaseConnector]{connect}} function in the
-DatabaseConnector package. Can be left NULL if \code{connectionDetails}
-is provided, in which case a new connection will be opened at the start
-of the function, and closed when the function finishes.}
+DatabaseConnector package. Cannot be left NULL in this function.}
 
 \item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides.
 Note that for SQL Server, this should include both the database and
@@ -36,6 +28,7 @@ privileges for storing temporary tables.}
 
 \item{returnHash}{if true returns a has table with all components necessary to build the
 cohort definition including the cohort definition}
+
 }
 \value{
 returns the cohort definition

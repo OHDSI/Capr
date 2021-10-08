@@ -10,7 +10,8 @@ getConceptIdDetails(
   connection = NULL,
   vocabularyDatabaseSchema = NULL,
   oracleTempSchema = NULL,
-  mapToStandard = TRUE
+  mapToStandard = TRUE,
+  simplifyToDataframe = TRUE
 )
 }
 \arguments{
@@ -35,6 +36,11 @@ schema name, for example 'vocabulary.dbo'.}
 privileges for storing temporary tables.}
 
 \item{mapToStandard}{logic to map to standard OMOP concept}
+
+\item{simplifyToDataframe}{logic to return dataframe or tibble. If are piping this function
+to create a concept set expression keep as true. Coercion to concept set expressions
+requires the use of a dataframe. If false returns a tiblle where $. retrieves the
+dataframe}
 }
 \value{
 a tibble data frame object with conceptId, conceptName, standardConcept,

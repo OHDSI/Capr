@@ -163,7 +163,8 @@ createConceptAttribute <- function(conceptIds,
                                   connection = connection,
                                   vocabularyDatabaseSchema = vocabularyDatabaseSchema,
                                   oracleTempSchema = oracleTempSchema,
-                                  mapToStandard = mapToStandard)
+                                  mapToStandard = mapToStandard,
+                                  simplifyToDataframe = TRUE)
   concepts$INVALID_REASON_CAPTION <- "Unknown"
   concepts$STANDARD_CONCEPT_CAPTION <- "Unknown"
   concepts <- concepts[,c(7,1,2,3,11,12,4)]
