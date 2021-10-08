@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CAPR_tutorial • Capr</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.99</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.994</span>
       </span>
     </div>
 
@@ -39,12 +39,15 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -54,15 +57,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/CAPR_tutorial.html">CAPR_tutorial</a>
+    </li>
+    <li>
       <a href="../articles/Capr_Attributes_Extended.html">Capr_Attributes_Extended</a>
     </li>
     <li>
-      <a href="../articles/CAPR_tutorial.html">CAPR_tutorial</a>
+      <a href="../articles/complex-cohort-example.html">complex-cohort-example</a>
     </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -72,7 +82,7 @@
 
       
 
-      </header><script src="CAPR_tutorial_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="CAPR_tutorial_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>CAPR_tutorial</h1>
@@ -93,10 +103,10 @@
 <div id="set-up" class="section level3">
 <h3 class="hasAnchor">
 <a href="#set-up" class="anchor"></a>Set Up</h3>
-<p>Before building our cohort, we need to load some R packages to assist us and connect to an OMOP CDM. CAPR relies on accessibility to an OMOP Vocabulary schema to find concepts and leverage concept relationships. We should note to ensure that you are using the latest OMOP vocabulary when using CAPR.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">Capr</span><span class="op">)</span> <span class="co">#the CAPR package to build cohorts in R</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/DatabaseConnector">DatabaseConnector</a></span><span class="op">)</span> <span class="co">#to connect to our OMOP CDM</span>
+<p>Before building our cohort, we need to load some R packages to assit us and connect to an OMOP CDM. CAPR relies on accessibility to an OMOP Vocabulary schema to find concepts and leverage relationships. We hope in the future we can set a public connection to ATHENA or an OMOP Vocabulary database to expand useability. We should note to ensure that you are using the latest OMOP vocabulary when using CAPR.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">Capr</span><span class="op">)</span> <span class="co">#the CAPR package to build cohorts in R</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/DatabaseConnector/">DatabaseConnector</a></span><span class="op">)</span> <span class="co">#to connect to our OMOP CDM</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/CirceR">CirceR</a></span><span class="op">)</span> <span class="co">#access the circe engine to generate ohdisql</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org">magrittr</a></span><span class="op">)</span> <span class="co">#leverage piping</span>
 
@@ -106,8 +116,7 @@
                                              password<span class="op">=</span><span class="st">"secret"</span>,
                                              schema<span class="op">=</span><span class="st">"cdm"</span>,
                                              port<span class="op">=</span><span class="st">"5432"</span><span class="op">)</span>
-<span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/connect.html">connect</a></span><span class="op">(</span><span class="va">connectionDetails</span><span class="op">)</span></pre></div>
-<pre><code>#&gt; Warning: package 'magrittr' was built under R version 4.0.3</code></pre>
+<span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/connect.html">connect</a></span><span class="op">(</span><span class="va">connectionDetails</span><span class="op">)</span></code></pre></div>
 <p>In this example we are looking to re-build a cohort developed for the COVID-19 study-a-thon (ID:1775485) This cohort was identifying all inpatient visits for COVID-19 patients. This is a description of the cohort:</p>
 <hr>
 <p><strong>Cohort Entry Events</strong></p>
@@ -150,8 +159,14 @@
 <h3 class="hasAnchor">
 <a href="#looking-up-concepts" class="anchor"></a>Looking up Concepts</h3>
 <p>The first thing to do in building a cohort is look up clinical concepts we want to use in the cohort. In the example below we want to lookup Inpatient Visits an Emergency Room and Inpatient Visit and an Inpatient Visit. With an existing database connection we can lookup some standard concept Ids in the vocabulary table.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="../reference/lookupConceptIds.html">lookupConceptIds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">262</span>,<span class="fl">9201</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">262</span>, <span class="co">#ERand IP Visit</span>
+                                 <span class="fl">9201</span><span class="op">)</span>, <span class="co">#IP Visit</span>
+                                 connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                                 connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                                 vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                                 oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                                 mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;   CONCEPT_ID                       CONCEPT_NAME STANDARD_CONCEPT
 #&gt; 1        262 Emergency Room and Inpatient Visit                S
 #&gt; 2       9201                    Inpatient Visit                S
@@ -162,8 +177,14 @@
 #&gt; 1     Visit         Visit            Visit
 #&gt; 2     Visit         Visit            Visit</code></pre>
 <p>Say we do not have a standard OMOP concept id that we want to query but a code from a medical vocabulary like ICD10CM. We can look up this concept code and find the non-standard concept ID.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="../reference/lookupConceptCodes.html">lookupConceptCodes</a></span><span class="op">(</span>vocabulary <span class="op">=</span> <span class="st">"ICD10CM"</span>, conceptCode <span class="op">=</span> <span class="st">"E11"</span>, mapToStandard <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/getConceptCodeDetails.html">getConceptCodeDetails</a></span><span class="op">(</span>conceptCode <span class="op">=</span> <span class="st">"E11"</span>,
+                             vocabulary <span class="op">=</span> <span class="st">"ICD10CM"</span>,
+                             connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                             connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                             vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                             oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                             mapToStandard <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;   CONCEPT_ID             CONCEPT_NAME STANDARD_CONCEPT INVALID_REASON_CAPTION
 #&gt; 1    1567956 Type 2 diabetes mellitus                N                  Valid
 #&gt;   INVALID_REASON STANDARD_CONCEPT_CAPTION CONCEPT_CODE DOMAIN_ID VOCABULARY_ID
@@ -171,54 +192,71 @@
 #&gt;      CONCEPT_CLASS_ID
 #&gt; 1 3-char nonbill code</code></pre>
 <p>If we only knew the concept code for ICD10CM but wanted it mapped to a standard concept, we can tell our function to <code>mapToStandard</code>. In this case we are returned the standard SNOMED concept.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="../reference/lookupConceptCodes.html">lookupConceptCodes</a></span><span class="op">(</span>vocabulary <span class="op">=</span> <span class="st">"ICD10CM"</span>, conceptCode <span class="op">=</span> <span class="st">"E11"</span>, mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/getConceptCodeDetails.html">getConceptCodeDetails</a></span><span class="op">(</span>conceptCode <span class="op">=</span> <span class="st">"E11"</span>,
+                             vocabulary <span class="op">=</span> <span class="st">"ICD10CM"</span>,
+                             connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                             connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                             vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                             oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                             mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;   CONCEPT_ID             CONCEPT_NAME STANDARD_CONCEPT INVALID_REASON_CAPTION
 #&gt; 1     201826 Type 2 diabetes mellitus                S                  Valid
 #&gt;   INVALID_REASON STANDARD_CONCEPT_CAPTION CONCEPT_CODE DOMAIN_ID VOCABULARY_ID
 #&gt; 1              V                 Standard     44054006 Condition        SNOMED
 #&gt;   CONCEPT_CLASS_ID
 #&gt; 1 Clinical Finding</code></pre>
-<p>Finally if we only know the medical concept but not a specific code, we can do a keyword search to find any concepts that contain a character string of “Diabetes”. In the code chunk below we only return the first 5 rows for demonstration purposes. Since we return a <code>data.table</code> in this function we can subset and search within this R object.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="../reference/lookupKeyword.html">lookupKeyword</a></span><span class="op">(</span><span class="st">"Diabetes"</span>, <span class="st">"any"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span></pre></div>
-<pre><code>#&gt;    CONCEPT_ID                        CONCEPT_NAME STANDARD_CONCEPT
-#&gt; 1:       8560   Juvenile Diabetes Foundation unit                S
-#&gt; 2:      30968                  Diabetes insipidus                S
-#&gt; 3:     192691 Diabetes mellitus during pregnancy                 S
-#&gt; 4:     194700 Diabetes mellitus in mother complic                S
-#&gt; 5:     201820                   Diabetes mellitus                S
-#&gt;    INVALID_REASON_CAPTION INVALID_REASON STANDARD_CONCEPT_CAPTION CONCEPT_CODE
-#&gt; 1:                  Valid              V                 Standard      [JDF'U]
-#&gt; 2:                  Valid              V                 Standard     15771004
-#&gt; 3:                  Valid              V                 Standard    199227004
-#&gt; 4:                  Valid              V                 Standard     76751001
-#&gt; 5:                  Valid              V                 Standard     73211009
-#&gt;    DOMAIN_ID VOCABULARY_ID CONCEPT_CLASS_ID
-#&gt; 1:      Unit          UCUM             Unit
-#&gt; 2: Condition        SNOMED Clinical Finding
-#&gt; 3: Condition        SNOMED Clinical Finding
-#&gt; 4: Condition        SNOMED Clinical Finding
-#&gt; 5: Condition        SNOMED Clinical Finding</code></pre>
+<p>Finally if we only know the medical concept but not a specific code, we can do a keyword search to find any concepts that contain a character string of “Diabetes”. In the code chunk below we only return the first 5 rows for demonstration purposes.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Diabetes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lookupKeyword.html">lookupKeyword</a></span><span class="op">(</span>keyword <span class="op">=</span> <span class="st">"Diabetes"</span>,
+                          searchType <span class="op">=</span> <span class="st">"any"</span>,
+                          connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                          connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                          vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                          oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
+<span class="va">Diabetes</span><span class="op">$</span><span class="va">.</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span> <span class="co">#need dot to call data frame from object</span></code></pre></div>
+<pre><code>#&gt;   CONCEPT_ID                        CONCEPT_NAME STANDARD_CONCEPT
+#&gt; 1       8560   Juvenile Diabetes Foundation unit                S
+#&gt; 2      30968                  Diabetes insipidus                S
+#&gt; 3     192691 Diabetes mellitus during pregnancy                 S
+#&gt; 4     194700 Diabetes mellitus in mother complic                S
+#&gt; 5     201820                   Diabetes mellitus                S
+#&gt;   INVALID_REASON_CAPTION INVALID_REASON STANDARD_CONCEPT_CAPTION CONCEPT_CODE
+#&gt; 1                  Valid              V                 Standard      [JDF'U]
+#&gt; 2                  Valid              V                 Standard     15771004
+#&gt; 3                  Valid              V                 Standard    199227004
+#&gt; 4                  Valid              V                 Standard     76751001
+#&gt; 5                  Valid              V                 Standard     73211009
+#&gt;   DOMAIN_ID VOCABULARY_ID CONCEPT_CLASS_ID
+#&gt; 1      Unit          UCUM             Unit
+#&gt; 2 Condition        SNOMED Clinical Finding
+#&gt; 3 Condition        SNOMED Clinical Finding
+#&gt; 4 Condition        SNOMED Clinical Finding
+#&gt; 5 Condition        SNOMED Clinical Finding</code></pre>
 </div>
 <div id="working-with-concept-set-expressions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#working-with-concept-set-expressions" class="anchor"></a>Working with Concept Set Expressions</h3>
 <p>Next we want to take this concept set and turn it into a concept set expression. The concept set expression contains the concept set item which sets how we want to use the concept. We can find descendant concept, exclude it from the list or include its mapped concepts to the expression. In <code>Capr</code> when a concept set expression is created the default is to include descendants. When we create the concept set expression we generate a global unique identifier for this component. In the OMOP cohort concept sets are referred to internally using an integer starting from 0. This identifier deploys the concept set expression within a component. With <code>Capr</code> we want these pieces to exist in isolation outside the cohort definition, so we dont have to rely on this arbitrary number within the cohort definition. This allows us to repurpose any concept set expression and parent component for a new cohort. In the structural print we see the guid in the concept set expression section of the component part.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="va">ipVisit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lookupConceptIds.html">lookupConceptIds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">262</span>,<span class="fl">9201</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"InpatientVisit"</span>, includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">ipVisit</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">IpVisitCSE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">262</span>, <span class="co">#ERand IP Visit</span>
+                                                 <span class="fl">9201</span><span class="op">)</span>, <span class="co">#IP Visit</span>
+                                  connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                                  connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                                  vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                                  oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                                  mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"InpatientVisit"</span>, includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Formal class 'Component' [package "Capr"] with 4 slots
 #&gt;   ..@ MetaData            :Formal class 'MetaData' [package "Capr"] with 3 slots
-#&gt;   .. .. ..@ ComponentClass: chr "ConceptSetExpression"
-#&gt;   .. .. ..@ Name          : chr "InpatientVisit"
-#&gt;   .. .. ..@ Description   : chr NA
+#&gt;   .. .. ..@ ComponentType: chr "ConceptSetExpression"
+#&gt;   .. .. ..@ Name         : chr "InpatientVisit"
+#&gt;   .. .. ..@ Description  : chr NA
 #&gt;   ..@ CriteriaExpression  : list()
 #&gt;   ..@ Limit               : list()
 #&gt;   ..@ ConceptSetExpression:List of 1
 #&gt;   .. ..$ :Formal class 'ConceptSetExpression' [package "Capr"] with 3 slots
-#&gt;   .. .. .. ..@ id        : chr "2c52df8e-5a15-44b9-be48-53f84ecc6e14"
+#&gt;   .. .. .. ..@ id        : chr "7992ea71-2266-482e-8c18-fd2b035de87d"
 #&gt;   .. .. .. ..@ Name      : chr "InpatientVisit"
 #&gt;   .. .. .. ..@ Expression:List of 2
 #&gt;   .. .. .. .. ..$ :Formal class 'ConceptSetItem' [package "Capr"] with 4 slots
@@ -252,33 +290,44 @@
 #&gt;   .. .. .. .. .. .. ..@ includeDescendants: logi TRUE
 #&gt;   .. .. .. .. .. .. ..@ includeMapped     : logi FALSE</code></pre>
 <p>Returning to the idea of concept set items, we can customize the mapping of the concept set item. If we had three concepts in the set but only want to exclude one of them we can specify the position in the <code>createConceptMapping</code> function.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="va">cid2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">37310282L</span>, <span class="fl">37310281L</span>, <span class="fl">756055L</span><span class="op">)</span>
-<span class="va">nm2</span> <span class="op">&lt;-</span> <span class="st">"COVID-19 specific testing (pre-coordinated Measurements excluded)"</span>
-<span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">cid2</span><span class="op">)</span>
-<span class="va">conceptMapping2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConceptMapping.html">createConceptMapping</a></span><span class="op">(</span><span class="va">n</span>, includeDescendants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="cn">TRUE</span>,<span class="va">n</span><span class="op">)</span>, isExcluded <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
-<span class="va">conceptSet2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lookupConceptIds.html">lookupConceptIds</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="va">cid2</span>, mapToStandard <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="../reference/createConceptSetExpressionCustom.html">createConceptSetExpressionCustom</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="va">nm2</span>, conceptMapping <span class="op">=</span> <span class="va">conceptMapping2</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">37310282L</span>, <span class="fl">37310281L</span>, <span class="fl">756055L</span><span class="op">)</span>
+<span class="va">nm</span> <span class="op">&lt;-</span> <span class="st">"COVID-19 specific testing (pre-coordinated Measurements excluded)"</span>
+<span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">cid</span><span class="op">)</span>
+<span class="co">#lookup up covid19 meausres</span>
+<span class="va">MeasureOfCovid19</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="va">cid</span>,
+                          connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                          connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                          vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                          oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                          mapToStandard <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#create a custom mapping list</span>
+<span class="va">conceptMapping</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConceptMapping.html">createConceptMapping</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">n</span>,
+                                        includeDescendants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="cn">TRUE</span>,<span class="va">n</span><span class="op">)</span>,
+                                        isExcluded <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">MeasureOfCovid19CSE</span> <span class="op">&lt;-</span> <span class="va">MeasureOfCovid19</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/createConceptSetExpressionCustom.html">createConceptSetExpressionCustom</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="va">nm</span>, conceptMapping <span class="op">=</span> <span class="va">conceptMapping</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="building-a-query" class="section level3">
 <h3 class="hasAnchor">
 <a href="#building-a-query" class="anchor"></a>Building a Query</h3>
-<p>Queries lookup a concept set in a domain table in the cdm and returns the set of persons in the table that satisfy this condition. A query contains a concept set expression and an attribute, which can be NULL. In this example we create an occurrence start date attribute. The create attribute signatures start with create and end with attribute. Sandwiched in the middle is the name of the attribute we wish to create. We can look up attributes using the command <code>listAttributeOptions</code>. In this example we start by building an occurrence start date attribute. We want the occurrence of the visit to take place any time after December 1st 2019.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="va">dateAtt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createOccurrenceStartDateAttribute.html">createOccurrenceStartDateAttribute</a></span><span class="op">(</span>Op <span class="op">=</span> <span class="st">"gt"</span>, Value <span class="op">=</span> <span class="st">"2019-12-01"</span><span class="op">)</span></pre></div>
+<p>Queries lookup a concept set in a domain table in the cdm a returns the set of persons in the table that satisfy this condition. A query contains a concept set expression and an attribute, which can be NULL. In this example we create an occurrence start date attribute. The create attribute signatures start with create and end with attribute. Sandwhiched in the middle is the name of the attribute we wish to create. We can look up attributes using the command <code>listAttributeOptions</code>. In this example we start by building an occurrence start date attribute. We want the occurrence of the visit to take place any time after December 1st 2019.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">DateAtt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createOccurrenceStartDateAttribute.html">createOccurrenceStartDateAttribute</a></span><span class="op">(</span>Op <span class="op">=</span> <span class="st">"gt"</span>, Value <span class="op">=</span> <span class="st">"2019-12-01"</span><span class="op">)</span></code></pre></div>
 <p>Next we create a visit occurrence query for the inpatient concept set expression and date attribute. Notice at every point we are building up our component container.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="va">ipVisitQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createVisitOccurrence.html">createVisitOccurrence</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">ipVisit</span>, attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">dateAtt</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">ipVisitQuery</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">IpVisitQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createVisitOccurrence.html">createVisitOccurrence</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">IpVisitCSE</span>,
+                                      attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">DateAtt</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Formal class 'Component' [package "Capr"] with 4 slots
 #&gt;   ..@ MetaData            :Formal class 'MetaData' [package "Capr"] with 3 slots
-#&gt;   .. .. ..@ ComponentClass: chr "Query"
-#&gt;   .. .. ..@ Name          : chr "VisitOccurrence Query"
-#&gt;   .. .. ..@ Description   : chr NA
+#&gt;   .. .. ..@ ComponentType: chr "Query"
+#&gt;   .. .. ..@ Name         : chr "VisitOccurrence Query"
+#&gt;   .. .. ..@ Description  : chr NA
 #&gt;   ..@ CriteriaExpression  :List of 1
 #&gt;   .. ..$ :Formal class 'Query' [package "Capr"] with 3 slots
 #&gt;   .. .. .. ..@ Domain    : chr "VisitOccurrence"
-#&gt;   .. .. .. ..@ CodesetId : chr "3135d342-a96b-460f-9741-cc0287a843c5"
+#&gt;   .. .. .. ..@ CodesetId : chr "7992ea71-2266-482e-8c18-fd2b035de87d"
 #&gt;   .. .. .. ..@ Attributes:List of 1
 #&gt;   .. .. .. .. ..$ :Formal class 'OpAttribute' [package "Capr"] with 3 slots
 #&gt;   .. .. .. .. .. .. ..@ Name    : chr "OccurrenceStartDate"
@@ -289,7 +338,7 @@
 #&gt;   ..@ Limit               : list()
 #&gt;   ..@ ConceptSetExpression:List of 1
 #&gt;   .. ..$ :Formal class 'ConceptSetExpression' [package "Capr"] with 3 slots
-#&gt;   .. .. .. ..@ id        : chr "3135d342-a96b-460f-9741-cc0287a843c5"
+#&gt;   .. .. .. ..@ id        : chr "7992ea71-2266-482e-8c18-fd2b035de87d"
 #&gt;   .. .. .. ..@ Name      : chr "InpatientVisit"
 #&gt;   .. .. .. ..@ Expression:List of 2
 #&gt;   .. .. .. .. ..$ :Formal class 'ConceptSetItem' [package "Capr"] with 4 slots
@@ -322,23 +371,22 @@
 #&gt;   .. .. .. .. .. .. ..@ isExcluded        : logi FALSE
 #&gt;   .. .. .. .. .. .. ..@ includeDescendants: logi TRUE
 #&gt;   .. .. .. .. .. .. ..@ includeMapped     : logi FALSE</code></pre>
-<p>This query is what we use for the primary criteria of this cohort. All that remains, is adding an observation window and a limit (number of observations per person) to set the cohort entry. Notice again in the structural print the component inherits the query and evolves into a primary criteria component class. If one ever wants to check the component class they can use <code><a href="../reference/componentClass,Component-method.html">componentClass(pc)</a></code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="va">pc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createPrimaryCriteria.html">createPrimaryCriteria</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Inpatient Visit PC"</span>,
-                            ComponentList<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">ipVisitQuery</span><span class="op">)</span>,
+<p>This query is what we use for the primary criteria of this cohort. All that remains, is adding an observation window and a limit (number of observations per person) to set the cohort entry. Notice again in the structural print the component inherits the query and evolves into a primary criteria component class. If one ever wants to check the component class they can use <code><a href="../reference/componentType,Component-method.html">componentType(pc)</a></code>.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">PcCovidDiag</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createPrimaryCriteria.html">createPrimaryCriteria</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Inpatient Visit Primary Criteria"</span>,
+                            ComponentList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">IpVisitQuery</span><span class="op">)</span>,
                             ObservationWindow <span class="op">=</span> <span class="fu"><a href="../reference/createObservationWindow.html">createObservationWindow</a></span><span class="op">(</span><span class="fl">0L</span>,<span class="fl">0L</span><span class="op">)</span>,
-                            Limit <span class="op">=</span> <span class="st">"All"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">pc</span><span class="op">)</span></pre></div>
+                            Limit <span class="op">=</span> <span class="st">"All"</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Formal class 'Component' [package "Capr"] with 4 slots
 #&gt;   ..@ MetaData            :Formal class 'MetaData' [package "Capr"] with 3 slots
-#&gt;   .. .. ..@ ComponentClass: chr "PrimaryCriteria"
-#&gt;   .. .. ..@ Name          : chr "Inpatient Visit PC"
-#&gt;   .. .. ..@ Description   : chr NA
+#&gt;   .. .. ..@ ComponentType: chr "PrimaryCriteria"
+#&gt;   .. .. ..@ Name         : chr "Inpatient Visit Primary Criteria"
+#&gt;   .. .. ..@ Description  : chr NA
 #&gt;   ..@ CriteriaExpression  :List of 2
 #&gt;   .. ..$ CriteriaList     :List of 1
 #&gt;   .. .. ..$ :Formal class 'Query' [package "Capr"] with 3 slots
 #&gt;   .. .. .. .. ..@ Domain    : chr "VisitOccurrence"
-#&gt;   .. .. .. .. ..@ CodesetId : chr "2c52df8e-5a15-44b9-be48-53f84ecc6e14"
+#&gt;   .. .. .. .. ..@ CodesetId : chr "7992ea71-2266-482e-8c18-fd2b035de87d"
 #&gt;   .. .. .. .. ..@ Attributes:List of 1
 #&gt;   .. .. .. .. .. ..$ :Formal class 'OpAttribute' [package "Capr"] with 3 slots
 #&gt;   .. .. .. .. .. .. .. ..@ Name    : chr "OccurrenceStartDate"
@@ -354,7 +402,7 @@
 #&gt;   .. .. .. ..@ Type: chr "All"
 #&gt;   ..@ ConceptSetExpression:List of 1
 #&gt;   .. ..$ :Formal class 'ConceptSetExpression' [package "Capr"] with 3 slots
-#&gt;   .. .. .. ..@ id        : chr "2c52df8e-5a15-44b9-be48-53f84ecc6e14"
+#&gt;   .. .. .. ..@ id        : chr "7992ea71-2266-482e-8c18-fd2b035de87d"
 #&gt;   .. .. .. ..@ Name      : chr "InpatientVisit"
 #&gt;   .. .. .. ..@ Expression:List of 2
 #&gt;   .. .. .. .. ..$ :Formal class 'ConceptSetItem' [package "Capr"] with 4 slots
@@ -392,29 +440,51 @@
 <h3 class="hasAnchor">
 <a href="#creating-a-count" class="anchor"></a>Creating a Count</h3>
 <p>Count classes inherit queries and provide boolean logic and temporality. This class counts the number of occurrences of a query that fit within an observation period relative to the initial event. Counts are used in cohort restriction like in the additional criteria and inclusion rules. In this example we are going to build a count for COVID-19. We first look up the concept and include descendants in the mapping. Next we make the concept set expression into a query without any attributes. A count requires a timeline so we can create a time window relative to the initial evemt.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit">
-<span class="va">covid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lookupConceptIds.html">lookupConceptIds</a></span><span class="op">(</span><span class="fl">37311061</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>Name<span class="op">=</span><span class="st">"COVID-19 (including asymptomatic)"</span><span class="op">)</span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#lookup covid diagnosis in vocabulary</span>
+<span class="va">CovidDiag</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fl">37311061</span>,
+                                 connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                                 connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                                 vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                                 oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                                 mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#create concept set expression including descendant concepts</span>
+<span class="va">CovidDiagCSE</span> <span class="op">&lt;-</span> <span class="va">CovidDiag</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>Name<span class="op">=</span><span class="st">"COVID-19 (including asymptomatic)"</span>,
+                             includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#create a conditionOccurrence query</span>
+<span class="va">CovidDiagQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConditionOccurrence.html">createConditionOccurrence</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">CovidDiagCSE</span><span class="op">)</span>
 
-<span class="va">covidQuery1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConditionOccurrence.html">createConditionOccurrence</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">covid</span><span class="op">)</span>
-<span class="va">tw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createTimeline.html">createTimeline</a></span><span class="op">(</span>StartWindow <span class="op">=</span> <span class="fu"><a href="../reference/createWindow.html">createWindow</a></span><span class="op">(</span>StartDays <span class="op">=</span> <span class="fl">21</span>, StartCoeff <span class="op">=</span> <span class="st">"Before"</span>, EndDays <span class="op">=</span> <span class="st">"All"</span>, EndCoeff <span class="op">=</span> <span class="st">"After"</span><span class="op">)</span>,
-                     EndWindow <span class="op">=</span> <span class="fu"><a href="../reference/createWindow.html">createWindow</a></span><span class="op">(</span>StartDays <span class="op">=</span> <span class="st">"All"</span>, StartCoeff <span class="op">=</span> <span class="st">"Before"</span>, EndDays <span class="op">=</span> <span class="fl">0</span>, EndCoeff <span class="op">=</span> <span class="st">"After"</span>,
-                                              IndexStart <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
-<span class="va">covidCrit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query<span class="op">=</span> <span class="va">covidQuery1</span>,
+<span class="co">#create start window for timeline</span>
+<span class="co">#start window to count occurrences from inpatient event (cohort entry)</span>
+<span class="va">StartWindow1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createWindow.html">createWindow</a></span><span class="op">(</span>StartDays <span class="op">=</span> <span class="fl">21</span>, StartCoeff <span class="op">=</span> <span class="st">"Before"</span>, <span class="co"># 21 days before IpVisit index start</span>
+                             EndDays <span class="op">=</span> <span class="st">"All"</span>,EndCoeff <span class="op">=</span> <span class="st">"After"</span><span class="op">)</span> <span class="co">#to all days after IpVisit index start</span>
+<span class="co">#create end window for timeline</span>
+<span class="co">#end window to count occurrences from inpatient event (cohort entry)</span>
+<span class="va">EndWindow1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createWindow.html">createWindow</a></span><span class="op">(</span>StartDays <span class="op">=</span> <span class="st">"All"</span>, StartCoeff <span class="op">=</span> <span class="st">"Before"</span>, <span class="co">#end all days before IpVisit index start</span>
+                           EndDays <span class="op">=</span> <span class="fl">0</span>, EndCoeff <span class="op">=</span> <span class="st">"After"</span>, <span class="co">#0 days after IpVisit index start</span>
+                           IndexStart <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">#toggle index end </span>
+<span class="co">#create timeline</span>
+<span class="va">Timeline1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createTimeline.html">createTimeline</a></span><span class="op">(</span>StartWindow <span class="op">=</span> <span class="va">StartWindow1</span>,
+                     EndWindow <span class="op">=</span> <span class="va">EndWindow1</span><span class="op">)</span>
+<span class="co">#create a count criteria</span>
+<span class="co">#at least 1 occurrence of a covid diagnosis occurring</span>
+<span class="co">#between a) 21 days before and all days after initial inpatient visit index start date</span>
+<span class="co">#and b) all days before and 0 days after initial inpatient visit index end date</span>
+<span class="va">CovidCountCriteria1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">CovidDiagQuery</span>,
                           Logic <span class="op">=</span> <span class="st">"at_least"</span>,
                           Count <span class="op">=</span> <span class="fl">1</span>,
-                          Timeline <span class="op">=</span> <span class="va">tw</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">covidCrit1</span><span class="op">)</span></pre></div>
+                          Timeline <span class="op">=</span> <span class="va">Timeline1</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Formal class 'Component' [package "Capr"] with 4 slots
 #&gt;   ..@ MetaData            :Formal class 'MetaData' [package "Capr"] with 3 slots
-#&gt;   .. .. ..@ ComponentClass: chr "Count"
-#&gt;   .. .. ..@ Name          : chr "ConditionOccurrence Count"
-#&gt;   .. .. ..@ Description   : chr NA
+#&gt;   .. .. ..@ ComponentType: chr "Count"
+#&gt;   .. .. ..@ Name         : chr "ConditionOccurrence Count"
+#&gt;   .. .. ..@ Description  : chr NA
 #&gt;   ..@ CriteriaExpression  :List of 1
 #&gt;   .. ..$ :Formal class 'Count' [package "Capr"] with 3 slots
 #&gt;   .. .. .. ..@ Criteria  :Formal class 'Query' [package "Capr"] with 3 slots
 #&gt;   .. .. .. .. .. ..@ Domain    : chr "ConditionOccurrence"
-#&gt;   .. .. .. .. .. ..@ CodesetId : chr "434d16ce-636c-43a5-8611-93d607422a35"
+#&gt;   .. .. .. .. .. ..@ CodesetId : chr "3bf096aa-19ad-4862-91a2-6a50f0f5f378"
 #&gt;   .. .. .. .. .. ..@ Attributes: list()
 #&gt;   .. .. .. ..@ Timeline  :Formal class 'Timeline' [package "Capr"] with 4 slots
 #&gt;   .. .. .. .. .. ..@ StartWindow            :Formal class 'Window' [package "Capr"] with 4 slots
@@ -444,7 +514,7 @@
 #&gt;   ..@ Limit               : list()
 #&gt;   ..@ ConceptSetExpression:List of 1
 #&gt;   .. ..$ :Formal class 'ConceptSetExpression' [package "Capr"] with 3 slots
-#&gt;   .. .. .. ..@ id        : chr "434d16ce-636c-43a5-8611-93d607422a35"
+#&gt;   .. .. .. ..@ id        : chr "3bf096aa-19ad-4862-91a2-6a50f0f5f378"
 #&gt;   .. .. .. ..@ Name      : chr "COVID-19 (including asymptomatic)"
 #&gt;   .. .. .. ..@ Expression:List of 1
 #&gt;   .. .. .. .. ..$ :Formal class 'ConceptSetItem' [package "Capr"] with 4 slots
@@ -466,42 +536,73 @@
 <div id="creating-a-group" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-a-group" class="anchor"></a>Creating a Group</h3>
-<p>A group is a set of counts, queries, attributes and sub-groups that are deployed using boolean logic. We can combine multiple components and then describe if the patient needs to satisfy all these criteria to remain in the cohort or at least 1. A group is used for additional criteria and inclusion rules. It is also used for a nested criteria attribute. In this example we will construct multiple counts that comprise of a group. Within this section we also show sub-examples of nuances of <code>Capr</code> as we build up to the group.</p>
+<p>A group is a set of counts, queries, attributes and sub-groups that are deployed using boolean logic. We can combine multiple components and then describe if the patient needs to satisfy all these criteria to remain in the cohort or at least 1. A group is used for additional criteria and inclusion rules. It is also used for a nested criteria attribute. In this example we will construct multiple counts that comprise of a group. Within this section we also show sub-examples of nuiances of <code>Capr</code> as we build up to the group.</p>
 <div id="creating-a-source-concept-attribute" class="section level4">
 <h4 class="hasAnchor">
 <a href="#creating-a-source-concept-attribute" class="anchor"></a>Creating a Source Concept Attribute</h4>
-<p>In the code chunk below we want to use source concepts as an attribute for one of the criteria in the group. The patient must have at least 1 instance of these source concepts, excluding for 45542411, 586414, 45600471, 586415, 710157. We first creae a concept mapping for the length of the concept set and then toggle the mapping so that these five concepts have the item of isExcluded set to TRUE. Once the conceptMapping is set we can create the concept set Expression. The concept set expression known as covidSourceConcept can be used as a source concept attribute. Notice when we make the query in the <code>createConditionOccurrence</code> function we do not include the concept set expression like before. This is because we are making a special attribute for the source concepts. We should note that a query does not always contain a concept set expression. This is also the case when making an observation period. One should be careful on how they wish to apply the concept set expressions within the query, it may be an attribute.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit">
-<span class="va">cid3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">710158L</span>, <span class="fl">710155L</span>, <span class="fl">710156L</span>, <span class="fl">710159L</span>, <span class="fl">45542411L</span>, <span class="fl">710160L</span>, 
-          <span class="fl">45756093L</span>, <span class="fl">42501115L</span>, <span class="fl">586414L</span>, <span class="fl">45600471L</span>, <span class="fl">586415L</span>, <span class="fl">710157L</span><span class="op">)</span>
-<span class="va">nm3</span> <span class="op">&lt;-</span> <span class="st">"COVID-19 source codes"</span>
-<span class="va">conceptMapping3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConceptMapping.html">createConceptMapping</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">cid3</span><span class="op">)</span><span class="op">)</span>
-<span class="va">conceptMapping3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toggleConceptMapping.html">toggleConceptMapping</a></span><span class="op">(</span>conceptMapping <span class="op">=</span> <span class="va">conceptMapping3</span>,pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">9</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>, mapping <span class="op">=</span> <span class="st">"isExcluded"</span><span class="op">)</span>
-<span class="va">covidSourceConcept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lookupConceptIds.html">lookupConceptIds</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="va">cid3</span>, mapToStandard <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/createConceptSetExpressionCustom.html">createConceptSetExpressionCustom</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="va">nm3</span>, conceptMapping <span class="op">=</span> <span class="va">conceptMapping3</span><span class="op">)</span>
+<p>In the code chunk below we want to use source concepts as an attribute for one of the criteria in the group. The patient must have at least 1 instance of these source concepts, excluding for 45542411, 586414, 45600471, 586415, 710157. We first creae a concept mapping for the length of the concept set and then toggle the mapping so that these five concepts have the item of isExcluded set to TRUE. Once the conceptMapping is set we can create the concept set Expression. The concept set expression known as COVID SourceConcept can be used as a source concept attribute. Notice when we make the query in the <code>createConditionOccurrence</code> function we do not include the concept set expression like before. This is because we are making a special attribute for the source concepts. We should note that a query does not always contain a concept set expression. This is also the case when making an observation period. One should be careful on how they wish to apply the concept set expressions within the query, it may be an attribute.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">CovidSourceConcepts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">710158L</span>, <span class="fl">710155L</span>, <span class="fl">710156L</span>, 
+                                                          <span class="fl">710159L</span>, <span class="fl">45542411L</span>, <span class="fl">710160L</span>, 
+                                                          <span class="fl">45756093L</span>, <span class="fl">42501115L</span>, <span class="fl">586414L</span>, 
+                                                          <span class="fl">45600471L</span>, <span class="fl">586415L</span>, <span class="fl">710157L</span><span class="op">)</span>,
+                                           connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                                           connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                                           vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                                           oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                                           mapToStandard <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#create a default mapping list includeDescendants, isExcluded, includeMapped all FALSE</span>
+<span class="va">ConceptMappingSourceConcepts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConceptMapping.html">createConceptMapping</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">CovidSourceConcepts</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#toggle TRUE the positions needed to alter</span>
+<span class="va">ConceptMappingSourceConcepts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toggleConceptMapping.html">toggleConceptMapping</a></span><span class="op">(</span>conceptMapping <span class="op">=</span> <span class="va">ConceptMappingSourceConcepts</span>,
+                                                     pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">9</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>, mapping <span class="op">=</span> <span class="st">"isExcluded"</span><span class="op">)</span>
 
-<span class="va">sourceConceptAttribute</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConditionSourceConceptAttribute.html">createConditionSourceConceptAttribute</a></span><span class="op">(</span>ConceptSetExpression <span class="op">=</span> <span class="va">covidSourceConcept</span><span class="op">)</span>
-<span class="va">covidQuery2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConditionOccurrence.html">createConditionOccurrence</a></span><span class="op">(</span>attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">sourceConceptAttribute</span><span class="op">)</span><span class="op">)</span>
-<span class="va">covidCrit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">covidQuery2</span>, Logic <span class="op">=</span> <span class="st">"at_least"</span>, Count <span class="op">=</span><span class="fl">1</span>, Timeline <span class="op">=</span> <span class="va">tw</span><span class="op">)</span></pre></div>
+<span class="co">#Create Concept Set Expression with custom mapping</span>
+<span class="va">CovidSourceConceptCSE</span> <span class="op">&lt;-</span> <span class="va">CovidSourceConcepts</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/createConceptSetExpressionCustom.html">createConceptSetExpressionCustom</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"COVID-19 source codes"</span>,
+                                   conceptMapping <span class="op">=</span> <span class="va">ConceptMappingSourceConcepts</span><span class="op">)</span>
+
+<span class="co">#Create a Source Concept Attribute for query</span>
+<span class="va">SourceConceptAttribute</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConditionSourceConceptAttribute.html">createConditionSourceConceptAttribute</a></span><span class="op">(</span>ConceptSetExpression <span class="op">=</span> <span class="va">CovidSourceConceptCSE</span><span class="op">)</span>
+
+<span class="co">#Create Query</span>
+<span class="va">CovidSourceConceptQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConditionOccurrence.html">createConditionOccurrence</a></span><span class="op">(</span>attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">SourceConceptAttribute</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">#create Count for covid source concepts</span>
+<span class="va">CovidCountCriteria2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">CovidSourceConceptQuery</span>,
+                                   Logic <span class="op">=</span> <span class="st">"at_least"</span>,
+                                   Count <span class="op">=</span> <span class="fl">1</span>,
+                                   Timeline <span class="op">=</span> <span class="va">Timeline1</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="forward-piping-and-mutability-of-the-component-class" class="section level4">
 <h4 class="hasAnchor">
 <a href="#forward-piping-and-mutability-of-the-component-class" class="anchor"></a>Forward Piping and Mutability of the Component Class</h4>
-<p>Something you probably have noticed is most of <code>Capr</code> code contains forward pipes from the <code>magrittr</code> package in R. This usually looks a little nicer to avoid overuse of the assignment operator <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code>. However we use this deliberately to convey the mutability of the component container in <code>Capr</code>. Looking back at the structural prints from before we can see that component class changes as the object moves from a concept set expression, to a query, to a count and so forth. However the information from the previous state stays the same. The S4 component allows us to modify the structure while maintaining some rigid consistency across inheritance. In the code below, our look up returns a data.frame. The input for the <code>createConceptSetExpression</code> is a data.frame and the output is component object with a component class of conceptSetExpression. Next we mutate this component to build a query. One can always check the current component class of a component by using the function <code>componentClass</code></p>
-<div class="sourceCode" id="cb22"><pre class="downlit">
-<span class="va">covidCrit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lookupConceptIds.html">lookupConceptIds</a></span><span class="op">(</span><span class="fl">37310282</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<p>Something you probably have noticed is most of <code>Capr</code> code contains forward pipes from the <code>magrittr</code> package in R. This usually looks a little nicer to avoid overuse of the assignment operator <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code>. However we use this deliberately to convey the mutability of the component container in <code>Capr</code>. Looking back at the structural prints from before we can see that component class changes as the object moves from a concept set expression, to a query, to a count and so forth. However the information from the previous state stays the same. The S4 component allows us to modify the structure while maintaining some rigid consistency across inheritance. In the code below, our look up returns a data.frame. The input for the <code>createConceptSetExpression</code> is a data.frame and the output is component object with a component class of conceptSetExpression. Next we mutate this component to build a query. On can always check the current component class of a component by using the function <code>componentType</code></p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">CovidCountCriteria3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fl">37310282</span>,
+                                 connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                                 connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                                 vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                                 oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                                 mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"COVID-19 specific test"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/createMeasurement.html">createMeasurement</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">.</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Logic <span class="op">=</span> <span class="st">"at_least"</span>, Count <span class="op">=</span> <span class="fl">1</span>, Timeline <span class="op">=</span> <span class="va">tw</span><span class="op">)</span>
-<span class="fu"><a href="../reference/componentClass,Component-method.html">componentClass</a></span><span class="op">(</span><span class="va">covidCrit3</span><span class="op">)</span></pre></div>
-<pre><code>#&gt; [1] "Count"</code></pre>
+  <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Logic <span class="op">=</span> <span class="st">"at_least"</span>,
+              Count <span class="op">=</span> <span class="fl">1</span>,
+              Timeline <span class="op">=</span> <span class="va">Timeline1</span><span class="op">)</span>
+<span class="fu"><a href="../reference/componentType,Component-method.html">componentType</a></span><span class="op">(</span><span class="va">CovidCountCriteria3</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="creating-a-concept-attribute" class="section level4">
 <h4 class="hasAnchor">
 <a href="#creating-a-concept-attribute" class="anchor"></a>Creating a Concept Attribute</h4>
 <p>Sometimes we want to apply concepts directly into a cohort as an attribute, without building them as a concept set expression in the cohort. In this case we are using different values as concepts for measurement of a COVID-19 test. Below we show a lookup as before for concept values.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit">
-<span class="fu"><a href="../reference/lookupConceptIds.html">lookupConceptIds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4126681L</span>,<span class="fl">45877985L</span>, <span class="fl">9191L</span>, <span class="fl">4181412L</span>, <span class="fl">45879438L</span>, <span class="fl">45884084L</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4126681L</span>,<span class="fl">45877985L</span>, <span class="fl">9191L</span>, <span class="fl">4181412L</span>, <span class="fl">45879438L</span>, <span class="fl">45884084L</span><span class="op">)</span>,
+                                 connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                                 connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                                 vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                                 oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                                 mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt;   CONCEPT_ID CONCEPT_NAME STANDARD_CONCEPT INVALID_REASON_CAPTION
 #&gt; 1       9191     Positive                S                  Valid
 #&gt; 2    4126681     Detected                S                  Valid
@@ -524,185 +625,229 @@
 #&gt; 5           Answer
 #&gt; 6           Answer</code></pre>
 <p>If we wanted to use these concepts directly into an attribute we can search them from the function call. Underlying this function is the same lookup command as before in addition to some formatting changes for concepts that are incorporated within the cohort and not in the concept set list.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ValueAsConceptAtt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createValueAsConceptAttribute.html">createValueAsConceptAttribute</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4126681L</span>,<span class="fl">45877985L</span>, <span class="fl">9191L</span>,
+                                                                  <span class="fl">4181412L</span>, <span class="fl">45879438L</span>, <span class="fl">45884084L</span><span class="op">)</span>,
+                                                   connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                                                   connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                                                   vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                                                   oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                                                   mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="va">valueAtt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createValueAsConceptAttribute.html">createValueAsConceptAttribute</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4126681L</span>,<span class="fl">45877985L</span>, <span class="fl">9191L</span>,
-                                            <span class="fl">4181412L</span>, <span class="fl">45879438L</span>, <span class="fl">45884084L</span><span class="op">)</span><span class="op">)</span>
-<span class="va">covidQuery4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createMeasurement.html">createMeasurement</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">conceptSet2</span>, attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">valueAtt</span><span class="op">)</span><span class="op">)</span>
-<span class="va">covidCrit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">covidQuery4</span>, Logic <span class="op">=</span> <span class="st">"at_least"</span>, Count<span class="op">=</span><span class="fl">1</span>, Timeline <span class="op">=</span> <span class="va">tw</span><span class="op">)</span></pre></div>
+<span class="va">Covid19MeasuresQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createMeasurement.html">createMeasurement</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">MeasureOfCovid19CSE</span>,
+                                           attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">ValueAsConceptAtt</span><span class="op">)</span><span class="op">)</span>
+<span class="va">CovidCountCriteria4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">Covid19MeasuresQuery</span>,
+                                   Logic <span class="op">=</span> <span class="st">"at_least"</span>,
+                                   Count<span class="op">=</span><span class="fl">1</span>, Timeline <span class="op">=</span> <span class="va">Timeline1</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="resuing-component-parts" class="section level4">
 <h4 class="hasAnchor">
 <a href="#resuing-component-parts" class="anchor"></a>Resuing Component Parts</h4>
-<p><code>Capr</code> levarages the global environment in R to maintain objects that have been previously created in other parts of the cohort. In <code>Capr</code>, components and other objects can always exist in isolation so we can simply add them into a different function call. Notice that our object <code>tw</code> which represents the timeline of the restricted events has stayed the same for each new count. We are recycling the object from the global environment and do not need to recreate this every time. We will expand upon this idea in the save and load commands in <code>Capr</code>. Beyond reuse we can copy and modify aspects to generate new component objects. In the code chunk below we can build this count through our typical means: lookup the concept, create the mapping, make the concept set expression, set the query with attributes and then build the count.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit">
-<span class="va">cid2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">37310282L</span>, <span class="fl">37310281L</span>, <span class="fl">756055L</span><span class="op">)</span>
-<span class="va">nm2</span> <span class="op">&lt;-</span> <span class="st">"COVID-19 specific testing (pre-coordinated Measurements excluded)"</span>
-<span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">cid2</span><span class="op">)</span>
-<span class="va">conceptMapping2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createConceptMapping.html">createConceptMapping</a></span><span class="op">(</span><span class="va">n</span>, includeDescendants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="cn">TRUE</span>,<span class="va">n</span><span class="op">)</span>, isExcluded <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
-<span class="va">conceptSet2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lookupConceptIds.html">lookupConceptIds</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="va">cid2</span>, mapToStandard <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="../reference/createConceptSetExpressionCustom.html">createConceptSetExpressionCustom</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="va">nm2</span>, conceptMapping <span class="op">=</span> <span class="va">conceptMapping2</span><span class="op">)</span>
-<span class="va">covidQuery5A</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createObservation.html">createObservation</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">conceptSet2</span>,
-                           attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">valueAtt</span><span class="op">)</span><span class="op">)</span>
-<span class="va">covidCrit5A</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">covidQuery5A</span>, Logic <span class="op">=</span> <span class="st">"at_least"</span>, Count<span class="op">=</span><span class="fl">1</span>, Timeline <span class="op">=</span> <span class="va">tw</span><span class="op">)</span></pre></div>
-<p>This is nearly identical to something we have created before, except it was a Measurement domain. Instead of recreating everything we can use the copy and modify principles in R to more quickly change this component to the new domain observation.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit">
-<span class="va">covidCrit5</span> <span class="op">&lt;-</span> <span class="va">covidCrit4</span>
-<span class="va">covidCrit5</span><span class="op">@</span><span class="va">CriteriaExpression</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">Criteria</span><span class="op">@</span><span class="va">Domain</span> <span class="op">&lt;-</span> <span class="st">"Observation"</span> </pre></div>
+<p><code>Capr</code> levarages the global environment in R to maintain objects that have been previously created in other parts of the cohort. In <code>Capr</code>, components and other objects can always exist in isolation so we can simply add them into a different function call. Notice that our object <code>Timeline1</code> which represents the timeline of the restricted events has stayed the same for each new count. We are recycling the object from the global environment and do not need to recreate this every time. We will expand upon this idea in the save and load commands in <code>Capr</code>. Beyond reuse we can copy and modify aspects to generate new component objects. In the code chunk below we can build this count through our typical means: lookup the concept, create the mapping, make the concept set expression, set the query with attributes and then build the count.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Covid19ObservationMeasureQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createObservation.html">createObservation</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">MeasureOfCovid19CSE</span>,
+                                           attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">ValueAsConceptAtt</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">CovidCountCriteria5A</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">Covid19ObservationMeasureQuery</span>,
+                                   Logic <span class="op">=</span> <span class="st">"at_least"</span>,
+                                   Count <span class="op">=</span> <span class="fl">1</span>, 
+                                   Timeline <span class="op">=</span> <span class="va">Timeline1</span><span class="op">)</span></code></pre></div>
+<p>This is nearly identical to something we have created before, except it was a Measurment domain. Instead of recreating everything we can use the copy and modify principles in R to more quickly change this component to the new domain observation.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">CovidCountCriteria5</span> <span class="op">&lt;-</span> <span class="va">CovidCountCriteria4</span>
+<span class="va">CovidCountCriteria5</span><span class="op">@</span><span class="va">CriteriaExpression</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">Criteria</span><span class="op">@</span><span class="va">Domain</span> <span class="op">&lt;-</span> <span class="st">"Observation"</span> </code></pre></div>
 </div>
 <div id="finally-creating-the-group" class="section level4">
 <h4 class="hasAnchor">
 <a href="#finally-creating-the-group" class="anchor"></a>Finally, Creating the group</h4>
 <p>We need to make one more count for our group. Once this is created we can add all these components into a group. A group requires a name, some logic on what counts and the list of criterias, demographic criterias and sub groups.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit">
-<span class="va">covidQuery6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createObservation.html">createObservation</a></span><span class="op">(</span>attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/createObservationSourceConceptAttribute.html">createObservationSourceConceptAttribute</a></span><span class="op">(</span><span class="va">covidSourceConcept</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">covidCrit6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">covidQuery6</span>, Logic <span class="op">=</span> <span class="st">"at_least"</span>, Count <span class="op">=</span><span class="fl">1</span>, Timeline <span class="op">=</span> <span class="va">tw</span><span class="op">)</span>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">CovidSourceConceptQueryObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createObservation.html">createObservation</a></span><span class="op">(</span>attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/createObservationSourceConceptAttribute.html">createObservationSourceConceptAttribute</a></span><span class="op">(</span><span class="va">CovidSourceConceptCSE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">CovidCountCriteria6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">CovidSourceConceptQueryObs</span>,
+                          Logic <span class="op">=</span> <span class="st">"at_least"</span>,
+                          Count <span class="op">=</span><span class="fl">1</span>,
+                          Timeline <span class="op">=</span> <span class="va">Timeline1</span><span class="op">)</span>
 
-<span class="va">covidGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"COVID-19 Diag"</span>,
-                          type <span class="op">=</span> <span class="st">"ANY"</span>, criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">covidCrit1</span>, <span class="va">covidCrit2</span>,
-                                                            <span class="va">covidCrit3</span>, <span class="va">covidCrit4</span>, <span class="va">covidCrit5</span>, <span class="va">covidCrit6</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="va">CovidDiagGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"COVID-19 Diag"</span>,
+                          type <span class="op">=</span> <span class="st">"ANY"</span>, 
+                          criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CovidCountCriteria1</span>, <span class="va">CovidCountCriteria2</span>,
+                                              <span class="va">CovidCountCriteria3</span>, <span class="va">CovidCountCriteria4</span>,
+                                              <span class="va">CovidCountCriteria5</span>, <span class="va">CovidCountCriteria6</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/saveComponent.html">saveComponent</a></span><span class="op">(</span><span class="va">CovidDiagGroup</span>,
+              saveName <span class="op">=</span> <span class="st">"CovidDiagGroup"</span>,
+              savePath <span class="op">=</span> <span class="st">"~/Documents"</span><span class="op">)</span></code></pre></div>
 <p>We can use this group to make an additional criteria like in the chunk below.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit">
-<span class="va">ac</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createAdditionalCriteria.html">createAdditionalCriteria</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Additional Crit for COVID cohort"</span>,Contents <span class="op">=</span> <span class="va">covidGroup</span>, Limit <span class="op">=</span> <span class="st">"All"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">covidGroup</span>, saveName <span class="op">=</span> <span class="st">"covidGroup"</span>, savePath <span class="op">=</span> <span class="st">"~/Documents/ComponentLibrary"</span><span class="op">)</span></pre></div>
-<p>We can also use this same group as a nested (correlated) criteria for an inclusion rule. This is another example of the reusability of the components. We can make a group once and then use it in a variety of scenarios across the cohort definition. We can also save the group and use it another time in a different cohort if we plan to use it frequently across a family of like cohorts.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit">
-<span class="va">ccAtt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCorrelatedCriteriaAttribute.html">createCorrelatedCriteriaAttribute</a></span><span class="op">(</span><span class="va">covidGroup</span><span class="op">)</span>
-<span class="va">covidQuery7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createVisitOccurrence.html">createVisitOccurrence</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">ipVisit</span>,
-                           attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">ccAtt</span><span class="op">)</span><span class="op">)</span>
-<span class="va">tw3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createTimeline.html">createTimeline</a></span><span class="op">(</span>StartWindow <span class="op">=</span> <span class="fu"><a href="../reference/createWindow.html">createWindow</a></span><span class="op">(</span>StartDays <span class="op">=</span> <span class="fl">180</span>, StartCoeff <span class="op">=</span> <span class="st">"Before"</span>,
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">AcCovidDiag</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createAdditionalCriteria.html">createAdditionalCriteria</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Additional Crit for COVID cohort"</span>,
+                               Contents <span class="op">=</span> <span class="va">CovidDiagGroup</span>, 
+                               Limit <span class="op">=</span> <span class="st">"All"</span><span class="op">)</span></code></pre></div>
+<p>We can also use this same group as a nested (correlated) criteria for an inclusion rule. This is another example of the resuability of the components. We can make a group once and then use it in a variety of scenarios across the cohort definition. We can also save the group and use it another time in a different cohort if we plan to use it frequently across a family of like cohorts.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#load an existing component</span>
+<span class="va">CovidDiagGroupLoad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadComponent.html">loadComponent</a></span><span class="op">(</span><span class="st">"~/Documents/CovidDiagGroup.json"</span><span class="op">)</span>
+<span class="va">CorrelatedCriteriaAtt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCorrelatedCriteriaAttribute.html">createCorrelatedCriteriaAttribute</a></span><span class="op">(</span><span class="va">CovidDiagGroupLoad</span><span class="op">)</span>
+<span class="va">InpatientVisitWCovidDiagQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createVisitOccurrence.html">createVisitOccurrence</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">IpVisitCSE</span>,
+                                     attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CorrelatedCriteriaAtt</span><span class="op">)</span><span class="op">)</span>
+<span class="va">Timeline2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createTimeline.html">createTimeline</a></span><span class="op">(</span>StartWindow <span class="op">=</span> <span class="fu"><a href="../reference/createWindow.html">createWindow</a></span><span class="op">(</span>StartDays <span class="op">=</span> <span class="fl">180</span>, StartCoeff <span class="op">=</span> <span class="st">"Before"</span>,
                                                  EndDays <span class="op">=</span> <span class="fl">1</span>, EndCoeff <span class="op">=</span> <span class="st">"Before"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">covidCritIR3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">covidQuery7</span>,
+<span class="va">CovidCountInclusionRule3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="va">InpatientVisitWCovidDiagQuery</span>,
                             Logic <span class="op">=</span> <span class="st">"exactly"</span>,
-                            Count <span class="op">=</span><span class="fl">0</span>,
-                            Timeline <span class="op">=</span> <span class="va">tw3</span><span class="op">)</span>
-<span class="va">covidGroup4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>Name <span class="op">=</span><span class="st">"does not have hospitalization for COVID19 in the 6 months preceding admission"</span>,
+                            Count <span class="op">=</span> <span class="fl">0</span>,
+                            Timeline <span class="op">=</span> <span class="va">Timeline2</span><span class="op">)</span>
+<span class="va">CovidHospitalizationGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>Name <span class="op">=</span><span class="st">"does not have hospitalization for COVID19 in the 6 months preceding admission"</span>,
                            type <span class="op">=</span> <span class="st">"ALL"</span>,
-                           criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">covidCritIR3</span><span class="op">)</span><span class="op">)</span></pre></div>
+                           criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CovidCountInclusionRule3</span><span class="op">)</span>,
+                           demographicCriteriaList <span class="op">=</span> <span class="cn">NULL</span>,
+                           Groups <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="creating-a-demographic-criteria" class="section level4">
 <h4 class="hasAnchor">
 <a href="#creating-a-demographic-criteria" class="anchor"></a>Creating a Demographic Criteria</h4>
-<p>In our groups sometimes we want to include a demographic criteria, for example persons 18 years or older. Demographic criterias are attributes, so we use the attribute functions to create them like before.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit">
-<span class="va">ageAtt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createAgeAttribute.html">createAgeAttribute</a></span><span class="op">(</span>Op <span class="op">=</span> <span class="st">"gte"</span>, Value<span class="op">=</span><span class="fl">18</span><span class="op">)</span>
-<span class="va">covidGroup2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"&gt;=18 years old"</span>,type<span class="op">=</span><span class="st">"ALL"</span>, demographicCriteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">ageAtt</span><span class="op">)</span><span class="op">)</span></pre></div>
+<p>In our groups sometimes we want to include a demographic criteria for examples persons 18 years or older. Demographic criterias are attributes, so we use the attribute functions to create them like before.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">AgeAtt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createAgeAttribute.html">createAgeAttribute</a></span><span class="op">(</span>Op <span class="op">=</span> <span class="st">"gte"</span>, Value <span class="op">=</span> <span class="fl">18</span><span class="op">)</span>
+<span class="va">Age18AndOlderGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"&gt;=18 years old"</span>,
+                           type<span class="op">=</span><span class="st">"ALL"</span>, 
+                           criteriaList <span class="op">=</span> <span class="cn">NULL</span>,
+                           demographicCriteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">AgeAtt</span><span class="op">)</span>,
+                           Groups <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="creating-inclusion-rules" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-inclusion-rules" class="anchor"></a>Creating Inclusion Rules</h3>
 <p>Once we have a series of groups we are happy with we can bundle them together to create inclusion rules. The code chunk below shows how to make inclusion rules from the groups we have created before plus a group that is based on persons having at least 365 days of observation.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit">
-<span class="va">tw2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createTimeline.html">createTimeline</a></span><span class="op">(</span>StartWindow <span class="op">=</span> <span class="fu"><a href="../reference/createWindow.html">createWindow</a></span><span class="op">(</span>StartDays <span class="op">=</span> <span class="st">"All"</span>, StartCoeff <span class="op">=</span> <span class="st">"Before"</span>, EndDays <span class="op">=</span> <span class="fl">365</span>, EndCoeff <span class="op">=</span> <span class="st">"Before"</span><span class="op">)</span>,
-                      EndWindow <span class="op">=</span> <span class="fu"><a href="../reference/createWindow.html">createWindow</a></span><span class="op">(</span>StartDays <span class="op">=</span> <span class="fl">0</span>, StartCoeff <span class="op">=</span> <span class="st">"Before"</span>, EndDays <span class="op">=</span> <span class="st">"All"</span>, EndCoeff <span class="op">=</span> <span class="st">"After"</span>,
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Timeline3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createTimeline.html">createTimeline</a></span><span class="op">(</span>StartWindow <span class="op">=</span> <span class="fu"><a href="../reference/createWindow.html">createWindow</a></span><span class="op">(</span>StartDays <span class="op">=</span> <span class="st">"All"</span>, StartCoeff <span class="op">=</span> <span class="st">"Before"</span>,
+                                                       EndDays <span class="op">=</span> <span class="fl">365</span>, EndCoeff <span class="op">=</span> <span class="st">"Before"</span><span class="op">)</span>,
+                      EndWindow <span class="op">=</span> <span class="fu"><a href="../reference/createWindow.html">createWindow</a></span><span class="op">(</span>StartDays <span class="op">=</span> <span class="fl">0</span>, StartCoeff <span class="op">=</span> <span class="st">"Before"</span>,
+                                               EndDays <span class="op">=</span> <span class="st">"All"</span>, EndCoeff <span class="op">=</span> <span class="st">"After"</span>,
                                                IndexStart <span class="op">=</span> <span class="cn">FALSE</span>, EventStarts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">covidCritIR2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="fu"><a href="../reference/createObservationPeriod.html">createObservationPeriod</a></span><span class="op">(</span><span class="op">)</span>,
+<span class="va">CovidCountInclusionRule2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Query <span class="op">=</span> <span class="fu"><a href="../reference/createObservationPeriod.html">createObservationPeriod</a></span><span class="op">(</span><span class="op">)</span>,
                             Logic <span class="op">=</span> <span class="st">"at_least"</span>,
                             Count <span class="op">=</span><span class="fl">1</span>,
-                            Timeline <span class="op">=</span> <span class="va">tw2</span><span class="op">)</span>
-<span class="va">covidGroup3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Has &gt;= 365 of observation"</span>,
-                           type <span class="op">=</span> <span class="st">"ALL"</span>, criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">covidCritIR2</span><span class="op">)</span><span class="op">)</span>
+                            Timeline <span class="op">=</span> <span class="va">Timeline3</span><span class="op">)</span>
+<span class="va">Has365DaysObsGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Has &gt;= 365 of observation"</span>,
+                           type <span class="op">=</span> <span class="st">"ALL"</span>,
+                           criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CovidCountInclusionRule2</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">irs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createInclusionRules.html">createInclusionRules</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Inclusion Rules for covid Cohort"</span>,
-                 Contents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">covidGroup2</span>, <span class="va">covidGroup3</span>, <span class="va">covidGroup4</span><span class="op">)</span>,
-                 Limit <span class="op">=</span><span class="st">"First"</span><span class="op">)</span></pre></div>
+<span class="va">IrsCovidDiag</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createInclusionRules.html">createInclusionRules</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Inclusion Rules for covid Cohort"</span>,
+                            Contents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">Age18AndOlderGroup</span>,
+                                            <span class="va">Has365DaysObsGroup</span>,
+                                            <span class="va">CovidHospitalizationGroup</span><span class="op">)</span>,
+                            Limit <span class="op">=</span><span class="st">"First"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="defining-the-cohort-exit" class="section level3">
 <h3 class="hasAnchor">
 <a href="#defining-the-cohort-exit" class="anchor"></a>Defining the cohort exit</h3>
 <p>The cohort exit is defined by the end strategy and the censoring criteria. The end strategy by default is end of continuous observation, however we can create two additional strategies to define how persons exit the cohort. First we can use a date offset. The code chunk below shows an example.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit">
-<span class="va">es</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDateOffsetEndStrategy.html">createDateOffsetEndStrategy</a></span><span class="op">(</span>offset <span class="op">=</span> <span class="fl">0</span>, eventDateOffset <span class="op">=</span> <span class="st">"EndDate"</span><span class="op">)</span></pre></div>
-<p>We can also create a custom era using a drug exposure to define the end point of a cohort. This example is not a part of the covid cohort but is included for demonstration. We first find a concept like warfarin, create the concept set expression and then apply this within the custom era.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit">
-<span class="va">warfarin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lookupConceptIds.html">lookupConceptIds</a></span><span class="op">(</span><span class="fl">1310149</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Warfarin"</span><span class="op">)</span>
-<span class="va">es2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCustomEraEndStrategy.html">createCustomEraEndStrategy</a></span><span class="op">(</span><span class="va">warfarin</span>, gapDays <span class="op">=</span> <span class="fl">3</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">EsCovidDiag</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDateOffsetEndStrategy.html">createDateOffsetEndStrategy</a></span><span class="op">(</span>offset <span class="op">=</span> <span class="fl">0</span>, eventDateOffset <span class="op">=</span> <span class="st">"EndDate"</span><span class="op">)</span></code></pre></div>
+<p>We can aslo create a custom era using a drug exposure to define the end point of a cohort. This example is not a part of the covid cohort but is included for demonstration. We first find a concept like warfarin, create the concept set expression and then apply this within the custom era.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">WarfarinCSE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fl">1310149</span>, 
+                                  connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                                  connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                                  vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                                  oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                                  mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Warfarin"</span>, includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="va">EndStrategyWithDrug</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCustomEraEndStrategy.html">createCustomEraEndStrategy</a></span><span class="op">(</span><span class="va">WarfarinCSE</span>,
+                                                  gapDays <span class="op">=</span> <span class="fl">3</span>,
+                                                  offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
 <p>Aside from the end strategy we can also define a censoring criteria as a way that persons exit the cohort. This is another example that is not part of the covid cohort but we include for the purpose of demonstration. Similar to a primary criteria we can build a concept set expression for what will be our censoring event. Then we create a query (we may also add an attribute) that defines the domain of the concept set expression. We can add any queries we wish to add to the censoring criteria to build this component.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit">
-<span class="va">infliximab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lookupConceptIds.html">lookupConceptIds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">937368</span>,<span class="fl">937369</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Infliximab"</span><span class="op">)</span>
-<span class="va">infliximabQuery</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/createDrugEra.html">createDrugEra</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">infliximab</span><span class="op">)</span>
-<span class="va">cen</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/createCensoringCriteria.html">createCensoringCriteria</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"prev inflix"</span>, ComponentList <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">infliximabQuery</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">InfliximabCSE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">937368</span>,<span class="fl">937369</span><span class="op">)</span>, 
+                                  connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
+                                  connection <span class="op">=</span> <span class="va">connection</span>, <span class="co">#use connection since it is already open</span>
+                                  vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
+                                  oracleTempSchema <span class="op">=</span> <span class="cn">NULL</span>,
+                                  mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Infliximab"</span>, includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">infliximabQuery</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/createDrugEra.html">createDrugEra</a></span><span class="op">(</span>conceptSetExpression <span class="op">=</span> <span class="va">InfliximabCSE</span><span class="op">)</span>
+<span class="va">cen</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/createCensoringCriteria.html">createCensoringCriteria</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"prev inflix"</span>, ComponentList <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">infliximabQuery</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="creating-a-cohort-era" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-a-cohort-era" class="anchor"></a>Creating a Cohort Era</h3>
-<p>The last piece of a cohort definition is to add the cohort era. This defines padding between events and censor window of when to begin recording events. Say in a cohort we only want to look at events after a certain date. All of this is defined in the cohort era. In many cases the cohort era can be composed of default settings (padding of 0 and no censor window) and does not need to to built for the cohort definition.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit">
-<span class="va">cohortEra</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCohortEra.html">createCohortEra</a></span><span class="op">(</span>LeftCensorDate <span class="op">=</span> <span class="st">"1994-06-17"</span><span class="op">)</span></pre></div>
+<p>The last piece of a cohort definition is to add the cohort era. This defines padding between events and censor window of when to begin recording events. Say in a cohort we only we want to look at events after a certain date. All of this is defined in the cohort era. In many cases the cohort era can be composed of default settings (padding of 0 and no censor window) and does not need to to built for the cohort definition.</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cohortEra</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCohortEra.html">createCohortEra</a></span><span class="op">(</span>LeftCensorDate <span class="op">=</span> <span class="st">"2019-12-17"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="creating-the-cohort-definition" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-the-cohort-definition" class="anchor"></a>Creating the cohort definition</h3>
-<p>Once we are happy with the creation of all the sub-components we can build the cohort definition. This is pretty simple. We infuse the component parts necessary for the cohort definition and create. In the cohort definition we can add meta data about the cohort definition. This includes a name (required), description (optional), author (optional) and the cdm version compatibility. The default of the cdm version is “&gt;= 5.0.0”. If we had a different variation of this cohort definition, for example the primary criteria for inpatient has a different observation window, we can simply create a separate primary criteria object and then infuse that into a separate cohort definition.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit">
-<span class="va">desc</span> <span class="op">&lt;-</span> <span class="st">"This cohort counts the number of inpatient visits from patients with COVID-19, this is counted as a covid diagnosis or from a measured covid test"</span>
-<span class="va">cd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCohortDefinition.html">createCohortDefinition</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Inpatient COVID-19"</span>,
+<p>Once we are happy with the creation of all the sub-components we can build the cohort definition. This is pretty simple. We infuse the component parts necessary for the cohort definition and create. In the cohort definition we can add meta data about the cohort definition. This includes a name (required), description (optional), author (optional) and the cdm version compatability. The default of the cdm version is “&gt;= 5.0.0”. If we had a different variation of this cohort definition, for example the primary criteria for inpatient has a different observation window, we can simply create a separate primary criteria object and then infuse that into a separate cohort definition.</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">desc</span> <span class="op">&lt;-</span> <span class="st">"This cohort counts the number of inpatient visits from patients with COVID-19, this is counted as a covid diagnosis or from a measured covid test"</span>
+<span class="va">cd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCohortDefinition.html">createCohortDefinition</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"Inpatient COVID-19 Diag"</span>,
                              Description <span class="op">=</span> <span class="va">desc</span>,
-                             PrimaryCriteria <span class="op">=</span> <span class="va">pc</span>,
-                             AdditionalCriteria <span class="op">=</span> <span class="va">ac</span>,
-                             InclusionRules <span class="op">=</span> <span class="va">irs</span>,
-                             EndStrategy <span class="op">=</span> <span class="va">es</span><span class="op">)</span></pre></div>
+                             PrimaryCriteria <span class="op">=</span> <span class="va">PcCovidDiag</span>,
+                             AdditionalCriteria <span class="op">=</span> <span class="va">AcCovidDiag</span>,
+                             InclusionRules <span class="op">=</span> <span class="va">IrsCovidDiag</span>,
+                             EndStrategy <span class="op">=</span> <span class="va">EsCovidDiag</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="deploying-the-cohort" class="section level2">
 <h2 class="hasAnchor">
 <a href="#deploying-the-cohort" class="anchor"></a>Deploying the Cohort</h2>
-<p>Once the cohort definition has been created we want to run it against our OMOP cdm. To do so we need to use the OHDSI <code>CirceR</code> package to take the cohort definition and create the ohdisql to run on our local environment. <code>CirceR</code> will populate the parameterized sql if one sets the generate options. We need to tell what is the column for the cohort Id in the cohort table of the results schema, the id number in the results schema, the cdm schema, the table where the cohort is to be written, the results Schema where the table sits, the vocabulary schema to access concepts and a toggle to generate statistics on the cohort. We can take the cohort definition created in R and return ohdisql and Atlas compatible circe json objects to deploy this cohort across our OMOP system. The function <code>compileCohortDefinition</code> takes the R and builds the json that <code>CirceR</code> takes to get the cohort description and most importantly the ohdisql. <code>Capr</code> does some low level manipulation to get from the R object to the json and then relies on <code>CirceR</code> to build the ohdisql. Functions leveraged in the <code>compileCohortDefinition</code> functions from <code>CirceR</code> include <code>cohortExpressionFromJson</code> which activates the circe-be, <code>cohortPrintFriendly</code> which returns the english text of the cohort, and <code>buildCohortQuery</code> which creates the ohdisql from the input generate options.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit">
-<span class="va">genOp</span> <span class="op">&lt;-</span> <span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CirceR/man/createGenerateOptions.html">createGenerateOptions</a></span><span class="op">(</span>cohortIdFieldName <span class="op">=</span> <span class="st">"cohort_definition_id"</span>,
+<p>Once the cohort definition has been created we want to run it against our OMOP cdm. To do so we need to use the <code>CirceR</code> package to take the cohort definition and create the ohdisql to run on our local environment. <code>CirceR</code> will populate the parameterized sql if one sets the generate options. We need to tell what is the column for the cohort Id in the cohort table of the results schema, the id number in the results schema, the cdm schema, the table where the cohort is to be written, the results Schema where the table sits, the vocabulary schema to access concepts and a toggle to generate statistics on the cohort. We can take the cohort definition created in R and return objects to deploy this cohort across our OMOP system. The function <code>compileCohortDefinition</code> takes the R and builds the json that <code>CirceR</code> takes to get the cohort description and most importantly the ohdisql. <code>Capr</code> does some low level manipulation to get from the R object to the json and then relies on <code>CirceR</code> to build the ohdisql. Functions leveraged in the <code>compileCohortDefinition</code> functions from <code>CirceR</code> include <code>cohortExpressionFromJson</code> which activates the circe-be, <code>cohortPrintFriendly</code> which returns the enlish text of the cohort, and <code>buildCohortQuery</code> which creates the ohdisql from the input generate options.</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">genOp</span> <span class="op">&lt;-</span> <span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CirceR/reference/createGenerateOptions.html">createGenerateOptions</a></span><span class="op">(</span>cohortIdFieldName <span class="op">=</span> <span class="st">"cohort_definition_id"</span>,
                                cohortId <span class="op">=</span> <span class="fl">9999</span>,
                                cdmSchema <span class="op">=</span> <span class="va">connectionDetails</span><span class="op">$</span><span class="va">schema</span>,
                                targetTable <span class="op">=</span> <span class="st">"cohort"</span>,
                                resultSchema <span class="op">=</span> <span class="st">"results"</span>,
                                vocabularySchema <span class="op">=</span> <span class="va">connectionDetails</span><span class="op">$</span><span class="va">schema</span>,
                                generateStats <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
-<span class="va">cohortInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compileCohortDefinition.html">compileCohortDefinition</a></span><span class="op">(</span><span class="va">cd</span>, <span class="va">genOp</span><span class="op">)</span></pre></div>
-<p>The cohortInfo object in the chunk above is a list of 4 aspects: 1) the s3 cohort definition (<code>circeS3</code>) – this is a intermediate structure for cohort definition that one can browse to debug errors 2) the cohort json (<code>circeJson</code>) – this returns the json of the cohort definition, identical to ATLAS. You can copy and paste this json to ATLAS to generate the same cohort. You can also save this for record keeping 3) the cohort description (<code>cohortRead</code>) – this returns the english text of the cohort 4) the sql (<code>ohdisql</code>) – the parameterized sql already filled in with the generate options.</p>
+<span class="va">cohortInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compileCohortDefinition.html">compileCohortDefinition</a></span><span class="op">(</span><span class="va">cd</span>, <span class="va">genOp</span><span class="op">)</span></code></pre></div>
+<p>The cohortInfo object in the chunk above is a list of 4 aspects: 1) the s3 cohort definition (<code>circeS3</code>) – this is a intermediate structure for cohort definition that one can browse to debug errors 2) the cohort json (<code>circeJson</code>) – this returns the json of the cohort definition, identical to ATLAS. You can copy an paste this json to ATLAS to generate the same cohort. You can also save this for record keeping 3) the cohort description (<code>cohortRead</code>) – this returns the english text of the cohort 4) the sql (<code>ohdisql</code>) – the parameterized sql already filled in with the generate options.</p>
 <p>To execute the ohdisql one needs to use the <code><a href="https://ohdsi.github.io/DatabaseConnector/reference/executeSql.html">DatabaseConnector::executeSql</a></code> function to run the sql against the db as shown in the chunk before.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit">
-<span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/executeSql.html">executeSql</a></span><span class="op">(</span>connection <span class="op">=</span> <span class="va">conn</span>, sql<span class="op">=</span><span class="va">cohortInfo</span><span class="op">$</span><span class="va">ohdiSQL</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/executeSql.html">executeSql</a></span><span class="op">(</span>connection <span class="op">=</span> <span class="va">conn</span>, sql<span class="op">=</span><span class="va">cohortInfo</span><span class="op">$</span><span class="va">ohdiSQL</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="saving-and-loading-cohort-designs" class="section level2">
+<div id="saving-and-loading-cohorts" class="section level2">
 <h2 class="hasAnchor">
-<a href="#saving-and-loading-cohort-designs" class="anchor"></a>Saving and Loading Cohort designs</h2>
-<p>An important feature of <code>Capr</code> is the ability to save and load components. As mentioned before we may want to reuse a component in a different cohort design. Instead of rebuilding this object we can save the component and load it up to deploy on a different cohort. The idea here is to leverage the programatic environment of R to assist in cohort development and programming network studies. We encourage users to save and recycle cohort design components to assist them in study development. The code chunk below shows an example of saving a cohort additional criteria.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit">
-<span class="fu"><a href="../reference/saveComponent.html">saveComponent</a></span><span class="op">(</span><span class="va">ac</span>, saveName <span class="op">=</span> <span class="st">"covidAC"</span>, savePath <span class="op">=</span> <span class="st">"~/Documents/ComponentLibrary/CovidInpatient"</span><span class="op">)</span></pre></div>
-<p>We can then load this additional criteria into the global R environment to utilize in a new iteration of a covid cohort design. Maybe this new cohort has a different primary criteria but the same in other places. Notice the saved components are written to json. Future releases may allow saving the S4 object as a binary, depending on user preference.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit">
-<span class="va">acCovidIp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadComponent.html">loadComponent</a></span><span class="op">(</span><span class="st">"~/Documents/ComponentLibrary/CovidInpatient/covidAC.json"</span><span class="op">)</span>
+<a href="#saving-and-loading-cohorts" class="anchor"></a>Saving and Loading Cohorts</h2>
+<p>An important feature of <code>Capr</code> is the ability to save and load components. As mentioned before we may want to reuse a component in a different cohort. Instead of rebuilding this object we can save the component and load it up to deploy on a different cohort. The idea here is to leverage the programatic environment of R to assist in cohort development and programming network studies. We encourage users to save and recycle components to assist them in study development. The code chunk below shows an example of saving a cohort additional criteria.</p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/saveComponent.html">saveComponent</a></span><span class="op">(</span><span class="va">AcCovidDiag</span>,
+              saveName <span class="op">=</span> <span class="st">"covidAC"</span>, 
+              savePath <span class="op">=</span> <span class="st">"~/Documents/ComponentLibrary/CovidInpatient"</span><span class="op">)</span></code></pre></div>
+<p>We can then load this additional criteria into the global environment to utilize in a new iteration of a covid cohort. Maybe this new cohort has a different primary criteria but the same in other places. Notice the saved components are written to json. Future releases may allow saving the S4 object as a binary, depending on user preference.</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">acCovidIp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadComponent.html">loadComponent</a></span><span class="op">(</span><span class="st">"~/Documents/ComponentLibrary/CovidInpatient/covidAC.json"</span><span class="op">)</span>
 
 
 <span class="va">cd2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCohortDefinition.html">createCohortDefinition</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"DifferentcovidDiagCohort"</span>,
                               PrimaryCriteria <span class="op">=</span> <span class="va">pcCovidOw365</span>,
                               AdditionalCriteria <span class="op">=</span> <span class="va">acCovidIp</span>,
                               InclusionRules <span class="op">=</span> <span class="va">irs</span>,
-                              EndStrategy <span class="op">=</span> <span class="va">es</span><span class="op">)</span></pre></div>
+                              EndStrategy <span class="op">=</span> <span class="va">es</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="importing-existing-json-cohort-designs" class="section level2">
+<div id="importing-existing-json-cohorts" class="section level2">
 <h2 class="hasAnchor">
-<a href="#importing-existing-json-cohort-designs" class="anchor"></a>Importing existing JSON Cohort Designs</h2>
-<p>The OHDSI community has created many cohort definitions and has introduced a gold standard pheontype library, to maintain a list of ideal cohorts for medical constructs. This will encourage the reuse of best practice standard cohort designs for OHDSI network studies. We also may want to take an existing cohort design to use as a starting skeleton and make a slight modification. <code>Capr</code> allows us to import Circe Json and build the cohort definition to your global environment. With this cohort design imported into R you can modify as you see fit. In this example we load the cohort definition and a saved primary criteria. We modify the primary criteria to have an observation window of post days 365 and add this to our loaded cohort. We can build the ohdisql of this cohort quite quickly.</p>
-<div class="sourceCode" id="cb43"><pre class="downlit">
-<span class="va">cd2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readInCirce.html">readInCirce</a></span><span class="op">(</span><span class="st">"~/Documents/NetworkStudy/COVID/inpatientCovid.json"</span><span class="op">)</span>
+<a href="#importing-existing-json-cohorts" class="anchor"></a>Importing existing JSON Cohorts</h2>
+<p>The OHDSI community has created thousands of cohorts and has introduced a gold standard pheontype library, maintaining a list of ideal cohorts for medical constructs. We do not want to rewrite good existing cohorts. We also may want to take an existing cohort skeleton and make a slight modification. <code>Capr</code> allows us to import Circe Json and build the cohort definition to your global environment. With this cohort uploaded you can modify as you see fit. In this example we upload the cohort definition and a saved primary criteria. We modify the primary criteria to have an observation window of post days 365 and add this to our loaded cohort. We can build the ohdisql of this cohort quite quickly.</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cd2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readInCirce.html">readInCirce</a></span><span class="op">(</span><span class="st">"~/Documents/NetworkStudy/COVID/inpatientCovid.json"</span><span class="op">)</span>
 <span class="va">pc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadComponent.html">loadComponent</a></span><span class="op">(</span><span class="st">"~/Documents/ComponentLibrary/CovidInpatient/covidPC.json"</span><span class="op">)</span>
 <span class="va">pc2</span><span class="op">@</span><span class="va">CriteriaExpression</span><span class="op">$</span><span class="va">ObservationWindow</span><span class="op">@</span><span class="va">PostDays</span> <span class="op">&lt;-</span> <span class="fl">365L</span>
 <span class="va">cd2</span><span class="op">@</span><span class="va">PrimaryCriteria</span> <span class="op">&lt;-</span> <span class="va">pc2</span>
-<span class="va">cohortInfo2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compileCohortDefinition.html">compileCohortDefinition</a></span><span class="op">(</span><span class="va">cd2</span>, <span class="va">genOp</span><span class="op">)</span></pre></div>
+<span class="va">cohortInfo2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compileCohortDefinition.html">compileCohortDefinition</a></span><span class="op">(</span><span class="va">cd2</span>, <span class="va">genOp</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="cohort-building-language-as-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#cohort-building-language-as-data" class="anchor"></a>Cohort Building Language as Data</h2>
-<p>A cool feature of R is its ability to do metaprogramming. We can save code as data and modify the code programatically. For those interested on learning the theoretical aspects of this in R, one should read Hadley Wickhams’s Advanced R section 4 about Metaprogramming. <code>Capr</code> uses this feature when importing a CIRCE json. It creates structural calls in an execution environment and then evaluates them into the global environment, leaving only the cohort definition as its trace. <code>Capr</code> has a function that places the function calls into a txt file. In summary this will generate the Capr R code equivalent of the original CIRCE json.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit">
-<span class="fu"><a href="../reference/writeCaprCall.html">writeCaprCall</a></span><span class="op">(</span>jsonPath <span class="op">=</span> <span class="st">"~/Documents/NetworkStudy/COVID/inpatientCovid.json"</span>,
-              txtPath <span class="op">=</span> <span class="st">"~/Documents/NetworkStudy/COVID/inpatientCovid.txt"</span><span class="op">)</span></pre></div>
-<p>While available to the user this function is really designed to interact with a webAPI, writing the machine legible R code to generate a cohort. This is an area of future exploration to modify cohort definitions programatically using the Capr R calls saved as data.</p>
+<p>A cool feature of R is its ability to do metaprogramming. We can save code as data and modify the code programatically. For those interested on learning the theoretical aspects of this in R, one should read Hadley Wickhams’s Advanced R section 4 about Metaprogramming. <code>Capr</code> uses this feature when importing a CIRCE json. It creates structural calls in an execution environment and then evaluates them into the global environment, leaving only the cohort definition as its trace. <code>Capr</code> has a function that places the function calls into a txt file.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/writeCaprCall.html">writeCaprCall</a></span><span class="op">(</span>jsonPath <span class="op">=</span> <span class="st">"~/Documents/NetworkStudy/COVID/inpatientCovid.json"</span>,
+              txtPath <span class="op">=</span> <span class="st">"~/Documents/NetworkStudy/COVID/inpatientCovid.txt"</span><span class="op">)</span></code></pre></div>
+<p>While available to the user this function is really designed to interact with a webAPI, writing the machine legible R code to generate acohort. This is an area of future exploration to modify cohort definitions programatically using the R calls saved as data.</p>
 </div>
   </div>
 
