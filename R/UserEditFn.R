@@ -531,7 +531,7 @@ editPrimaryCriteria <- function(primaryCriteria, detail = c("Name", "Description
   return(primaryCriteria)
 }
 
-#' Function to edit Primary Criteria
+#' Function to edit Inclusion Rules
 #'
 #' This function edits a meta data class
 #' @param inclusionRules the inclusion rules component you wish to edit

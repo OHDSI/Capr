@@ -32,7 +32,7 @@ library(CirceR) #access the circe engine to generate ohdisql
 library(magrittr) #leverage piping
 
 connectionDetails <- createConnectionDetails(dbms="postgresql",
-                                             server="example.com/datasourc",
+                                             server="example.com/datasource",
                                              user="me",
                                              password="secret",
                                              schema="cdm",
@@ -235,7 +235,7 @@ Queries lookup a concept set in a domain table in the cdm a returns the set of p
 DateAtt <- createOccurrenceStartDateAttribute(Op = "gt", Value = "2019-12-01")
 ```
 
-Next we create a visit occurence query for the inpatient concept set expression and date attribute. Notice at every point we are building up our component container. 
+Next we create a visit occurrence query for the inpatient concept set expression and date attribute. Notice at every point we are building up our component container. 
 
 ```{r create a query}
 IpVisitQuery <- createVisitOccurrence(conceptSetExpression = IpVisitCSE,
@@ -251,7 +251,7 @@ This query is what we use for the primary criteria of this cohort. All that rema
 
 ```{r create a primary criteria}
 PcCovidDiag <- createPrimaryCriteria(Name = "Inpatient Visit Primary Criteria",
-                            ComponentList= list(IpVisitQuery),
+                            ComponentList = list(IpVisitQuery),
                             ObservationWindow = createObservationWindow(0L,0L),
                             Limit = "All")
 ```
@@ -293,11 +293,11 @@ EndWindow1 <- createWindow(StartDays = "All", StartCoeff = "Before", #end all da
 #create timeline
 Timeline1 <- createTimeline(StartWindow = StartWindow1,
                      EndWindow = EndWindow1)
-#create a count critera
-#at least 1 occurence of a covid diagnosis occuring
+#create a count criteria
+#at least 1 occurrence of a covid diagnosis occurring
 #between a) 21 days before and all days after initial inpatient visit index start date
 #and b) all days before and 0 days after initial inpatient visit index end date
-CovidCountCriteria1 <- createCount(Query= CovidDiagQuery,
+CovidCountCriteria1 <- createCount(Query = CovidDiagQuery,
                           Logic = "at_least",
                           Count = 1,
                           Timeline = Timeline1)
@@ -316,7 +316,7 @@ A group is a set of counts, queries, attributes and sub-groups that are deployed
 
 #### Creating a Source Concept Attribute
 
-In the code chunk below we want to use source concepts as an attribute for one of the criteria in the group. The patient must have at least 1 instance of these source concepts, excluding for 45542411, 586414, 45600471, 586415, 710157. We first creae a concept mapping for the length of the concept set and then toggle the mapping so that these five concepts have the item of isExcluded set to TRUE. Once the conceptMapping is set we can create the concept set Expression. The concept set expression known as covidSourceConcept can be used as a source concept attribute. Notice when we make the query in the `createConditionOccurrence` function we do not include the concept set expression like before. This is because we are making a special attribute for the source concepts. We should note that a query does not always contain a concept set expression. This is also the case when making an observation period. One should be careful on how they wish to apply the concept set expressions within the query, it may be an attribute. 
+In the code chunk below we want to use source concepts as an attribute for one of the criteria in the group. The patient must have at least 1 instance of these source concepts, excluding for 45542411, 586414, 45600471, 586415, 710157. We first creae a concept mapping for the length of the concept set and then toggle the mapping so that these five concepts have the item of isExcluded set to TRUE. Once the conceptMapping is set we can create the concept set Expression. The concept set expression known as COVID SourceConcept can be used as a source concept attribute. Notice when we make the query in the `createConditionOccurrence` function we do not include the concept set expression like before. This is because we are making a special attribute for the source concepts. We should note that a query does not always contain a concept set expression. This is also the case when making an observation period. One should be careful on how they wish to apply the concept set expressions within the query, it may be an attribute. 
 
 ```{r create source concept criteria}
 CovidSourceConcepts <- getConceptIdDetails(conceptIds = c(710158L, 710155L, 710156L, 
@@ -348,7 +348,7 @@ CovidSourceConceptQuery <- createConditionOccurrence(attributeList = list(Source
 #create Count for covid source concepts
 CovidCountCriteria2 <- createCount(Query = CovidSourceConceptQuery,
                                    Logic = "at_least",
-                                   Count =1,
+                                   Count = 1,
                                    Timeline = Timeline1)
 ```
 
@@ -363,7 +363,7 @@ CovidCountCriteria3 <- getConceptIdDetails(conceptIds = 37310282,
                                  connection = connection, #use connection since it is already open
                                  vocabularyDatabaseSchema = vocabularyDatabaseSchema,
                                  oracleTempSchema = NULL,
-                                 mapToStandard = TRUE)%>%
+                                 mapToStandard = TRUE) %>%
   createConceptSetExpression(Name = "COVID-19 specific test") %>%
   createMeasurement(conceptSetExpression = .) %>%
   createCount(Logic = "at_least",

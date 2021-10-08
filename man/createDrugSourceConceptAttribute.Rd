@@ -7,7 +7,7 @@
 createDrugSourceConceptAttribute(ConceptSetExpression)
 }
 \arguments{
-\item{ConceptSetExpression}{the concepte set expression we wish to deploy as a source concept attribute
+\item{ConceptSetExpression}{the concept set expression we wish to deploy as a source concept attribute
 This concept set expression should contain source codes, which may be non-standard.}
 }
 \value{

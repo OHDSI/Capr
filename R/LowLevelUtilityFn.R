@@ -1,4 +1,4 @@
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -72,6 +72,78 @@ setMethod("getConceptSetId", "Query",
 ##################
 #Utilities
 #################
+
+#' Function to get concept ids from concept set expression in object
+#'
+#' @param x the object to check
+#' @return a list or vector of concept id integers
+#' @include LowLevelClasses.R
+#' @export
+checkConceptIds <- function(x) {
+
+  checkConceptField(x, field = "CONCEPT_ID")
+  # #if object is a concept set expression
+  # if (is(x) == "ConceptSetExpression") {
+  #   #extract expression
+  #   dd <- x@Expression
+  #   #extract concept id  from concept set item
+  #   rr <- purrr::map_int(dd, ~slot(slot(.x, name = "Concept"), name = "CONCEPT_ID"))
+  # }
+  #
+  # #if the oject is a component
+  # if (is(x) == "Component") {
+  #   #recurisvely run the funtion
+  #   rr <- purrr::map(x@ConceptSetExpression, ~checkConceptIds(.x))
+  # }
+  # return(rr)
+}
+
+
+#' Function to get concept fields from concept set expression in object
+#'
+#' @param x the object to check
+#' @param field the concept field to check
+#' @return a list or vector of concept fields
+#' @include LowLevelClasses.R
+#' @export
+checkConceptField <- function(x, field) {
+
+  #check field input
+  fieldOps <- toupper(c("concept_id", "concept_name",
+                "standard_concept", "standard_concept_caption",
+                "invalid_reason", "invalid_reason_caption",
+                "concept_code", "domain_id", "vocabulary_id",
+                "concept_class_id"))
+  checkFieldOps <- field %in% fieldOps
+
+  if (!checkFieldOps) {
+    msg <- paste("Incorrect field input. Valid field options include: \n",
+                 paste(fieldOps, collapse = ", "))
+    stop(msg)
+  }
+
+
+  #if object is a concept set expression
+  if (is(x) == "ConceptSetExpression") {
+    #extract expression
+    dd <- x@Expression
+    #extract concept id  from concept set item
+    if (field == "CONCEPT_ID"){
+      rr <- purrr::map_int(dd, ~slot(slot(.x, name = "Concept"), name = field))
+    } else{
+      rr <- purrr::map_chr(dd, ~slot(slot(.x, name = "Concept"), name = field))
+    }
+
+  }
+
+  #if the oject is a component
+  if (is(x) == "Component") {
+    #recurisvely run the funtion
+    rr <- purrr::map(x@ConceptSetExpression, ~checkConceptField(.x, field = field))
+  }
+  return(rr)
+}
+
 #function to remove duplicate concept set expressions
 #' Function that removes duplicate concept set expressions
 #'

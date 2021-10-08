@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Capr_Attributes_Extended • Capr</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.99</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.994</span>
       </span>
     </div>
 
@@ -39,12 +39,15 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -54,15 +57,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/CAPR_tutorial.html">CAPR_tutorial</a>
+    </li>
+    <li>
       <a href="../articles/Capr_Attributes_Extended.html">Capr_Attributes_Extended</a>
     </li>
     <li>
-      <a href="../articles/CAPR_tutorial.html">CAPR_tutorial</a>
+      <a href="../articles/complex-cohort-example.html">complex-cohort-example</a>
     </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -72,7 +82,7 @@
 
       
 
-      </header><script src="Capr_Attributes_Extended_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="Capr_Attributes_Extended_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Capr_Attributes_Extended</h1>
@@ -88,13 +98,12 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>There are several attributes that are available in circe-be and found in ATLAS. In future releases, <code>Capr</code> will create a dedicated function signature to each attribute (subject to user feedback). In order to extend the usage of attributes that are not personalized, a few low level functions were made available to access a greater set of attributes. The functions are: <code>createOpAttribute</code> and <code>createConceptAttribute</code>. OpAttributes are for attributes that contain an operator and concept attribute include concept ids that are not part of the cohort concept set list. To view all possible attributes in Capr available for each domain, a helper function <code>listAttributeOptions</code> can be used. Below are some of the available attributes per attribute class.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">Capr</span><span class="op">)</span>
+<p>There are several attributes that are available in circe-be and found in ATLAS. In future releases, <code>Capr</code> will create a dedicated function signature to each attribute (subject to user feedback). In order to extend the usage of attributes that are not personalized, a few low level functions were made available to access a greater set of attributes. The functions are: <code>createOpAttribute</code> and <code>createConceptAttribute</code>. OpAttributes are for attributes that contain an operator and concept attribute include concept ids that are not part of the cohort concept set list. To view all possible attribute in Capr available for each domain, a helper function <code>listAttributeOptions</code> can be used. Below are some of the available attribute per attribute class.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">Capr</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: CirceR</span>
 <span class="co">#&gt; Loading required package: DatabaseConnector</span>
 <span class="co">#&gt; Loading required package: magrittr</span>
-<span class="co">#&gt; Warning: package 'magrittr' was built under R version 4.0.3</span>
 <span class="va">AttributeOptions</span>
 <span class="co">#&gt; $Op</span>
 <span class="co">#&gt;  [1] "Age"                 "OccurrenceStartDate" "OccurrenceEnd"      </span>
@@ -126,7 +135,7 @@
 <span class="co">#&gt; [7] "DeathSourceConcept"       "DeviceSourceConcept"     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $TextFilter</span>
-<span class="co">#&gt; [1] "ValueAsString"  "StopReason"     "UniqueDeviceId"</span></pre></div>
+<span class="co">#&gt; [1] "ValueAsString"  "StopReason"     "UniqueDeviceId"</span></code></pre></div>
 <p>Not all of these attributes are Op or Concept, there are others like source and logical which already have been personalized and do not need use of low level functions. An example of a logical is <code>createFirstAttribute</code> and an example of a source concept is <code>createDeviceSourceConceptAttribute</code>. Correlated Criteria is another attribute that is already user facing. Currently text filler attributes are not supported but will be extended in a future release.</p>
 </div>
 <div id="op-attribute" class="section level2">
@@ -186,14 +195,14 @@
 </tbody>
 </table>
 <p>An example of using a Op Attribute can be seen in the chunk below:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">opExample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createOpAttribute.html">createOpAttribute</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"RangeHigh"</span>, Op <span class="op">=</span> <span class="st">"&gt;="</span>, Value <span class="op">=</span> <span class="fl">5L</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">opExample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createOpAttribute.html">createOpAttribute</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"RangeHigh"</span>, Op <span class="op">=</span> <span class="st">"&gt;="</span>, Value <span class="op">=</span> <span class="fl">5L</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">opExample</span><span class="op">)</span>
 <span class="co">#&gt; Formal class 'Component' [package "Capr"] with 4 slots</span>
 <span class="co">#&gt;   ..@ MetaData            :Formal class 'MetaData' [package "Capr"] with 3 slots</span>
-<span class="co">#&gt;   .. .. ..@ ComponentClass: chr "Attribute"</span>
-<span class="co">#&gt;   .. .. ..@ Name          : chr "OpAttribute"</span>
-<span class="co">#&gt;   .. .. ..@ Description   : chr NA</span>
+<span class="co">#&gt;   .. .. ..@ ComponentType: chr "Attribute"</span>
+<span class="co">#&gt;   .. .. ..@ Name         : chr "OpAttribute"</span>
+<span class="co">#&gt;   .. .. ..@ Description  : chr NA</span>
 <span class="co">#&gt;   ..@ CriteriaExpression  :List of 1</span>
 <span class="co">#&gt;   .. ..$ :Formal class 'OpAttribute' [package "Capr"] with 3 slots</span>
 <span class="co">#&gt;   .. .. .. ..@ Name    : chr "RangeHigh"</span>
@@ -202,16 +211,16 @@
 <span class="co">#&gt;   .. .. .. .. ..$ Value : int 5</span>
 <span class="co">#&gt;   .. .. .. .. ..$ Extent: int NA</span>
 <span class="co">#&gt;   ..@ Limit               : list()</span>
-<span class="co">#&gt;   ..@ ConceptSetExpression: list()</span></pre></div>
+<span class="co">#&gt;   ..@ ConceptSetExpression: list()</span></code></pre></div>
 <p>For a date an example is in the chunk below:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">opExample2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createOpAttribute.html">createOpAttribute</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"OccurrenceStartDate"</span>, Op <span class="op">=</span> <span class="st">"greater than"</span>, Value <span class="op">=</span> <span class="st">"2018-12-31"</span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">opExample2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createOpAttribute.html">createOpAttribute</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"OccurrenceStartDate"</span>, Op <span class="op">=</span> <span class="st">"greater than"</span>, Value <span class="op">=</span> <span class="st">"2018-12-31"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">opExample2</span><span class="op">)</span>
 <span class="co">#&gt; Formal class 'Component' [package "Capr"] with 4 slots</span>
 <span class="co">#&gt;   ..@ MetaData            :Formal class 'MetaData' [package "Capr"] with 3 slots</span>
-<span class="co">#&gt;   .. .. ..@ ComponentClass: chr "Attribute"</span>
-<span class="co">#&gt;   .. .. ..@ Name          : chr "OpAttribute"</span>
-<span class="co">#&gt;   .. .. ..@ Description   : chr NA</span>
+<span class="co">#&gt;   .. .. ..@ ComponentType: chr "Attribute"</span>
+<span class="co">#&gt;   .. .. ..@ Name         : chr "OpAttribute"</span>
+<span class="co">#&gt;   .. .. ..@ Description  : chr NA</span>
 <span class="co">#&gt;   ..@ CriteriaExpression  :List of 1</span>
 <span class="co">#&gt;   .. ..$ :Formal class 'OpAttribute' [package "Capr"] with 3 slots</span>
 <span class="co">#&gt;   .. .. .. ..@ Name    : chr "OccurrenceStartDate"</span>
@@ -220,14 +229,14 @@
 <span class="co">#&gt;   .. .. .. .. ..$ Value : chr "2018-12-31"</span>
 <span class="co">#&gt;   .. .. .. .. ..$ Extent: chr NA</span>
 <span class="co">#&gt;   ..@ Limit               : list()</span>
-<span class="co">#&gt;   ..@ ConceptSetExpression: list()</span></pre></div>
+<span class="co">#&gt;   ..@ ConceptSetExpression: list()</span></code></pre></div>
 </div>
 <div id="concept-attribute" class="section level2">
 <h2 class="hasAnchor">
 <a href="#concept-attribute" class="anchor"></a>Concept Attribute</h2>
 <p>A concept attribute looks up concept ids without including them as concept sets in the cohort definitions. Examples of a concept attribute is Gender. Male (ID: 8507) and Female (ID: 8532) have standard concept ids that are often used as attributes. We can apply the lookup tools to assist us in querying concept ids from the OMOP vocabulary. An example of creating a concept attribute is shown below:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="../reference/createConceptAttribute.html">createConceptAttribute</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fl">8507</span>, name <span class="op">=</span> <span class="st">"Gender"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/createConceptAttribute.html">createConceptAttribute</a></span><span class="op">(</span>conceptIds <span class="op">=</span> <span class="fl">8507</span>, name <span class="op">=</span> <span class="st">"Gender"</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 

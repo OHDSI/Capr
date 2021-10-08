@@ -11,8 +11,7 @@ getConceptCodeDetails(
   connection = NULL,
   vocabularyDatabaseSchema = NULL,
   oracleTempSchema = NULL,
-  mapToStandard = TRUE,
-  simplifyToDataframe = TRUE
+  mapToStandard = TRUE
 )
 }
 \arguments{
@@ -31,19 +30,14 @@ DatabaseConnector package. Can be left NULL if \code{connectionDetails}
 is provided, in which case a new connection will be opened at the start
 of the function, and closed when the function finishes.}
 
-\item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides.
-Note that for SQL Server, this should include both the database and
-schema name, for example 'vocabulary.dbo'.}
+\item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides. Note that
+for SQL Server, this should include both the database and schema
+name, for example 'vocabulary.dbo'.}
 
 \item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
 privileges for storing temporary tables.}
 
 \item{mapToStandard}{logic to map to standard OMOP concept}
-
-\item{simplifyToDataframe}{logic to return dataframe or tibble. If are piping this function
-to create a concept set expression keep as true. Coercion to concept set expressions
-requires the use of a dataframe. If false returns a tiblle where $. retrieves the
-dataframe}
 }
 \value{
 a tibble data frame object with conceptId, conceptName, standardConcept,

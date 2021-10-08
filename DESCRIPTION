@@ -1,6 +1,6 @@
 Package: Capr
 Title: Cohort definition Application Programming in R
-Version: 0.0.1.994
+Version: 1.0.0
 Authors@R: 
     person(given = "Martin",
            family = "Lavallee",
@@ -16,7 +16,7 @@ Description: The CAPR package develops cohort definitions to implement across an
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: 
   R (>= 3.5.0),
   CirceR (>= 1.0.0),
@@ -30,12 +30,17 @@ Imports:
   rlang,
   uuid,
   SqlRender,
-  data.table,
   dplyr,
-  checkmate
+  checkmate,
+  tibble,
+  withr,
+  readr
 Suggests:
+    testthat (>= 3.0.0),
     knitr,
     rmarkdown
+Remotes:
+    ohdsi/CirceR
 Collate: 
     'Capr.R'
     'LowLevelClasses.R'
@@ -45,6 +50,7 @@ Collate:
     'LowLevelCreateFn.R'
     'LowLevelLoadFn.R'
     'LowLevelSaveFn.R'
+    'UserAttributeEdit.R'
     'UserCommands.R'
     'UserConceptLookupFn.R'
     'UserCreateAttributeFn.R'
@@ -53,3 +59,4 @@ Collate:
     'UserEditFn.R'
     'UserPrintFn.R'
 VignetteBuilder: knitr
+Config/testthat/edition: 3

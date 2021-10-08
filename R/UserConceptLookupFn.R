@@ -1,4 +1,4 @@
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -27,10 +27,6 @@
 #' @template     OracleTempSchema
 #' @param        conceptIds a vector of concept ids
 #' @param        mapToStandard logic to map to standard OMOP concept
-#' @param        simplifyToDataframe logic to return dataframe or tibble. If are piping this function
-#'               to create a concept set expression keep as true. Coercion to concept set expressions
-#'               requires the use of a dataframe. If false returns a tiblle where $. retrieves the
-#'               dataframe
 #' @return       a tibble data frame object with conceptId, conceptName, standardConcept,
 #'               standardConceptCaption, invalidReason, invalidReasonCaption, conceptCode,
 #'               domainId, vocabularyId, conceptClassId.
@@ -42,8 +38,7 @@ getConceptIdDetails <- function(conceptIds,
                                 connection = NULL,
                                 vocabularyDatabaseSchema = NULL,
                                 oracleTempSchema = NULL,
-                                mapToStandard = TRUE,
-                                simplifyToDataframe = TRUE) {
+                                mapToStandard = TRUE) {
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertVector(conceptIds, add = errorMessage)
@@ -70,7 +65,8 @@ getConceptIdDetails <- function(conceptIds,
 
   #if mapping to the standard concept join to concept_relationship----------------------------------
   if (mapToStandard){
-    conceptIdToMap  <- conceptDetails$.$conceptId
+    #conceptIdToMap  <- conceptDetails$.$conceptId bug fix from dbConnector
+    conceptIdToMap  <- conceptDetails$conceptId
     mappingQuery <- "SELECT b.* FROM @vocabularyDatabaseSchema.concept_relationship a
     JOIN  @vocabularyDatabaseSchema.concept b on b.concept_id = a.concept_id_2 AND a.relationship_id = '@relationship'
     WHERE a.concept_id_1 in (@conceptId);"
@@ -82,9 +78,6 @@ getConceptIdDetails <- function(conceptIds,
                                                                  conceptId = conceptIdToMap,
                                                                  relationship = "Maps to") %>%
       dplyr::tibble()
-  }
-  if (simplifyToDataframe){
-    conceptDetails <- conceptDetails$.
   }
   return(conceptDetails)
 }
@@ -100,10 +93,6 @@ getConceptIdDetails <- function(conceptIds,
 #' @param        conceptCode a character vector of concept codes
 #' @param        vocabulary a single character string with the vocabulary of the codes
 #' @param        mapToStandard logic to map to standard OMOP concept
-#' @param        simplifyToDataframe logic to return dataframe or tibble. If are piping this function
-#'               to create a concept set expression keep as true. Coercion to concept set expressions
-#'               requires the use of a dataframe. If false returns a tiblle where $. retrieves the
-#'               dataframe
 #' @return       a tibble data frame object with conceptId, conceptName, standardConcept,
 #'               standardConceptCaption, invalidReason, invalidReasonCaption, conceptCode,
 #'               domainId, vocabularyId, conceptClassId.
@@ -116,8 +105,7 @@ getConceptCodeDetails <- function(conceptCode,
                                   connection = NULL,
                                   vocabularyDatabaseSchema = NULL,
                                   oracleTempSchema = NULL,
-                                  mapToStandard = TRUE,
-                                  simplifyToDataframe = TRUE) {
+                                  mapToStandard = TRUE) {
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertVector(conceptCode, add = errorMessage)
@@ -146,7 +134,8 @@ getConceptCodeDetails <- function(conceptCode,
 
   #if mapping to the standard concept join to concept_relationship----------------------------------
   if (mapToStandard){
-    conceptIdToMap  <- conceptDetails$.$conceptId
+    #conceptIdToMap  <- conceptDetails$.$conceptId
+    conceptIdToMap  <- conceptDetails$conceptId
     mappingQuery <- "SELECT b.* FROM @vocabularyDatabaseSchema.concept_relationship a
     JOIN  @vocabularyDatabaseSchema.concept b on b.concept_id = a.concept_id_2 AND a.relationship_id = '@relationship'
     WHERE a.concept_id_1 in (@conceptId);"
@@ -160,9 +149,9 @@ getConceptCodeDetails <- function(conceptCode,
       dplyr::tibble()
   }
 
-  if (simplifyToDataframe){ #simplify to dataframe use for conceptsetexpressions
-    conceptDetails <- conceptDetails$.
-  }
+  # if (simplifyToDataframe){ #simplify to dataframe use for conceptsetexpressions
+  #   conceptDetails <- conceptDetails$.
+  # }
 
   return(conceptDetails)
 }
@@ -177,10 +166,6 @@ getConceptCodeDetails <- function(conceptCode,
 #' @template     OracleTempSchema
 #' @param        keyword a character string used to search OMOP concepts
 #' @param        searchType options to aid search. Can use like match, exact match or any match
-#' @param        simplifyToDataframe logic to return dataframe or tibble. If are piping this function
-#'               to create a concept set expression keep as true. Coercion to concept set expressions
-#'               requires the use of a dataframe. If false returns a tiblle where $. retrieves the
-#'               dataframe. For keyword lookup it is suggested to keep option false.
 #' @return       a tibble data frame object with conceptId, conceptName, standardConcept,
 #'               standardConceptCaption, invalidReason, invalidReasonCaption, conceptCode,
 #'               domainId, vocabularyId, conceptClassId.
@@ -192,8 +177,7 @@ lookupKeyword<-function(keyword,
                         connectionDetails = NULL,
                         connection = NULL,
                         vocabularyDatabaseSchema = NULL,
-                        oracleTempSchema = NULL,
-                        simplifyToDataframe = FALSE) {
+                        oracleTempSchema = NULL) {
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertVector(keyword, add = errorMessage)
@@ -228,8 +212,5 @@ lookupKeyword<-function(keyword,
                                                                keyword = keyword) %>%
     dplyr::tibble()
 
-  if (simplifyToDataframe){ #simplify to dataframe use for conceptsetexpressions
-    conceptDetails <- conceptDetails$.
-  }
   return(conceptDetails)
 }

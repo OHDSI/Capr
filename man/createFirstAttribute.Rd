@@ -2,7 +2,7 @@
 % Please edit documentation in R/UserCreateAttributeFn.R
 \name{createFirstAttribute}
 \alias{createFirstAttribute}
-\title{create First Attribute}
+\title{create First Occurrence Attribute}
 \usage{
 createFirstAttribute(logic = TRUE)
 }
