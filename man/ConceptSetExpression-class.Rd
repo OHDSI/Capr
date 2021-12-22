@@ -14,6 +14,6 @@ A class for the concept set expressions bundles multiple concepts with mapping
 
 \item{\code{Name}}{the name of the concept set expression}
 
-\item{\code{Expression}}{a list containing expressions. expressions include multiple conceptSetItem}
+\item{\code{Expression}}{a list containing expressions. expressions include multiple conceptSetItem objects}
 }}
 

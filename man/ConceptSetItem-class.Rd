@@ -5,7 +5,7 @@
 \alias{ConceptSetItem-class}
 \title{An S4 class for ConceptSetItem}
 \description{
-a class that provides information on the mapping of the concept
+A class that provides information on the mapping of the concept
 }
 \section{Slots}{
 

@@ -3,9 +3,17 @@
 \docType{class}
 \name{CohortDetails-class}
 \alias{CohortDetails-class}
-\title{An S4 class providing details for the Cohort}
+\title{Show Contents of a Component}
 \description{
-An S4 class providing details for the Cohort
+This function prints the contents of a component. Note 1/27/21 attributes and some other s4 classes
+need to be implemented
+}
+\details{
+param showFullConceptSetExpressions T/F options to include full details of concept expressions
+An S4 class providing metadata for a CohortDefinition
+
+The cohort details do not affect the cohort definition and are for improving
+human readability only.
 }
 \section{Slots}{
 

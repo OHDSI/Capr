@@ -5,8 +5,9 @@
 \alias{Query-class}
 \title{An S4 class for a Query}
 \description{
-A query is a medical concept that can be extracted from a database through a where statement.
- This would include concepts
+TODO clarify description of a Query
+A query is a medical concept that can be extracted from a database through a 'where' clause in a SQL statement.
+This includes concepts. (?)
 }
 \section{Slots}{
 

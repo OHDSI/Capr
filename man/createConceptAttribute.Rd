@@ -17,16 +17,13 @@ createConceptAttribute(
 \arguments{
 \item{conceptIds}{the list of ids to lookup, need OMOP vocabulary connection}
 
-\item{connectionDetails}{An object of type \code{connectionDetails} as created using the
+\item{connection}{Either an object of type \code{connectionDetails} as created using the
 \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
-DatabaseConnector package. Can be left NULL if \code{connection} is
-provided.}
-
-\item{connection}{An object of type \code{connection} as created using the
+DatabaseConnector package or or object of type \code{connection} as created using the
 \code{\link[DatabaseConnector]{connect}} function in the
-DatabaseConnector package. Can be left NULL if \code{connectionDetails}
-is provided, in which case a new connection will be opened at the start
-of the function, and closed when the function finishes.}
+DatabaseConnector package. If  \code{connectionDetails}
+is provided a new connection will be opened at the start
+of the function and closed when the function finishes.}
 
 \item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides. Note that
 for SQL Server, this should include both the database and schema

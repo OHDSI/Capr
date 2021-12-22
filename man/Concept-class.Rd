@@ -3,7 +3,7 @@
 \docType{class}
 \name{Concept-class}
 \alias{Concept-class}
-\title{An S4 class for a Concepet}
+\title{An S4 class for a ConceptSet}
 \description{
 A concept class contains all the information about the concept from the OMOP voabulary
 }

@@ -6,3 +6,4 @@ errorReportSql.txt
 *.log
 /doc/
 /Meta/
+work/*

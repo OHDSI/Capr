@@ -3,7 +3,7 @@
 \docType{class}
 \name{CorrelatedCriteriaAttribute-class}
 \alias{CorrelatedCriteriaAttribute-class}
-\title{An S4 class for CorrelatedCriteriaAttribue}
+\title{An S4 class for CorrelatedCriteriaAttribute}
 \description{
 A group attribute that is nested within a query.
 }
