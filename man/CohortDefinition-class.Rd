@@ -3,9 +3,11 @@
 \docType{class}
 \name{CohortDefinition-class}
 \alias{CohortDefinition-class}
-\title{An S4 class for Cohort Definition}
+\title{An S4 class for a Circe Cohort Definition}
 \description{
-A cohort definition contains information about how to quantify a clinical concept.
+A cohort definition contains information about how to quantify a clinical phenotype.
+The ultimate purpose of Capr is to allow the creation and manipulation of Circe cohort
+definitions in R making CohortDefinition its most important class.
 }
 \section{Slots}{
 

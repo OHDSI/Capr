@@ -29,7 +29,7 @@ This function returns a component class object which contains the concept set ex
 }
 \description{
 This function takes a data frame of OMOP concepts, establishes the mapping logic and bundles them together as
-a concept set expression. A new concept expression created in R sets a guid for the concept id. This unique identifier
+a concept set expression. A new concept expression created in R sets a guid (unique id) for the concept id. This unique identifier
 is used to link the concept set expressions to its implementation within the cohort definition (typically as a query).
 With this function, toggling the mapping options sets the logic for all concepts in the concept set expression. If the
 user wants to set a custom mapping for each concept in the expression the user should use createConceptSetExpressionCustom.
