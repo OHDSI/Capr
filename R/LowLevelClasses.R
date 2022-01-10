@@ -589,7 +589,7 @@ setClass("MetaData",
 )
 
 setValidity("MetaData", function(object) {
-  validTypes <- c("PrimaryCriteria", "AdditionalCriteria", "InclusionCriteria", "EndStrategy", "CensoringCriteria", "CohortEra",
+  validTypes <- c("PrimaryCriteria", "AdditionalCriteria", "InclusionRules", "EndStrategy", "CensoringCriteria", "CohortEra",
                   "Query", "Count", "Group", "ConceptSetExpression", "Attribute", "Empty")
   if (!(object@ComponentType %in% validTypes)) {
     paste0("ComponentType must be one of '", paste(validTypes, collapse = ", "), "'")
