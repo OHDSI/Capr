@@ -592,7 +592,7 @@ setValidity("MetaData", function(object) {
   validTypes <- c("PrimaryCriteria", "AdditionalCriteria", "InclusionRules", "EndStrategy", "CensoringCriteria", "CohortEra",
                   "Query", "Count", "Group", "ConceptSetExpression", "Attribute", "Empty")
   if (!(object@ComponentType %in% validTypes)) {
-    paste0("ComponentType must be one of '", paste(validTypes, collapse = ", "), "'")
+    paste0("ComponentType must be one of '", paste(validTypes, collapse = ", "), "'", ", not '", object@ComponentType, "'")
     # TODO add additional checks. Should we check length of name and Description. Should we use the argument checking package?
   } else {
     TRUE
