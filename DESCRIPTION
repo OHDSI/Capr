@@ -5,7 +5,7 @@ Authors@R:
     person(given = "Martin",
            family = "Lavallee",
            role = c("aut", "cre"),
-           email = "mlavallee@ltscomputingllc.com")
+           email = "mdlavallee92@gmail.com")
 Description: The CAPR package develops cohort definitions to implement across an OMOP mapped dbms. This pacakge allows 
     allows for the programmatic creation of OMOP cohorts that compile to the CIRCE-BE engine. CAPR utilizes s4 to construct
     component parts to the cohort definition (i.e. Primary Criteria, Inclusion Rules, Additional Criteria, Censoring Criteria,
