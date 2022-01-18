@@ -1,11 +1,11 @@
 Package: Capr
 Title: Cohort definition Application Programming in R
-Version: 0.0.1.994
+Version: 1.0.0
 Authors@R: 
     person(given = "Martin",
            family = "Lavallee",
            role = c("aut", "cre"),
-           email = "mlavallee@ltscomputingllc.com")
+           email = "mdlavallee92@gmail.com")
 Description: The CAPR package develops cohort definitions to implement across an OMOP mapped dbms. This pacakge allows 
     allows for the programmatic creation of OMOP cohorts that compile to the CIRCE-BE engine. CAPR utilizes s4 to construct
     component parts to the cohort definition (i.e. Primary Criteria, Inclusion Rules, Additional Criteria, Censoring Criteria,
@@ -16,7 +16,7 @@ Description: The CAPR package develops cohort definitions to implement across an
 License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: 
   R (>= 3.5.0),
   CirceR (>= 1.0.0),
@@ -30,12 +30,21 @@ Imports:
   rlang,
   uuid,
   SqlRender,
-  data.table,
   dplyr,
-  checkmate
+  checkmate,
+  tibble,
+  withr,
+  readr,
+  utils,
+  stringr,
+  glue,
+  cli
 Suggests:
+    testthat (>= 3.0.0),
     knitr,
     rmarkdown
+Remotes:
+    ohdsi/CirceR
 Collate: 
     'Capr.R'
     'LowLevelClasses.R'
@@ -45,11 +54,13 @@ Collate:
     'LowLevelCreateFn.R'
     'LowLevelLoadFn.R'
     'LowLevelSaveFn.R'
+    'UserAttributeEdit.R'
     'UserCommands.R'
     'UserConceptLookupFn.R'
     'UserCreateAttributeFn.R'
     'UserCreateDomainFn.R'
     'UserCreateFn.R'
     'UserEditFn.R'
-    'UserPrintFn.R'
+    'utils.R'
 VignetteBuilder: knitr
+Config/testthat/edition: 3

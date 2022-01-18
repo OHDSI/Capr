@@ -1,6 +1,6 @@
 # @file PackageMaintenance
 #
-# Copyright 2020 Observational Health Data Sciences and Informatics
+# Copyright 2021 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -17,7 +17,7 @@
 # limitations under the License.
 
 # Format and check code
-# OhdsiRTools::formatRFolder()
+OhdsiRTools::formatRFolder()
 OhdsiRTools::checkUsagePackage("Capr")
 OhdsiRTools::updateCopyrightYearFolder()
 devtools::spell_check()
@@ -25,14 +25,32 @@ devtools::spell_check()
 
 # Create manual and vignettes:
 unlink("extras/Capr.pdf")
-shell("R CMD Rd2pdf ./ --output=extras/Capr.pdf")
 
+# for linux
+system("R CMD Rd2pdf ./ --output=extras/Capr.pdf")
+
+# for windows
+#shell('R CMD Rd2pdf ./ --output=extras/Capr.pdf')
+
+# Capr_tutorial vignette
 dir.create(path = "./inst/doc/", showWarnings = FALSE)
 rmarkdown::render("vignettes/CAPR_tutorial.Rmd",
                   output_file = "../inst/doc/CAPR_tutorial.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
-                                          toc = TRUE,
-                                          number_sections = TRUE))
+  toc = TRUE, number_sections = TRUE))
+unlink("inst/doc/CAPR_tutorial.tex")
 
+
+# complex-cohort-example
+dir.create(path = "./inst/doc/", showWarnings = FALSE)
+rmarkdown::render("vignettes/complex-cohort-example.Rmd",
+                  output_file = "../inst/doc/complex-cohort-example.pdf",
+
+  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
+unlink("inst/doc/complex-cohort-example.tex")
+
+
+# build site
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
+

@@ -5,12 +5,13 @@
 \alias{Group-class}
 \title{An S4 class for Group}
 \description{
-A group that bundles criterias together identifying an event
+TODO clarify the description of a group.
+A group that bundles criteria together identifying an event
 }
 \section{Slots}{
 
 \describe{
-\item{\code{Type}}{a expression type class boolean for the number of items to make the group count}
+\item{\code{Type}}{a expression type class Boolean for the number of items to make the group count}
 
 \item{\code{CriteriaList}}{a list of items (counts and queries) that would identify a medical event}
 

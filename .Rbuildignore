@@ -1,2 +1,7 @@
 ^Capr\.Rproj$
 ^\.Rproj\.user$
+.github
+deploy.sh
+compare_versions
+^doc$
+^Meta$

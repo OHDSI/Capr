@@ -2,7 +2,7 @@
 % Please edit documentation in R/UserEditFn.R
 \name{editInclusionRules}
 \alias{editInclusionRules}
-\title{Function to edit Primary Criteria}
+\title{Function to edit Inclusion Rules}
 \usage{
 editInclusionRules(
   inclusionRules,

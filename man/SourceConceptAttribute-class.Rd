@@ -12,6 +12,6 @@ An attribute that looks at utilizing the source concepts instead of standard con
 \describe{
 \item{\code{Name}}{name of the attribute}
 
-\item{\code{SourceCodesetId}}{a source concept id, conection to concept set expression}
+\item{\code{SourceCodesetId}}{a source concept id, connection to concept set expression}
 }}
 

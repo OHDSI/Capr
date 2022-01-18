@@ -12,8 +12,8 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -73,7 +73,7 @@ an exact name search or general search that contains the concept name in the con
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.99</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.994</span>
       </span>
     </div>
 
@@ -81,12 +81,15 @@ an exact name search or general search that contains the concept name in the con
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -96,16 +99,21 @@ an exact name search or general search that contains the concept name in the con
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CAPR_tutorial.html">CAPR_tutorial</a>
+    </li>
+    <li>
       <a href="../articles/Capr_Attributes_Extended.html">Capr_Attributes_Extended</a>
     </li>
     <li>
-      <a href="../articles/CAPR_tutorial.html">CAPR_tutorial</a>
+      <a href="../articles/complex-cohort-example.html">complex-cohort-example</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -131,8 +139,11 @@ an exact name search or general search that contains the concept name in the con
 
     <pre class="usage"><span class='fu'>lookupKeyword</span><span class='op'>(</span>
   <span class='va'>keyword</span>,
-  search_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"like"</span>, <span class='st'>"exact"</span>, <span class='st'>"any"</span><span class='op'>)</span>,
-  cdmDatabaseSchema <span class='op'>=</span> <span class='cn'>NULL</span>
+  searchType <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"like"</span>, <span class='st'>"exact"</span>, <span class='st'>"any"</span><span class='op'>)</span>,
+  connectionDetails <span class='op'>=</span> <span class='cn'>NULL</span>,
+  connection <span class='op'>=</span> <span class='cn'>NULL</span>,
+  vocabularyDatabaseSchema <span class='op'>=</span> <span class='cn'>NULL</span>,
+  oracleTempSchema <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -140,21 +151,45 @@ an exact name search or general search that contains the concept name in the con
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>keyword</th>
-      <td><p>a word a or phrase to search concepts</p></td>
+      <td><p>a character string used to search OMOP concepts</p></td>
     </tr>
     <tr>
-      <th>search_type</th>
-      <td><p>how to use keyword: a) like the keyword, b)exact keyword , or c) any match of keyword</p></td>
+      <th>searchType</th>
+      <td><p>options to aid search. Can use like match, exact match or any match</p></td>
     </tr>
     <tr>
-      <th>cdmDatabaseSchema</th>
-      <td><p>designate cdm Database schema, if connected to cdm then leave NULL</p></td>
+      <th>connectionDetails</th>
+      <td><p>An object of type <code>connectionDetails</code> as created using the
+<code><a href='https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html'>createConnectionDetails</a></code> function in the
+DatabaseConnector package. Can be left NULL if <code>connection</code> is
+provided.</p></td>
+    </tr>
+    <tr>
+      <th>connection</th>
+      <td><p>An object of type <code>connection</code> as created using the
+<code><a href='https://ohdsi.github.io/DatabaseConnector/reference/connect.html'>connect</a></code> function in the
+DatabaseConnector package. Can be left NULL if <code>connectionDetails</code>
+is provided, in which case a new connection will be opened at the start
+of the function, and closed when the function finishes.</p></td>
+    </tr>
+    <tr>
+      <th>vocabularyDatabaseSchema</th>
+      <td><p>Schema name where your OMOP vocabulary format resides. Note that
+for SQL Server, this should include both the database and schema
+name, for example 'vocabulary.dbo'.</p></td>
+    </tr>
+    <tr>
+      <th>oracleTempSchema</th>
+      <td><p>Should be used in Oracle to specify a schema where the user has write
+privileges for storing temporary tables.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.table with all concepts found from the search</p>
+    <p>a tibble data frame object with conceptId, conceptName, standardConcept,
+              standardConceptCaption, invalidReason, invalidReasonCaption, conceptCode,
+              domainId, vocabularyId, conceptClassId.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

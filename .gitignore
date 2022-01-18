@@ -4,3 +4,6 @@ inst/doc
 .DS_Store
 errorReportSql.txt
 *.log
+/doc/
+/Meta/
+work/*

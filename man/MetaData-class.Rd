@@ -3,14 +3,16 @@
 \docType{class}
 \name{MetaData-class}
 \alias{MetaData-class}
-\title{An S4 class for Meta Data}
+\title{An S4 class for Component MetaData
+TODO confirm possible values for ComponentType. Should Index be included as a slot?}
 \description{
-A class for meta data, info about component structure
+An S4 class for Component MetaData
+TODO confirm possible values for ComponentType. Should Index be included as a slot?
 }
 \section{Slots}{
 
 \describe{
-\item{\code{ComponentType}}{name of component class (this is formally defined)}
+\item{\code{ComponentType}}{name of component class (this is formally defined) Possible values are...}
 
 \item{\code{Name}}{name for component customized by user}
 

@@ -29,9 +29,9 @@ DatabaseConnector package. Can be left NULL if \code{connectionDetails}
 is provided, in which case a new connection will be opened at the start
 of the function, and closed when the function finishes.}
 
-\item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides.
-Note that for SQL Server, this should include both the database and
-schema name, for example 'vocabulary.dbo'.}
+\item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides. Note that
+for SQL Server, this should include both the database and schema
+name, for example 'vocabulary.dbo'.}
 
 \item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
 privileges for storing temporary tables.}

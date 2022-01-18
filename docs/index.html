@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cohort definition Application Programming in R • Capr</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.99</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.994</span>
       </span>
     </div>
 
@@ -45,12 +45,15 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -60,15 +63,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/CAPR_tutorial.html">CAPR_tutorial</a>
+    </li>
+    <li>
       <a href="articles/Capr_Attributes_Extended.html">Capr_Attributes_Extended</a>
     </li>
     <li>
-      <a href="articles/CAPR_tutorial.html">CAPR_tutorial</a>
+      <a href="articles/complex-cohort-example.html">complex-cohort-example</a>
     </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -84,34 +94,95 @@
 <div id="capr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#capr" class="anchor"></a>Capr</h1></div>
+
+<p>Capr is part of <a href="https://ohdsi.github.io/Hades">HADES</a>.</p>
 <p>Cohort definition Application Programming in R</p>
 </div>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>Capr is an R package to develop and manipulate OHDSI cohort definitions. This package assists in creating a cohort definition that can be compiled by circe-be using CirceR. Cohort definitions developed in Capr are compatible with OHDSI ATLAS. Additionally the package allows for development of cohort design components, sub-items of a cohort design that are meant to be reusable and mutable to assist creating cohorts in study development.</p>
-<p>Note this package is an early release and is still under development. Capr was developed by LTS Computing LLC and has been released as open source for the OHDSI community.</p>
 </div>
 <div id="system-requirements" class="section level1">
 <h1 class="hasAnchor">
 <a href="#system-requirements" class="anchor"></a>System Requirements</h1>
-<p>Installation Requires R (version 3.5.0 or higher). You will also require installation of OHDSI CirceR and OHDSI DatabaseConnector. For installation details of those packages see: <a href="https://github.com/OHDSI/CirceR" class="uri">https://github.com/OHDSI/CirceR</a> and <a href="https://github.com/OHDSI/DatabaseConnector" class="uri">https://github.com/OHDSI/DatabaseConnector</a>.</p>
-<p>Operational This package requires a connection to an OMOP vocabulary database to query concepts. The database connection is made using OHDSI DatabaseConnector.</p>
+<p>Requires R (version 3.6.0 or higher). Installation on Windows requires <a href="http://cran.r-project.org/bin/windows/Rtools/">RTools</a>. Libraries used in Capr require Java. Capr requires a connection to an OMOP vocabulary database to query concepts.</p>
 </div>
-<div id="contributors" class="section level1">
+<div id="installation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#contributors" class="anchor"></a>Contributors</h1>
-<p>Martin Lavallee, Lee Evans</p>
-<p>#Tutorial</p>
-<p>An R package vignette is included with this package which can be found upon install:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span><span class="op">(</span><span class="st">"CAPR_tutorial"</span>, package <span class="op">=</span> <span class="st">"Capr"</span><span class="op">)</span></pre></div>
+<a href="#installation" class="anchor"></a>Installation</h1>
+<ol>
+<li><p>See the instructions <a href="https://ohdsi.github.io/Hades/rSetup.html">here</a> for configuring your R environment, including RTools and Java.</p></li>
+<li><p>In R, use the following commands to download and install Capr:</p></li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/Capr"</span><span class="op">)</span></code></pre></div>
+<ol>
+<li>Optionally, run this to check if Capr was correctly installed:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu">createConnectionDetails</span><span class="op">(</span>dbms<span class="op">=</span><span class="st">"postgresql"</span>,
+                                             server<span class="op">=</span><span class="st">"my_server.org"</span>,
+                                             user <span class="op">=</span> <span class="st">"joe"</span>,
+                                             password <span class="op">=</span> <span class="st">"super_secret"</span><span class="op">)</span>
+
+<span class="fu">checkCmInstallation</span><span class="op">(</span><span class="va">connectionDetails</span><span class="op">)</span></code></pre></div>
+<p>Where dbms, server, user, and password need to be changed to the settings for your database environment. Type</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">?</span><span class="va">createConnectionDetails</span></code></pre></div>
+<p>for more details on how to configure your database connection.</p>
+</div>
+<div id="user-documentation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#user-documentation" class="anchor"></a>User Documentation</h1>
+<p>Documentation can be found on the <a href="https://ohdsi.github.io/Capr">package website</a>.</p>
+<p>PDF versions of the documentation are also available:</p>
+<ul>
+<li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Capr_Tutorial.pdf">Capr Tutorial</a>
+</li>
+<li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/complex-cohort-example.pdf">Capr Complex Cohort Example</a>
+</li>
+<li>Package manual: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf">Capr.pdf</a>
+</li>
+</ul>
+</div>
+<div id="support" class="section level1">
+<h1 class="hasAnchor">
+<a href="#support" class="anchor"></a>Support</h1>
+<ul>
+<li>Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a>
+</li>
+<li>We use the <a href="https://github.com/OHDSI/Capr/issues">GitHub issue tracker</a> for all bugs/issues/enhancements</li>
+</ul>
+</div>
+<div id="contributing" class="section level1">
+<h1 class="hasAnchor">
+<a href="#contributing" class="anchor"></a>Contributing</h1>
+<p>Read <a href="https://ohdsi.github.io/Hades/contribute.html">here</a> how you can contribute to this package.</p>
+</div>
+<div id="license" class="section level1">
+<h1 class="hasAnchor">
+<a href="#license" class="anchor"></a>License</h1>
+<p>Capr is licensed under Apache License 2.0</p>
+</div>
+<div id="development" class="section level1">
+<h1 class="hasAnchor">
+<a href="#development" class="anchor"></a>Development</h1>
+<p>Capr is being developed in R Studio.</p>
 </div>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Ask a question at <br><a href="http://forums.ohdsi.org">http://​forums.ohdsi.org</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li>Apache License 2.0</li>
@@ -124,7 +195,14 @@
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/OHDSI/%3Creponame%3E/actions?query=workflow%3AR-CMD-check"><img src="https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg" alt="Build Status"></a></li>
+<li><a href="https://codecov.io/github/OHDSI/Capr?branch=main"><img src="https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main" alt="codecov.io"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
