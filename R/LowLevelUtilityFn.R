@@ -124,7 +124,7 @@ checkConceptField <- function(x, field) {
 
 
   #if object is a concept set expression
-  if (is(x) == "ConceptSetExpression") {
+  if (methods::is(x) == "ConceptSetExpression") {
     #extract expression
     dd <- x@Expression
     #extract concept id  from concept set item
@@ -137,7 +137,7 @@ checkConceptField <- function(x, field) {
   }
 
   #if the oject is a component
-  if (is(x) == "Component") {
+  if (methods::is(x) == "Component") {
     #recurisvely run the funtion
     rr <- purrr::map(x@ConceptSetExpression, ~checkConceptField(.x, field = field))
   }

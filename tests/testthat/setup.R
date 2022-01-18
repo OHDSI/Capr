@@ -2,9 +2,9 @@
 
 oldJarFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
 Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = tempfile("jdbcDrivers"))
-downloadJdbcDrivers("postgresql")
-downloadJdbcDrivers("sql server")
-downloadJdbcDrivers("oracle")
+DatabaseConnector::downloadJdbcDrivers("postgresql")
+DatabaseConnector::downloadJdbcDrivers("sql server")
+DatabaseConnector::downloadJdbcDrivers("oracle")
 
 #set up save space for capr
 Sys.setenv("Capr_Save_Space" = tempdir("saveCapr"))

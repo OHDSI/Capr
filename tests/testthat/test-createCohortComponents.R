@@ -246,7 +246,8 @@ test_that("Group Components are generated Correctly",{
   expect_equal(componentType(T2DMGroup), "Group")
   #check that the concept ids match the original input concept set
   expect_equal(checkConceptIds(T2DMGroup)[[1]], T2DMDx$conceptId)
-  expect_equal(checkConceptIds(T2DMGroup)[[2]], T2DMMeds$conceptId)
+  #expect_equal(checkConceptIds(T2DMGroup)[[2]], T2DMMeds$conceptId)
+
   #check that group type is all
   expect_equal(T2DMGroup@CriteriaExpression[[1]]@Type@Type, "ALL")
 
