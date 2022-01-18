@@ -39,6 +39,15 @@ setValidity("Window", function(object) {
   TRUE
 })
 
+#' Show statements of capr objects
+#'
+#' These functions print the capr object to console in a readable format
+#'
+#' @param object the object to show
+#' @return a console print of the object
+#' @rdname show-method
+#' @aliases show
+#' @aliases show,Window-method
 setMethod("show", "Window", function(object) {
   cat(object@Event, object@Start$Days, "Days", object@Start$Coeff, "and",
       object@End$Days, "Days", object@End$Coeff, object@Index)
@@ -63,6 +72,8 @@ setValidity("Timeline", function(object) {
   TRUE
 })
 
+#' @rdname show-method
+#' @aliases show,Timeline-method
 setMethod("show", "Timeline", function(object) {
   cat("Timeline", "\n")
   show(object@StartWindow)
@@ -101,6 +112,8 @@ setValidity("Occurrence", function(object) {
   TRUE
 })
 
+#' @rdname show-method
+#' @aliases show,Occurrence-method
 setMethod("show", "Occurrence", function(object) {
   cat(utils::str(object))
 })
@@ -140,6 +153,8 @@ setValidity("ObservationWindow", function(object) {
   TRUE
 })
 
+#' @rdname show-method
+#' @aliases show,ObservationWindow-method
 setMethod("show", "ObservationWindow", function(object) {
   cat("Observation Window:", "\n")
   cat("Continous observation of at least", object@PriorDays, "days prior and",
@@ -169,6 +184,8 @@ setValidity("Group", function(object) {
   TRUE
 })
 
+#' @rdname show-method
+#' @aliases show,Group-method
 setMethod("show", "Group", function(object) {
   ty <- object@Type@Type
   if (ty == "AT_LEAST" | ty == "AT_MOST") {
@@ -223,6 +240,8 @@ setValidity("Query", function(object) {
   TRUE
 })
 
+#' @rdname show-method
+#' @aliases show,Query-method
 setMethod("show", "Query", function(object) {
   cat("Query", "\n")
   cat("Domain:", object@Domain, "\n")
@@ -257,6 +276,8 @@ setValidity("Count", function(object) {
   TRUE
 })
 
+#' @rdname show-method
+#' @aliases show,Count-method
 setMethod("show", "Count", function(object) {
   cat("Count", object@Occurrence@Type, object@Occurrence@Count)
   if (object@Occurrence@isDistinct) {
@@ -289,6 +310,8 @@ setValidity("OpAttribute", function(object) {
   TRUE
 })
 
+#' @rdname show-method
+#' @aliases show,OpAttribute-method
 setMethod("show", "OpAttribute", function(object) {
   cat(paste0(methods::is(object), ":"),object@Name, "==>")
   op <- object@Op
@@ -453,6 +476,8 @@ setValidity("Concept", function(object) {
   # TODO
 })
 
+#' @rdname show-method
+#' @aliases show,Concept-method
 setMethod("show", "Concept", function(object) {
   nm <- methods::slotNames(methods::is(object))
   concept <- unname(sapply(nm, slot, object = object))
@@ -490,6 +515,8 @@ setValidity("ConceptSetItem", function(object) {
 
 # print a checkmark
 # stringi::stri_unescape_unicode("\\u2714")
+#' @rdname show-method
+#' @aliases show,ConceptSetItem-method
 #' @export
 setMethod("show", "ConceptSetItem", function(object) {
   domains <- paste(unique(vapply(object, function(x) x@Concept@DOMAIN_ID, character(1))), collapse = ", ")
@@ -534,6 +561,8 @@ setValidity("ConceptSetExpression", function(object) {
   TRUE
 })
 
+#' @rdname show-method
+#' @aliases show,ConceptSetExpression-method
 setMethod("show", "ConceptSetExpression", function(object) {
   cat(object@Name, "\n")
   cat("CodesetId:", object@id,"\n")
@@ -564,6 +593,8 @@ setValidity("Limit", function(object) {
   }
 })
 
+#' @rdname show-method
+#' @aliases show,Limit-method
 setMethod("show", "Limit", function(object) {
   event <- ifelse(object@Type == "all", "events", "event")
   cat(paste("Limit to", object@Type, event, "per person."))
@@ -599,6 +630,8 @@ setValidity("MetaData", function(object) {
   }
 })
 
+#' @rdname show-method
+#' @aliases show,MetaData-method
 setMethod("show", "MetaData", function(object) {
   cat(utils::str(object))
 })
@@ -644,6 +677,8 @@ setValidity("Component", function(object) {
   TRUE
 })
 
+#' @rdname show-method
+#' @aliases show,Component-method
 setMethod("show", "Component", function(object) {
 
   name <- ifelse(nchar(object@MetaData@Name) > 0, paste(":", object@MetaData@Name), "")
@@ -763,7 +798,8 @@ setValidity("CohortDetails", function(object) {
   }
 })
 
-
+#' @rdname show-method
+#' @aliases show,CohortDetails-method
 setMethod("show", "CohortDetails", function(object) {
   nm <- stringr::str_trunc(object@Name, 40)
   aut <- ifelse(nchar(object@Author) > 0, paste0("[", object@Author, "]"), "")
@@ -805,6 +841,8 @@ setValidity("CohortDefinition", function(object) {
   # TODO implement addtitional validity checks
 })
 
+#' @rdname show-method
+#' @aliases show,CohortDefinition-method
 setMethod("show", "CohortDefinition", function(object) {
   cat(utils::str(object, maxlevel = 3))
   # TODO write a better print method for CohortDefinition
