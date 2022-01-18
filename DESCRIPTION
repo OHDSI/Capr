@@ -34,7 +34,8 @@ Imports:
   checkmate,
   tibble,
   withr,
-  readr
+  readr,
+  utils
 Suggests:
     testthat (>= 3.0.0),
     knitr,

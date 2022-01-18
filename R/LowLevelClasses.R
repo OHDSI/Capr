@@ -102,7 +102,7 @@ setValidity("Occurrence", function(object) {
 })
 
 setMethod("show", "Occurrence", function(object) {
-  cat(str(object))
+  cat(utils::str(object))
 })
 
 #' An S4 class for Expression type
@@ -600,7 +600,7 @@ setValidity("MetaData", function(object) {
 })
 
 setMethod("show", "MetaData", function(object) {
-  cat(str(object))
+  cat(utils::str(object))
 })
 
 # Capr Component ----------------------------------------------------------
@@ -650,11 +650,11 @@ setMethod("show", "Component", function(object) {
 
   cli::cat_line(cli::rule(paste0(object@MetaData@ComponentType, name)))
   cli::cat_line("Critera Expression")
-  cli::cat_line(str(object@CriteriaExpression, max.level = 2))
+  cli::cat_line(utils::str(object@CriteriaExpression, max.level = 2))
 
   print(object@Limit)
   cli::cat_line("Concept Set Expression")
-  cli::cat_line(str(object@ConceptSetExpression, max.level = 2))
+  cli::cat_line(utils::str(object@ConceptSetExpression, max.level = 2))
 })
 
 
@@ -806,6 +806,6 @@ setValidity("CohortDefinition", function(object) {
 })
 
 setMethod("show", "CohortDefinition", function(object) {
-  cat(str(object, maxlevel = 3))
+  cat(utils::str(object, maxlevel = 3))
   # TODO write a better print method for CohortDefinition
 })
