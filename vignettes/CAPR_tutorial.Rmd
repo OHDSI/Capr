@@ -197,7 +197,7 @@ IpVisitCSE <- getConceptIdDetails(conceptIds = c(262, 9201),
 ```
 
 ```{r echo=FALSE, eval=TRUE}
-str(IpVisitCSE)
+#str(IpVisitCSE)
 ```
 
 Returning to the idea of concept set items, we can customize the mapping of the concept set item. If we had three concepts in the set but only want to exclude one of them we can specify the position in the `createConceptMapping` function.
@@ -256,7 +256,7 @@ IpVisitQuery <- createVisitOccurrence(conceptSetExpression = IpVisitCSE,
 ```
 
 ```{r echo=FALSE, eval=TRUE}
-str(IpVisitQuery)
+#str(IpVisitQuery)
 ```
 
 This query is what we use for the primary criteria of this cohort. All that remains, is adding an observation window and a limit (number of observations per person) to set the cohort entry. Notice again in the structural print the component inherits the query and evolves into a primary criteria component class. If one ever wants to check the component class they can use `componentType(pc)`.
@@ -269,7 +269,7 @@ PcCovidDiag <- createPrimaryCriteria(Name = "Inpatient Visit Primary Criteria",
 ```
 
 ```{r echo=FALSE, eval=TRUE}
-str(PcCovidDiag)
+#str(PcCovidDiag)
 ```
 
 ### Creating a Count
@@ -328,7 +328,7 @@ Count(Visit(CovidDiag),
 ```
 
 ```{r echo=FALSE, eval=TRUE}
-str(CovidCountCriteria1)
+#str(CovidCountCriteria1)
 ```
 
 ### Creating a Group
