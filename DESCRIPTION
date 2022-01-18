@@ -35,7 +35,10 @@ Imports:
   tibble,
   withr,
   readr,
-  utils
+  utils,
+  stringr,
+  glue,
+  cli
 Suggests:
     testthat (>= 3.0.0),
     knitr,
