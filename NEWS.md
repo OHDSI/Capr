@@ -10,11 +10,11 @@ definitions of OMOP CDM mapped data. Features include:
 queries, counts, groups) and main-components (primary criteria, additional criteria,
 inclusion rules, censoring criteria and cohort eras).
 
-3. Save and load component parts of cohort defintion
+3. Save and load component parts of cohort definition
 
 4. Import circe json and convert into Capr objects
 
 5. Print Capr R script that produces equivalent cohort definitions in Capr   
 
-6. Preliminary helper and edit functions for working with cohorts
+6. Show functions for Capr objects
 
