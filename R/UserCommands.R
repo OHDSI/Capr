@@ -1,4 +1,4 @@
-# Copyright 2021 Observational Health Data Sciences and Informatics
+# Copyright 2022 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -22,14 +22,14 @@
 #'
 #' This function saves the component as a json file. The component is converted from s4 to s3 to
 #' fit the jsonlite function
-#' @param x the component you wish to save
+#' @param obj the component you wish to save
 #' @param saveName a name for the function you want to save
 #' @param savePath a path to a file to save. Default is the active working directory
 #' @return no return in r. json file written to a save point
 #' @include LowLevelSaveFn.R
 #' @export
-saveComponent <- function(x, saveName, savePath = getwd()){
-  sc <- saveState(x) #run save state for component
+saveComponent <- function(obj, saveName, savePath = getwd()){
+  sc <- saveState(obj) #run save state for component
   objjson <- jsonlite::toJSON(sc, pretty=T, auto_unbox = T) #convert to json
   write(objjson, file=file.path(savePath,paste0(saveName, ".json"))) #if a savePath is provided append to name
   invisible(sc)
@@ -57,7 +57,6 @@ loadComponent <- function(path){
 #' This function reads a circe json an builds the cohort definition in an execution space
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param jsonPath a path to the file we wish to import
 #' @param returnHash if true returns a has table with all components necessary to build the
 #' cohort definition including the cohort definition
@@ -71,12 +70,11 @@ readInCirce <- function(jsonPath,
                         connectionDetails,
                         connection = NULL,
                         vocabularyDatabaseSchema = NULL,
-                        oracleTempSchema = NULL,
+                        #tempEmulationSchema = NULL,
                         returnHash = FALSE){
   cohort <- jsonlite::read_json(jsonPath) #read in json from file path
   dbConnection <- createDatabaseConnectionLang(connectionDetails = connectionDetails,
-                                               vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                                               oracleTempSchema = oracleTempSchema)
+                                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
   cohortBuild <- getCohortDefinitionCall(cohort)$createCDCall #get the functions needed to build the cohort
   cohortCaller <- getCohortDefinitionCall(cohort)$CohortCall # get the caller function to make final cohort
   cohortBuild <- Filter(Negate(is.null),cohortBuild) #remove null spaces
@@ -91,7 +89,8 @@ readInCirce <- function(jsonPath,
   DatabaseConnector::disconnect(exeEnv$connection) #disconnect
   eval(cohortCaller, envir = exeEnv) #evaluate the cohort Caller in the execution environemnt
   if (returnHash) {
-    rm(connection, connectionDetails, vocabularyDatabaseSchema, oracleTempSchema,
+    rm(connection, connectionDetails, vocabularyDatabaseSchema,
+       #tempEmulationSchema,
        envir = exeEnv)
     ret <- exeEnv
   } else {

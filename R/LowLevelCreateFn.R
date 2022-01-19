@@ -1,4 +1,4 @@
-# Copyright 2021 Observational Health Data Sciences and Informatics
+# Copyright 2022 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -143,7 +143,6 @@ createSourceConceptAttribute <- function(Domain,ConceptSetExpression){
 #'  createConceptAttribue
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param        conceptIds the list of ids to lookup, need OMOP vocabulary connection
 #' @param        mapToStandard whether to map concept ids to standard or leave as is default is TRUE
 #' @param        name name of the ttribute name
@@ -154,7 +153,7 @@ createConceptAttribute <- function(conceptIds,
                                     connectionDetails = NULL,
                                     connection = NULL,
                                     vocabularyDatabaseSchema = NULL,
-                                    oracleTempSchema = NULL,
+                                    #tempEmulationSchema = NULL,
                                     mapToStandard = TRUE,
                                     name){
   #get concepts for attribute
@@ -162,7 +161,7 @@ createConceptAttribute <- function(conceptIds,
                                   connectionDetails = connectionDetails,
                                   connection = connection,
                                   vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                                  oracleTempSchema = oracleTempSchema,
+                                  #tempEmulationSchema = tempEmulationSchema,
                                   mapToStandard = mapToStandard)
   concepts$INVALID_REASON_CAPTION <- "Unknown"
   concepts$STANDARD_CONCEPT_CAPTION <- "Unknown"

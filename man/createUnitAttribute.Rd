@@ -9,7 +9,6 @@ createUnitAttribute(
   connectionDetails = NULL,
   connection = NULL,
   vocabularyDatabaseSchema = NULL,
-  oracleTempSchema = NULL,
   mapToStandard = TRUE
 )
 }
@@ -30,9 +29,6 @@ of the function, and closed when the function finishes.}
 \item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides. Note that
 for SQL Server, this should include both the database and schema
 name, for example 'vocabulary.dbo'.}
-
-\item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
-privileges for storing temporary tables.}
 
 \item{mapToStandard}{a logical that indicates whether the concept Ids should be mapped to standard concepts}
 }

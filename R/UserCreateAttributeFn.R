@@ -1,4 +1,4 @@
-# Copyright 2021 Observational Health Data Sciences and Informatics
+# Copyright 2022 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -772,7 +772,6 @@ createVisitSourceConceptAttribute <- function(ConceptSetExpression){
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -782,13 +781,13 @@ createValueAsConceptAttribute <- function(conceptIds,
                                           connectionDetails = NULL,
                                           connection = NULL,
                                           vocabularyDatabaseSchema = NULL,
-                                          oracleTempSchema = NULL,
+                                          #tempEmulationSchema = NULL,
                                           mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "ValueAsConcept")
 }
@@ -801,7 +800,6 @@ createValueAsConceptAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -811,13 +809,13 @@ createGenderAttribute <- function(conceptIds,
                                   connectionDetails = NULL,
                                   connection = NULL,
                                   vocabularyDatabaseSchema = NULL,
-                                  oracleTempSchema = NULL,
+                                  #tempEmulationSchema = NULL,
                                   mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "Gender")
 }
@@ -830,7 +828,6 @@ createGenderAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -840,13 +837,13 @@ createVisitTypeAttribute <- function(conceptIds,
                                   connectionDetails = NULL,
                                   connection = NULL,
                                   vocabularyDatabaseSchema = NULL,
-                                  oracleTempSchema = NULL,
+                                  #tempEmulationSchema = NULL,
                                   mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "VisitType")
 }
@@ -858,7 +855,6 @@ createVisitTypeAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -868,13 +864,13 @@ createDrugTypeAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "DrugType")
 }
@@ -886,7 +882,6 @@ createDrugTypeAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -896,13 +891,13 @@ createProcedureTypeAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "ProcedureType")
 }
@@ -914,7 +909,6 @@ createProcedureTypeAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -924,13 +918,13 @@ createObservationTypeAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "ObservationType")
 }
@@ -942,7 +936,6 @@ createObservationTypeAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -952,13 +945,13 @@ createMeasurementTypeAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "MeasurementType")
 }
@@ -970,7 +963,6 @@ createMeasurementTypeAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -980,13 +972,13 @@ createDeathTypeAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "DeathType")
 }
@@ -998,7 +990,6 @@ createDeathTypeAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -1008,13 +999,13 @@ createDeviceTypeAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "DeviceType")
 }
@@ -1026,7 +1017,6 @@ createDeviceTypeAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -1036,13 +1026,13 @@ createProviderSpecialtyAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "ProviderSpecialty")
 }
@@ -1054,7 +1044,6 @@ createProviderSpecialtyAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -1064,13 +1053,13 @@ createPlaceOfServiceAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "PlaceOfService")
 }
@@ -1082,7 +1071,6 @@ createPlaceOfServiceAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -1092,13 +1080,13 @@ createModifierAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "Modifier")
 }
@@ -1110,7 +1098,6 @@ createModifierAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -1120,13 +1107,13 @@ createQualifierAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "Qualifier")
 }
@@ -1138,7 +1125,6 @@ createQualifierAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -1148,13 +1134,13 @@ createUnitAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "Unit")
 }
@@ -1166,7 +1152,6 @@ createUnitAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -1176,13 +1161,13 @@ createOperatorAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "Operator")
 }
@@ -1194,7 +1179,6 @@ createOperatorAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -1204,13 +1188,13 @@ createRouteConceptsAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "RouteConcepts")
 }
@@ -1222,7 +1206,6 @@ createRouteConceptsAttribute <- function(conceptIds,
 #' to be connected to an OMOP vocabulary to use the lookup functions.
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
 #' @param conceptIds a vector of concept ids. Must be connected to an OMOP vocabulary to use function
 #' @param mapToStandard a logical that indicates whether the concept Ids should be mapped to standard concepts
 #' @include LowLevelCreateFn.R
@@ -1232,13 +1215,13 @@ createDoseUnitAttribute <- function(conceptIds,
                                          connectionDetails = NULL,
                                          connection = NULL,
                                          vocabularyDatabaseSchema = NULL,
-                                         oracleTempSchema = NULL,
+                                         #tempEmulationSchema = NULL,
                                          mapToStandard =TRUE){
   createConceptAttribute(conceptIds = conceptIds,
                          connectionDetails = connectionDetails,
                          connection = connection,
                          vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                         oracleTempSchema = oracleTempSchema,
+                         #tempEmulationSchema = tempEmulationSchema,
                          mapToStandard = mapToStandard,
                          name = "DoseUnit")
 }

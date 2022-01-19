@@ -10,7 +10,7 @@ lookupKeyword(
   connectionDetails = NULL,
   connection = NULL,
   vocabularyDatabaseSchema = NULL,
-  oracleTempSchema = NULL
+  tempEmulationSchema = NULL
 )
 }
 \arguments{
@@ -33,8 +33,9 @@ of the function, and closed when the function finishes.}
 for SQL Server, this should include both the database and schema
 name, for example 'vocabulary.dbo'.}
 
-\item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
-privileges for storing temporary tables.}
+\item{tempEmulationSchema}{Some database platforms like Oracle and Impala do not truly support
+temp tables. To emulate temp tables, provide a schema with write
+privileges where temp tables can be created.}
 }
 \value{
 a tibble data frame object with conceptId, conceptName, standardConcept,

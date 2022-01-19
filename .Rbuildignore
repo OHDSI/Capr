@@ -5,3 +5,7 @@ deploy.sh
 compare_versions
 ^doc$
 ^Meta$
+^_pkgdown\.yml$
+^docs$
+^extras$
+^man-roxygen$

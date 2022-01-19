@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>complex-cohort-example • Capr</title>
+<title>Creating a Complex Cohort using Capr • Capr</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="complex-cohort-example">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Creating a Complex Cohort using Capr">
 <meta property="og:description" content="Capr">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.994</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li>
-  <a href="../news/index.html">Changelog</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -57,20 +50,23 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/CAPR_tutorial.html">CAPR_tutorial</a>
+      <a href="../articles/Capr_Attributes_Extended.html">Using extended cohort attributes in Capr</a>
     </li>
     <li>
-      <a href="../articles/Capr_Attributes_Extended.html">Capr_Attributes_Extended</a>
+      <a href="../articles/CAPR_tutorial.html">Capr Basics Tutorial</a>
     </li>
     <li>
-      <a href="../articles/complex-cohort-example.html">complex-cohort-example</a>
+      <a href="../articles/complex-cohort-example.html">Creating a Complex Cohort using Capr</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://ohdsi.github.io/Hades"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link">hadesLogo</a>
 </li>
       </ul>
 </div>
@@ -82,10 +78,10 @@
 
       
 
-      </header><script src="complex-cohort-example_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>complex-cohort-example</h1>
+      <h1 data-toc-skip>Creating a Complex Cohort using Capr</h1>
             
       
       
@@ -95,13 +91,13 @@
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>Capr is helpful for cohort definition creation because components of a cohort definition can be split into isolated objects, independent of the full cohort definition. Using Capr, we can now construct smaller pieces of the cohort definition such as queries, counts or groups that can be reincorportated across the cohort definition. The idea of reusable component parts is to construct smaller and simpler objects that can be saved to disk (or in the global environment) to be used as an input to a more complex feature of the cohort definition. In this vignette, we show how we can leverage Capr to create complex cohorts and lay the foundations for more advanced use cases like cohort templating.</p>
-<p>The example detailed in this vignette follows follows a complex cohort definition creation example detailed in the following <a href="https://www.youtube.com/watch?v=2d0qLHEzVYU&amp;ab_channel=ChrisKnoll">video</a>. Our goal is to create the <a href="https://phekb.org/phenotype/type-2-diabetes-mellitus">PheKB type 2 diabetes cohort definition</a> that contains five paths that logically defines a case of type 2 diabetes. In this example we construct smaller pieces of the cohort definition that we can reuse during the construction of the cohort.</p>
+<p>The example detailed in this vignette follows follows a complex cohort definition creation example detailed in the following <a href="https://www.youtube.com/watch?v=2d0qLHEzVYU&amp;ab_channel=ChrisKnoll" class="external-link">video</a>. Our goal is to create the <a href="https://phekb.org/phenotype/type-2-diabetes-mellitus" class="external-link">PheKB type 2 diabetes cohort definition</a> that contains five paths that logically defines a case of type 2 diabetes. In this example we construct smaller pieces of the cohort definition that we can reuse during the construction of the cohort.</p>
 <p>The PheKB Type 2 Diabetes Mellitus cohort definition is described by the flowchart:</p>
-<p><img src="../../../../R/x86_64-pc-linux-gnu-library/4.1/Capr/images/t2d_001.png" width="192"></p>
+<p><img src="../../../win-library/4.1/Capr/images/t2d_001.png" width="192"></p>
 <p>To build this cohort we first start with a initial set of presumed cases of T2DM. Patient initially in this cohort must have all of the following: a diagnosis of T2DM (T2Dx), a prescribed medication for T2DM (T2Rx), and presence of an abnormal lab for T2DM. An abnormal lab can be described by any of: <span class="math inline">\(\geq 125\)</span> mg/dl for fasting glucose, <span class="math inline">\(\geq 200\)</span> mg/dl for random glucose or <span class="math inline">\(\geq6\%\)</span> for HbA1c. From this initial set we need to restrict initial events to not included persons with a type 1 Diabetes diagnosis. With this a set of presumed cases, we can now confirm T2DM diagnosis using an algorithm composed of 5 pathways based on the above figure:</p>
 <p>Path 1: exactly 0 T2Dx, at least 1 T2Rx and at least 1 AbLab</p>
 <p>Path 2: at least 1 T2Dx, exactly 0 T1Rx, exactly 0 T2Rx, and at least 1 AbLab</p>
@@ -110,16 +106,16 @@
 <p>Path 5: at least 1 T2Dx, at least 1 T1Rx, exactly 0 T2Rx and at least 2 T2Dx</p>
 <p>These inclusion rules restrict our initial event, ensuring that we are only recruiting patients with a confirmed T2DM case. In this vignette we outline the process of creating this cohort in Capr.</p>
 </div>
-<div id="setup" class="section level2">
-<h2 class="hasAnchor">
-<a href="#setup" class="anchor"></a>Setup</h2>
+<div class="section level2">
+<h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
+</h2>
 <p>Before we start using Capr, we must load it as a dependent package in R and set up a connection to an OMOP database using <code>DatabaseConnector</code>. In order to use Capr’s lookup functions, one needs to be connected to an OMOP database with up-to-date vocabulary tables. This helps us find all the concept information, map descendants, and map to the standard concept for cohort definition queries. This setup should be at the top of all Capr scripts to be referenced throughout.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">Capr</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/DatabaseConnector/">DatabaseConnector</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">Capr</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/DatabaseConnector/" class="external-link">DatabaseConnector</a></span><span class="op">)</span>
 
 <span class="co">#set database connection details</span>
-<span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html">createConnectionDetails</a></span><span class="op">(</span>
+<span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html" class="external-link">createConnectionDetails</a></span><span class="op">(</span>
   dbms <span class="op">=</span> <span class="st">"postgresql"</span>,
   server <span class="op">=</span> <span class="st">"example.com/datasource"</span>,
   user <span class="op">=</span> <span class="st">"me"</span>,
@@ -127,13 +123,13 @@
   port <span class="op">=</span> <span class="st">"5432"</span><span class="op">)</span>
 
 <span class="co">#set connection</span>
-<span class="va">connection</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/connect.html">connect</a></span><span class="op">(</span><span class="va">connectionDetails</span><span class="op">)</span>
+<span class="va">connection</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/connect.html" class="external-link">connect</a></span><span class="op">(</span><span class="va">connectionDetails</span><span class="op">)</span>
 <span class="co">#identify vocabulary schema</span>
 <span class="va">vocabularyDatabaseSchema</span> <span class="op">&lt;-</span> <span class="st">"vocab"</span></code></pre></div>
 </div>
-<div id="building-concept-set-expressions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#building-concept-set-expressions" class="anchor"></a>Building Concept Set Expressions</h2>
+<div class="section level2">
+<h2 id="building-concept-set-expressions">Building Concept Set Expressions<a class="anchor" aria-label="anchor" href="#building-concept-set-expressions"></a>
+</h2>
 <p>The first step in cohort creation is to identify medical concepts of interest that capture possible occurrence of type 2 diabetes, for example. Concept set expressions are a fundamental building block to the cohort definition because they group together all codes used to capture a common medical term and establish hierarchical relationships between these sets of codes. As an example, let’s say we are interested in all Type 2 Diabetes medications. We want to capture metformin and glipizide and all other medications used prescribed for Type 2 Diabetes. We can group these together as a single concept set. But what about if there are different brands or dosages of these medications, how do we include all of them? For this we need to establish a descendant relationship between the root concept of the ingredient with all its child concepts describing variations on the same ingredient. The concept set expression bundles together codes for all Type 2 Diabetes medications and inherits the descendant concepts used to describe different formulations of the ingredients. We now have a thorough list of all concepts used to describe medications prescribed for Type 2 Diabetes Mellitus. One should refer to documentation on the OMOP vocabularies and concept set creation for more in-depth explanation. Whenever a cohort definition is built, we typically start by identifying the concept set expressions. For the type 2 diabetes cohort we need to identify the following concept set expressions:</p>
 <ol style="list-style-type: decimal">
 <li><p>Diagnosis of Type 2 Diabetes (T2Dx)</p></li>
@@ -155,13 +151,13 @@
 <span class="va">T2Dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>
   conceptIds <span class="op">=</span> <span class="fl">201826</span>,
   connection <span class="op">=</span> <span class="va">connection</span>,
-  vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>
     Name <span class="op">=</span> <span class="st">"Type 2 Diabetes Diagnosis"</span>,
     includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co">#Type 2 Diabetes Medications concept IDS</span>
-<span class="va">T2RxIds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1502809L</span>, <span class="fl">1502826L</span>, <span class="fl">1503297L</span>, <span class="fl">1510202L</span>, 
+<span class="va">T2RxIds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1502809L</span>, <span class="fl">1502826L</span>, <span class="fl">1503297L</span>, <span class="fl">1510202L</span>, 
              <span class="fl">1515249L</span>, <span class="fl">1516766L</span>, <span class="fl">1525215L</span>, <span class="fl">1529331L</span>, 
              <span class="fl">1530014L</span>, <span class="fl">1547504L</span>, <span class="fl">1559684L</span>, <span class="fl">1560171L</span>, 
              <span class="fl">1580747L</span>, <span class="fl">1583722L</span>, <span class="fl">1594973L</span>, <span class="fl">1597756L</span><span class="op">)</span>
@@ -170,7 +166,7 @@
 <span class="va">T2Rx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>
   conceptIds <span class="op">=</span> <span class="va">T2RxIds</span>,
   connection <span class="op">=</span> <span class="va">connection</span>,
-   vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>
     Name <span class="op">=</span> <span class="st">"Type 2 Diabetes Medications"</span>,
     includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -179,14 +175,14 @@
 <span class="va">T1Dx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptIdDetails.html">getConceptIdDetails</a></span><span class="op">(</span>
   conceptIds <span class="op">=</span> <span class="fl">201254</span>,
   connection <span class="op">=</span> <span class="va">connection</span>,
-  vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>
     Name <span class="op">=</span> <span class="st">"Type 1 Diabetes Diagnosis"</span>,
     includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Sometimes it is more convenient to use concept codes from a given vocabulary instead of the concept ids. The OMOP vocabularies allow us to look up concepts from both standard and non-standard vocabularies using their original codes. We can map these codes to standard and find the concept ids used for OMOP queries. Below we show code that looks up concept codes and forms the concept set expression used for the cohort definition.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Type 1 Diabetes Medications</span>
-<span class="va">T1DRxNormCodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">139825</span>,<span class="fl">274783</span>,<span class="fl">314684</span>,
+<span class="va">T1DRxNormCodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">139825</span>,<span class="fl">274783</span>,<span class="fl">314684</span>,
                           <span class="fl">352385</span>,<span class="fl">400008</span>,<span class="fl">51428</span>,
                           <span class="fl">5856</span>,<span class="fl">86009</span>,<span class="fl">139953</span><span class="op">)</span><span class="op">)</span>
 <span class="va">T1Rx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getConceptCodeDetails.html">getConceptCodeDetails</a></span><span class="op">(</span>
@@ -194,51 +190,51 @@
   vocabulary <span class="op">=</span> <span class="st">"RxNorm"</span>,
   connection <span class="op">=</span> <span class="va">connection</span>,
   vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
-  mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>
     Name <span class="op">=</span> <span class="st">"Type 1 Diabetes Medications"</span>,
     includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co">#Abnormal Lab</span>
-<span class="va">AbLabHbA1c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"4548-4"</span>, <span class="st">"17856-6"</span>, <span class="st">"4549-2"</span>, <span class="st">"17855-8"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="va">AbLabHbA1c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"4548-4"</span>, <span class="st">"17856-6"</span>, <span class="st">"4549-2"</span>, <span class="st">"17855-8"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/getConceptCodeDetails.html">getConceptCodeDetails</a></span><span class="op">(</span>
     conceptCode <span class="op">=</span> <span class="va">.</span>, <span class="co">#places the lhs vector to the rhs of the pipe</span>
     vocabulary <span class="op">=</span> <span class="st">"LOINC"</span>,
     connection <span class="op">=</span> <span class="va">connection</span>,
     vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
-    mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>
     Name <span class="op">=</span> <span class="st">"Abnormal Lab HbA1c"</span>,
     includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co">#Ab Lab for Random Glucose (&gt;= 200 mg/dl)</span>
-<span class="va">AbLabRandomGluc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"2339-0"</span>, <span class="st">"2345-7"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="va">AbLabRandomGluc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2339-0"</span>, <span class="st">"2345-7"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="../reference/getConceptCodeDetails.html">getConceptCodeDetails</a></span><span class="op">(</span>
     conceptCode <span class="op">=</span> <span class="va">.</span>, 
     vocabulary <span class="op">=</span> <span class="st">"LOINC"</span>,
     connection <span class="op">=</span> <span class="va">connection</span>,
     vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
-    mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>
     Name <span class="op">=</span> <span class="st">"Abnormal Lab Random Glucose"</span>,
     includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co">#Ab Lab for Fasting Glucose (&gt;= 125 mg/dl)</span>
 
-<span class="va">AbLabFastingGluc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1558-6"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="va">AbLabFastingGluc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1558-6"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="../reference/getConceptCodeDetails.html">getConceptCodeDetails</a></span><span class="op">(</span>
     conceptCode <span class="op">=</span> <span class="va">.</span>,
     vocabulary <span class="op">=</span> <span class="st">"LOINC"</span>,
     connection <span class="op">=</span> <span class="va">connection</span>,
     vocabularyDatabaseSchema <span class="op">=</span> <span class="va">vocabularyDatabaseSchema</span>,
-    mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    mapToStandard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/createConceptSetExpression.html">createConceptSetExpression</a></span><span class="op">(</span>
     Name <span class="op">=</span> <span class="st">"Abnormal Lab Fasting Glucose"</span>,
     includeDescendants <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="building-queries" class="section level2">
-<h2 class="hasAnchor">
-<a href="#building-queries" class="anchor"></a>Building Queries</h2>
+<div class="section level2">
+<h2 id="building-queries">Building Queries<a class="anchor" aria-label="anchor" href="#building-queries"></a>
+</h2>
 <p>The next building block of a cohort definition is a query. A query, as defined in the context of circe and Capr, provides the mechanism for identifying an observational event in the CDM. By identifying a domanin we can search for presence of a concept (and its descendants) within the clinical tables of the CDM. For example if we wanted to look for presence of a type 2 diabetes diagnosis we would search the condition occurrence domain for any matches with the Type 2 diabetes concept set expression. In Capr, the signature for creating a query includes the domain from which we wish to query. A concept set expression is typically attached to the query and sometimes can be modified by a list of attributes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -261,7 +257,7 @@
 <code class="sourceCode R"><span class="co">#HbA1c Query with value attribute</span>
 <span class="va">AbLabHbA1cQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createMeasurement.html">createMeasurement</a></span><span class="op">(</span>
   conceptSetExpression <span class="op">=</span> <span class="va">AbLabHbA1c</span>,
-  attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   <span class="co">#add attribute of &gt;= 6% HbA1c</span>
   <span class="fu"><a href="../reference/createValueAsNumberAttribute.html">createValueAsNumberAttribute</a></span><span class="op">(</span>Op <span class="op">=</span> <span class="st">"gte"</span>, Value <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
   <span class="op">)</span><span class="op">)</span>
@@ -269,7 +265,7 @@
 <span class="co">#RandomGluc Query with value attribute</span>
 <span class="va">AbLabRandomGlucQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createMeasurement.html">createMeasurement</a></span><span class="op">(</span>
   conceptSetExpression <span class="op">=</span> <span class="va">AbLabRandomGluc</span>,
-  attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   <span class="co">#add attribute of &gt;= 200 mg/dl</span>
   <span class="fu"><a href="../reference/createValueAsNumberAttribute.html">createValueAsNumberAttribute</a></span><span class="op">(</span>Op <span class="op">=</span> <span class="st">"gte"</span>, Value <span class="op">=</span> <span class="fl">200L</span><span class="op">)</span>
 <span class="op">)</span><span class="op">)</span>
@@ -277,14 +273,14 @@
 <span class="co">#FastingGluc Query with value attribute</span>
 <span class="va">AbLabFastingGlucQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createMeasurement.html">createMeasurement</a></span><span class="op">(</span>
   conceptSetExpression <span class="op">=</span> <span class="va">AbLabFastingGluc</span>,
-  attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   <span class="co">#add attribute of &gt;= 125 mg/dl</span>
   <span class="fu"><a href="../reference/createValueAsNumberAttribute.html">createValueAsNumberAttribute</a></span><span class="op">(</span>Op <span class="op">=</span> <span class="st">"gte"</span>, Value <span class="op">=</span> <span class="fl">125L</span><span class="op">)</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="creating-counts-from-queries" class="section level2">
-<h2 class="hasAnchor">
-<a href="#creating-counts-from-queries" class="anchor"></a>Creating Counts from Queries</h2>
+<div class="section level2">
+<h2 id="creating-counts-from-queries">Creating Counts from Queries<a class="anchor" aria-label="anchor" href="#creating-counts-from-queries"></a>
+</h2>
 <p>A query looks through a domain and verifies the presence of a concept set expression, modified by the presence of an attribute. What a query lacks is temporal and enumeration logic along a patient timeline. A count component modifies the query to check for the number of occurrences along a temporal spectrum. For example, in our type 2 diabetes pathways we need may need to identify presence of a Type 1 Diabetes medication to confirm the diagnosis. So we need to modify the query for type 1 diabetes medications to ensure that we are counting only those patients who do not have a medication following the initial entry event. Recall the pathways had a series of conditions that all needed to be observed in order for a patient to count within a pathway.</p>
 <p>Ex. Path 1: exactly 0 T2Dx, at least 1 T2Rx and at least 1 AbLab</p>
 <p>Each item within the pathway is a count. THe count is ensuring we have identified a query by set number of occurrences within a timeline.</p>
@@ -372,14 +368,14 @@
                                             Count <span class="op">=</span> <span class="fl">1L</span>,
                                             Timeline <span class="op">=</span> <span class="va">tl1</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="creating-the-initial-cohort-entry" class="section level2">
-<h2 class="hasAnchor">
-<a href="#creating-the-initial-cohort-entry" class="anchor"></a>Creating the Initial Cohort Entry</h2>
+<div class="section level2">
+<h2 id="creating-the-initial-cohort-entry">Creating the Initial Cohort Entry<a class="anchor" aria-label="anchor" href="#creating-the-initial-cohort-entry"></a>
+</h2>
 <p>With the components created above we can set the initial cohort entry. We defined initial entry as observed occurrence of all of the following events: T2DM diagnosis, prescription of a T2DM medication and the presence of an abnormal lab. In OHDSI the initial recruiting point is called the primary criteria. The primary criteria only searches on queries and is bounded by an observation window distinguishing the minimal amount of continuous observation for the patient to be included.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">PrimaryCriteria</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createPrimaryCriteria.html">createPrimaryCriteria</a></span><span class="op">(</span>
   Name <span class="op">=</span> <span class="st">"PC for T2DM Case Phenotype"</span>,
-  ComponentList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">T2DxQuery</span>,<span class="va">T2RxQuery</span>,<span class="va">AbLabHbA1cQuery</span>,
+  ComponentList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">T2DxQuery</span>,<span class="va">T2RxQuery</span>,<span class="va">AbLabHbA1cQuery</span>,
                        <span class="va">AbLabFastingGlucQuery</span>,<span class="va">AbLabRandomGlucQuery</span><span class="op">)</span>,
   ObservationWindow <span class="op">=</span> <span class="fu"><a href="../reference/createObservationWindow.html">createObservationWindow</a></span><span class="op">(</span>
     PriorDays <span class="op">=</span> <span class="fl">0L</span>,
@@ -391,7 +387,7 @@
 <code class="sourceCode R"><span class="co">#No T1Dx at any point in patient history</span>
 <span class="va">NoT1DxGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="st">"No Diagnosis of Type 1 Diabetes"</span>,
                            type <span class="op">=</span> <span class="st">"ALL"</span>,
-                           criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">noT1DxCount</span><span class="op">)</span><span class="op">)</span>
+                           criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">noT1DxCount</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">#create additional Criteria</span>
 <span class="co">#further restrict the initial capture to people with no T1Dx</span>
@@ -402,15 +398,15 @@
 <span class="op">)</span></code></pre></div>
 <p>With these two pieces of the cohort we have an initial set of T2DM patients who do no have T1DM. Next we need to confirm the T2DM cases to ensure inclusion into the cohort. In the next section we create the confirmatory pathways.</p>
 </div>
-<div id="creating-t2d-pathways-as-groups" class="section level2">
-<h2 class="hasAnchor">
-<a href="#creating-t2d-pathways-as-groups" class="anchor"></a>Creating T2D Pathways as Groups</h2>
+<div class="section level2">
+<h2 id="creating-t2d-pathways-as-groups">Creating T2D Pathways as Groups<a class="anchor" aria-label="anchor" href="#creating-t2d-pathways-as-groups"></a>
+</h2>
 <p>In the previous section we alluded to the idea of a group component. Groups are a way of providing boolean logic to counts of events found by queries. In this example, we can bundle multiple counts together as a pathway. Another example of a group before getting to the pathways is the abnormal lab. In our example we don’t need the patient to have all the labs, just 1 abnormal lab of the set of three. From the abnormal lab counts created before, we only need 1 to be true for the person to be included in the cohort.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">atLeast1AbLabGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>
   Name <span class="op">=</span> <span class="st">"Abnormal labs for HbA1c, Fasting+Random Glucose"</span>,
   type <span class="op">=</span> <span class="st">"ANY"</span>,
-  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       <span class="va">atLeast1AbLabHbA1cCount</span>,
       <span class="va">atLeast1AbLabFastingGlucCount</span>,
       <span class="va">atLeast1AbLabRandomGlucCount</span><span class="op">)</span>
@@ -423,23 +419,23 @@
   Name <span class="op">=</span> <span class="st">"Pathway1"</span>,
   Description <span class="op">=</span> <span class="st">"0 T2Dx, 1+ T2Rx and 1+ AbLab"</span>,
   type <span class="op">=</span> <span class="st">"ALL"</span>,
-  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">noT2DxCount</span>, <span class="va">atLeast1T2RxCount</span><span class="op">)</span>,
-  Groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">atLeast1AbLabGroup</span><span class="op">)</span><span class="op">)</span>
+  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">noT2DxCount</span>, <span class="va">atLeast1T2RxCount</span><span class="op">)</span>,
+  Groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">atLeast1AbLabGroup</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">#Path 2: 1+ T2Dx, 0 T1Rx, 0 T2Rx, and 1+ AbLab  </span>
 <span class="va">Pathway2T2DMGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>
   Name <span class="op">=</span> <span class="st">"Pathway2"</span>,
   Description <span class="op">=</span> <span class="st">"1+ T2Dx, 0 T1Rx, 0 T2Rx, and 1+ AbLab"</span>,
   type <span class="op">=</span> <span class="st">"ALL"</span>,
-  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">atLeast1T2DxCount</span>, <span class="va">noT1RxCount</span>, <span class="va">noT2RxCount</span><span class="op">)</span>,
-  Groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">atLeast1AbLabGroup</span><span class="op">)</span><span class="op">)</span>
+  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">atLeast1T2DxCount</span>, <span class="va">noT1RxCount</span>, <span class="va">noT2RxCount</span><span class="op">)</span>,
+  Groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">atLeast1AbLabGroup</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">#Path 3: 1+ T2Dx, 0 T1Rx, and 1+ T2Rx  </span>
 <span class="va">Pathway3T2DMGroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>
   Name <span class="op">=</span> <span class="st">"Pathway3"</span>,
   Description <span class="op">=</span> <span class="st">"1+ T2Dx, 0 T1Rx, and 1+ T2Rx"</span>,
   type <span class="op">=</span> <span class="st">"ALL"</span>,
-  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">atLeast1T2DxCount</span>, <span class="va">noT1RxCount</span>, <span class="va">atLeast1T2RxCount</span><span class="op">)</span>
+  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">atLeast1T2DxCount</span>, <span class="va">noT1RxCount</span>, <span class="va">atLeast1T2RxCount</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="co">#Path 5: 1+ T2Dx, 1+ T1Rx, 0 T2Rx and 2+ T2Dx   </span>
@@ -447,7 +443,7 @@
   Name <span class="op">=</span> <span class="st">"Pathway5"</span>,
   Description <span class="op">=</span> <span class="st">"1+ T2Dx, 1+ T1Rx, 0 T2Rx and 2+ T2Dx"</span>,
   type <span class="op">=</span> <span class="st">"ALL"</span>,
-  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">atLeast1T2DxCount</span>, <span class="va">atLeast1T1RxCount</span>,
+  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">atLeast1T2DxCount</span>, <span class="va">atLeast1T1RxCount</span>,
                       <span class="va">noT2RxCount</span>, <span class="va">atLeast2T2DxCount</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <p>Notice we omitted pathway 4. This is because pathway 4 has a special nested structure: a T2Rx must occur before a T1Rx. To create this nesting within T1Rx query, we require a special correlated criteria attribute. This attribute nests a group within a query, meaning that the query is only valid if the nested group is also true. In this case we want the timeline to be All days before and 1 day before, so that we are only counting T2Rx occuring before the T1Rx. The code chunk below shows how this nested criteria is created:</p>
@@ -467,13 +463,13 @@
   <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>
     Name <span class="op">=</span> <span class="st">"Nested Group T2Rx before T1Rx"</span>,
     type <span class="op">=</span> <span class="st">"ALL"</span>,
-    criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">PriorT2RxCount</span><span class="op">)</span>
+    criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">PriorT2RxCount</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="op">)</span>
 
 <span class="va">T2RxBeforeT1RxCount</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDrugExposure.html">createDrugExposure</a></span><span class="op">(</span>
   conceptSetExpression <span class="op">=</span> <span class="va">T1Rx</span>,
-  attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">PriorT2RxNestedGroup</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  attributeList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">PriorT2RxNestedGroup</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/createCount.html">createCount</a></span><span class="op">(</span>Logic <span class="op">=</span> <span class="st">"at_least"</span>, Count <span class="op">=</span> <span class="fl">1L</span>,
               Timeline <span class="op">=</span> <span class="va">tl1</span><span class="op">)</span></code></pre></div>
 <p>With this nested count in place we can build the 4th pathway, which requires at least 1 T2Dx, at least 1 T1Rx, at least 1 T2Rx, and the T2Rx to occur before the T1Rx.</p>
@@ -483,7 +479,7 @@
   Name <span class="op">=</span> <span class="st">"Pathway4"</span>,
   Description <span class="op">=</span> <span class="st">"1+ T2Dx, 1+ T1Rx, 1+T2Rx, and 1+ T2Rx &lt; T1Rx"</span>,
   type <span class="op">=</span> <span class="st">"ALL"</span>,
-  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">atLeast1T2DxCount</span>, <span class="va">atLeast1T1RxCount</span>,
+  criteriaList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">atLeast1T2DxCount</span>, <span class="va">atLeast1T1RxCount</span>,
                       <span class="va">T2RxBeforeT1RxCount</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <p>Now we create the inclusion rules for this cohort. Based on the original entry set, we further restrict to only contain those that follow a set of rules. The patients only need to be in 1 of any of the pathways, thus the boolean for our group component is “any”.</p>
@@ -492,26 +488,26 @@
 <span class="va">T2DMCase</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createGroup.html">createGroup</a></span><span class="op">(</span>
   Name <span class="op">=</span> <span class="st">"Case for T2DM using algorithm"</span>,
   type <span class="op">=</span> <span class="st">"ANY"</span>,
-  Groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">Pathway1T2DMGroup</span>, <span class="va">Pathway2T2DMGroup</span>, <span class="va">Pathway3T2DMGroup</span>,
+  Groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">Pathway1T2DMGroup</span>, <span class="va">Pathway2T2DMGroup</span>, <span class="va">Pathway3T2DMGroup</span>,
                 <span class="va">Pathway4T2DMGroup</span>, <span class="va">Pathway5T2DMGroup</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="co">#keep T2DM cases if they meet 1 of the 5 pathways</span>
 <span class="va">InclusionRules</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createInclusionRules.html">createInclusionRules</a></span><span class="op">(</span>
   Name <span class="op">=</span> <span class="st">"IRs for T2DM Case Phenotype"</span>,
-  Contents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">T2DMCase</span><span class="op">)</span>,
+  Contents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">T2DMCase</span><span class="op">)</span>,
   Limit <span class="op">=</span> <span class="st">"First"</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div id="finalizing-the-cohort-definition" class="section level2">
-<h2 class="hasAnchor">
-<a href="#finalizing-the-cohort-definition" class="anchor"></a>Finalizing the Cohort Definition</h2>
+<div class="section level2">
+<h2 id="finalizing-the-cohort-definition">Finalizing the Cohort Definition<a class="anchor" aria-label="anchor" href="#finalizing-the-cohort-definition"></a>
+</h2>
 <p>In the cohort definition we have so far captured entry and restriction, but what about exit. A cohort is defined by an entry an exit so that we understand a patient’s time at risk. In this cohort exit may be defined in two parts: end of continuous observation (meaning the last recorded timestamp available) or a censoring event. If the patient were to be diagnosed with Type 1 Diabetes their events are no longer observed since they can not be a valid T2DM case. We can create a censoring criteria based on a query, shown in the code chunk below:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#person exits cohort if there is a diagnosis of T1DM</span>
 <span class="va">CensoringCriteria</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCensoringCriteria.html">createCensoringCriteria</a></span><span class="op">(</span>
   Name <span class="op">=</span> <span class="st">"Censor of T1DM cases"</span>,
-  ComponentList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">T1DxQuery</span><span class="op">)</span>
+  ComponentList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">T1DxQuery</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <p>Now the cohort definition is done, and we can create the full object in Capr as so:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -1769,11 +1765,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Martin Lavallee.</p>
+  <p></p>
+<p>Developed by Martin Lavallee.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -1781,6 +1779,8 @@
 
   
 
+
+  
 
   </body>
 </html>

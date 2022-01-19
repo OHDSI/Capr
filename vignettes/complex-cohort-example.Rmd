@@ -1,8 +1,8 @@
 ---
-title: "complex-cohort-example"
+title: "Creating a Complex Cohort using Capr"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{complex-cohort-example}
+  %\VignetteIndexEntry{Creating a Complex Cohort using Capr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -1,4 +1,4 @@
-# Copyright 2021 Observational Health Data Sciences and Informatics
+# Copyright 2022 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -24,7 +24,9 @@
 #'
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
+#' @param        tempEmulationSchema  Some database platforms like Oracle and Impala do not truly support
+#'                              temp tables. To emulate temp tables, provide a schema with write
+#'                              privileges where temp tables can be created.
 #' @param        conceptIds a vector of concept ids
 #' @param        mapToStandard logic to map to standard OMOP concept
 #' @return       a tibble data frame object with conceptId, conceptName, standardConcept,
@@ -37,7 +39,7 @@ getConceptIdDetails <- function(conceptIds,
                                 connectionDetails = NULL,
                                 connection = NULL,
                                 vocabularyDatabaseSchema = NULL,
-                                oracleTempSchema = NULL,
+                                tempEmulationSchema = NULL,
                                 mapToStandard = TRUE) {
 
   errorMessage <- checkmate::makeAssertCollection()
@@ -59,7 +61,7 @@ getConceptIdDetails <- function(conceptIds,
                                                                sql = conceptQuery,
                                                                snakeCaseToCamelCase = TRUE,
                                                                vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                                                               oracleTempSchema = oracleTempSchema,
+                                                               tempEmulationSchema = tempEmulationSchema,
                                                                conceptId = conceptIds) %>%
     dplyr::tibble()
 
@@ -74,7 +76,7 @@ getConceptIdDetails <- function(conceptIds,
                                                                  sql = mappingQuery,
                                                                  snakeCaseToCamelCase = TRUE,
                                                                  vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                                                                 oracleTempSchema = oracleTempSchema,
+                                                                 tempEmulationSchema = tempEmulationSchema,
                                                                  conceptId = conceptIdToMap,
                                                                  relationship = "Maps to") %>%
       dplyr::tibble()
@@ -89,7 +91,9 @@ getConceptIdDetails <- function(conceptIds,
 #'
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
+#' @param        tempEmulationSchema Some database platforms like Oracle and Impala do not truly support
+#'                              temp tables. To emulate temp tables, provide a schema with write
+#'                              privileges where temp tables can be created.
 #' @param        conceptCode a character vector of concept codes
 #' @param        vocabulary a single character string with the vocabulary of the codes
 #' @param        mapToStandard logic to map to standard OMOP concept
@@ -104,7 +108,7 @@ getConceptCodeDetails <- function(conceptCode,
                                   connectionDetails = NULL,
                                   connection = NULL,
                                   vocabularyDatabaseSchema = NULL,
-                                  oracleTempSchema = NULL,
+                                  tempEmulationSchema = NULL,
                                   mapToStandard = TRUE) {
 
   errorMessage <- checkmate::makeAssertCollection()
@@ -127,7 +131,7 @@ getConceptCodeDetails <- function(conceptCode,
                                                                sql = conceptQuery,
                                                                snakeCaseToCamelCase = TRUE,
                                                                vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                                                               oracleTempSchema = oracleTempSchema,
+                                                               tempEmulationSchema = tempEmulationSchema,
                                                                vocabulary = vocabulary,
                                                                conceptCode = paste(conceptCode, collapse = "','")) %>%
     dplyr::tibble()
@@ -143,7 +147,7 @@ getConceptCodeDetails <- function(conceptCode,
                                                                  sql = mappingQuery,
                                                                  snakeCaseToCamelCase = TRUE,
                                                                  vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                                                                 oracleTempSchema = oracleTempSchema,
+                                                                 tempEmulationSchema = tempEmulationSchema,
                                                                  conceptId = conceptIdToMap,
                                                                  relationship = "Maps to") %>%
       dplyr::tibble()
@@ -163,7 +167,9 @@ getConceptCodeDetails <- function(conceptCode,
 #'
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
+#' @param        tempEmulationSchema Some database platforms like Oracle and Impala do not truly support
+#'                              temp tables. To emulate temp tables, provide a schema with write
+#'                              privileges where temp tables can be created.
 #' @param        keyword a character string used to search OMOP concepts
 #' @param        searchType options to aid search. Can use like match, exact match or any match
 #' @return       a tibble data frame object with conceptId, conceptName, standardConcept,
@@ -177,7 +183,7 @@ lookupKeyword<-function(keyword,
                         connectionDetails = NULL,
                         connection = NULL,
                         vocabularyDatabaseSchema = NULL,
-                        oracleTempSchema = NULL) {
+                        tempEmulationSchema = NULL) {
 
   errorMessage <- checkmate::makeAssertCollection()
   checkmate::assertVector(keyword, add = errorMessage)
@@ -208,7 +214,7 @@ lookupKeyword<-function(keyword,
                                                                sql = conceptQuery,
                                                                snakeCaseToCamelCase = TRUE,
                                                                vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                                                               oracleTempSchema = oracleTempSchema,
+                                                               tempEmulationSchema = tempEmulationSchema,
                                                                keyword = keyword) %>%
     dplyr::tibble()
 

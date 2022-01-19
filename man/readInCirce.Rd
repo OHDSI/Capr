@@ -9,7 +9,6 @@ readInCirce(
   connectionDetails,
   connection = NULL,
   vocabularyDatabaseSchema = NULL,
-  oracleTempSchema = NULL,
   returnHash = FALSE
 )
 }
@@ -30,9 +29,6 @@ of the function, and closed when the function finishes.}
 \item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides. Note that
 for SQL Server, this should include both the database and schema
 name, for example 'vocabulary.dbo'.}
-
-\item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
-privileges for storing temporary tables.}
 
 \item{returnHash}{if true returns a has table with all components necessary to build the
 cohort definition including the cohort definition}
