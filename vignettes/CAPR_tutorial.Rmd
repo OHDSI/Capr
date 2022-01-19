@@ -2,7 +2,7 @@
 title: "Capr Basics Tutorial"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{CAPR_tutorial}
+  %\VignetteIndexEntry{Capr Basics Tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

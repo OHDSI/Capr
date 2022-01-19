@@ -2,7 +2,7 @@
 title: "Using extended cohort attributes in Capr"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Capr_Attributes_Extended}
+  %\VignetteIndexEntry{Using extended cohort attributes in Capr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
