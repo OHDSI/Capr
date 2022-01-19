@@ -57,7 +57,9 @@ loadComponent <- function(path){
 #' This function reads a circe json an builds the cohort definition in an execution space
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
+#' @param tempEmulationSchema   Some database platforms like Oracle and Impala do not truly support
+#'                              temp tables. To emulate temp tables, provide a schema with write
+#'                              privileges where temp tables can be created.
 #' @param jsonPath a path to the file we wish to import
 #' @param returnHash if true returns a has table with all components necessary to build the
 #' cohort definition including the cohort definition
@@ -71,12 +73,12 @@ readInCirce <- function(jsonPath,
                         connectionDetails,
                         connection = NULL,
                         vocabularyDatabaseSchema = NULL,
-                        oracleTempSchema = NULL,
+                        tempEmulationSchema = NULL,
                         returnHash = FALSE){
   cohort <- jsonlite::read_json(jsonPath) #read in json from file path
   dbConnection <- createDatabaseConnectionLang(connectionDetails = connectionDetails,
                                                vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                                               oracleTempSchema = oracleTempSchema)
+                                               tempEmulationSchema = tempEmulationSchema)
   cohortBuild <- getCohortDefinitionCall(cohort)$createCDCall #get the functions needed to build the cohort
   cohortCaller <- getCohortDefinitionCall(cohort)$CohortCall # get the caller function to make final cohort
   cohortBuild <- Filter(Negate(is.null),cohortBuild) #remove null spaces
@@ -91,7 +93,7 @@ readInCirce <- function(jsonPath,
   DatabaseConnector::disconnect(exeEnv$connection) #disconnect
   eval(cohortCaller, envir = exeEnv) #evaluate the cohort Caller in the execution environemnt
   if (returnHash) {
-    rm(connection, connectionDetails, vocabularyDatabaseSchema, oracleTempSchema,
+    rm(connection, connectionDetails, vocabularyDatabaseSchema, tempEmulationSchema,
        envir = exeEnv)
     ret <- exeEnv
   } else {

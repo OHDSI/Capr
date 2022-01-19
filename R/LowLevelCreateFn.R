@@ -143,7 +143,9 @@ createSourceConceptAttribute <- function(Domain,ConceptSetExpression){
 #'  createConceptAttribue
 #' @template     Connection
 #' @template     VocabularyDatabaseSchema
-#' @template     OracleTempSchema
+#' @param        tempEmulationSchema  Some database platforms like Oracle and Impala do not truly support
+#'                              temp tables. To emulate temp tables, provide a schema with write
+#'                              privileges where temp tables can be created.
 #' @param        conceptIds the list of ids to lookup, need OMOP vocabulary connection
 #' @param        mapToStandard whether to map concept ids to standard or leave as is default is TRUE
 #' @param        name name of the ttribute name
@@ -154,7 +156,7 @@ createConceptAttribute <- function(conceptIds,
                                     connectionDetails = NULL,
                                     connection = NULL,
                                     vocabularyDatabaseSchema = NULL,
-                                    oracleTempSchema = NULL,
+                                    tempEmulationSchema = NULL,
                                     mapToStandard = TRUE,
                                     name){
   #get concepts for attribute
@@ -162,7 +164,7 @@ createConceptAttribute <- function(conceptIds,
                                   connectionDetails = connectionDetails,
                                   connection = connection,
                                   vocabularyDatabaseSchema = vocabularyDatabaseSchema,
-                                  oracleTempSchema = oracleTempSchema,
+                                  tempEmulationSchema = tempEmulationSchema,
                                   mapToStandard = mapToStandard)
   concepts$INVALID_REASON_CAPTION <- "Unknown"
   concepts$STANDARD_CONCEPT_CAPTION <- "Unknown"

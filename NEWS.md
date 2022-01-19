@@ -1,3 +1,10 @@
+Capr 1.0.1
+==========
+
+1. Minor edits to documentation   
+2. Replace deprecated oracleTempSchmema with tempEmulationSchema in functions that lookup concepts in the OMOP vocabulary tables  
+
+
 Capr 1.0.0
 ==========
 
