@@ -1,6 +1,6 @@
 # @file PackageMaintenance
 #
-# Copyright 2021 Observational Health Data Sciences and Informatics
+# Copyright 2022 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -27,10 +27,10 @@ devtools::spell_check()
 unlink("extras/Capr.pdf")
 
 # for linux
-system("R CMD Rd2pdf ./ --output=extras/Capr.pdf")
+#system("R CMD Rd2pdf ./ --output=extras/Capr.pdf")
 
 # for windows
-#shell('R CMD Rd2pdf ./ --output=extras/Capr.pdf')
+shell('R CMD Rd2pdf ./ --output=extras/Capr.pdf')
 
 # Capr_tutorial vignette
 dir.create(path = "./inst/doc/", showWarnings = FALSE)
@@ -49,6 +49,14 @@ rmarkdown::render("vignettes/complex-cohort-example.Rmd",
   rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
 unlink("inst/doc/complex-cohort-example.tex")
 
+
+# complex-cohort-example
+dir.create(path = "./inst/doc/", showWarnings = FALSE)
+rmarkdown::render("vignettes/Capr_Attributes_Extended.Rmd",
+                  output_file = "../inst/doc/Capr_Attributes_Extended.pdf",
+
+                  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
+unlink("inst/doc/Capr_Attributes_Extended.tex")
 
 # build site
 pkgdown::build_site()
