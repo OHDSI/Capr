@@ -1,7 +1,7 @@
 Capr
 ====
 
-[![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/<reponame>/actions?query=workflow%3AR-CMD-check)
+[![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/Capr/actions?query=workflow%3AR-CMD-check)
 [![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/Capr?branch=main)
 
 Capr is part of [HADES](https://ohdsi.github.io/Hades).
@@ -29,25 +29,6 @@ Installation
   install.packages("remotes")
   remotes::install_github("ohdsi/Capr")
   ```
-  
-3. Optionally, run this to check if Capr was correctly installed:
-
-  ```r
-  connectionDetails <- createConnectionDetails(dbms="postgresql",
-                                               server="my_server.org",
-                                               user = "joe",
-                                               password = "super_secret")
-
-  checkCmInstallation(connectionDetails)
-  ```
-  
-  Where dbms, server, user, and password need to be changed to the settings for your database environment. Type
-  
-  ```r
-  ?createConnectionDetails
-  ``` 
-  
-  for more details on how to configure your database connection.
 
 
 User Documentation
@@ -57,6 +38,7 @@ Documentation can be found on the [package website](https://ohdsi.github.io/Capr
 PDF versions of the documentation are also available:
 * Vignette: [Capr Tutorial](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Capr_Tutorial.pdf)
 * Vignette: [Capr Complex Cohort Example](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/complex-cohort-example.pdf)
+* Vignette [Using extended cohort attributes in Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Capr_Attributes_Extended.pdf)
 * Package manual: [Capr.pdf](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
 
 Support

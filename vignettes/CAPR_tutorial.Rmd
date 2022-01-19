@@ -1,5 +1,5 @@
 ---
-title: "CAPR_tutorial"
+title: "Capr Basics Tutorial"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{CAPR_tutorial}

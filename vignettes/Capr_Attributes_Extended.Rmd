@@ -1,5 +1,5 @@
 ---
-title: "Capr_Attributes_Extended"
+title: "Using extended cohort attributes in Capr"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Capr_Attributes_Extended}
