@@ -9,7 +9,6 @@ createConceptAttribute(
   connectionDetails = NULL,
   connection = NULL,
   vocabularyDatabaseSchema = NULL,
-  tempEmulationSchema = NULL,
   mapToStandard = TRUE,
   name
 )
@@ -31,10 +30,6 @@ of the function, and closed when the function finishes.}
 \item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides. Note that
 for SQL Server, this should include both the database and schema
 name, for example 'vocabulary.dbo'.}
-
-\item{tempEmulationSchema}{Some database platforms like Oracle and Impala do not truly support
-temp tables. To emulate temp tables, provide a schema with write
-privileges where temp tables can be created.}
 
 \item{mapToStandard}{whether to map concept ids to standard or leave as is default is TRUE}
 

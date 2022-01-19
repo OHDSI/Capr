@@ -4,10 +4,10 @@
 \alias{saveComponent}
 \title{Function to save component}
 \usage{
-saveComponent(x, saveName, savePath = getwd())
+saveComponent(obj, saveName, savePath = getwd())
 }
 \arguments{
-\item{x}{the component you wish to save}
+\item{obj}{the component you wish to save}
 
 \item{saveName}{a name for the function you want to save}
 

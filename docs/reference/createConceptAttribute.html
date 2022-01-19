@@ -45,7 +45,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://ohdsi.github.io/Hades" class="external-link">hadesLogo</a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -71,7 +71,6 @@
   connectionDetails <span class="op">=</span> <span class="cn">NULL</span>,
   connection <span class="op">=</span> <span class="cn">NULL</span>,
   vocabularyDatabaseSchema <span class="op">=</span> <span class="cn">NULL</span>,
-  tempEmulationSchema <span class="op">=</span> <span class="cn">NULL</span>,
   mapToStandard <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">name</span>
 <span class="op">)</span></code></pre></div>
@@ -96,10 +95,6 @@ of the function, and closed when the function finishes.</p></dd>
 <dd><p>Schema name where your OMOP vocabulary format resides. Note that
 for SQL Server, this should include both the database and schema
 name, for example 'vocabulary.dbo'.</p></dd>
-<dt>tempEmulationSchema</dt>
-<dd><p>Some database platforms like Oracle and Impala do not truly support
-temp tables. To emulate temp tables, provide a schema with write
-privileges where temp tables can be created.</p></dd>
 <dt>mapToStandard</dt>
 <dd><p>whether to map concept ids to standard or leave as is default is TRUE</p></dd>
 <dt>name</dt>

@@ -6,8 +6,7 @@
 \usage{
 createDatabaseConnectionLang(
   connectionDetails = NULL,
-  vocabularyDatabaseSchema = NULL,
-  tempEmulationSchema = NULL
+  vocabularyDatabaseSchema = NULL
 )
 }
 \arguments{
@@ -18,10 +17,6 @@ DatabaseConnector package. Can be left NULL which will create dummy credentials}
 \item{vocabularyDatabaseSchema}{Schema name where your OMOP vocabulary format resides. Note that
 for SQL Server, this should include both the database and schema
 name, for example 'vocabulary.dbo'.}
-
-\item{tempEmulationSchema}{Some database platforms like Oracle and Impala do not truly support
-temp tables. To emulate temp tables, provide a schema with write
-privileges where temp tables can be created.}
 }
 \value{
 r language to generate the connection to dbms. Be cautious to not expose credentials

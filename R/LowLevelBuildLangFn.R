@@ -23,14 +23,10 @@
 #'                            \code{\link[DatabaseConnector]{createConnectionDetails}} function in the
 #'                            DatabaseConnector package. Can be left NULL which will create dummy credentials
 #' @template     VocabularyDatabaseSchema
-#' @param tempEmulationSchema   Some database platforms like Oracle and Impala do not truly support
-#'                              temp tables. To emulate temp tables, provide a schema with write
-#'                              privileges where temp tables can be created.
 #' @importFrom rlang call2 sym
 #' @return r language to generate the connection to dbms. Be cautious to not expose credentials
 createDatabaseConnectionLang <- function(connectionDetails = NULL,
-                                         vocabularyDatabaseSchema = NULL,
-                                         tempEmulationSchema = NULL){
+                                         vocabularyDatabaseSchema = NULL){
   #if parameters dbms param is null specify dummy parameters
   if (is.null(connectionDetails)){
     connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "postgresql",
@@ -64,10 +60,12 @@ createDatabaseConnectionLang <- function(connectionDetails = NULL,
   vdsLang <- rlang::call2("<-",
                           rlang::sym("vocabularyDatabaseSchema"),
                           vocabularyDatabaseSchema)
-  otsLang <- rlang::call2("<-",
-                          rlang::sym("tempEmulationSchema"),
-                          tempEmulationSchema)
-  connLang <- list(connectionDetailsLang, vdsLang, otsLang, connectLang)
+  # otsLang <- rlang::call2("<-",
+  #                         rlang::sym("tempEmulationSchema"),
+  #                         tempEmulationSchema)
+  connLang <- list(connectionDetailsLang, vdsLang,
+                   #otsLang,
+                   connectLang)
   return(connLang)
 
 
@@ -125,13 +123,13 @@ getConceptSetCall <- function(x){
     mapping <- rlang::sym(paste0("conceptMapping",oid[i])) #set the mapping objects
     connection <- rlang::sym("connection")
     vocabularyDatabaseSchema <- rlang::sym("vocabularyDatabaseSchema")
-    tempEmulationSchema <- rlang::sym("tempEmulationSchema")
+    #tempEmulationSchema <- rlang::sym("tempEmulationSchema")
     #create a temporary expression for the function. bang bang (!!) the object calls into the fexpression
     tmp <- rlang::expr(getConceptIdDetails(conceptIds = !!cid,
                                            connection = !!connection,
                                            connectionDetails = NULL,
                                            vocabularyDatabaseSchema = !!vocabularyDatabaseSchema,
-                                           tempEmulationSchema = !!tempEmulationSchema,
+                                           #tempEmulationSchema = !!tempEmulationSchema,
                                            mapToStandard = FALSE) %>%
                          createConceptSetExpressionCustom(Name = !!nm,conceptMapping = !!mapping))
     #create the assignments for each of the conecept Sets
@@ -252,7 +250,7 @@ createAttributeCall <- function(x,objNm){
                               connectionDetails = NULL,
                               connection = rlang::sym("connection"),
                               vocabularyDatabaseSchema = rlang::sym("vocabularyDatabaseSchema"),
-                              tempEmulationSchema = rlang::sym("tempEmulationSchema"),
+                              #tempEmulationSchema = rlang::sym("tempEmulationSchema"),
                               mapToStandard = rlang::expr(FALSE)) #create the concept attribute call wapper
       jj[[i]] <- rlang::call2("<-", rlang::sym(paste0("att",objNm,"_",i)), jj[[i]])
       next
@@ -547,7 +545,7 @@ getIRSCall <- function(x){
   expLimit <- x$ExpressionLimit$Type #extract the expression limit
   NameforComponent <-"cohortInclusionRules" #make a name for the inclusion rules
   irsLang <- rlang::call2("createInclusionRules", # make the create Inclusion Rules call
-                  Name =NameforComponent, #add the name for the component
+                  Name = NameforComponent, #add the name for the component
                   Contents = irsNm, #add the list of inclusion rules used to build the object
                   Limit = expLimit) #include the expression limit
 
