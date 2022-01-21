@@ -14,6 +14,8 @@ Description: The CAPR package develops cohort definitions to implement across an
     definition in order to combine Concept Set Expressions with its definition logic in the same position, facilitating the 
     transition between scientific description and computational implmentation. 
 License: Apache License 2.0
+URL: https://ohdsi.github.io/Capr, https://github.com/OHDSI/Capr
+BugReports: https://github.com/OHDSI/Capr/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
