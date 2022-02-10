@@ -1,3 +1,11 @@
+Capr 1.0.2
+==========
+
+1. Fix Hades and github logo on package down site   
+2. Fix links to access vignettes from README
+3. Other minor changes to prep for PhenotypePheburary
+
+
 Capr 1.0.1
 ==========
 
