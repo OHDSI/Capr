@@ -551,10 +551,7 @@ setMethod("show", "ConceptSetItem", function(object) {
 setClass("ConceptSetExpression",
          slots = c(id = "character",
                    Name = "character",
-                   Expression = "list"),
-         prototype = list(id = uuid::UUIDgenerate(),
-                          Name = NA_character_,
-                          Expression = list()))
+                   Expression = "list"))
 
 setValidity("ConceptSetExpression", function(object) {
   # TODO create validation rules for ConceptSetExpression

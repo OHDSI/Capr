@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.3</span>
       </span>
     </div>
 
@@ -49,7 +49,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -103,19 +103,30 @@
 <div class="section level1">
 <h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h1>
-<p>Capr is an R package to develop and manipulate OHDSI cohort definitions. This package assists in creating a cohort definition that can be compiled by circe-be using CirceR. Cohort definitions developed in Capr are compatible with OHDSI ATLAS. Additionally the package allows for development of cohort design components, sub-items of a cohort design that are meant to be reusable and mutable to assist creating cohorts in study development.</p>
+<p>Capr is an R package to develop and manipulate OHDSI cohort
+definitions. This package assists in creating a cohort definition that
+can be compiled by circe-be using CirceR. Cohort definitions developed
+in Capr are compatible with OHDSI ATLAS. Additionally the package allows
+for development of cohort design components, sub-items of a cohort
+design that are meant to be reusable and mutable to assist creating
+cohorts in study development.</p>
 </div>
 <div class="section level1">
 <h1 id="system-requirements">System Requirements<a class="anchor" aria-label="anchor" href="#system-requirements"></a>
 </h1>
-<p>Requires R (version 3.6.0 or higher). Installation on Windows requires <a href="http://cran.r-project.org/bin/windows/Rtools/" class="external-link">RTools</a>. Libraries used in Capr require Java. Capr requires a connection to an OMOP vocabulary database to query concepts.</p>
+<p>Requires R (version 3.6.0 or higher). Installation on Windows
+requires <a href="http://cran.r-project.org/bin/windows/Rtools/" class="external-link">RTools</a>.
+Libraries used in Capr require Java. Capr requires a connection to an
+OMOP vocabulary database to query concepts.</p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
 <ol style="list-style-type: decimal">
-<li><p>See the instructions <a href="https://ohdsi.github.io/Hades/rSetup.html" class="external-link">here</a> for configuring your R environment, including RTools and Java.</p></li>
-<li><p>In R, use the following commands to download and install Capr:</p></li>
+<li><p>See the instructions <a href="https://ohdsi.github.io/Hades/rSetup.html" class="external-link">here</a> for
+configuring your R environment, including RTools and Java.</p></li>
+<li><p>In R, use the following commands to download and install
+Capr:</p></li>
 </ol>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
@@ -125,21 +136,27 @@
 <h1 id="user-documentation">User Documentation<a class="anchor" aria-label="anchor" href="#user-documentation"></a>
 </h1>
 <p>Documentation can be found on the <a href="https://ohdsi.github.io/Capr" class="external-link">package website</a>.</p>
-<p>PDF versions of the documentation are also available: * Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Capr_Tutorial.pdf" class="external-link">Capr Tutorial</a> * Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/complex-cohort-example.pdf" class="external-link">Capr Complex Cohort Example</a> * Vignette <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Capr_Attributes_Extended.pdf" class="external-link">Using extended cohort attributes in Capr</a> * Package manual: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf" class="external-link">Capr.pdf</a></p>
+<p>PDF versions of the documentation are also available: * Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Capr_Tutorial.pdf" class="external-link">Capr
+Tutorial</a> * Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/complex-cohort-example.pdf" class="external-link">Capr
+Complex Cohort Example</a> * Vignette <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Capr_Attributes_Extended.pdf" class="external-link">Using
+extended cohort attributes in Capr</a> * Package manual: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf" class="external-link">Capr.pdf</a></p>
 </div>
 <div class="section level1">
 <h1 id="support">Support<a class="anchor" aria-label="anchor" href="#support"></a>
 </h1>
 <ul>
-<li>Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers" class="external-link">OHDSI Forum</a>
+<li>Developer questions/comments/feedback:
+<a href="http://forums.ohdsi.org/c/developers" class="external-link">OHDSI Forum</a>
 </li>
-<li>We use the <a href="https://github.com/OHDSI/Capr/issues" class="external-link">GitHub issue tracker</a> for all bugs/issues/enhancements</li>
+<li>We use the <a href="https://github.com/OHDSI/Capr/issues" class="external-link">GitHub
+issue tracker</a> for all bugs/issues/enhancements</li>
 </ul>
 </div>
 <div class="section level1">
 <h1 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
 </h1>
-<p>Read <a href="https://ohdsi.github.io/Hades/contribute.html" class="external-link">here</a> how you can contribute to this package.</p>
+<p>Read <a href="https://ohdsi.github.io/Hades/contribute.html" class="external-link">here</a>
+how you can contribute to this package.</p>
 </div>
 <div class="section level1">
 <h1 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
@@ -205,7 +222,8 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
