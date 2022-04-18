@@ -182,4 +182,52 @@ compileCohortDefinition <- function(CohortDefinition, generateOptions = NULL){
 }
 
 
+########------Create Cohort Dataframe for generation------------#################
+
+#' Create a dataframe that can be used by cohort generator to build cohorts into backend table
+#'
+#' This function converts a list of Cohort definitions into a dataframe that can be used by cohort
+#' generator and cohort diagnostics to build and evaluate cohorts. The dataframe returns an atlasId column and
+#' a cohortId column which are equivalent. Further it creates a column for the ohdisql, json, read and name of
+#' cohort.
+#'
+#' @param cohortList a list of cohorts to turn into a dataframe
+#' @param generateStats select true if you want inclusion rule stats or false for no stats
+#' @importFrom CirceR createGenerateOptions
+#' @importFrom purrr map_chr
+#' @return A data frame of cohort definitions containing meta data
+#' @export
+createCohortDataframe <- function(cohortList, generateStats = TRUE) {
+
+  check <- purrr::map_chr(cohortList, ~methods::is(.x))
+
+  if(!all(check == "CohortDefinition")) {
+    stop("all cohorts need to be a Capr CohortDefinition class")
+  }
+
+  # get cohort names
+  cohortName <-purrr::map_chr(cohortList, ~slot(slot(.x, "CohortDetails"), "Name"))
+
+  #set basic genops for CirceR
+  genOp <- CirceR::createGenerateOptions(generateStats = generateStats)
+
+  #get the info from compiler
+  cohortInfo <- purrr::map(cohortList, ~compileCohortDefinition(.x,
+                                                                generateOptions = genOp))
+
+  #get each element from compile
+  cohortSql <- purrr::map_chr(cohortInfo, ~getElement(.x, "ohdiSQL"))
+  cohortJson <- purrr::map_chr(cohortInfo, ~getElement(.x, "circeJson"))
+  cohortRead <- purrr::map_chr(cohortInfo, ~getElement(.x, "cohortRead"))
+
+
+  #create Data frame
+  df <- data.frame('atlasId' = seq_along(cohortList),
+                   'cohortId' = seq_along(cohortList),
+                   'cohortName'= cohortName,
+                   'sql'= cohortSql,
+                   'json' = cohortJson,
+                   'read' = cohortRead)
+  return(df)
+}
 

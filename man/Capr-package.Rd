@@ -8,6 +8,15 @@
 \description{
 The CAPR package develops cohort definitions to implement across an OMOP mapped dbms. This pacakge allows allows for the programmatic creation of OMOP cohorts that compile to the CIRCE-BE engine. CAPR utilizes s4 to construct component parts to the cohort definition (i.e. Primary Criteria, Inclusion Rules, Additional Criteria, Censoring Criteria, and End Strategy) and then packs them together into a Cohort Definition class. The Cohort Definition can be rendered into a CIRCE-BE object that will generate ohdsiSQL to query against an OMOP dbms. CAPR adds component parts to the OMOP cohort definition in order to combine Concept Set Expressions with its definition logic in the same position, facilitating the transition between scientific description and computational implmentation.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://ohdsi.github.io/Capr}
+  \item \url{https://github.com/OHDSI/Capr}
+  \item Report bugs at \url{https://github.com/OHDSI/Capr/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Martin Lavallee \email{mdlavallee92@gmail.com}
 

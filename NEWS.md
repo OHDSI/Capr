@@ -1,3 +1,10 @@
+Capr 1.0.3
+==========
+
+1. Fix bug in guid generation...did not create unique guid each time
+2. Add function to create cohort data frame for CohortGenerator and CohortDiagnostics
+3. Fix pdf documentation in readme
+
 Capr 1.0.2
 ==========
 
