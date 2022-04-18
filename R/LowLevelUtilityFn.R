@@ -166,7 +166,7 @@ removeDupCSE <- function(cse){
     }#end duplication check
   }#end for loop
   #discard any concept set expressions not needed
-  cse <- purrr::discard(cse,function(x) is(x)[1] != "ConceptSetExpression")
+  cse <- purrr::discard(cse, function(x) is(x)[1] != "ConceptSetExpression")
   return(cse)
 }
 
