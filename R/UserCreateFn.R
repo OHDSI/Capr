@@ -182,8 +182,9 @@ createConceptSetExpression <- function(conceptSet, Name, includeDescendants =TRU
                                    includeMapped = includeMapped)
   #create the a new concept set expression from the concept set, this also sets the guid concept id
   cse <- new("ConceptSetExpression", Name = Name,
-             Expression = concepts,
-             id = uuid::UUIDgenerate())
+             Expression = concepts)
+  #create guid for new cse
+  cse@id <- uuid::UUIDgenerate()
 
 
   #attach the concept set expressions to a component class object
@@ -309,7 +310,10 @@ createConceptSetExpressionCustom <- function(conceptSet, Name, conceptMapping = 
     }
   }
   #create the a new concept set expression from the concept set, this also sets the guid concept id
-  cse <- new("ConceptSetExpression", Name = Name, Expression = concepts)
+  cse <- new("ConceptSetExpression", Name = Name,
+             Expression = concepts)
+  #create guid for new cse
+  cse@id <- uuid::UUIDgenerate()
 
   #attach the concept set expressions to a component class object
   comp <- createComponent(Name = Name,

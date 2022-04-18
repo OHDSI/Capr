@@ -193,7 +193,7 @@ compileCohortDefinition <- function(CohortDefinition, generateOptions = NULL){
 #'
 #' @param cohortList a list of cohorts to turn into a dataframe
 #' @param generateStats select true if you want inclusion rule stats or false for no stats
-#' @importFrom CirceR ccreateGenerateOptions
+#' @importFrom CirceR createGenerateOptions
 #' @importFrom purrr map_chr
 #' @return A data frame of cohort definitions containing meta data
 #' @export
