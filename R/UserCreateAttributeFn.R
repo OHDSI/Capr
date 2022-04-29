@@ -260,22 +260,22 @@ createPeriodEndDateAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the age
-#' @param Extent an integer for the age only used if the op is bt or !bt
+#' @param Value a numeric for the age
+#' @param Extent a numeric for the age only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createAgeAttribute <- function(Op, Value, Extent = NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "Age", #create op attribute with domain already set up
@@ -290,22 +290,22 @@ createAgeAttribute <- function(Op, Value, Extent = NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the EraLength
-#' @param Extent an integer for the EraLength only used if the op is bt or !bt
+#' @param Value a numeric for the EraLength
+#' @param Extent a numeric for the EraLength only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createEraLengthAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "EraLength", #create op attribute with domain already set up
@@ -320,22 +320,22 @@ createEraLengthAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the AgeAtStart
-#' @param Extent an integer for the AgeAtStart only used if the op is bt or !bt
+#' @param Value a numeric for the AgeAtStart
+#' @param Extent a numeric for the AgeAtStart only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createAgeAtStartAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "AgeAtStart", #create op attribute with domain already set up
@@ -350,22 +350,22 @@ createAgeAtStartAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the AgeAtEnd
-#' @param Extent an integer for the AgeAtEnd only used if the op is bt or !bt
+#' @param Value a numeric for the AgeAtEnd
+#' @param Extent a numeric for the AgeAtEnd only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createAgeAtEndAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "AgeAtEnd", #create op attribute with domain already set up
@@ -380,22 +380,22 @@ createAgeAtEndAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the GapDays
-#' @param Extent an integer for the GapDays only used if the op is bt or !bt
+#' @param Value a numeric for the GapDays
+#' @param Extent a numeric for the GapDays only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createGapDaysAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "GapDays", #create op attribute with domain already set up
@@ -410,22 +410,22 @@ createGapDaysAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the Refills
-#' @param Extent an integer for the Refills only used if the op is bt or !bt
+#' @param Value a numeric for the Refills
+#' @param Extent a numeric for the Refills only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createRefillsAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "Refills", #create op attribute with domain already set up
@@ -440,22 +440,22 @@ createRefillsAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the Quantity
-#' @param Extent an integer for the Quantity only used if the op is bt or !bt
+#' @param Value a numeric for the Quantity
+#' @param Extent a numeric for the Quantity only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createQuantityAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "Quantity", #create op attribute with domain already set up
@@ -470,22 +470,22 @@ createQuantityAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the DaysSupply
-#' @param Extent an integer for the DaysSupply only used if the op is bt or !bt
+#' @param Value a numeric for the DaysSupply
+#' @param Extent a numeric for the DaysSupply only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createDaysSupplyAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "DaysSupply", #create op attribute with domain already set up
@@ -500,22 +500,22 @@ createDaysSupplyAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the EffectiveDrugDose
-#' @param Extent an integer for the EffectiveDrugDose only used if the op is bt or !bt
+#' @param Value a numeric for the EffectiveDrugDose
+#' @param Extent a numeric for the EffectiveDrugDose only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createEffectiveDrugDoseAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "EffectiveDrugDose", #create op attribute with domain already set up
@@ -530,22 +530,22 @@ createEffectiveDrugDoseAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the ValueAsNumber
-#' @param Extent an integer for the ValueAsNumber only used if the op is bt or !bt
+#' @param Value a numeric for the ValueAsNumber
+#' @param Extent a numeric for the ValueAsNumber only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createValueAsNumberAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "ValueAsNumber", #create op attribute with domain already set up
@@ -560,22 +560,22 @@ createValueAsNumberAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the RangeLow
-#' @param Extent an integer for the RangeLow only used if the op is bt or !bt
+#' @param Value a numeric for the RangeLow
+#' @param Extent a numeric for the RangeLow only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createRangeLowAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "RangeLow", #create op attribute with domain already set up
@@ -590,22 +590,22 @@ createRangeLowAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the RangeHigh
-#' @param Extent an integer for the RangeHigh only used if the op is bt or !bt
+#' @param Value a numeric for the RangeHigh
+#' @param Extent a numeric for the RangeHigh only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createRangeHighAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "RangeHigh", #create op attribute with domain already set up
@@ -620,22 +620,22 @@ createRangeHighAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the RangeHighRatio
-#' @param Extent an integer for the RangeHighRatio only used if the op is bt or !bt
+#' @param Value a numeric for the RangeHighRatio
+#' @param Extent a numeric for the RangeHighRatio only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createRangeHighRatioAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "RangeHighRatio", #create op attribute with domain already set up
@@ -650,22 +650,22 @@ createRangeHighRatioAttribute <- function(Op, Value, Extent=NULL){
 #' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
 #' only used if the op is bt or !bt.
 #' @param Op defines logic for interpreting the numeric or date value.
-#' @param Value an integer for the RangeLowRatio
-#' @param Extent an integer for the RangeLowRatio only used if the op is bt or !bt
+#' @param Value a numeric for the RangeLowRatio
+#' @param Extent a numeric for the RangeLowRatio only used if the op is bt or !bt
 #' @include LowLevelCreateFn.R
 #' @return a component of attribute class
 #' @export
 createRangeLowRatioAttribute <- function(Op, Value, Extent=NULL){
   Op <- mapOperator(Op) #map operator to handle multiple inputs
-  if (!is.integer(Value)){ #error handler for character date string
-    Value <- as.integer(Value)
+  if (!is.numeric(Value)){ #error handler for character date string
+    Value <- as.numeric(Value)
   }
   if (!is.null(Extent)){ #error handler for not null extent
     if (!grepl("bt", Op)){ #error handler for bt and !bt
       stop("Extent can only be used for bt and !bt")
     }
-    if (!is.integer(Extent)){ #error handler for character date string or null
-      Extent <- as.integer(Extent)
+    if (!is.numeric(Extent)){ #error handler for character date string or null
+      Extent <- as.numeric(Extent)
     }
   }
   createOpAttribute(Name = "RangeLowRatio", #create op attribute with domain already set up

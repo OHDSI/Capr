@@ -9,9 +9,9 @@ createRangeLowRatioAttribute(Op, Value, Extent = NULL)
 \arguments{
 \item{Op}{defines logic for interpreting the numeric or date value.}
 
-\item{Value}{an integer for the RangeLowRatio}
+\item{Value}{a numeric for the RangeLowRatio}
 
-\item{Extent}{an integer for the RangeLowRatio only used if the op is bt or !bt}
+\item{Extent}{a numeric for the RangeLowRatio only used if the op is bt or !bt}
 }
 \value{
 a component of attribute class

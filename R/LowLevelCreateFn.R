@@ -106,7 +106,7 @@ createOpAttribute <- function(Name, Op, Value, Extent = NULL){
   if (grepl("Date", Name)) {
     Contents <- lapply(Contents, as.character)
   } else{
-    Contents <- lapply(Contents, as.integer)
+    Contents <- lapply(Contents, as.numeric)
   }
 
   att <- new("OpAttribute",
