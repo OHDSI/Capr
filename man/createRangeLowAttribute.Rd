@@ -9,9 +9,9 @@ createRangeLowAttribute(Op, Value, Extent = NULL)
 \arguments{
 \item{Op}{defines logic for interpreting the numeric or date value.}
 
-\item{Value}{an integer for the RangeLow}
+\item{Value}{a numeric for the RangeLow}
 
-\item{Extent}{an integer for the RangeLow only used if the op is bt or !bt}
+\item{Extent}{a numeric for the RangeLow only used if the op is bt or !bt}
 }
 \value{
 a component of attribute class

@@ -9,9 +9,9 @@ createAgeAttribute(Op, Value, Extent = NULL)
 \arguments{
 \item{Op}{defines logic for interpreting the numeric or date value.}
 
-\item{Value}{an integer for the age}
+\item{Value}{a numeric for the age}
 
-\item{Extent}{an integer for the age only used if the op is bt or !bt}
+\item{Extent}{a numeric for the age only used if the op is bt or !bt}
 }
 \value{
 a component of attribute class
