@@ -1,3 +1,9 @@
+Capr 1.0.4
+==========
+1. Bug Fixes
+  - allow for numeric attributes stop automatic integer coersion
+  - allow for death query without CSE in Censoring and Primary Criteria
+
 Capr 1.0.3
 ==========
 

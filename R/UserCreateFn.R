@@ -560,7 +560,16 @@ createPrimaryCriteria <- function(Name,
     stop("All inputs in a Component list must be of Component class")
   }
   cl <- lapply(ComponentList, function(x) x@CriteriaExpression[[1]])
-  cse <- lapply(ComponentList, function(x) x@ConceptSetExpression[[1]])
+
+  #modification to handle Death query
+  cse <- vector('list', length = length(ComponentList))
+  for (i in seq_along(ComponentList)) {
+    if (cl[[i]]@Domain == "Death") {
+      cse[[i]] <- NULL
+    } else{
+      cse[[i]] <- ComponentList[[i]]@ConceptSetExpression[[1]]
+    }
+  }
   pc <- createComponent(Name = Name,
                                 Description = Description,
                                 ComponentType = "PrimaryCriteria",
@@ -661,7 +670,17 @@ createCensoringCriteria <- function(Name, ComponentList, Description = NULL){
     stop("All inputs in a Component list must be of Component class")
   }
   cl <- lapply(ComponentList, function(x) x@CriteriaExpression[[1]])
-  cse <- lapply(ComponentList, function(x) x@ConceptSetExpression[[1]])
+
+  #modification to handle Death query
+  cse <- vector('list', length = length(ComponentList))
+  for (i in seq_along(ComponentList)) {
+    if (cl[[i]]@Domain == "Death") {
+      cse[[i]] <- NULL
+    } else{
+      cse[[i]] <- ComponentList[[i]]@ConceptSetExpression[[1]]
+    }
+  }
+
   cen <- createComponent(Name = Name,
                          Description = Description,
                          ComponentType = "CensoringCriteria",
