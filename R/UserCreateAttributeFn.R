@@ -674,6 +674,36 @@ createRangeLowRatioAttribute <- function(Op, Value, Extent=NULL){
                     Extent = Extent) #if between or not between determin extent
 }
 
+#' create VisitLength Attribute
+#'
+#' This function creates an Operator attribute for person VisitLength. The user selects the type of
+#' operator, value which is the minimal bound and extent which is the end point of a between bound. Extent is
+#' only used if the op is bt or !bt.
+#' @param Op defines logic for interpreting the numeric or date value.
+#' @param Value an integer for the RangeLowRatio
+#' @param Extent an integer for the RangeLowRatio only used if the op is bt or !bt
+#' @include LowLevelCreateFn.R
+#' @return a component of attribute class
+#' @export
+createVisitLengthAttribute <- function(Op, Value, Extent=NULL){
+  Op <- mapOperator(Op) #map operator to handle multiple inputs
+  if (!is.integer(Value)){ #error handler for character date string
+    Value <- as.integer(Value)
+  }
+  if (!is.null(Extent)){ #error handler for not null extent
+    if (!grepl("bt", Op)){ #error handler for bt and !bt
+      stop("Extent can only be used for bt and !bt")
+    }
+    if (!is.integer(Extent)){ #error handler for character date string or null
+      Extent <- as.integer(Extent)
+    }
+  }
+  createOpAttribute(Name = "VisitLength", #create op attribute with domain already set up
+                    Op = Op, #determin the operator
+                    Value = Value, #add the value
+                    Extent = Extent) #if between or not between determin extent
+}
+
 ##########----------------createConceptAttributes-------------################
 #' create condition source concept
 #'
