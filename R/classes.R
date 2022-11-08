@@ -1,3 +1,24 @@
+# Helpers ---------------------------
+setClass("ObservationWindow",
+         slots = c(priorDays = "integer",
+                   postDays = "integer"),
+         prototype = list(
+           priorDays = 0L,
+           postDays = 0L
+         )
+)
+
+setClass("Occurrence",
+         slots = c(
+           type = "character",
+           count = "integer"
+         ),
+         prototype = list(
+           type = NA_character_,
+           count = NA_integer_
+         )
+)
+
 # Concept Classes ---------------------------------
 
 setClass("Concept",
@@ -62,6 +83,67 @@ setClass("Query",
          )
 )
 
+setClass("Count",
+         slots = c(
+           query = 'Query',
+           window = 'Window',
+           occurrence = 'Occurrence'),
+         prototype = list(
+           query = new("Query"),
+           window = new("Window"),
+           occurrence = new("Occurrence")
+         )
+)
+
+
+setClass("Group",
+         slots = c(
+           occurrence = 'Occurrence',
+           criteria = 'list',
+           group = 'list'),
+         prototype = list(
+           occurrence = new("Occurrence"),
+           criteria = list(),
+           group = list()
+         )
+)
+
+# Cohort Classes -------------------------------
+
+setClass("CohortEntry",
+         slot = c(
+           entryEvents = "list",
+           observationWindow = "ObservationWindow",
+           primaryCriteriaLimit = "character",
+           additionalCriteria = "Group",
+           qualifiedLimit = "character"
+         ),
+         prototype = list(
+           entryEvents = list(),
+           observationWindow = new("ObservationWindow"),
+           primaryCriteriaLimit = "First",
+           additionalCriteria = new("Group"),
+           qualifiedLimit = "First"
+         )
+)
+
+
+setClass("Cohort",
+         slot = c(
+           entry = "list",
+           ir = "list",
+           exit = "list",
+           era = "list"
+         ),
+         prototype = list(
+           entry = list(),
+           ir = list(),
+           exit = list(),
+           era = list()
+         )
+)
+
+
 # Attribute Classes -----------------------------
 
 setClass("conceptAttribute",
@@ -89,3 +171,5 @@ setClass("opAttribute",
            extent = NA_integer_
          )
 )
+
+
