@@ -15,7 +15,7 @@ setClass("Concept",
            isExcluded = "logical"
          ),
          prototype = list(
-           concept = NA_integer_,
+           conceptId = NA_integer_,
            conceptName = NA_character_,
            standardConcept = NA_character_,
            standardConceptCaption = NA_character_,
@@ -33,7 +33,7 @@ setClass("Concept",
 
 
 
-setClass("ConceptSetExpression",
+setClass("ConceptSet",
          slot = c(
            id = "character",
            name = "character",
@@ -50,12 +50,12 @@ setClass("ConceptSetExpression",
 setClass("Query",
          slot = c(
            domain = "character",
-           cse = "ConceptSetExpression",
+           conceptSet = "ConceptSet",
            attributes = "list"
          ),
          prototype = list(
            domain = NA_character_,
-           cse = new("ConceptSetExpression"),
+           conceptSet = new("ConceptSet"),
            attributes = list()
          )
 )
