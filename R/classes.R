@@ -127,19 +127,42 @@ setClass("CohortEntry",
          )
 )
 
+setClass("CohortExit",
+         slot = c(
+           endStrategy = "list",
+           censor = "list"
+         ),
+         prototype = list(
+           endStrategy = list('type' = "end of continuous observation"),
+           censor = list()
+         )
+)
+
+
+setClass("CohortEra",
+         slots = c(
+           era_pad = "integer",
+           start_date = "Date",
+           end_date = "Date"
+         ),
+         prototype = list(
+           era_pad = 0L,
+           start_date = lubridate::date("1970-01-01"),
+           end_date = lubridate::date("2099-12-31")
+         ))
 
 setClass("Cohort",
          slot = c(
-           entry = "list",
+           entry = "CohortEntry",
            ir = "list",
-           exit = "list",
-           era = "list"
+           exit = "CohortExit",
+           era = "CohortEra"
          ),
          prototype = list(
-           entry = list(),
+           entry = new("CohortEntry"),
            ir = list(),
-           exit = list(),
-           era = list()
+           exit = new("CohortExit"),
+           era = new("CohortEra")
          )
 )
 

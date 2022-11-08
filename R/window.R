@@ -2,7 +2,7 @@ observeWindow <- function(priorDays = 0L,
                           postDays = 0L) {
 
   new("ObservationWindow",
-      priorDays = priorDays,
-      postDays = postDays)
+      priorDays = as.integer(priorDays),
+      postDays = as.integer(postDays))
 
 }
