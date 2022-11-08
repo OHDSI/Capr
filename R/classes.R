@@ -1,3 +1,5 @@
+# Concept Classes ---------------------------------
+
 setClass("Concept",
          slot = c(
            conceptId = "integer",
@@ -46,7 +48,7 @@ setClass("ConceptSet",
          )
 )
 
-
+# Circe Classes --------------------------------------
 setClass("Query",
          slot = c(
            domain = "character",
@@ -57,5 +59,33 @@ setClass("Query",
            domain = NA_character_,
            conceptSet = new("ConceptSet"),
            attributes = list()
+         )
+)
+
+# Attribute Classes -----------------------------
+
+setClass("conceptAttribute",
+         slot = c(
+           name = "character",
+           conceptSet = "list"
+         ),
+         prototype = list(
+           name = NA_character_,
+           conceptSet = list()
+         )
+)
+
+setClass("opAttribute",
+         slot = c(
+           name = "character",
+           op = "character",
+           value = "integer",
+           extent = "integer"
+         ),
+         prototype = list(
+           name = NA_character_,
+           op = NA_character_,
+           value = NA_integer_,
+           extent = NA_integer_
          )
 )

@@ -5,3 +5,4 @@ errorReportSql.txt
 *.log
 /Meta/
 work/*
+scratch/
