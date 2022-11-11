@@ -83,17 +83,17 @@ setClass("Query",
          )
 )
 
-setClass("Count",
-         slots = c(
-           query = 'Query',
-           window = 'Window',
-           occurrence = 'Occurrence'),
-         prototype = list(
-           query = new("Query"),
-           window = new("Window"),
-           occurrence = new("Occurrence")
-         )
-)
+# setClass("Count",
+#          slots = c(
+#            query = 'Query',
+#            window = 'Window',
+#            occurrence = 'Occurrence'),
+#          prototype = list(
+#            query = new("Query"),
+#            window = new("Window"),
+#            occurrence = new("Occurrence")
+#          )
+# )
 
 
 setClass("Group",

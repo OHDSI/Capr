@@ -14,7 +14,7 @@ query <- function(domain, conceptSet, ...) {
 
 conditionOccurrence <- function(conceptSet, ...) {
 
-  query(domain = "ConditionOccurrence",
+  query(domain = "conditionOccurrence",
         conceptSet = conceptSet,
         ...)
 
@@ -22,7 +22,7 @@ conditionOccurrence <- function(conceptSet, ...) {
 
 drugExposure <- function(conceptSet, ...) {
 
-  query(domain = "DrugExposure",
+  query(domain = "drugExposure",
         conceptSet = conceptSet,
         ...)
 
@@ -30,7 +30,7 @@ drugExposure <- function(conceptSet, ...) {
 
 measurement <- function(conceptSet, ...) {
 
-  query(domain = "Measurement",
+  query(domain = "measurement",
         conceptSet = conceptSet,
         ...)
 
@@ -38,7 +38,7 @@ measurement <- function(conceptSet, ...) {
 
 procedureOccurrence <- function(conceptSet, ...) {
 
-  query(domain = "ProcedureOccurrence",
+  query(domain = "procedureOccurrence",
         conceptSet = conceptSet,
         ...)
 
