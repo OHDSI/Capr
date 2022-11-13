@@ -1,5 +1,5 @@
 
-# Circe ConceptSet classes ------------------------------------------
+# Concept set related classes ------------------------------------------
 
 #' An S4 class for a single OMOP Concept
 #'
@@ -191,6 +191,12 @@ cs <- function(..., name = "", id = NULL) {
     }
   })
 
+  ids <- purrr::map_int(conceptList, ~.@Concept@concept_id)
+  dups <- ids[duplicated(ids)]
+  if (length(dups) > 0)
+    rlang::abort(paste("ID: ", paste(dups, collapse = ", "), " are duplicated in the concept set."))
+  # TODO decide how to handle duplicate ids in `cs`
+
   if (is.null(id)) id <- as.character(uuid::UUIDgenerate())
 
   methods::new("ConceptSet",
@@ -216,7 +222,7 @@ exclude <- function(...) {
 
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
-      return(newConcept(x))
+      return(newConcept(x, isExcluded = TRUE))
     } else if (is(x, "ConceptSetItem")) {
       x@isExcluded <- TRUE
       return(x)
@@ -239,7 +245,7 @@ mapped <- function(...) {
 
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
-      return(newConcept(x))
+      return(newConcept(x, includeMapped = TRUE))
     } else if (is(x, "ConceptSetItem")) {
       x@includeMapped <- TRUE
       return(x)
@@ -262,7 +268,7 @@ descendants <- function(...) {
 
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
-      return(newConcept(x))
+      return(newConcept(x, includeDescendants = TRUE))
     } else if (is(x, "ConceptSetItem")) {
       x@includeDescendants <- TRUE
       return(x)
@@ -285,6 +291,119 @@ as.data.frame.ConceptSet <- function(x) {
   )
 }
 
+setMethod("as.list", "Concept", function(x){
+  nm <- methods::slotNames(methods::is(x))
+  concept <- lapply(nm, slot, object = x)
+  # Convert NA_character to empty string
+  concept <- lapply(concept, function(.) ifelse(is.character(.) && is.na(.), "", .))
+  names(concept) <- toupper(nm)
+  return(concept)
+})
+
+# as.list(x@Expression[[1]]@Concept)
+
+setMethod("as.list", "ConceptSetItem", function(x){
+  list('concept' = as.list(x@Concept),
+       'isExcluded' = x@isExcluded,
+       'includeDescendants' = x@includeDescendants,
+       'includeMapped' = x@includeMapped)
+})
+
+# as.list(x@Expression[[1]])
+
+setMethod("as.list", "ConceptSet", function(x){
+            list('id' = x@id,
+                 'Name' = x@Name,
+                 'Expression' = lapply(x@Expression, as.list))
+})
+
+#' Save a concept set as a json file
+#'
+#' The resulting concept Set JSON file can be imported into Atlas.
+#'
+#' @param x A Capr concept set created by `cs()`
+#' @param path Name of file to write to. (e.g. "concepts.json")
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' anemia <- cs(descendants(439777,4013073,4013074))
+#' writeConceptSet(anemia, 'anemia.json')
+#' }
+writeConceptSet <- function(x, path) {
+  items <- list(items = lapply(x@Expression, as.list))
+  jsonlite::write_json(x = items, path = path, pretty = TRUE, auto_unbox = TRUE)
+}
+
+# condition_anemia <- cs(descendants(439777,4013073,4013074))
+# jsonlite::write_json()
+# x <- condition_anemia
 
 
-condition_anemia <- cs(descendants(439777,4013073,4013074))
+#' Fill in Concept Set details using a vocab
+#'
+#' Concept sets created in R using the `cs` function do not contain details like
+#' "CONCEPT_NAME", "DOMAIN_ID", etc. If an OMOP CDM vocabulary is available then
+#' these details can be filled in by the the `getConceptSetDetails` function.
+#'
+#' @param x A concept set created by `cs`
+#' @param con A connection to an OMOP CDM database
+#' @template VocabularyDatabaseSchema
+#' @return A modified version of the input concept set with concept details filled in.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # create a concept set
+#' vocabularyDatabaseSchema = "cdm5"
+#' anemia <- cs(descendants(439777,4013073,4013074))
+#'
+#' # fill in the details from an OMOP CDM
+#' library(DatabaseConnector)
+#' con <- connect(dbms = "postgresql", user = "postgres", password = "", server = "localhost/covid")
+#' anemia <- getConceptSetDetails(condition_anemia, con, vocabularyDatabaseSchema = "cdm5")
+#'}
+getConceptSetDetails <- function(x,
+                                con,
+                                vocabularyDatabaseSchema = NULL) {
+
+  checkmate::assertClass(x, "ConceptSet")
+  checkmate::assertTRUE(DBI::dbIsValid(con))
+  checkmate::assertCharacter(vocabularyDatabaseSchema, len = 1, null.ok = TRUE)
+
+
+  ids <- purrr::map_int(x@Expression, ~.@Concept@concept_id)
+
+  sql <- "SELECT * FROM @schema.concept WHERE concept_id IN (@ids);" %>%
+    SqlRender::render(schema = vocabularyDatabaseSchema, ids = ids) %>%
+    SqlRender::translate(targetDialect = dbms(con))
+
+  df <- DBI::dbGetQuery(con, sql) %>%
+    tibble::tibble() %>%
+    dplyr::rename_all(tolower) %>%
+    # Not exactly sure what the logic is for filling in the captions and invalid_reason
+    dplyr::mutate(invalid_reason = ifelse(is.na(invalid_reason), "V", invalid_reason)) %>%
+    dplyr::mutate(
+      standard_concept_caption = case_when(
+        standard_concept == "S" ~ "Standard",
+        standard_concept == "" ~ "Non-Standard",
+        standard_concept == "C" ~ "Classification",
+        TRUE ~ "")) %>%
+    dplyr::mutate(invalid_reason_caption = case_when(
+        invalid_reason == "V" ~ "Valid",
+        invalid_reason == "I" ~ "Invalid",
+        TRUE ~ "")
+    )
+
+  for (i in seq_along(x@Expression)) {
+    id <- x@Expression[[i]]@Concept@concept_id
+    for (n in slotNames("Concept")[-1]) {
+      dtl <- dplyr::filter(df, .data$concept_id == .env$id) %>% dplyr::pull(!!n)
+      if (length(dtl > 0)) slot(x@Expression[[i]]@Concept, n) <- dtl
+    }
+  }
+  return(x)
+}
+

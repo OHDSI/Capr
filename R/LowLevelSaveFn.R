@@ -20,42 +20,42 @@
 #########################
 
 setGeneric("saveState", function(x){standardGeneric("saveState")})
-
-#' Save State for components
 #'
-#' These function coerce s4 CAPR objects to s3 so that they are in a json save state
+#' #' Save State for components
+#' #'
+#' #' These function coerce s4 CAPR objects to s3 so that they are in a json save state
+#' #'
+#' #' @param x a criteria class object in s4
+#' #' @return the object converted to s3 to be saved as a json object
+#' #' @rdname saveState-method
+#' #' @aliases saveState
+#' #' @aliases saveState,Concept-method
+#' setMethod("saveState", "Concept",
+#'           function(x){
+#'             nm <- methods::slotNames(methods::is(x))
+#'             concept <- lapply(nm, slot, object = x)
+#'             names(concept) <- nm
+#'             return(concept)
+#'           })
 #'
-#' @param x a criteria class object in s4
-#' @return the object converted to s3 to be saved as a json object
-#' @rdname saveState-method
-#' @aliases saveState
-#' @aliases saveState,Concept-method
-setMethod("saveState", "Concept",
-          function(x){
-            nm <- methods::slotNames(methods::is(x))
-            concept <- lapply(nm, slot, object = x)
-            names(concept) <- nm
-            return(concept)
-          })
-
-#' @rdname saveState-method
-#' @aliases saveState,ConceptSetItem-method
-setMethod("saveState", "ConceptSetItem",
-          function(x){
-            list('Concept' = saveState(x@Concept),
-                 'isExcluded' = x@isExcluded,
-                 'includeDescendants' = x@includeDescendants,
-                 'includeMapped' = x@includeMapped)
-          })
-
-#' @rdname saveState-method
-#' @aliases saveState,ConceptSetExpression-method
-setMethod("saveState", "ConceptSetExpression",
-          function(x){
-            list('id' = x@id,
-                 'Name' = x@Name,
-                 'Expression' = lapply(x@Expression, saveState))
-          })
+#' #' @rdname saveState-method
+#' #' @aliases saveState,ConceptSetItem-method
+#' setMethod("saveState", "ConceptSetItem",
+#'           function(x){
+#'             list('Concept' = saveState(x@Concept),
+#'                  'isExcluded' = x@isExcluded,
+#'                  'includeDescendants' = x@includeDescendants,
+#'                  'includeMapped' = x@includeMapped)
+#'           })
+#'
+#' #' @rdname saveState-method
+#' #' @aliases saveState,ConceptSetExpression-method
+#' setMethod("saveState", "ConceptSetExpression",
+#'           function(x){
+#'             list('id' = x@id,
+#'                  'Name' = x@Name,
+#'                  'Expression' = lapply(x@Expression, saveState))
+#'           })
 
 #' @rdname saveState-method
 #' @aliases saveState,OpAttribute-method
