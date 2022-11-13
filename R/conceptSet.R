@@ -1,5 +1,5 @@
 
-# Circe ConceptSetExpression classes ------------------------------------------
+# Circe ConceptSet classes ------------------------------------------
 
 #' An S4 class for a single OMOP Concept
 #'
@@ -112,16 +112,16 @@ setMethod("show", "ConceptSetItem", function(object) {
 #' @slot id an id for the concept set expression to identify within a component
 #' @slot Name the name of the concept set expression
 #' @slot Expression a list containing expressions. expressions include multiple conceptSetItem objects
-setClass("ConceptSetExpression",
+setClass("ConceptSet",
          slots = c(id = "character",
                    Name = "character",
                    Expression = "list"))
 
-setValidity("ConceptSetExpression", function(object) {
+setValidity("ConceptSet", function(object) {
   stopifnot(is.character(object@id),
-            length(object@id ==1),
+            length(object@id) == 1,
             is.character(object@id),
-            length(object@id ==1),
+            length(object@id) == 1,
             is.list(object@Expression),
             all(purrr::map_lgl(object@Expression, ~is(., "ConceptSetItem")))
             )
@@ -129,11 +129,11 @@ setValidity("ConceptSetExpression", function(object) {
 })
 
 #' @rdname show-method
-#' @aliases show,ConceptSetExpression-method
-setMethod("show", "ConceptSetExpression", function(object) {
+#' @aliases show,ConceptSet-method
+setMethod("show", "ConceptSet", function(object) {
   cat(paste("<Capr Concept Set>", object@Name, "\n"))
   cat("Id:", object@id,"\n")
-  d <- purrr::map_chr(object@Expression, ~.@Concept@CONCEPT_ID)
+  d <- purrr::map_chr(object@Expression, ~.@Concept@concept_id)
   print(as.data.frame(object))
 })
 
@@ -193,7 +193,7 @@ cs <- function(..., name = "", id = NULL) {
 
   if (is.null(id)) id <- as.character(uuid::UUIDgenerate())
 
-  methods::new("ConceptSetExpression",
+  methods::new("ConceptSet",
                id = id,
                Name = name,
                Expression = conceptList)
@@ -274,14 +274,17 @@ descendants <- function(...) {
 #'
 #' @param x A Caper Concept Set
 #'
-#' @return A tibble (dataframe) with columns: concept_id, includeDescendants, includeDescendants, includeMapped.
+#' @return A tibble (dataframe) with columns: concept_id, includeDescendants, isExcluded, includeMapped.
 #' @export
-as.data.frame.ConceptSetExpression <- function(x) {
+as.data.frame.ConceptSet <- function(x) {
   tibble::tibble(
-    conceptId = purrr::map_int(x@Expression, ~.@Concept@CONCEPT_ID),
+    conceptId = purrr::map_int(x@Expression, ~.@Concept@concept_id),
     includeDescendants = purrr::map_lgl(x@Expression, "includeDescendants"),
-    includeDescendants = purrr::map_lgl(x@Expression, "isExcluded"),
+    isExcluded = purrr::map_lgl(x@Expression, "isExcluded"),
     includeMapped = purrr::map_lgl(x@Expression, "includeMapped")
   )
 }
 
+
+
+condition_anemia <- cs(descendants(439777,4013073,4013074))
