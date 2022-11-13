@@ -56,18 +56,18 @@ setClass("Occurrence",
 
 
 
-setClass("ConceptSet",
-         slot = c(
-           id = "character",
-           name = "character",
-           conceptSet = "list"
-         ),
-         prototype = list(
-           id = NA_character_,
-           name = NA_character_,
-           conceptSet = list()
-         )
-)
+# setClass("ConceptSet",
+#          slot = c(
+#            id = "character",
+#            name = "character",
+#            conceptSet = "list"
+#          ),
+#          prototype = list(
+#            id = NA_character_,
+#            name = NA_character_,
+#            conceptSet = list()
+#          )
+# )
 
 # Circe Classes --------------------------------------
 
