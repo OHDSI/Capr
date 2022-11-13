@@ -62,15 +62,15 @@ query <- function(domain, conceptSet, ...) {
 #'
 #' @return A Capr Query
 #' @export
-conditionOccurrence <- function(conceptSet, ...) {
+condition <- function(conceptSet, ...) {
 
-  query(domain = "conditionOccurrence",
+  query(domain = "ConditionOccurrence",
         conceptSet = conceptSet,
         ...)
 
 }
 
-drugExposure <- function(conceptSet, ...) {
+drug <- function(conceptSet, ...) {
 
   query(domain = "drugExposure",
         conceptSet = conceptSet,
@@ -86,9 +86,9 @@ measurement <- function(conceptSet, ...) {
 
 }
 
-procedureOccurrence <- function(conceptSet, ...) {
+procedure <- function(conceptSet, ...) {
 
-  query(domain = "procedureOccurrence",
+  query(domain = "ProcedureOccurrence",
         conceptSet = conceptSet,
         ...)
 
