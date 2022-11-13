@@ -1,3 +1,15 @@
+#' Create a cohort entry criteria
+#'
+#' @param ... Capr Queries
+#' @param observationWindow
+#' @param primaryCriteriaLimit
+#' @param additionalCriteria
+#' @param qualifiedLimit
+#'
+#' @return
+#' @export
+#'
+#' @examples
 entry <- function(...,
                   observationWindow = observeWindow(),
                   primaryCriteriaLimit = "First",
@@ -16,7 +28,6 @@ entry <- function(...,
   }
 
   return(cohort_entry)
-
 }
 
 
@@ -24,6 +35,9 @@ cohort <- function(entry,
                    irs = NULL,
                    exit = NULL,
                    era = NULL) {
+
+  # Entry should be a list of queries or groups
+  if (is(entry, "Query")) entry <- entry(entry)
 
   cd <- new("Cohort", entry = entry)
 
