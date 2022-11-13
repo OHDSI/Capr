@@ -217,47 +217,6 @@ setMethod("show", "Group", function(object) {
   }
 })
 
-#' An S4 class for a Query
-#'
-#' TODO clarify description of a Query
-#' A query is a medical concept that can be extracted from a database through a 'where' clause in a SQL statement.
-#' This includes concepts. (?)
-#'
-#' @slot Domain the domain where the concepts can be found
-#' @slot CodesetId the id that matches the concept set expression
-#' @slot Attributes a list of attributes that modify the query with more information
-setClass("Query",
-         slots = c(Domain = "character",
-                   CodesetId = "character",
-                   Attributes = "list"),
-         prototype = list(Domain = NA_character_,
-                          CodesetId = NA_character_,
-                          Attributes = list())
-)
-
-setValidity("Query", function(object) {
-  # TODO Query validation rules
-  TRUE
-})
-
-#' @rdname show-method
-#' @aliases show,Query-method
-setMethod("show", "Query", function(object) {
-  cat("Query", "\n")
-  cat("Domain:", object@Domain, "\n")
-  cat("CodesetId:", object@CodesetId, "\n")
-  cat("Attributes:", "\n")
-  if (length(object@Attributes) > 0) {
-    for (i in seq_along(object@Attributes)) {
-      cat("\t",paste0(i, ") "))
-      show(object@Attributes[[i]])
-      cat("\n")
-    }
-  } else {
-    cat("None", "\n")
-  }
-})
-
 #' An S4 class for a Count
 #'
 #' A count class provides a number of occurrences of the query and the timeline that it happens
