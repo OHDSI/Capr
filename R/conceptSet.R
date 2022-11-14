@@ -313,8 +313,8 @@ setMethod("as.list", "ConceptSetItem", function(x){
 
 setMethod("as.list", "ConceptSet", function(x){
             list('id' = x@id,
-                 'Name' = x@Name,
-                 'Expression' = lapply(x@Expression, as.list))
+                 'name' = x@Name,
+                 'expression' = lapply(x@Expression, as.list))
 })
 
 #' Save a concept set as a json file
@@ -364,7 +364,7 @@ writeConceptSet <- function(x, path) {
 #' library(DatabaseConnector)
 #' con <- connect(dbms = "postgresql", user = "postgres", password = "", server = "localhost/covid")
 #' anemia <- getConceptSetDetails(condition_anemia, con, vocabularyDatabaseSchema = "cdm5")
-#'}
+#' }
 getConceptSetDetails <- function(x,
                                 con,
                                 vocabularyDatabaseSchema = NULL) {
