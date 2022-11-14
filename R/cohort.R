@@ -54,5 +54,11 @@ cohort <- function(entry,
   }
 
   return(cd)
+}
+
+writeCohort <- function(x, path) {
+  checkmate::assertClass(x, "Cohort")
+  checkmate::assertCharacter(path, len = 1, min.chars = "1", pattern = "\\.json$")
 
 }
+
