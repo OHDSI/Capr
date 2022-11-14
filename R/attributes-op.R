@@ -1,4 +1,7 @@
 # operators --------------------
+
+
+#' @export
 lt <- function(value) {
   opAttribute <- new("opAttribute",
                      op = "lt",
@@ -7,6 +10,7 @@ lt <- function(value) {
   return(opAttribute)
 }
 
+#' @export
 gt <- function(value) {
   opAttribute <- new("opAttribute",
                      op = "gt",
@@ -15,7 +19,7 @@ gt <- function(value) {
   return(opAttribute)
 }
 
-
+#' @export
 lte <- function(value) {
   opAttribute <- new("opAttribute",
                      op = "lte",
@@ -24,6 +28,7 @@ lte <- function(value) {
   return(opAttribute)
 }
 
+#' @export
 gte <- function(value) {
   opAttribute <- new("opAttribute",
                      op = "gte",
@@ -32,7 +37,7 @@ gte <- function(value) {
   return(opAttribute)
 }
 
-
+#' @export
 eq <- function(value) {
   opAttribute <- new("opAttribute",
                      op = "eq",
@@ -41,6 +46,7 @@ eq <- function(value) {
   return(opAttribute)
 }
 
+#' @export
 bt <- function(value, extent) {
   opAttribute <- new("opAttribute",
                      op = "bt",
@@ -50,6 +56,7 @@ bt <- function(value, extent) {
   return(opAttribute)
 }
 
+#' @export
 nbt <- function(value, extent) {
   opAttribute <- new("opAttribute",
                      op = "!bt",
@@ -61,21 +68,25 @@ nbt <- function(value, extent) {
 
 #op attribute names----------------------
 
+#' @export
 age <- function(opAttribute) {
   opAttribute@name <- "age"
   return(opAttribute)
 }
 
+#' @export
 valueAsNumber <- function(opAttribute) {
   opAttribute@name <- "valueAsNumber"
   return(opAttribute)
 }
 
+#' @export
 rangeHigh <- function(opAttribute) {
   opAttribute@name <- "rangeHigh"
   return(opAttribute)
 }
 
+#' @export
 rangeLow <- function(opAttribute) {
   opAttribute@name <- "rangeLow"
   return(opAttribute)
