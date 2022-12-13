@@ -91,3 +91,19 @@
 #'   opAttribute@name <- "rangeLow"
 #'   return(opAttribute)
 #' }
+
+
+setClass("opAttribute",
+         slot = c(
+           name = "character",
+           op = "character",
+           value = "integer",
+           extent = "integer"
+         ),
+         prototype = list(
+           name = NA_character_,
+           op = NA_character_,
+           value = NA_integer_,
+           extent = NA_integer_
+         )
+)

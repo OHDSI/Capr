@@ -65,3 +65,13 @@
 #'       name = "unit",
 #'       conceptSet = concept_set)
 #' }
+setClass("conceptAttribute",
+         slot = c(
+           name = "character",
+           conceptSet = "list"
+         ),
+         prototype = list(
+           name = NA_character_,
+           conceptSet = list()
+         )
+)
