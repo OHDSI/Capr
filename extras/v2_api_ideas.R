@@ -22,24 +22,21 @@
 
 # Capr r code -----------------
 
-# only specify what you need. Leave defaults out.
-
-# Q: make descendants default? seems like yes
 condition_anemia <- cs(descendants(439777,4013073,4013074))
 observation_anemia <- cs(descendants(2617148,2617149,2617150,4028717,4028718,4029669,4029670,4264446,4288089,45766614))
 hemoglobin_measurement <- cs(descendants(1234,1234,1234,1234,1234,1234,1234,1234))
 
 # exclude example
-complex <- cs(439777,4013073, exclude(4013074))
+cs <- cs(439777,4013073, exclude(descendants(4013074)))
 
 # create a query - example
-conditionOccurrence(condition_anemia)
+condition(condition_anemia)
 
 # create a cohort
 cohort(conditionOccurrence(condition_anemia))
 
 anemia <- cohort(entry = entry(
-  conditionOccurrence(condition_anemia),
+  condition(condition_anemia),
   measurement(hemoglobin_measurement, male(), numeric_value(lt(13)), unit("gram per deciliter")), # unit can be text (for common units) or a concept set
   measurement(hemoglobin_measurement, male(), numeric_value(lt(130)), unit("gram per liter")),
   measurement(hemoglobin_measurement, female(), value(lt(12)), unit("gram per deciliter")), # possibly make value more generic

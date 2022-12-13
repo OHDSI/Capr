@@ -2,7 +2,7 @@ Package: Capr
 Title: Cohort definition Application Programming in R
 Version: 2.0.0
 Authors@R: c(
-    person("Martin", "Lavallee", , "mdlavallee92@gmail.com", role = c("aut", "cre"))
+    person("Martin", "Lavallee", , "mdlavallee92@gmail.com", role = c("aut", "cre")),
     person("Adam", "Black", , "black@ohdsi.org", role = "aut")
   )
 Description: The Capr package provides a programming language for defining OHDSI cohort definitions in R. 
@@ -16,13 +16,13 @@ URL: https://ohdsi.github.io/Capr, https://github.com/OHDSI/Capr
 BugReports: https://github.com/OHDSI/Capr/issues
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Depends: 
   R (>= 3.5.0),
 Imports: 
   CirceR (>= 1.0.0),
   DatabaseConnector (>= 2.4.2),
-  magrittr (>= 1.5.0)
+  magrittr (>= 1.5.0),
   jsonlite,
   RJSONIO,
   methods,
@@ -45,22 +45,5 @@ Suggests:
     rmarkdown
 Remotes:
     ohdsi/CirceR
-Collate: 
-    'Capr.R'
-    'LowLevelClasses.R'
-    'LowLevelUtilityFn.R'
-    'LowLevelBuildLangFn.R'
-    'LowLevelCoercionFn.R'
-    'LowLevelCreateFn.R'
-    'LowLevelLoadFn.R'
-    'LowLevelSaveFn.R'
-    'UserAttributeEdit.R'
-    'UserCommands.R'
-    'UserConceptLookupFn.R'
-    'UserCreateAttributeFn.R'
-    'UserCreateDomainFn.R'
-    'UserCreateFn.R'
-    'UserEditFn.R'
-    'utils.R'
 VignetteBuilder: knitr
 Config/testthat/edition: 3

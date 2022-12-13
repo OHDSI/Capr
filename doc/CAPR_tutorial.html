@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>CAPR_tutorial</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">CAPR_tutorial</h1>
+
+
+
+<p>The purpose of <code>Capr</code> is to provide a programatic avenue (within R) for cohort creation. What separates <code>Capr</code> cohort building from what is already possible in ATLAS is: 1) working directly in R and 2) simplfying cohort development through the optional use of component parts. Component parts are what we classify as reproducible aspects of the cohort definition. For example, say we want to conceptualize a medical diagnosis that we want to deploy multiple times within the cohort; maybe once as an additional criteria and again as a nested criteria within an inclusion rule. Another example would be if we wanted to use the same primary criteria across 20 cohorts. The primary criteria component can be saved and reused in cohort development. The goal of <code>Capr</code> is to assist and simplify cohort development while maintaining downstream compatibility with the OHDSI Methods Library. By translating the foundation of cohort development established by circe-be into R, we hope that users can leverage the R environment in assisting them in efficiently developing cohorts and expand possibilities of testing phenotype sensitivity.</p>
+<p>The objective of this vignette for <code>Capr</code> is to: 1) demonstrate creation of a cohort definition within R, 2) deploy the cohort definition using <code>CirceR</code> 3) introduce resuable component parts and show how to save and load these constructs, 4) illustrate how to import and modify existing ATLAS cohorts and 5) using cohort building calls as data in R.</p>
+<div id="creating-a-cohort-definition-in-r" class="section level2">
+<h2>Creating a Cohort Definition in R</h2>
+<div id="set-up" class="section level3">
+<h3>Set Up</h3>
+<p>Before building our cohort, we need to load some R packages to assit us and connect to an OMOP CDM. CAPR relies on accessibility to an OMOP Vocabulary schema to find concepts and leverage relationships. We hope in the future we can set a public connection to ATHENA or an OMOP Vocabulary database to expand useability. We should note to ensure that you are using the latest OMOP vocabulary when using CAPR.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Capr) <span class="co">#the CAPR package to build cohorts in R</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DatabaseConnector) <span class="co">#to connect to our OMOP CDM</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CirceR) <span class="co">#access the circe engine to generate ohdisql</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr) <span class="co">#leverage piping</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>connectionDetails <span class="ot">&lt;-</span> <span class="fu">createConnectionDetails</span>(<span class="at">dbms=</span><span class="st">&quot;postgresql&quot;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">server=</span><span class="st">&quot;example.com/datasource&quot;</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">user=</span><span class="st">&quot;me&quot;</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">password=</span><span class="st">&quot;secret&quot;</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">schema=</span><span class="st">&quot;cdm&quot;</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">port=</span><span class="st">&quot;5432&quot;</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>conn <span class="ot">&lt;-</span> <span class="fu">connect</span>(connectionDetails)</span></code></pre></div>
+<p>In this example we are looking to re-build a cohort developed for the COVID-19 study-a-thon (ID:1775485) This cohort was identifying all inpatient visits for COVID-19 patients. This is a description of the cohort:</p>
+<hr />
+<p><strong>Cohort Entry Events</strong></p>
+<p>People may enter the cohort when observing any of the following:</p>
+<ol style="list-style-type: decimal">
+<li>visit occurrences of ‘InpatientVisit’, starting after December 1, 2019.</li>
+</ol>
+<p>Restrict entry events to with any of the following criteria:</p>
+<ol style="list-style-type: decimal">
+<li>having at least 1 condition occurrence of ‘COVID-19 (including asymptomatic)’, starting 21 days before cohort entry start date and starting anytime on or before cohort entry end date.</li>
+<li>having at least 1 condition occurrence of any condition (including ‘COVID-19 source codes’ source concepts), starting 21 days before cohort entry start date and starting anytime on or before cohort entry end date.</li>
+<li>having at least 1 measurement of ‘COVID-19 specific test’, starting 21 days before cohort entry start date and starting anytime on or before cohort entry end date.</li>
+<li>having at least 1 measurement of ‘Covid-19 Specific Measurement’, starting 21 days before cohort entry start date and starting anytime on or before cohort entry end date; with value as concept: “positive”, “detected”, “present”, “detected”, “present” or “positive”.</li>
+<li>having at least 1 observation of ‘Covid-19 Specific Measurement’, starting 21 days before cohort entry start date and starting anytime on or before cohort entry end date; with value as concept: “positive”, “detected”, “present”, “detected”, “present” or “positive”.</li>
+<li>having at least 1 observation of any observation (including ‘COVID-19 source codes’ source concepts), starting 21 days before cohort entry start date and starting anytime on or before cohort entry end date.</li>
+</ol>
+<p><strong>Inclusion Criteria</strong></p>
+<p><em>1. &gt;=18 years old</em></p>
+<p>Entry events with the following event criteria: who are &gt;= 18 years old.</p>
+<p><em>2. Has &gt;= 365 of observation</em></p>
+<p>Entry events having at least 1 observation period, starting anytime up to 365 days before cohort entry start date and ending between 0 days before and all days after cohort entry end date.</p>
+<p><em>3. does not have hospitalization for COVID19 in the 6 months preceding admission</em></p>
+<p>Entry events having no visit occurrences of ‘InpatientVisit’, starting in the 180 days prior to cohort entry start date; with any of the following criteria:</p>
+<ol style="list-style-type: decimal">
+<li>having at least 1 condition occurrence of ‘COVID-19 (including asymptomatic)’, starting 21 days before ‘InpatientVisit’ start date and starting anytime on or before ‘InpatientVisit’ end date.</li>
+<li>having at least 1 condition occurrence of any condition (including ‘COVID-19 source codes’ source concepts), starting 21 days before ‘InpatientVisit’ start date and starting anytime on or before ‘InpatientVisit’ end date.</li>
+<li>having at least 1 measurement of ‘COVID-19 specific test’, starting 21 days before ‘InpatientVisit’ start date and starting anytime on or before ‘InpatientVisit’ end date.</li>
+<li>having at least 1 measurement of ‘Covid-19 Specific Measurement’, starting 21 days before ‘InpatientVisit’ start date and starting anytime on or before ‘InpatientVisit’ end date; with value as concept: “positive”, “detected”, “present”, “detected”, “present” or “positive”.</li>
+<li>having at least 1 observation of ‘Covid-19 Specific Measurement’, starting 21 days before ‘InpatientVisit’ start date and starting anytime on or before ‘InpatientVisit’ end date; with value as concept: “positive”, “detected”, “present”, “detected”, “present” or “positive”.</li>
+<li>having at least 1 observation of any observation (including ‘COVID-19 source codes’ source concepts), starting 21 days before ‘InpatientVisit’ start date and starting anytime on or before ‘InpatientVisit’ end date.</li>
+</ol>
+<p>Limit qualifying entry events to the all events per person.</p>
+<p><strong>Cohort Exit</strong></p>
+<p>The cohort end date will be offset from index event’s end date plus 0 days.</p>
+<p><strong>Cohort Eras</strong></p>
+<p>Entry events will be combined into cohort eras if they are within 0 days of each other.</p>
+<hr />
+</div>
+<div id="looking-up-concepts" class="section level3">
+<h3>Looking up Concepts</h3>
+<p>The first thing to do in building a cohort is look up clinical concepts we want to use in the cohort. In the example below we want to lookup Inpatient Visits an Emergency Room and Inpatient Visit and an Inpatient Visit. With an existing database connection we can lookup some standard concept Ids in the vocabulary table.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getConceptIdDetails</span>(<span class="at">conceptIds =</span> <span class="fu">c</span>(<span class="dv">262</span>, <span class="co">#ERand IP Visit</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="dv">9201</span>), <span class="co">#IP Visit</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">mapToStandard =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>#&gt;   CONCEPT_ID                       CONCEPT_NAME STANDARD_CONCEPT
+#&gt; 1        262 Emergency Room and Inpatient Visit                S
+#&gt; 2       9201                    Inpatient Visit                S
+#&gt;   INVALID_REASON_CAPTION INVALID_REASON STANDARD_CONCEPT_CAPTION CONCEPT_CODE
+#&gt; 1                  Valid              V                 Standard         ERIP
+#&gt; 2                  Valid              V                 Standard           IP
+#&gt;   DOMAIN_ID VOCABULARY_ID CONCEPT_CLASS_ID
+#&gt; 1     Visit         Visit            Visit
+#&gt; 2     Visit         Visit            Visit</code></pre>
+<p>Say we do not have a standard OMOP concept id that we want to query but a code from a medical vocabulary like ICD10CM. We can look up this concept code and find the non-standard concept ID.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getConceptCodeDetails</span>(<span class="at">conceptCode =</span> <span class="st">&quot;E11&quot;</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">vocabulary =</span> <span class="st">&quot;ICD10CM&quot;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">mapToStandard =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>#&gt;   CONCEPT_ID             CONCEPT_NAME STANDARD_CONCEPT INVALID_REASON_CAPTION
+#&gt; 1    1567956 Type 2 diabetes mellitus                N                  Valid
+#&gt;   INVALID_REASON STANDARD_CONCEPT_CAPTION CONCEPT_CODE DOMAIN_ID VOCABULARY_ID
+#&gt; 1              V             Non-Standard          E11 Condition       ICD10CM
+#&gt;      CONCEPT_CLASS_ID
+#&gt; 1 3-char nonbill code</code></pre>
+<p>If we only knew the concept code for ICD10CM but wanted it mapped to a standard concept, we can tell our function to <code>mapToStandard</code>. In this case we are returned the standard SNOMED concept.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getConceptCodeDetails</span>(<span class="at">conceptCode =</span> <span class="st">&quot;E11&quot;</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">vocabulary =</span> <span class="st">&quot;ICD10CM&quot;</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">mapToStandard =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>#&gt;   CONCEPT_ID             CONCEPT_NAME STANDARD_CONCEPT INVALID_REASON_CAPTION
+#&gt; 1     201826 Type 2 diabetes mellitus                S                  Valid
+#&gt;   INVALID_REASON STANDARD_CONCEPT_CAPTION CONCEPT_CODE DOMAIN_ID VOCABULARY_ID
+#&gt; 1              V                 Standard     44054006 Condition        SNOMED
+#&gt;   CONCEPT_CLASS_ID
+#&gt; 1 Clinical Finding</code></pre>
+<p>Finally if we only know the medical concept but not a specific code, we can do a keyword search to find any concepts that contain a character string of “Diabetes”. In the code chunk below we only return the first 5 rows for demonstration purposes.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Diabetes <span class="ot">&lt;-</span> <span class="fu">lookupKeyword</span>(<span class="at">keyword =</span> <span class="st">&quot;Diabetes&quot;</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">searchType =</span> <span class="st">&quot;any&quot;</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>Diabetes<span class="sc">$</span>.[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,] <span class="co">#need dot to call data frame from object</span></span></code></pre></div>
+<pre><code>#&gt;   CONCEPT_ID                        CONCEPT_NAME STANDARD_CONCEPT
+#&gt; 1       8560   Juvenile Diabetes Foundation unit                S
+#&gt; 2      30968                  Diabetes insipidus                S
+#&gt; 3     192691 Diabetes mellitus during pregnancy                 S
+#&gt; 4     194700 Diabetes mellitus in mother complic                S
+#&gt; 5     201820                   Diabetes mellitus                S
+#&gt;   INVALID_REASON_CAPTION INVALID_REASON STANDARD_CONCEPT_CAPTION CONCEPT_CODE
+#&gt; 1                  Valid              V                 Standard      [JDF&#39;U]
+#&gt; 2                  Valid              V                 Standard     15771004
+#&gt; 3                  Valid              V                 Standard    199227004
+#&gt; 4                  Valid              V                 Standard     76751001
+#&gt; 5                  Valid              V                 Standard     73211009
+#&gt;   DOMAIN_ID VOCABULARY_ID CONCEPT_CLASS_ID
+#&gt; 1      Unit          UCUM             Unit
+#&gt; 2 Condition        SNOMED Clinical Finding
+#&gt; 3 Condition        SNOMED Clinical Finding
+#&gt; 4 Condition        SNOMED Clinical Finding
+#&gt; 5 Condition        SNOMED Clinical Finding</code></pre>
+</div>
+<div id="working-with-concept-set-expressions" class="section level3">
+<h3>Working with Concept Set Expressions</h3>
+<p>Next we want to take this concept set and turn it into a concept set expression. The concept set expression contains the concept set item which sets how we want to use the concept. We can find descendant concept, exclude it from the list or include its mapped concepts to the expression. In <code>Capr</code> when a concept set expression is created the default is to include descendants. When we create the concept set expression we generate a global unique identifier for this component. In the OMOP cohort concept sets are referred to internally using an integer starting from 0. This identifier deploys the concept set expression within a component. With <code>Capr</code> we want these pieces to exist in isolation outside the cohort definition, so we dont have to rely on this arbitrary number within the cohort definition. This allows us to repurpose any concept set expression and parent component for a new cohort. In the structural print we see the guid in the concept set expression section of the component part.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>IpVisitCSE <span class="ot">&lt;-</span> <span class="fu">getConceptIdDetails</span>(<span class="at">conceptIds =</span> <span class="fu">c</span>(<span class="dv">262</span>, <span class="co">#ERand IP Visit</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                                                 <span class="dv">9201</span>), <span class="co">#IP Visit</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">mapToStandard =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createConceptSetExpression</span>(<span class="at">Name =</span> <span class="st">&quot;InpatientVisit&quot;</span>, <span class="at">includeDescendants =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>#&gt; Formal class &#39;Component&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   ..@ MetaData            :Formal class &#39;MetaData&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. ..@ ComponentType: chr &quot;ConceptSetExpression&quot;
+#&gt;   .. .. ..@ Name         : chr &quot;InpatientVisit&quot;
+#&gt;   .. .. ..@ Description  : chr NA
+#&gt;   ..@ CriteriaExpression  : list()
+#&gt;   ..@ Limit               : list()
+#&gt;   ..@ ConceptSetExpression:List of 1
+#&gt;   .. ..$ :Formal class &#39;ConceptSetExpression&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. ..@ id        : chr &quot;7992ea71-2266-482e-8c18-fd2b035de87d&quot;
+#&gt;   .. .. .. ..@ Name      : chr &quot;InpatientVisit&quot;
+#&gt;   .. .. .. ..@ Expression:List of 2
+#&gt;   .. .. .. .. ..$ :Formal class &#39;ConceptSetItem&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   .. .. .. .. .. .. ..@ Concept           :Formal class &#39;Concept&#39; [package &quot;Capr&quot;] with 10 slots
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_ID              : int 262
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_NAME            : chr &quot;Emergency Room and Inpatient Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT        : chr &quot;S&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT_CAPTION: chr &quot;Standard&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON          : chr &quot;V&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON_CAPTION  : chr &quot;Valid&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CODE            : chr &quot;ERIP&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ DOMAIN_ID               : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ VOCABULARY_ID           : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CLASS_ID        : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. ..@ isExcluded        : logi FALSE
+#&gt;   .. .. .. .. .. .. ..@ includeDescendants: logi TRUE
+#&gt;   .. .. .. .. .. .. ..@ includeMapped     : logi FALSE
+#&gt;   .. .. .. .. ..$ :Formal class &#39;ConceptSetItem&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   .. .. .. .. .. .. ..@ Concept           :Formal class &#39;Concept&#39; [package &quot;Capr&quot;] with 10 slots
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_ID              : int 9201
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_NAME            : chr &quot;Inpatient Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT        : chr &quot;S&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT_CAPTION: chr &quot;Standard&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON          : chr &quot;V&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON_CAPTION  : chr &quot;Valid&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CODE            : chr &quot;IP&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ DOMAIN_ID               : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ VOCABULARY_ID           : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CLASS_ID        : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. ..@ isExcluded        : logi FALSE
+#&gt;   .. .. .. .. .. .. ..@ includeDescendants: logi TRUE
+#&gt;   .. .. .. .. .. .. ..@ includeMapped     : logi FALSE</code></pre>
+<p>Returning to the idea of concept set items, we can customize the mapping of the concept set item. If we had three concepts in the set but only want to exclude one of them we can specify the position in the <code>createConceptMapping</code> function.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>cid <span class="ot">&lt;-</span> <span class="fu">c</span>(37310282L, 37310281L, 756055L)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>nm <span class="ot">&lt;-</span> <span class="st">&quot;COVID-19 specific testing (pre-coordinated Measurements excluded)&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(cid)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#lookup up covid19 meausres</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>MeasureOfCovid19 <span class="ot">&lt;-</span> <span class="fu">getConceptIdDetails</span>(<span class="at">conceptIds =</span> cid,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                          <span class="at">mapToStandard =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#create a custom mapping list</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>conceptMapping <span class="ot">&lt;-</span> <span class="fu">createConceptMapping</span>(<span class="at">n =</span> n,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">includeDescendants =</span> <span class="fu">rep</span>(<span class="cn">TRUE</span>,n),</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">isExcluded =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>))</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>MeasureOfCovid19CSE <span class="ot">&lt;-</span> MeasureOfCovid19 <span class="sc">%&gt;%</span> </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createConceptSetExpressionCustom</span>(<span class="at">Name =</span> nm, <span class="at">conceptMapping =</span> conceptMapping)</span></code></pre></div>
+</div>
+<div id="building-a-query" class="section level3">
+<h3>Building a Query</h3>
+<p>Queries lookup a concept set in a domain table in the cdm a returns the set of persons in the table that satisfy this condition. A query contains a concept set expression and an attribute, which can be NULL. In this example we create an occurrence start date attribute. The create attribute signatures start with create and end with attribute. Sandwhiched in the middle is the name of the attribute we wish to create. We can look up attributes using the command <code>listAttributeOptions</code>. In this example we start by building an occurrence start date attribute. We want the occurrence of the visit to take place any time after December 1st 2019.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>DateAtt <span class="ot">&lt;-</span> <span class="fu">createOccurrenceStartDateAttribute</span>(<span class="at">Op =</span> <span class="st">&quot;gt&quot;</span>, <span class="at">Value =</span> <span class="st">&quot;2019-12-01&quot;</span>)</span></code></pre></div>
+<p>Next we create a visit occurrence query for the inpatient concept set expression and date attribute. Notice at every point we are building up our component container.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>IpVisitQuery <span class="ot">&lt;-</span> <span class="fu">createVisitOccurrence</span>(<span class="at">conceptSetExpression =</span> IpVisitCSE,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">attributeList =</span> <span class="fu">list</span>(DateAtt))</span></code></pre></div>
+<pre><code>#&gt; Formal class &#39;Component&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   ..@ MetaData            :Formal class &#39;MetaData&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. ..@ ComponentType: chr &quot;Query&quot;
+#&gt;   .. .. ..@ Name         : chr &quot;VisitOccurrence Query&quot;
+#&gt;   .. .. ..@ Description  : chr NA
+#&gt;   ..@ CriteriaExpression  :List of 1
+#&gt;   .. ..$ :Formal class &#39;Query&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. ..@ Domain    : chr &quot;VisitOccurrence&quot;
+#&gt;   .. .. .. ..@ CodesetId : chr &quot;7992ea71-2266-482e-8c18-fd2b035de87d&quot;
+#&gt;   .. .. .. ..@ Attributes:List of 1
+#&gt;   .. .. .. .. ..$ :Formal class &#39;OpAttribute&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. .. .. .. ..@ Name    : chr &quot;OccurrenceStartDate&quot;
+#&gt;   .. .. .. .. .. .. ..@ Op      : chr &quot;gt&quot;
+#&gt;   .. .. .. .. .. .. ..@ Contents:List of 2
+#&gt;   .. .. .. .. .. .. .. ..$ Value : chr &quot;2019-12-01&quot;
+#&gt;   .. .. .. .. .. .. .. ..$ Extent: chr NA
+#&gt;   ..@ Limit               : list()
+#&gt;   ..@ ConceptSetExpression:List of 1
+#&gt;   .. ..$ :Formal class &#39;ConceptSetExpression&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. ..@ id        : chr &quot;7992ea71-2266-482e-8c18-fd2b035de87d&quot;
+#&gt;   .. .. .. ..@ Name      : chr &quot;InpatientVisit&quot;
+#&gt;   .. .. .. ..@ Expression:List of 2
+#&gt;   .. .. .. .. ..$ :Formal class &#39;ConceptSetItem&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   .. .. .. .. .. .. ..@ Concept           :Formal class &#39;Concept&#39; [package &quot;Capr&quot;] with 10 slots
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_ID              : int 262
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_NAME            : chr &quot;Emergency Room and Inpatient Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT        : chr &quot;S&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT_CAPTION: chr &quot;Standard&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON          : chr &quot;V&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON_CAPTION  : chr &quot;Valid&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CODE            : chr &quot;ERIP&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ DOMAIN_ID               : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ VOCABULARY_ID           : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CLASS_ID        : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. ..@ isExcluded        : logi FALSE
+#&gt;   .. .. .. .. .. .. ..@ includeDescendants: logi TRUE
+#&gt;   .. .. .. .. .. .. ..@ includeMapped     : logi FALSE
+#&gt;   .. .. .. .. ..$ :Formal class &#39;ConceptSetItem&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   .. .. .. .. .. .. ..@ Concept           :Formal class &#39;Concept&#39; [package &quot;Capr&quot;] with 10 slots
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_ID              : int 9201
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_NAME            : chr &quot;Inpatient Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT        : chr &quot;S&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT_CAPTION: chr &quot;Standard&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON          : chr &quot;V&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON_CAPTION  : chr &quot;Valid&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CODE            : chr &quot;IP&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ DOMAIN_ID               : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ VOCABULARY_ID           : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CLASS_ID        : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. ..@ isExcluded        : logi FALSE
+#&gt;   .. .. .. .. .. .. ..@ includeDescendants: logi TRUE
+#&gt;   .. .. .. .. .. .. ..@ includeMapped     : logi FALSE</code></pre>
+<p>This query is what we use for the primary criteria of this cohort. All that remains, is adding an observation window and a limit (number of observations per person) to set the cohort entry. Notice again in the structural print the component inherits the query and evolves into a primary criteria component class. If one ever wants to check the component class they can use <code>componentType(pc)</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>PcCovidDiag <span class="ot">&lt;-</span> <span class="fu">createPrimaryCriteria</span>(<span class="at">Name =</span> <span class="st">&quot;Inpatient Visit Primary Criteria&quot;</span>,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ComponentList =</span> <span class="fu">list</span>(IpVisitQuery),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ObservationWindow =</span> <span class="fu">createObservationWindow</span>(0L,0L),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Limit =</span> <span class="st">&quot;All&quot;</span>)</span></code></pre></div>
+<pre><code>#&gt; Formal class &#39;Component&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   ..@ MetaData            :Formal class &#39;MetaData&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. ..@ ComponentType: chr &quot;PrimaryCriteria&quot;
+#&gt;   .. .. ..@ Name         : chr &quot;Inpatient Visit Primary Criteria&quot;
+#&gt;   .. .. ..@ Description  : chr NA
+#&gt;   ..@ CriteriaExpression  :List of 2
+#&gt;   .. ..$ CriteriaList     :List of 1
+#&gt;   .. .. ..$ :Formal class &#39;Query&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. .. ..@ Domain    : chr &quot;VisitOccurrence&quot;
+#&gt;   .. .. .. .. ..@ CodesetId : chr &quot;7992ea71-2266-482e-8c18-fd2b035de87d&quot;
+#&gt;   .. .. .. .. ..@ Attributes:List of 1
+#&gt;   .. .. .. .. .. ..$ :Formal class &#39;OpAttribute&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. .. .. .. .. ..@ Name    : chr &quot;OccurrenceStartDate&quot;
+#&gt;   .. .. .. .. .. .. .. ..@ Op      : chr &quot;gt&quot;
+#&gt;   .. .. .. .. .. .. .. ..@ Contents:List of 2
+#&gt;   .. .. .. .. .. .. .. .. ..$ Value : chr &quot;2019-12-01&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..$ Extent: chr NA
+#&gt;   .. ..$ ObservationWindow:Formal class &#39;ObservationWindow&#39; [package &quot;Capr&quot;] with 2 slots
+#&gt;   .. .. .. ..@ PriorDays: int 0
+#&gt;   .. .. .. ..@ PostDays : int 0
+#&gt;   ..@ Limit               :List of 1
+#&gt;   .. ..$ PrimaryCriteriaLimit:Formal class &#39;Limit&#39; [package &quot;Capr&quot;] with 1 slot
+#&gt;   .. .. .. ..@ Type: chr &quot;All&quot;
+#&gt;   ..@ ConceptSetExpression:List of 1
+#&gt;   .. ..$ :Formal class &#39;ConceptSetExpression&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. ..@ id        : chr &quot;7992ea71-2266-482e-8c18-fd2b035de87d&quot;
+#&gt;   .. .. .. ..@ Name      : chr &quot;InpatientVisit&quot;
+#&gt;   .. .. .. ..@ Expression:List of 2
+#&gt;   .. .. .. .. ..$ :Formal class &#39;ConceptSetItem&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   .. .. .. .. .. .. ..@ Concept           :Formal class &#39;Concept&#39; [package &quot;Capr&quot;] with 10 slots
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_ID              : int 262
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_NAME            : chr &quot;Emergency Room and Inpatient Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT        : chr &quot;S&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT_CAPTION: chr &quot;Standard&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON          : chr &quot;V&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON_CAPTION  : chr &quot;Valid&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CODE            : chr &quot;ERIP&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ DOMAIN_ID               : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ VOCABULARY_ID           : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CLASS_ID        : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. ..@ isExcluded        : logi FALSE
+#&gt;   .. .. .. .. .. .. ..@ includeDescendants: logi TRUE
+#&gt;   .. .. .. .. .. .. ..@ includeMapped     : logi FALSE
+#&gt;   .. .. .. .. ..$ :Formal class &#39;ConceptSetItem&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   .. .. .. .. .. .. ..@ Concept           :Formal class &#39;Concept&#39; [package &quot;Capr&quot;] with 10 slots
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_ID              : int 9201
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_NAME            : chr &quot;Inpatient Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT        : chr &quot;S&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT_CAPTION: chr &quot;Standard&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON          : chr &quot;V&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON_CAPTION  : chr &quot;Valid&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CODE            : chr &quot;IP&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ DOMAIN_ID               : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ VOCABULARY_ID           : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CLASS_ID        : chr &quot;Visit&quot;
+#&gt;   .. .. .. .. .. .. ..@ isExcluded        : logi FALSE
+#&gt;   .. .. .. .. .. .. ..@ includeDescendants: logi TRUE
+#&gt;   .. .. .. .. .. .. ..@ includeMapped     : logi FALSE</code></pre>
+</div>
+<div id="creating-a-count" class="section level3">
+<h3>Creating a Count</h3>
+<p>Count classes inherit queries and provide boolean logic and temporality. This class counts the number of occurrences of a query that fit within an observation period relative to the initial event. Counts are used in cohort restriction like in the additional criteria and inclusion rules. In this example we are going to build a count for COVID-19. We first look up the concept and include descendants in the mapping. Next we make the concept set expression into a query without any attributes. A count requires a timeline so we can create a time window relative to the initial evemt.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lookup covid diagnosis in vocabulary</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>CovidDiag <span class="ot">&lt;-</span> <span class="fu">getConceptIdDetails</span>(<span class="at">conceptIds =</span> <span class="dv">37311061</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">mapToStandard =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#create concept set expression including descendant concepts</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>CovidDiagCSE <span class="ot">&lt;-</span> CovidDiag <span class="sc">%&gt;%</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createConceptSetExpression</span>(<span class="at">Name=</span><span class="st">&quot;COVID-19 (including asymptomatic)&quot;</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">includeDescendants =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#create a conditionOccurrence query</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>CovidDiagQuery <span class="ot">&lt;-</span> <span class="fu">createConditionOccurrence</span>(<span class="at">conceptSetExpression =</span> CovidDiagCSE)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co">#create start window for timeline</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co">#start window to count occurrences from inpatient event (cohort entry)</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>StartWindow1 <span class="ot">&lt;-</span> <span class="fu">createWindow</span>(<span class="at">StartDays =</span> <span class="dv">21</span>, <span class="at">StartCoeff =</span> <span class="st">&quot;Before&quot;</span>, <span class="co"># 21 days before IpVisit index start</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>                             <span class="at">EndDays =</span> <span class="st">&quot;All&quot;</span>,<span class="at">EndCoeff =</span> <span class="st">&quot;After&quot;</span>) <span class="co">#to all days after IpVisit index start</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co">#create end window for timeline</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="co">#end window to count occurrences from inpatient event (cohort entry)</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>EndWindow1 <span class="ot">&lt;-</span> <span class="fu">createWindow</span>(<span class="at">StartDays =</span> <span class="st">&quot;All&quot;</span>, <span class="at">StartCoeff =</span> <span class="st">&quot;Before&quot;</span>, <span class="co">#end all days before IpVisit index start</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>                           <span class="at">EndDays =</span> <span class="dv">0</span>, <span class="at">EndCoeff =</span> <span class="st">&quot;After&quot;</span>, <span class="co">#0 days after IpVisit index start</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>                           <span class="at">IndexStart =</span> <span class="cn">FALSE</span>) <span class="co">#toggle index end </span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co">#create timeline</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>Timeline1 <span class="ot">&lt;-</span> <span class="fu">createTimeline</span>(<span class="at">StartWindow =</span> StartWindow1,</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>                     <span class="at">EndWindow =</span> EndWindow1)</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="co">#create a count criteria</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="co">#at least 1 occurrence of a covid diagnosis occurring</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="co">#between a) 21 days before and all days after initial inpatient visit index start date</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="co">#and b) all days before and 0 days after initial inpatient visit index end date</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>CovidCountCriteria1 <span class="ot">&lt;-</span> <span class="fu">createCount</span>(<span class="at">Query =</span> CovidDiagQuery,</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Logic =</span> <span class="st">&quot;at_least&quot;</span>,</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Count =</span> <span class="dv">1</span>,</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Timeline =</span> Timeline1)</span></code></pre></div>
+<pre><code>#&gt; Formal class &#39;Component&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   ..@ MetaData            :Formal class &#39;MetaData&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. ..@ ComponentType: chr &quot;Count&quot;
+#&gt;   .. .. ..@ Name         : chr &quot;ConditionOccurrence Count&quot;
+#&gt;   .. .. ..@ Description  : chr NA
+#&gt;   ..@ CriteriaExpression  :List of 1
+#&gt;   .. ..$ :Formal class &#39;Count&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. ..@ Criteria  :Formal class &#39;Query&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. .. .. ..@ Domain    : chr &quot;ConditionOccurrence&quot;
+#&gt;   .. .. .. .. .. ..@ CodesetId : chr &quot;3bf096aa-19ad-4862-91a2-6a50f0f5f378&quot;
+#&gt;   .. .. .. .. .. ..@ Attributes: list()
+#&gt;   .. .. .. ..@ Timeline  :Formal class &#39;Timeline&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   .. .. .. .. .. ..@ StartWindow            :Formal class &#39;Window&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   .. .. .. .. .. .. .. ..@ Event: chr &quot;EventStarts&quot;
+#&gt;   .. .. .. .. .. .. .. ..@ Start:List of 2
+#&gt;   .. .. .. .. .. .. .. .. ..$ Days : int 21
+#&gt;   .. .. .. .. .. .. .. .. ..$ Coeff: chr &quot;Before&quot;
+#&gt;   .. .. .. .. .. .. .. ..@ End  :List of 2
+#&gt;   .. .. .. .. .. .. .. .. ..$ Days : chr &quot;All&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..$ Coeff: chr &quot;After&quot;
+#&gt;   .. .. .. .. .. .. .. ..@ Index: chr &quot;IndexStartDate&quot;
+#&gt;   .. .. .. .. .. ..@ EndWindow              :Formal class &#39;Window&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   .. .. .. .. .. .. .. ..@ Event: chr &quot;EventStarts&quot;
+#&gt;   .. .. .. .. .. .. .. ..@ Start:List of 2
+#&gt;   .. .. .. .. .. .. .. .. ..$ Days : chr &quot;All&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..$ Coeff: chr &quot;Before&quot;
+#&gt;   .. .. .. .. .. .. .. ..@ End  :List of 2
+#&gt;   .. .. .. .. .. .. .. .. ..$ Days : int 0
+#&gt;   .. .. .. .. .. .. .. .. ..$ Coeff: chr &quot;After&quot;
+#&gt;   .. .. .. .. .. .. .. ..@ Index: chr &quot;IndexEndDate&quot;
+#&gt;   .. .. .. .. .. ..@ RestrictVisit          : logi FALSE
+#&gt;   .. .. .. .. .. ..@ IgnoreObservationPeriod: logi FALSE
+#&gt;   .. .. .. ..@ Occurrence:Formal class &#39;Occurrence&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. .. .. ..@ Type      : chr &quot;at_least&quot;
+#&gt;   .. .. .. .. .. ..@ Count     : int 1
+#&gt;   .. .. .. .. .. ..@ isDistinct: logi FALSE
+#&gt;   ..@ Limit               : list()
+#&gt;   ..@ ConceptSetExpression:List of 1
+#&gt;   .. ..$ :Formal class &#39;ConceptSetExpression&#39; [package &quot;Capr&quot;] with 3 slots
+#&gt;   .. .. .. ..@ id        : chr &quot;3bf096aa-19ad-4862-91a2-6a50f0f5f378&quot;
+#&gt;   .. .. .. ..@ Name      : chr &quot;COVID-19 (including asymptomatic)&quot;
+#&gt;   .. .. .. ..@ Expression:List of 1
+#&gt;   .. .. .. .. ..$ :Formal class &#39;ConceptSetItem&#39; [package &quot;Capr&quot;] with 4 slots
+#&gt;   .. .. .. .. .. .. ..@ Concept           :Formal class &#39;Concept&#39; [package &quot;Capr&quot;] with 10 slots
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_ID              : int 37311061
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_NAME            : chr &quot;Disease caused by 2019-nCoV&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT        : chr &quot;S&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ STANDARD_CONCEPT_CAPTION: chr &quot;Standard&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON          : chr &quot;V&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ INVALID_REASON_CAPTION  : chr &quot;Valid&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CODE            : chr &quot;840539006&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ DOMAIN_ID               : chr &quot;Condition&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ VOCABULARY_ID           : chr &quot;SNOMED&quot;
+#&gt;   .. .. .. .. .. .. .. .. ..@ CONCEPT_CLASS_ID        : chr &quot;Clinical Finding&quot;
+#&gt;   .. .. .. .. .. .. ..@ isExcluded        : logi FALSE
+#&gt;   .. .. .. .. .. .. ..@ includeDescendants: logi TRUE
+#&gt;   .. .. .. .. .. .. ..@ includeMapped     : logi FALSE</code></pre>
+</div>
+<div id="creating-a-group" class="section level3">
+<h3>Creating a Group</h3>
+<p>A group is a set of counts, queries, attributes and sub-groups that are deployed using boolean logic. We can combine multiple components and then describe if the patient needs to satisfy all these criteria to remain in the cohort or at least 1. A group is used for additional criteria and inclusion rules. It is also used for a nested criteria attribute. In this example we will construct multiple counts that comprise of a group. Within this section we also show sub-examples of nuiances of <code>Capr</code> as we build up to the group.</p>
+<div id="creating-a-source-concept-attribute" class="section level4">
+<h4>Creating a Source Concept Attribute</h4>
+<p>In the code chunk below we want to use source concepts as an attribute for one of the criteria in the group. The patient must have at least 1 instance of these source concepts, excluding for 45542411, 586414, 45600471, 586415, 710157. We first creae a concept mapping for the length of the concept set and then toggle the mapping so that these five concepts have the item of isExcluded set to TRUE. Once the conceptMapping is set we can create the concept set Expression. The concept set expression known as COVID SourceConcept can be used as a source concept attribute. Notice when we make the query in the <code>createConditionOccurrence</code> function we do not include the concept set expression like before. This is because we are making a special attribute for the source concepts. We should note that a query does not always contain a concept set expression. This is also the case when making an observation period. One should be careful on how they wish to apply the concept set expressions within the query, it may be an attribute.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>CovidSourceConcepts <span class="ot">&lt;-</span> <span class="fu">getConceptIdDetails</span>(<span class="at">conceptIds =</span> <span class="fu">c</span>(710158L, 710155L, 710156L, </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                                                          710159L, 45542411L, 710160L, </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                                                          45756093L, 42501115L, 586414L, </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                                                          45600471L, 586415L, 710157L),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">mapToStandard =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#create a default mapping list includeDescendants, isExcluded, includeMapped all FALSE</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>ConceptMappingSourceConcepts <span class="ot">&lt;-</span> <span class="fu">createConceptMapping</span>(<span class="at">n =</span> <span class="fu">nrow</span>(CovidSourceConcepts))</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#toggle TRUE the positions needed to alter</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>ConceptMappingSourceConcepts <span class="ot">&lt;-</span> <span class="fu">toggleConceptMapping</span>(<span class="at">conceptMapping =</span> ConceptMappingSourceConcepts,</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>                                                     <span class="at">pos =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">9</span><span class="sc">:</span><span class="dv">12</span>), <span class="at">mapping =</span> <span class="st">&quot;isExcluded&quot;</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Create Concept Set Expression with custom mapping</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>CovidSourceConceptCSE <span class="ot">&lt;-</span> CovidSourceConcepts <span class="sc">%&gt;%</span> </span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createConceptSetExpressionCustom</span>(<span class="at">Name =</span> <span class="st">&quot;COVID-19 source codes&quot;</span>,</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">conceptMapping =</span> ConceptMappingSourceConcepts)</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Create a Source Concept Attribute for query</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>SourceConceptAttribute <span class="ot">&lt;-</span> <span class="fu">createConditionSourceConceptAttribute</span>(<span class="at">ConceptSetExpression =</span> CovidSourceConceptCSE)</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co">#Create Query</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>CovidSourceConceptQuery <span class="ot">&lt;-</span> <span class="fu">createConditionOccurrence</span>(<span class="at">attributeList =</span> <span class="fu">list</span>(SourceConceptAttribute))</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="co">#create Count for covid source concepts</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>CovidCountCriteria2 <span class="ot">&lt;-</span> <span class="fu">createCount</span>(<span class="at">Query =</span> CovidSourceConceptQuery,</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Logic =</span> <span class="st">&quot;at_least&quot;</span>,</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Count =</span> <span class="dv">1</span>,</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Timeline =</span> Timeline1)</span></code></pre></div>
+</div>
+<div id="forward-piping-and-mutability-of-the-component-class" class="section level4">
+<h4>Forward Piping and Mutability of the Component Class</h4>
+<p>Something you probably have noticed is most of <code>Capr</code> code contains forward pipes from the <code>magrittr</code> package in R. This usually looks a little nicer to avoid overuse of the assignment operator <code>&lt;-</code>. However we use this deliberately to convey the mutability of the component container in <code>Capr</code>. Looking back at the structural prints from before we can see that component class changes as the object moves from a concept set expression, to a query, to a count and so forth. However the information from the previous state stays the same. The S4 component allows us to modify the structure while maintaining some rigid consistency across inheritance. In the code below, our look up returns a data.frame. The input for the <code>createConceptSetExpression</code> is a data.frame and the output is component object with a component class of conceptSetExpression. Next we mutate this component to build a query. On can always check the current component class of a component by using the function <code>componentType</code></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>CovidCountCriteria3 <span class="ot">&lt;-</span> <span class="fu">getConceptIdDetails</span>(<span class="at">conceptIds =</span> <span class="dv">37310282</span>,</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">mapToStandard =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createConceptSetExpression</span>(<span class="at">Name =</span> <span class="st">&quot;COVID-19 specific test&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createMeasurement</span>(<span class="at">conceptSetExpression =</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createCount</span>(<span class="at">Logic =</span> <span class="st">&quot;at_least&quot;</span>,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">Count =</span> <span class="dv">1</span>,</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">Timeline =</span> Timeline1)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="fu">componentType</span>(CovidCountCriteria3)</span></code></pre></div>
+</div>
+<div id="creating-a-concept-attribute" class="section level4">
+<h4>Creating a Concept Attribute</h4>
+<p>Sometimes we want to apply concepts directly into a cohort as an attribute, without building them as a concept set expression in the cohort. In this case we are using different values as concepts for measurement of a COVID-19 test. Below we show a lookup as before for concept values.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getConceptIdDetails</span>(<span class="at">conceptIds =</span> <span class="fu">c</span>(4126681L,45877985L, 9191L, 4181412L, 45879438L, 45884084L),</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">mapToStandard =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>#&gt;   CONCEPT_ID CONCEPT_NAME STANDARD_CONCEPT INVALID_REASON_CAPTION
+#&gt; 1       9191     Positive                S                  Valid
+#&gt; 2    4126681     Detected                S                  Valid
+#&gt; 3    4181412      Present                S                  Valid
+#&gt; 4   45877985     Detected                S                  Valid
+#&gt; 5   45879438      Present                S                  Valid
+#&gt; 6   45884084     Positive                S                  Valid
+#&gt;   INVALID_REASON STANDARD_CONCEPT_CAPTION CONCEPT_CODE  DOMAIN_ID VOCABULARY_ID
+#&gt; 1              V                 Standard     10828004 Meas Value        SNOMED
+#&gt; 2              V                 Standard    260373001 Meas Value        SNOMED
+#&gt; 3              V                 Standard     52101004 Meas Value        SNOMED
+#&gt; 4              V                 Standard    LA11882-0 Meas Value         LOINC
+#&gt; 5              V                 Standard     LA9633-4 Meas Value         LOINC
+#&gt; 6              V                 Standard     LA6576-8 Meas Value         LOINC
+#&gt;   CONCEPT_CLASS_ID
+#&gt; 1  Qualifier Value
+#&gt; 2  Qualifier Value
+#&gt; 3  Qualifier Value
+#&gt; 4           Answer
+#&gt; 5           Answer
+#&gt; 6           Answer</code></pre>
+<p>If we wanted to use these concepts directly into an attribute we can search them from the function call. Underlying this function is the same lookup command as before in addition to some formatting changes for concepts that are incorporated within the cohort and not in the concept set list.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ValueAsConceptAtt <span class="ot">&lt;-</span> <span class="fu">createValueAsConceptAttribute</span>(<span class="at">conceptIds =</span> <span class="fu">c</span>(4126681L,45877985L, 9191L,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                                                                  4181412L, 45879438L, 45884084L),</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                                                   <span class="at">mapToStandard =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>Covid19MeasuresQuery <span class="ot">&lt;-</span> <span class="fu">createMeasurement</span>(<span class="at">conceptSetExpression =</span> MeasureOfCovid19CSE,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">attributeList =</span> <span class="fu">list</span>(ValueAsConceptAtt))</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>CovidCountCriteria4 <span class="ot">&lt;-</span> <span class="fu">createCount</span>(<span class="at">Query =</span> Covid19MeasuresQuery,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Logic =</span> <span class="st">&quot;at_least&quot;</span>,</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Count=</span><span class="dv">1</span>, <span class="at">Timeline =</span> Timeline1)</span></code></pre></div>
+</div>
+<div id="resuing-component-parts" class="section level4">
+<h4>Resuing Component Parts</h4>
+<p><code>Capr</code> levarages the global environment in R to maintain objects that have been previously created in other parts of the cohort. In <code>Capr</code>, components and other objects can always exist in isolation so we can simply add them into a different function call. Notice that our object <code>Timeline1</code> which represents the timeline of the restricted events has stayed the same for each new count. We are recycling the object from the global environment and do not need to recreate this every time. We will expand upon this idea in the save and load commands in <code>Capr</code>. Beyond reuse we can copy and modify aspects to generate new component objects. In the code chunk below we can build this count through our typical means: lookup the concept, create the mapping, make the concept set expression, set the query with attributes and then build the count.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Covid19ObservationMeasureQuery <span class="ot">&lt;-</span> <span class="fu">createObservation</span>(<span class="at">conceptSetExpression =</span> MeasureOfCovid19CSE,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">attributeList =</span> <span class="fu">list</span>(ValueAsConceptAtt))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>CovidCountCriteria5A <span class="ot">&lt;-</span> <span class="fu">createCount</span>(<span class="at">Query =</span> Covid19ObservationMeasureQuery,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Logic =</span> <span class="st">&quot;at_least&quot;</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Count =</span> <span class="dv">1</span>, </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Timeline =</span> Timeline1)</span></code></pre></div>
+<p>This is nearly identical to something we have created before, except it was a Measurment domain. Instead of recreating everything we can use the copy and modify principles in R to more quickly change this component to the new domain observation.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>CovidCountCriteria5 <span class="ot">&lt;-</span> CovidCountCriteria4</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>CovidCountCriteria5<span class="sc">@</span>CriteriaExpression[[<span class="dv">1</span>]]<span class="sc">@</span>Criteria<span class="sc">@</span>Domain <span class="ot">&lt;-</span> <span class="st">&quot;Observation&quot;</span> </span></code></pre></div>
+</div>
+<div id="finally-creating-the-group" class="section level4">
+<h4>Finally, Creating the group</h4>
+<p>We need to make one more count for our group. Once this is created we can add all these components into a group. A group requires a name, some logic on what counts and the list of criterias, demographic criterias and sub groups.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>CovidSourceConceptQueryObs <span class="ot">&lt;-</span> <span class="fu">createObservation</span>(<span class="at">attributeList =</span> <span class="fu">list</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createObservationSourceConceptAttribute</span>(CovidSourceConceptCSE)))</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>CovidCountCriteria6 <span class="ot">&lt;-</span> <span class="fu">createCount</span>(<span class="at">Query =</span> CovidSourceConceptQueryObs,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Logic =</span> <span class="st">&quot;at_least&quot;</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Count =</span><span class="dv">1</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Timeline =</span> Timeline1)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>CovidDiagGroup <span class="ot">&lt;-</span> <span class="fu">createGroup</span>(<span class="at">Name =</span> <span class="st">&quot;COVID-19 Diag&quot;</span>,</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">&quot;ANY&quot;</span>, </span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>                          <span class="at">criteriaList =</span> <span class="fu">list</span>(CovidCountCriteria1, CovidCountCriteria2,</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>                                              CovidCountCriteria3, CovidCountCriteria4,</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>                                              CovidCountCriteria5, CovidCountCriteria6))</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="fu">saveComponent</span>(CovidDiagGroup,</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">saveName =</span> <span class="st">&quot;CovidDiagGroup&quot;</span>,</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">savePath =</span> <span class="st">&quot;~/Documents&quot;</span>)</span></code></pre></div>
+<p>We can use this group to make an additional criteria like in the chunk below.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>AcCovidDiag <span class="ot">&lt;-</span> <span class="fu">createAdditionalCriteria</span>(<span class="at">Name =</span> <span class="st">&quot;Additional Crit for COVID cohort&quot;</span>,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">Contents =</span> CovidDiagGroup, </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">Limit =</span> <span class="st">&quot;All&quot;</span>)</span></code></pre></div>
+<p>We can also use this same group as a nested (correlated) criteria for an inclusion rule. This is another example of the resuability of the components. We can make a group once and then use it in a variety of scenarios across the cohort definition. We can also save the group and use it another time in a different cohort if we plan to use it frequently across a family of like cohorts.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load an existing component</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>CovidDiagGroupLoad <span class="ot">&lt;-</span> <span class="fu">loadComponent</span>(<span class="st">&quot;~/Documents/CovidDiagGroup.json&quot;</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>CorrelatedCriteriaAtt <span class="ot">&lt;-</span> <span class="fu">createCorrelatedCriteriaAttribute</span>(CovidDiagGroupLoad)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>InpatientVisitWCovidDiagQuery <span class="ot">&lt;-</span> <span class="fu">createVisitOccurrence</span>(<span class="at">conceptSetExpression =</span> IpVisitCSE,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">attributeList =</span> <span class="fu">list</span>(CorrelatedCriteriaAtt))</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>Timeline2 <span class="ot">&lt;-</span> <span class="fu">createTimeline</span>(<span class="at">StartWindow =</span> <span class="fu">createWindow</span>(<span class="at">StartDays =</span> <span class="dv">180</span>, <span class="at">StartCoeff =</span> <span class="st">&quot;Before&quot;</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                                                 <span class="at">EndDays =</span> <span class="dv">1</span>, <span class="at">EndCoeff =</span> <span class="st">&quot;Before&quot;</span>))</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>CovidCountInclusionRule3 <span class="ot">&lt;-</span> <span class="fu">createCount</span>(<span class="at">Query =</span> InpatientVisitWCovidDiagQuery,</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Logic =</span> <span class="st">&quot;exactly&quot;</span>,</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Count =</span> <span class="dv">0</span>,</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Timeline =</span> Timeline2)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>CovidHospitalizationGroup <span class="ot">&lt;-</span> <span class="fu">createGroup</span>(<span class="at">Name =</span><span class="st">&quot;does not have hospitalization for COVID19 in the 6 months preceding admission&quot;</span>,</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>                           <span class="at">type =</span> <span class="st">&quot;ALL&quot;</span>,</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>                           <span class="at">criteriaList =</span> <span class="fu">list</span>(CovidCountInclusionRule3),</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">demographicCriteriaList =</span> <span class="cn">NULL</span>,</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">Groups =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+</div>
+<div id="creating-a-demographic-criteria" class="section level4">
+<h4>Creating a Demographic Criteria</h4>
+<p>In our groups sometimes we want to include a demographic criteria for examples persons 18 years or older. Demographic criterias are attributes, so we use the attribute functions to create them like before.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>AgeAtt <span class="ot">&lt;-</span> <span class="fu">createAgeAttribute</span>(<span class="at">Op =</span> <span class="st">&quot;gte&quot;</span>, <span class="at">Value =</span> <span class="dv">18</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>Age18AndOlderGroup <span class="ot">&lt;-</span> <span class="fu">createGroup</span>(<span class="at">Name =</span> <span class="st">&quot;&gt;=18 years old&quot;</span>,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">type=</span><span class="st">&quot;ALL&quot;</span>, </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">criteriaList =</span> <span class="cn">NULL</span>,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">demographicCriteriaList =</span> <span class="fu">list</span>(AgeAtt),</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">Groups =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="creating-inclusion-rules" class="section level3">
+<h3>Creating Inclusion Rules</h3>
+<p>Once we have a series of groups we are happy with we can bundle them together to create inclusion rules. The code chunk below shows how to make inclusion rules from the groups we have created before plus a group that is based on persons having at least 365 days of observation.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>Timeline3 <span class="ot">&lt;-</span> <span class="fu">createTimeline</span>(<span class="at">StartWindow =</span> <span class="fu">createWindow</span>(<span class="at">StartDays =</span> <span class="st">&quot;All&quot;</span>, <span class="at">StartCoeff =</span> <span class="st">&quot;Before&quot;</span>,</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>                                                       <span class="at">EndDays =</span> <span class="dv">365</span>, <span class="at">EndCoeff =</span> <span class="st">&quot;Before&quot;</span>),</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">EndWindow =</span> <span class="fu">createWindow</span>(<span class="at">StartDays =</span> <span class="dv">0</span>, <span class="at">StartCoeff =</span> <span class="st">&quot;Before&quot;</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">EndDays =</span> <span class="st">&quot;All&quot;</span>, <span class="at">EndCoeff =</span> <span class="st">&quot;After&quot;</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">IndexStart =</span> <span class="cn">FALSE</span>, <span class="at">EventStarts =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>CovidCountInclusionRule2 <span class="ot">&lt;-</span> <span class="fu">createCount</span>(<span class="at">Query =</span> <span class="fu">createObservationPeriod</span>(),</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Logic =</span> <span class="st">&quot;at_least&quot;</span>,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Count =</span><span class="dv">1</span>,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Timeline =</span> Timeline3)</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>Has365DaysObsGroup <span class="ot">&lt;-</span> <span class="fu">createGroup</span>(<span class="at">Name =</span> <span class="st">&quot;Has &gt;= 365 of observation&quot;</span>,</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>                           <span class="at">type =</span> <span class="st">&quot;ALL&quot;</span>,</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>                           <span class="at">criteriaList =</span> <span class="fu">list</span>(CovidCountInclusionRule2))</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>IrsCovidDiag <span class="ot">&lt;-</span> <span class="fu">createInclusionRules</span>(<span class="at">Name =</span> <span class="st">&quot;Inclusion Rules for covid Cohort&quot;</span>,</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Contents =</span> <span class="fu">list</span>(Age18AndOlderGroup,</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>                                            Has365DaysObsGroup,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>                                            CovidHospitalizationGroup),</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Limit =</span><span class="st">&quot;First&quot;</span>)</span></code></pre></div>
+</div>
+<div id="defining-the-cohort-exit" class="section level3">
+<h3>Defining the cohort exit</h3>
+<p>The cohort exit is defined by the end strategy and the censoring criteria. The end strategy by default is end of continuous observation, however we can create two additional strategies to define how persons exit the cohort. First we can use a date offset. The code chunk below shows an example.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>EsCovidDiag <span class="ot">&lt;-</span> <span class="fu">createDateOffsetEndStrategy</span>(<span class="at">offset =</span> <span class="dv">0</span>, <span class="at">eventDateOffset =</span> <span class="st">&quot;EndDate&quot;</span>)</span></code></pre></div>
+<p>We can aslo create a custom era using a drug exposure to define the end point of a cohort. This example is not a part of the covid cohort but is included for demonstration. We first find a concept like warfarin, create the concept set expression and then apply this within the custom era.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>WarfarinCSE <span class="ot">&lt;-</span> <span class="fu">getConceptIdDetails</span>(<span class="at">conceptIds =</span> <span class="dv">1310149</span>, </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">mapToStandard =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createConceptSetExpression</span>(<span class="at">Name =</span> <span class="st">&quot;Warfarin&quot;</span>, <span class="at">includeDescendants =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>EndStrategyWithDrug <span class="ot">&lt;-</span> <span class="fu">createCustomEraEndStrategy</span>(WarfarinCSE,</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>                                                  <span class="at">gapDays =</span> <span class="dv">3</span>,</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>                                                  <span class="at">offset =</span> <span class="dv">0</span>)</span></code></pre></div>
+<p>Aside from the end strategy we can also define a censoring criteria as a way that persons exit the cohort. This is another example that is not part of the covid cohort but we include for the purpose of demonstration. Similar to a primary criteria we can build a concept set expression for what will be our censoring event. Then we create a query (we may also add an attribute) that defines the domain of the concept set expression. We can add any queries we wish to add to the censoring criteria to build this component.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>InfliximabCSE <span class="ot">&lt;-</span> <span class="fu">getConceptIdDetails</span>(<span class="at">conceptIds =</span> <span class="fu">c</span>(<span class="dv">937368</span>,<span class="dv">937369</span>), </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">connectionDetails =</span> <span class="cn">NULL</span>,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">connection =</span> connection, <span class="co">#use connection since it is already open</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">vocabularyDatabaseSchema =</span> vocabularyDatabaseSchema,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">oracleTempSchema =</span> <span class="cn">NULL</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">mapToStandard =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createConceptSetExpression</span>(<span class="at">Name =</span> <span class="st">&quot;Infliximab&quot;</span>, <span class="at">includeDescendants =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>infliximabQuery <span class="ot">&lt;-</span><span class="fu">createDrugEra</span>(<span class="at">conceptSetExpression =</span> InfliximabCSE)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>cen <span class="ot">&lt;-</span><span class="fu">createCensoringCriteria</span>(<span class="at">Name =</span> <span class="st">&quot;prev inflix&quot;</span>, <span class="at">ComponentList =</span>  <span class="fu">list</span>(infliximabQuery))</span></code></pre></div>
+</div>
+<div id="creating-a-cohort-era" class="section level3">
+<h3>Creating a Cohort Era</h3>
+<p>The last piece of a cohort definition is to add the cohort era. This defines padding between events and censor window of when to begin recording events. Say in a cohort we only we want to look at events after a certain date. All of this is defined in the cohort era. In many cases the cohort era can be composed of default settings (padding of 0 and no censor window) and does not need to to built for the cohort definition.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>cohortEra <span class="ot">&lt;-</span> <span class="fu">createCohortEra</span>(<span class="at">LeftCensorDate =</span> <span class="st">&quot;2019-12-17&quot;</span>)</span></code></pre></div>
+</div>
+<div id="creating-the-cohort-definition" class="section level3">
+<h3>Creating the cohort definition</h3>
+<p>Once we are happy with the creation of all the sub-components we can build the cohort definition. This is pretty simple. We infuse the component parts necessary for the cohort definition and create. In the cohort definition we can add meta data about the cohort definition. This includes a name (required), description (optional), author (optional) and the cdm version compatability. The default of the cdm version is “&gt;= 5.0.0”. If we had a different variation of this cohort definition, for example the primary criteria for inpatient has a different observation window, we can simply create a separate primary criteria object and then infuse that into a separate cohort definition.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>desc <span class="ot">&lt;-</span> <span class="st">&quot;This cohort counts the number of inpatient visits from patients with COVID-19, this is counted as a covid diagnosis or from a measured covid test&quot;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>cd <span class="ot">&lt;-</span> <span class="fu">createCohortDefinition</span>(<span class="at">Name =</span> <span class="st">&quot;Inpatient COVID-19 Diag&quot;</span>,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">Description =</span> desc,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">PrimaryCriteria =</span> PcCovidDiag,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">AdditionalCriteria =</span> AcCovidDiag,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">InclusionRules =</span> IrsCovidDiag,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">EndStrategy =</span> EsCovidDiag)</span></code></pre></div>
+</div>
+</div>
+<div id="deploying-the-cohort" class="section level2">
+<h2>Deploying the Cohort</h2>
+<p>Once the cohort definition has been created we want to run it against our OMOP cdm. To do so we need to use the <code>CirceR</code> package to take the cohort definition and create the ohdisql to run on our local environment. <code>CirceR</code> will populate the parameterized sql if one sets the generate options. We need to tell what is the column for the cohort Id in the cohort table of the results schema, the id number in the results schema, the cdm schema, the table where the cohort is to be written, the results Schema where the table sits, the vocabulary schema to access concepts and a toggle to generate statistics on the cohort. We can take the cohort definition created in R and return objects to deploy this cohort across our OMOP system. The function <code>compileCohortDefinition</code> takes the R and builds the json that <code>CirceR</code> takes to get the cohort description and most importantly the ohdisql. <code>Capr</code> does some low level manipulation to get from the R object to the json and then relies on <code>CirceR</code> to build the ohdisql. Functions leveraged in the <code>compileCohortDefinition</code> functions from <code>CirceR</code> include <code>cohortExpressionFromJson</code> which activates the circe-be, <code>cohortPrintFriendly</code> which returns the enlish text of the cohort, and <code>buildCohortQuery</code> which creates the ohdisql from the input generate options.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>genOp <span class="ot">&lt;-</span> CirceR<span class="sc">::</span><span class="fu">createGenerateOptions</span>(<span class="at">cohortIdFieldName =</span> <span class="st">&quot;cohort_definition_id&quot;</span>,</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">cohortId =</span> <span class="dv">9999</span>,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">cdmSchema =</span> connectionDetails<span class="sc">$</span>schema,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">targetTable =</span> <span class="st">&quot;cohort&quot;</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                               <span class="at">resultSchema =</span> <span class="st">&quot;results&quot;</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>                               <span class="at">vocabularySchema =</span> connectionDetails<span class="sc">$</span>schema,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                               <span class="at">generateStats =</span> F)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>cohortInfo <span class="ot">&lt;-</span> <span class="fu">compileCohortDefinition</span>(cd, genOp)</span></code></pre></div>
+<p>The cohortInfo object in the chunk above is a list of 4 aspects: 1) the s3 cohort definition (<code>circeS3</code>) – this is a intermediate structure for cohort definition that one can browse to debug errors 2) the cohort json (<code>circeJson</code>) – this returns the json of the cohort definition, identical to ATLAS. You can copy an paste this json to ATLAS to generate the same cohort. You can also save this for record keeping 3) the cohort description (<code>cohortRead</code>) – this returns the english text of the cohort 4) the sql (<code>ohdisql</code>) – the parameterized sql already filled in with the generate options.</p>
+<p>To execute the ohdisql one needs to use the <code>DatabaseConnector::executeSql</code> function to run the sql against the db as shown in the chunk before.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>DatabaseConnector<span class="sc">::</span><span class="fu">executeSql</span>(<span class="at">connection =</span> conn, <span class="at">sql=</span>cohortInfo<span class="sc">$</span>ohdiSQL)</span></code></pre></div>
+</div>
+<div id="saving-and-loading-cohorts" class="section level2">
+<h2>Saving and Loading Cohorts</h2>
+<p>An important feature of <code>Capr</code> is the ability to save and load components. As mentioned before we may want to reuse a component in a different cohort. Instead of rebuilding this object we can save the component and load it up to deploy on a different cohort. The idea here is to leverage the programatic environment of R to assist in cohort development and programming network studies. We encourage users to save and recycle components to assist them in study development. The code chunk below shows an example of saving a cohort additional criteria.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveComponent</span>(AcCovidDiag,</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">saveName =</span> <span class="st">&quot;covidAC&quot;</span>, </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">savePath =</span> <span class="st">&quot;~/Documents/ComponentLibrary/CovidInpatient&quot;</span>)</span></code></pre></div>
+<p>We can then load this additional criteria into the global environment to utilize in a new iteration of a covid cohort. Maybe this new cohort has a different primary criteria but the same in other places. Notice the saved components are written to json. Future releases may allow saving the S4 object as a binary, depending on user preference.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>acCovidIp <span class="ot">&lt;-</span> <span class="fu">loadComponent</span>(<span class="st">&quot;~/Documents/ComponentLibrary/CovidInpatient/covidAC.json&quot;</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>cd2 <span class="ot">&lt;-</span> <span class="fu">createCohortDefinition</span>(<span class="at">Name =</span> <span class="st">&quot;DifferentcovidDiagCohort&quot;</span>,</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>                              <span class="at">PrimaryCriteria =</span> pcCovidOw365,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>                              <span class="at">AdditionalCriteria =</span> acCovidIp,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">InclusionRules =</span> irs,</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>                              <span class="at">EndStrategy =</span> es)</span></code></pre></div>
+</div>
+<div id="importing-existing-json-cohorts" class="section level2">
+<h2>Importing existing JSON Cohorts</h2>
+<p>The OHDSI community has created thousands of cohorts and has introduced a gold standard pheontype library, maintaining a list of ideal cohorts for medical constructs. We do not want to rewrite good existing cohorts. We also may want to take an existing cohort skeleton and make a slight modification. <code>Capr</code> allows us to import Circe Json and build the cohort definition to your global environment. With this cohort uploaded you can modify as you see fit. In this example we upload the cohort definition and a saved primary criteria. We modify the primary criteria to have an observation window of post days 365 and add this to our loaded cohort. We can build the ohdisql of this cohort quite quickly.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>cd2 <span class="ot">&lt;-</span> <span class="fu">readInCirce</span>(<span class="st">&quot;~/Documents/NetworkStudy/COVID/inpatientCovid.json&quot;</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>pc2 <span class="ot">&lt;-</span> <span class="fu">loadComponent</span>(<span class="st">&quot;~/Documents/ComponentLibrary/CovidInpatient/covidPC.json&quot;</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>pc2<span class="sc">@</span>CriteriaExpression<span class="sc">$</span>ObservationWindow<span class="sc">@</span>PostDays <span class="ot">&lt;-</span> 365L</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>cd2<span class="sc">@</span>PrimaryCriteria <span class="ot">&lt;-</span> pc2</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>cohortInfo2 <span class="ot">&lt;-</span> <span class="fu">compileCohortDefinition</span>(cd2, genOp)</span></code></pre></div>
+</div>
+<div id="cohort-building-language-as-data" class="section level2">
+<h2>Cohort Building Language as Data</h2>
+<p>A cool feature of R is its ability to do metaprogramming. We can save code as data and modify the code programatically. For those interested on learning the theoretical aspects of this in R, one should read Hadley Wickhams’s Advanced R section 4 about Metaprogramming. <code>Capr</code> uses this feature when importing a CIRCE json. It creates structural calls in an execution environment and then evaluates them into the global environment, leaving only the cohort definition as its trace. <code>Capr</code> has a function that places the function calls into a txt file.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeCaprCall</span>(<span class="at">jsonPath =</span> <span class="st">&quot;~/Documents/NetworkStudy/COVID/inpatientCovid.json&quot;</span>,</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">txtPath =</span> <span class="st">&quot;~/Documents/NetworkStudy/COVID/inpatientCovid.txt&quot;</span>)</span></code></pre></div>
+<p>While available to the user this function is really designed to interact with a webAPI, writing the machine legible R code to generate acohort. This is an area of future exploration to modify cohort definitions programatically using the R calls saved as data.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

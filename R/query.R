@@ -184,17 +184,33 @@ conditionEra <- function(conceptSet, ...) {
 
 # Serialization -----
 
+# class(x@conceptSet@Expression[[1]])
+# as.list(x@conceptSet@Expression[[1]])
 setMethod("as.list", "Query", function(x) {
 
-  # ll <- list("ConceptSets"
-  #   x@Domain = list(
-  #            'CodesetId' = x@conceptSet@id,
-  #            lapply(x@Attributes, as.list)))
+  x <- condition(cs(1:2))
+  # A query has exactly one concept set so id is always 0
+  conceptSetList <- list(id = 0,
+                         name = x@conceptSet@Name,
+                         items = lapply(x@conceptSet@Expression, as.list))
 
-  # if(length(ll$CodesetId) == 0){
-  #   ll$CodesetId <- NA_character_
-  # }
-  # return(ll)
+  #TODO add attributes
+  atr <- list("Age" = list("Value" = 90, "Op" = "lt"),
+              "Age2" = list("Value" = 90, "Op" = "lt"))
+
+  domainList <- c(0, atr) %>%  rlang::set_names(c("CodesetId", names(atr)))
+
+  atr_name <- "Age2"
+  atr_value <- list("Value" = 90, "Op" = "lt")
+
+  ll <- lst("ConceptSets" = conceptSetList,
+              !!x@domain := lst('CodesetId' = 0, !!atr_name := atr_value))
+
+  jsonlite::toJSON(ll, pretty = TRUE, auto_unbox = TRUE)
+  return(ll)
 })
+
+
+
 
 

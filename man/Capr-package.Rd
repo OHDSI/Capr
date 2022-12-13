@@ -6,7 +6,7 @@
 \alias{Capr-package}
 \title{Capr: Cohort definition Application Programming in R}
 \description{
-The CAPR package develops cohort definitions to implement across an OMOP mapped dbms. This pacakge allows allows for the programmatic creation of OMOP cohorts that compile to the CIRCE-BE engine. CAPR utilizes s4 to construct component parts to the cohort definition (i.e. Primary Criteria, Inclusion Rules, Additional Criteria, Censoring Criteria, and End Strategy) and then packs them together into a Cohort Definition class. The Cohort Definition can be rendered into a CIRCE-BE object that will generate ohdsiSQL to query against an OMOP dbms. CAPR adds component parts to the OMOP cohort definition in order to combine Concept Set Expressions with its definition logic in the same position, facilitating the transition between scientific description and computational implmentation.
+The Capr package provides a programming language for defining OHDSI cohort definitions in R. The functions in Capr allow for the programmatic creation of OHDSI concept sets and cohorts that can be serialized to Atlas/CIRCE-BE compatible json files or to OHDSI-SQL. Capr functions can be used to create, save, and load component parts to a cohort definition allowing R programmers to easily reuse cohort logic. Capr provides tools to create a large number of OHDSI cohorts programmatically while also helping bridge the gap between human readable descriptions of clinical phenotypes and their computational implmentation.
 }
 \seealso{
 Useful links:
@@ -19,6 +19,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Martin Lavallee \email{mdlavallee92@gmail.com}
+
+Authors:
+\itemize{
+  \item Adam Black \email{black@ohdsi.org}
+}
 
 }
 \keyword{internal}

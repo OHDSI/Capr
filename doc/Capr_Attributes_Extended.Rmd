@@ -1,0 +1,89 @@
+---
+title: "Capr_Attributes_Extended"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Capr_Attributes_Extended}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction 
+
+There are several attributes that are available in circe-be and found in ATLAS. In future releases, `Capr` will create a dedicated function signature to each attribute (subject to user feedback). In order to extend the usage of attributes that are not personalized, a few low level functions were made available to access a greater set of attributes. The functions are: `createOpAttribute` and `createConceptAttribute`. OpAttributes are for attributes that contain an operator and concept attribute include concept ids that are not part of the cohort concept set list. To view all possible attribute in Capr available for each domain, a helper function `listAttributeOptions` can be used. Below are some of the available attribute per attribute class. 
+
+```{r echo=FALSE}
+AttributeOptions <- list('Op' =c("Age", "OccurrenceStartDate", "OccurrenceEnd", "AgeAtEnd",
+                               "AgeAtStart", "PeriodLength", "ValueAsNumber", "RangeLow",
+                               "RangeHigh", "RangeLowRatio", "RangeHighRatio",
+                               "EraStartDate", "EraEndDate", "OccurrenceCount",
+                               "EraLength", "Refills", "Quantity", "DaysSupply",
+                               "EffectiveDrugDose", "VisitLength"),
+                       'Concept' = c("ConditionType", "Gender", "VisitType",
+                                     "DrugType", "RouteConcepts", "DoseUnit",
+                                     "ProviderSepcialty", "PlaceOfService",
+                                     "ProcedureType", "Modifier", "ObservationType",
+                                     "ValueAsConcept", "Qualifier", "Unit",
+                                     "MeasurementType", "Operator", "DeathType",
+                                     "DeviceType"),
+                       'Logical' =c("First", "DrugTypeExclude", "ConditionTypeExclude",
+                                    "VisitTypeExclude", "ProcedureTypeExclude",
+                                    "ObservationTypeExclude", "MeasurementTypeExclude",
+                                    "Abnormal", "DeathTypeExclude", "DeviceTypeExclude"),
+                       'SourceConcept' = c("VisitSourceConcept","DrugSourceConcept",
+                                           "ConditionSourceConcept", "ProcedureSourceConcept",
+                                           "ObservationSourceConcept", "MeasurementSourceConcept",
+                                           "DeathSourceConcept", "DeviceSourceConcept"),
+                       'TextFilter' =c("ValueAsString", "StopReason", "UniqueDeviceId"))
+```
+
+
+```{r setup}
+library(Capr)
+AttributeOptions
+```
+
+Not all of these attributes are Op or Concept, there are others like source and logical which already have been personalized and do not need use of low level functions. An example of a logical is `createFirstAttribute` and an example of a source concept is `createDeviceSourceConceptAttribute`.  Correlated Criteria is another attribute that is already user facing. Currently text filler attributes are not supported but will be extended in a future release. 
+
+
+## Op Attribute
+
+The Op Attribute uses an operator to bound either a single value or a value and extent. Operators include less than, less than or equal to, greater than, greater than or equal to, equal to, between and not between. Capr allows four type of entries for operators: a symbol, text, short, and indicies. Capr will automatically map the operator to the short hand text which is used in circe. Two operators (between and not between) require two inputs a value and an extent. No other operator requires an extent, which should be NULL by default. The value and extent can either be integers or character date strings. If you wish to use a data Op attribute than the character date string must be of form yyyy-mm-dd, otherwise it will be invalid in the circe compiler. In future releases, a separate date attribute may be created. 
+
+```{r echo=FALSE}
+knitr::kable(data.frame(symb = c("<", "<=", ">", ">=", "==", "--", "!-"),
+                     text = c("less than", "less than or equal to", "greater than",
+                              "greater than or equal to", "equal to", "between", "not between"),
+                     short = c("lt", "lte", "gt", "gte", "eq", "bt", "!bt"),
+                     idx = 1:7,
+                     stringsAsFactors = FALSE))
+```
+
+An example of using a Op Attribute can be seen in the chunk below:
+
+```{r}
+opExample <- createOpAttribute(Name = "RangeHigh", Op = ">=", Value = 5L)
+str(opExample)
+```
+
+For a date an example is in the chunk below:
+
+```{r}
+opExample2 <- createOpAttribute(Name = "OccurrenceStartDate", Op = "greater than", Value = "2018-12-31")
+str(opExample2)
+```
+
+## Concept Attribute
+
+A concept attribute looks up concept ids without including them as concept sets in the cohort definitions. Examples of a concept attribute is Gender. Male (ID: 8507) and Female (ID: 8532) have standard concept ids that are often used as attributes. We can apply the lookup tools to assist us in querying concept ids from the OMOP vocabulary. An example of creating a concept attribute is shown below:
+
+```{r eval=FALSE}
+createConceptAttribute(conceptIds = 8507, name = "Gender")
+```
+

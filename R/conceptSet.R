@@ -131,9 +131,7 @@ setValidity("ConceptSet", function(object) {
 #' @rdname show-method
 #' @aliases show,ConceptSet-method
 setMethod("show", "ConceptSet", function(object) {
-  cat(paste("<Capr Concept Set>", object@Name, "\n"))
-  cat("Id:", object@id,"\n")
-  d <- purrr::map_chr(object@Expression, ~.@Concept@concept_id)
+  cli::cat_rule(paste("<Capr Concept Set>", object@Name))
   print(as.data.frame(object))
 })
 
@@ -142,11 +140,35 @@ setMethod("show", "ConceptSet", function(object) {
 # From the user's perspective there are only concept sets with zero or more members.
 
 # Internal
-newConcept <- function(id, isExcluded = FALSE, includeDescendants = FALSE, includeMapped = FALSE) {
+newConcept <- function(id,
+                       isExcluded = FALSE,
+                       includeDescendants = FALSE,
+                       includeMapped = FALSE,
+                       conceptName = "",
+                       standardConcept = "",
+                       standardConceptCaption = "",
+                       invalidReason = "",
+                       invalidReasonCaption = "",
+                       conceptCode = "",
+                       domainId = "",
+                       vocabularyId = "",
+                       conceptClassId = "") {
   checkmate::assertIntegerish(id, len = 1)
 
+  concept <- new("Concept",
+                 concept_id = as.integer(id),
+                 concept_name = conceptName,
+                 standard_concept = standardConcept,
+                 standard_concept_caption = standardConceptCaption,
+                 invalid_reason = invalidReason,
+                 invalid_reason_caption = invalidReasonCaption,
+                 concept_code = conceptCode,
+                 domain_id = domainId,
+                 vocabulary_id = vocabularyId,
+                 concept_class_id = conceptClassId)
+
   new("ConceptSetItem",
-      Concept = new("Concept", concept_id = as.integer(id)),
+      Concept = concept,
       isExcluded = isExcluded,
       includeDescendants = includeDescendants,
       includeMapped = includeMapped)
@@ -195,7 +217,7 @@ cs <- function(..., name = "", id = NULL) {
   dups <- ids[duplicated(ids)]
   if (length(dups) > 0)
     rlang::abort(paste("ID: ", paste(dups, collapse = ", "), " are duplicated in the concept set."))
-  # TODO decide how to handle duplicate ids in `cs`
+  # TODO decide how to handle duplicate ids in `cs`. For now we throw error.
 
   if (is.null(id)) id <- as.character(uuid::UUIDgenerate())
 
@@ -205,7 +227,7 @@ cs <- function(..., name = "", id = NULL) {
                Expression = conceptList)
 }
 
-# Concept set helpers -----
+# Constructor helpers -----
 
 #' Exclude concepts from a concept set
 #'
@@ -276,6 +298,8 @@ descendants <- function(...) {
   })
 }
 
+# Type Coercion ----
+
 #' Coerce a concept set expression to a dataframe
 #'
 #' @param x A Caper Concept Set
@@ -290,6 +314,9 @@ as.data.frame.ConceptSet <- function(x) {
     includeMapped = purrr::map_lgl(x@Expression, "includeMapped")
   )
 }
+
+# setGeneric("as.data.frame")
+setMethod("as.data.frame", "ConceptSet", as.data.frame.ConceptSet)
 
 setMethod("as.list", "Concept", function(x){
   nm <- methods::slotNames(methods::is(x))
@@ -336,10 +363,51 @@ writeConceptSet <- function(x, path) {
   jsonlite::write_json(x = items, path = path, pretty = TRUE, auto_unbox = TRUE)
 }
 
+#' Write a concept set to a json file
+#'
+#' The resulting concept Set JSON file can be imported into Atlas.
+#'
+#' @param path Name of concept set file to read. (e.g. "concepts.json")
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' anemia <- readConceptSet('anemia.json')
+#' }
+readConceptSet <- function(path, name, id = NULL) {
+
+  if (missing(name)) {
+    name <- fs::path_ext_remove(basename(path))
+  } else {
+    checkmate::assertCharacter(name, len = 1)
+  }
+
+  items <- jsonlite::read_json(path = path)
+  # TODO do some validation of the input. Also check that this works with Atlas.
+  conceptList <- purrr::map(items[[1]], function(.) {
+    newConcept(id = .$concept$CONCEPT_ID,
+               isExcluded = .$isExcluded,
+               includeDescendants = .$includeDescendants,
+               includeMapped = .$includeMapped,
+               conceptName = .$concept$CONCEPT_NAME,
+               standardConcept = .$concept$STANDARD_CONCEPT,
+               standardConceptCaption = .$concept$STANDARD_CONCEPT_CAPTION,
+               invalidReason = .$concept$INVALID_REASON,
+               conceptCode = .$concept$CONCEPT_CODE,
+               domainId = .$concept$DOMAIN_ID,
+               vocabularyId = .$concept$VOCABULARY_ID,
+               conceptClassId = .$concept$CONCEPT_CLASS_ID)
+  })
+
+  rlang::inject(cs(!!!conceptList, name = name, id = id))
+}
+
 # condition_anemia <- cs(descendants(439777,4013073,4013074))
 # jsonlite::write_json()
 # x <- condition_anemia
 
+# Other ----
 
 #' Fill in Concept Set details using a vocab
 #'
@@ -406,4 +474,88 @@ getConceptSetDetails <- function(x,
   }
   return(x)
 }
+
+
+#' @exportMethod
+setMethod("==", signature("ConceptSet", "ConceptSet"), function(e1, e2) {
+  isTRUE(dplyr::all_equal(as.data.frame(e1),
+                          as.data.frame(e2),
+                          ignore_row_order = TRUE))
+})
+
+# args(getGeneric("unique")) # get generic argument names
+
+# TODO convert this to vctrs. use generic.
+uniqueConceptSets <- function(x) {
+  stopifnot(is.list(x), all(purrr::map_lgl(x, ~is(., "ConceptSet"))))
+  # Is there an efficient implementation using just equality? Seems like maybe not?
+  l <- list()
+  for (i in x) {
+    alreday_in <- any(purrr::map_lgl(l, ~i == .))
+    if(!alreday_in) l <- c(l, i)
+  }
+  return(l)
+}
+
+# Build Capr call ----
+
+#' Create the Capr code to build a concept set
+#'
+#' @param x A concept set
+#' @return The Capr code required to build the concept set
+#'
+getConceptSetCall <- function(x, name = x@Name){
+
+  checkmate::assertCharacter(name, len = 1, min.chars = 1)
+
+  df <- as.data.frame(x)
+
+  # TODO improve formatting for multi-lines. Possibly make this code more concise?
+  csCall <- ""
+  ids <- df[df$includeDescendants & df$isExcluded & df$includeMapped,]$conceptId
+  if (length(ids) > 0) {
+    csCall <- c(paste0("exclude(desendants(mapped(", paste0(ids, collapse = ", "), ")))"), csCall)
+  }
+
+  ids <- df[df$includeDescendants & df$isExcluded & !df$includeMapped,]$conceptId
+  if (length(ids) > 0) {
+    csCall <- c(paste0("exclude(desendants(", paste0(ids, collapse = ", "), "))"), csCall)
+  }
+
+  ids <- df[df$includeDescendants & !df$isExcluded & df$includeMapped,]$conceptId
+  if (length(ids) > 0) {
+    csCall <- c(paste0("desendants(mapped(", paste0(ids, collapse = ", "), "))"), csCall)
+  }
+
+  ids <- df[!df$includeDescendants & df$isExcluded & df$includeMapped,]$conceptId
+  if (length(ids) > 0) {
+    csCall <- c(paste0("exclude(mapped(", paste0(ids, collapse = ", "), "))"), csCall)
+  }
+
+  ids <- df[!df$includeDescendants & !df$isExcluded & df$includeMapped,]$conceptId
+  if (length(ids) > 0) {
+    csCall <- c(paste0("mapped(", paste0(ids, collapse = ", "), ")"), csCall)
+  }
+
+  ids <- df[!df$includeDescendants & df$isExcluded & !df$includeMapped,]$conceptId
+  if (length(ids) > 0) {
+    csCall <- c(paste0("exclude(", paste0(ids, collapse = ", "), ")"), csCall)
+  }
+
+  ids <- df[df$includeDescendants & !df$isExcluded & !df$includeMapped,]$conceptId
+  if (length(ids) > 0) {
+    csCall <- c(paste0("descendants(", paste0(ids, collapse = ", "), ")"), csCall)
+  }
+
+  ids <- df[!df$includeDescendants & !df$isExcluded & !df$includeMapped,]$conceptId
+  if (length(ids) > 0) {
+    csCall <- c(paste0(ids, collapse = ", "), csCall)
+  }
+
+  paste0(name, " <- cs(", paste(csCall[csCall != ""], collapse = ", "), ")")
+}
+
+# getConceptSetCall(cs(1,2, exclude(4,3)), "blah")
+
+
 
