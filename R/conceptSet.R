@@ -215,11 +215,15 @@ cs <- function(..., name = "", id = NULL) {
 
   ids <- purrr::map_int(conceptList, ~.@Concept@concept_id)
   dups <- ids[duplicated(ids)]
-  if (length(dups) > 0)
+  if (length(dups) > 0) {
     rlang::abort(paste("ID: ", paste(dups, collapse = ", "), " are duplicated in the concept set."))
+  }
+
   # TODO decide how to handle duplicate ids in `cs`. For now we throw error.
 
-  if (is.null(id)) id <- as.character(uuid::UUIDgenerate())
+  if (is.null(id)) {
+    id <- as.character(digest::digest(ids, algo = "md5"))
+  }
 
   methods::new("ConceptSet",
                id = id,
