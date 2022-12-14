@@ -36,7 +36,7 @@ setMethod("show", "conceptAttribute", function(object) {
     vocabulary_id = purrr::map_chr(object@conceptSet, ~.x@vocabulary_id),
     concept_class_id = purrr::map_chr(object@conceptSet, ~.x@concept_class_id)
   )
-  cli::cat_rule(paste("<Capr Concept Attribute>", object@name))
+  cli::cat_bullet(paste("Capr Concept Attribute:", object@name), bullet = "sup_plus")
   print(tbl)
 })
 

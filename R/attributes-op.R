@@ -26,14 +26,15 @@ setClass("opAttributeNumeric",
 setMethod("show", "opAttributeNumeric", function(object) {
   symbol <- opToPrint(object@op)
   if (symbol == "-") {
-    pp <- paste0("x: {", object@value, symbol, object@extent, "}")
+    pp <- paste0("in {", object@value, symbol, object@extent, "}")
   } else if (symbol == "!-"){
-    pp <- paste0("x: !{", object@value, "-", object@extent, "}")
-  }else {
-    pp <- paste("x", symbol, object@value)
+    pp <- paste0("not in {", object@value, "-", object@extent, "}")
+  } else {
+    pp <- paste(symbol, object@value)
   }
-  cli::cat_bullet(paste("Capr Op Attribute Integer", object@name))
-  cli::cat_line(pp)
+
+  txt <- paste0("Capr Op Attribute Numeric: ", object@name, " ", pp)
+  cli::cat_bullet(txt, bullet = "sup_plus")
 
 })
 
@@ -65,14 +66,14 @@ setClass("opAttributeInteger",
 setMethod("show", "opAttributeInteger", function(object) {
   symbol <- opToPrint(object@op)
   if (symbol == "-") {
-    pp <- paste0("x: {", object@value, symbol, object@extent, "}")
+    pp <- paste0("in {", object@value, symbol, object@extent, "}")
   } else if (symbol == "!-"){
-    pp <- paste0("x: !{", object@value, "-", object@extent, "}")
-  }else {
-    pp <- paste("x", symbol, object@value)
+    pp <- paste0("not in {", object@value, "-", object@extent, "}")
+  } else {
+    pp <- paste(symbol, object@value)
   }
-  cli::cat_bullet(paste("Capr Op Attribute Integer", object@name))
-  cli::cat_line(pp)
+  txt <- paste0("Capr Op Attribute Integer: ", object@name, " ", pp)
+  cli::cat_bullet(txt, bullet = "sup_plus")
 
 })
 
@@ -104,14 +105,14 @@ setClass("opAttributeDate",
 setMethod("show", "opAttributeDate", function(object) {
   symbol <- opToPrint(object@op)
   if (symbol == "-") {
-    pp <- paste0("x: {", object@value, symbol, object@extent, "}")
+    pp <- paste0("in {", object@value, symbol, object@extent, "}")
   } else if (symbol == "!-"){
-    pp <- paste0("x: !{", object@value, "-", object@extent, "}")
-  }else {
-    pp <- paste("x", symbol, object@value)
+    pp <- paste0("not in {", object@value, "-", object@extent, "}")
+  } else {
+    pp <- paste(symbol, object@value)
   }
-  cli::cat_bullet(paste("Capr Op Attribute Date", object@name))
-  cli::cat_line(pp)
+  txt <- paste0("Capr Op Attribute Date: ", object@name, " ", pp)
+  cli::cat_bullet(txt, bullet = "sup_plus")
 
 })
 
