@@ -1,6 +1,13 @@
 # Classes -----------------------
 
 ## Occurrence --------------
+
+#' An S4 class for an occurrence.
+#' @description This determines how many events need to occur to count the criteria
+#' in the cohort definition (relative to the index event)
+#' @slot type a character string determin the logic for counting occurrences. Can be
+#' all, any, exactly, atLeast, or atMost
+#' @slot count an integer specifying the number of occurrences for a criteria
 setClass("Occurrence",
          slots = c(
            type = "character",
@@ -11,8 +18,15 @@ setClass("Occurrence",
            count = NA_integer_
          )
 )
-## Count ----------------
-setClass("Count",
+## Criteria ----------------
+#' An S4 for a criteria
+#' @description a criteria is a temporal observation of a clinical event relative to the index event
+#' @slot occurrence an occurrence object specifying how many events must occur
+#' to consider the event as part of the cohort definition
+#' @slot query a query object that provides context to the clinical event of interest
+#' @slot aperture an eventAperture object that shows the temporal span where the event is to be observed
+#' relative to the index event
+setClass("Criteria",
          slots = c(
            occurrence = 'Occurrence',
            query = 'Query',
@@ -24,6 +38,12 @@ setClass("Count",
          )
 )
 ## Gorup ----------------
+#' An S4 class for a group
+#' @description a group is the combination of multiple criteria or sub groups
+#' @slot occurrence an occurrence object specifying how many events must occur
+#' to consider the event as part of the cohort definition
+#' @slot critera a list of criteria that are grouped together
+#' @slot group a list of sub-groups to consider
 setClass("Group",
          slots = c(
            occurrence = 'Occurrence',
@@ -40,18 +60,25 @@ setClass("Group",
 # Constructors -----------------------
 
 ## Occurrences ----------------
+#' Function to enumerate an exact count of occurrences
+#' @param x the integer counting the number of occurrences
+#' @export
 exactly <- function(x) {
   new("Occurrence",
       type = "exactly",
       count = as.integer(x))
 }
-
+#' Function to enumerate an minimal count of occurrences
+#' @param x the integer counting the number of occurrences
+#' @export
 atLeast <- function(x) {
   new("Occurrence",
       type = "atLeast",
       count = as.integer(x))
 }
-
+#' Function to enumerate a maximum count of occurrences
+#' @param x the integer counting the number of occurrences
+#' @export
 atMost <- function(x) {
   new("Occurrence",
       type = "atMost",
@@ -59,10 +86,17 @@ atMost <- function(x) {
 }
 
 ## Criteria -------------------
+#' Function to construct a criteria object
+#' @param occurrence an occurrence object specifying how many events must occur
+#' to consider the event as part of the cohort definition
+#' @param query a query object that provides context to the clinical event of interest
+#' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
+#' relative to the index event
+#' @export
 criteria <- function(occurrence,
                      query,
                      aperture) {
-  new("Count",
+  new("Criteria",
       occurrence = occurrence,
       query = query,
       aperture = aperture)
@@ -74,6 +108,9 @@ is.group <- function(x) {
   methods::is(x) == "Group"
 }
 
+#' Function to construct a group where all criterias and groups must be satisfied
+#' @param ... a set of criteria or groups
+#' @export
 withAll <- function(...){
   items <- list(...)
   new("Group",
@@ -83,7 +120,9 @@ withAll <- function(...){
       )
 }
 
-
+#' Function to construct a group where any criterias and groups may be satisfied
+#' @param ... a set of criteria or groups
+#' @export
 withAny <- function(...){
   items <- list(...)
   new("Group",
@@ -93,6 +132,10 @@ withAny <- function(...){
   )
 }
 
+#' Function to construct a group where at least some of the criterias or groups must be satisfied
+#' @param x an integer specifying the number of criterias or groups that must be satisfied
+#' @param ... a set of criteria or groups
+#' @export
 withAtLeast <- function(x, ...){
   items <- list(...)
   new("Group",
@@ -101,8 +144,11 @@ withAtLeast <- function(x, ...){
       group = purrr::keep(items, is.group)
   )
 }
-
-withAtLeast <- function(x, ...){
+#' Function to construct a group where at most some of the criterias or groups must be satisfied
+#' @param x an integer specifying the number of criterias or groups that must be satisfied
+#' @param ... a set of criteria or groups
+#' @export
+withAtMost <- function(x, ...){
   items <- list(...)
   new("Group",
       occurrence = new("Occurrence", type = "atMost", count = as.integer(x)),

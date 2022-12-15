@@ -1,6 +1,11 @@
 # Classes --------------
 
 ## ObservationWindow -------------------
+#' An S4 class for an ObservationWindow
+#' @description this determines the minimal observation time before and after index for all persons
+#' in the cohort
+#' @slot priorDays minimum number of days prior to the cohort index
+#' @slot postDays minimum number of days post cohort index
 setClass("ObservationWindow",
          slots = c(priorDays = "integer",
                    postDays = "integer"),
@@ -11,7 +16,7 @@ setClass("ObservationWindow",
 )
 
 ## Endpoint ----------------
-#' An S4 class for an Endpoing
+#' An S4 class for an Endpoint
 #' @description this determines the time in days relative to an index either before or after
 #' @slot days either a character string all or an integer for the number of days
 #' @slot coeff a character string either before or after
@@ -31,10 +36,10 @@ setClass("Endpoint",
 #'
 #' A window class provides details on the end points of the timeline
 #'
-#' @slot Event a character string either start or end. Identifies the point of reference for the window
-#' @slot Start an endpoint object containing the days and coefficient for the start of the window
-#' @slot End an endpoint object containing the days and coefficient for the end of the window
-#' @slot Index A character string either start or end. Identifies where the index is relative to the window
+#' @slot event a character string either start or end. Identifies the point of reference for the window
+#' @slot start an endpoint object containing the days and coefficient for the start of the window
+#' @slot end an endpoint object containing the days and coefficient for the end of the window
+#' @slot index A character string either start or end. Identifies where the index is relative to the window
 setClass("EventWindow",
          slots = c(event = "character",
                    start = "Endpoint",
@@ -53,10 +58,10 @@ setClass("EventWindow",
 #'
 #'The aperture class provides context to when the criteria must be observed in a person timeline to pretain to the expression
 #'
-#' @slot StartWindow a EventWindow class object identifying the start window
-#' @slot EndWindow a EventWindow class object ifentifying the end window (optional)
-#' @slot RestrictVisit a logic toggle where TRUE restricts to the same visit
-#' @slot IgnoreObservationPeriod a logic toggle where TRUE allows events outside the observation period
+#' @slot startWindow a EventWindow class object identifying the start window
+#' @slot endWindow a EventWindow class object ifentifying the end window (optional)
+#' @slot restrictVisit a logic toggle where TRUE restricts to the same visit
+#' @slot ignoreObservationPeriod a logic toggle where TRUE allows events outside the observation period
 setClass("EventAperture",
          slots = c(startWindow = "EventWindow",
                    endWindow = "EventWindow",
@@ -72,7 +77,10 @@ setClass("EventAperture",
 # Constructors ----------------------
 
 ## ObservationWindow ---------------------
-
+#' A function to construct the observationWindow
+#' @param priorDays minimum number of days prior to the cohort index. Default 0 days
+#' @param postDays minimum number of days post cohort index. Default 0 days
+#' @export
 observationWindow <- function(priorDays = 0L,
                           postDays = 0L) {
 
@@ -83,7 +91,11 @@ observationWindow <- function(priorDays = 0L,
 }
 
 ## Endpoint ------
-
+#' A function to offset the number of days relative to index
+#' @param days a number specifying the number of days to offset from index where
+#' an event may be observed. In this function a negative number means days before index
+#' and a postive number means days after index.
+#' @export
 offset <- function(days) {
   coeff <- dplyr::if_else(sign(days) == 1, "after", "before", "before")
   new("Endpoint",
@@ -91,12 +103,16 @@ offset <- function(days) {
       coeff = coeff)
 }
 
+#' Function looking at all time before an event
+#' @export
 allDaysBefore <- function() {
   new("Endpoint",
       days = "all",
       coeff = "before")
 }
 
+#' Function looking at all time after an event
+#' @export
 allDaysAfter <- function() {
   new("Endpoint",
       days = "all",
@@ -104,8 +120,14 @@ allDaysAfter <- function() {
 }
 
 
-## Timeline ---------------------
+## EventWindow ---------------------
 
+#' Function creates an event window where the event starts
+#' @param a the left side of the event window
+#' @param b the right side of the event window
+#' @param index specifying what part of the index we start looking for events
+#' either at the index start date or index enddate
+#' @export
 eventStarts <- function(a, b, index = c("startDate", "endDate")){
 
   index <- checkmate::matchArg(index, c("startDate", "endDate"))
@@ -116,6 +138,12 @@ eventStarts <- function(a, b, index = c("startDate", "endDate")){
       index = index)
 }
 
+#' Function creates an event window where the event ends
+#' @param a the left side of the event window
+#' @param b the right side of the event window
+#' @param index specifying what part of the index we start looking for events
+#' either at the index start date or index enddate
+#' @export
 eventEnds <- function(a, b, index = c("startDate", "endDate")) {
   index <- checkmate::matchArg(index, c("startDate", "endDate"))
   new("EventWindow",
@@ -125,6 +153,16 @@ eventEnds <- function(a, b, index = c("startDate", "endDate")) {
       index = index)
 }
 
+
+## Event Aperture -------------------
+#' Function that creates an eventAperture an opening where an event can occur
+#' relative to the index event
+#' @param startWindow the starting window where an event can occur
+#' @param endWindow the end window of where an event can occur. This parameter is optional
+#' @param restrictVisit a logical toggle specifying whether the event should occur on the same visit
+#' @param ignoreObservationPeriod a logical toggle specifying whether we can consider events outside the
+#' observation period
+#' @export
 duringInterval <- function(startWindow,
                            endWindow = NULL,
                            restrictVisit = FALSE,

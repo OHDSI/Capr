@@ -1,15 +1,83 @@
-#' #' Create a cohort entry criteria
-#' #'
-#' #' @param ... Capr Queries
-#' #' @param observationWindow
-#' #' @param primaryCriteriaLimit
-#' #' @param additionalCriteria
-#' #' @param qualifiedLimit
-#' #'
-#' #' @return
-#' #' @export
-#' #'
-#' #' @examples
+# Classes-----------------------
+
+setClass("CohortEntry",
+         slots = c(
+           entryEvents = "list",
+           observationWindow = "ObservationWindow",
+           primaryCriteriaLimit = "character",
+           additionalCriteria = "Group",
+           qualifiedLimit = "character"
+         ),
+         prototype = list(
+           entryEvents = list(),
+           observationWindow = new("ObservationWindow"),
+           primaryCriteriaLimit = "First",
+           additionalCriteria = new("Group"),
+           qualifiedLimit = "First"
+         )
+)
+
+setClass("CohortAttrition",
+         slots = c(
+           rules = "list",
+           expressionLimit = "character"
+         ),
+         prototype = list(
+           rules = list(),
+           expressionLimit = "First"
+         ))
+
+setClass("CohortExit",
+         slots = c(
+           endStrategy = "list",
+           censor = "list"
+         ),
+         prototype = list(
+           endStrategy = list('type' = "end of continuous observation"),
+           censor = list()
+         )
+)
+
+
+setClass("CohortEra",
+         slots = c(
+           eraDays = "integer",
+           studyStartDate = "Date",
+           studyEndDate = "Date"
+         ),
+         prototype = list(
+           eraDays = 0L,
+           studyStartDate = lubridate::date("1970-01-01"),
+           studyEndDate = lubridate::date("2099-12-31")
+         ))
+
+
+setClass("Cohort",
+         slot = c(
+           entry = "CohortEntry",
+           attrition = "CohortAttrition",
+           exit = "CohortExit",
+           era = "CohortEra"
+         ),
+         prototype = list(
+           entry = new("CohortEntry"),
+           attrition = new("CohortAttrition"),
+           exit = new("CohortExit"),
+           era = new("CohortEra")
+         )
+)
+
+
+#' Create a cohort entry criteria
+#'
+#' @param ... Capr Queries
+#' @param observationWindow a time specifying the minimal time a person is observed
+#' @param primaryCriteriaLimit
+#' @param additionalCriteria a Capr group that adds restriction to the entry event
+#' @param qualifiedLimit
+#'
+#' @return
+#' @export
 entry <- function(...,
                   observationWindow = observeWindow(),
                   primaryCriteriaLimit = "First",
@@ -29,10 +97,27 @@ entry <- function(...,
 
   return(cohort_entry)
 }
+
+#' Create a cohort attrition object
 #'
-#'
+#' @param ... Capr groups
+#' @param expressionLimit how to limit initial events per person either First, All, or Last
+#' @export
+rules <- function(..., expressionLimit = c("First", "All", "Last")) {
+  new("CohortAttrition",
+      rules = list(...),
+      expressionLimit = expressionLimit)
+
+}
+
+#' Function that creates a cohort object
+#' @param entry the index event of the cohort
+#' @param attrition rules that restrict the cohort further, developing attrition
+#' @param exit the event where the person exits the cohort
+#' @param era
+#' @export
 cohort <- function(entry,
-                   irs = NULL,
+                   attrition = NULL,
                    exit = NULL,
                    era = NULL) {
 
@@ -41,8 +126,8 @@ cohort <- function(entry,
 
   cd <- new("Cohort", entry = entry)
 
-  if (!is.null(irs)) {
-    cd@irs <- irs
+  if (!is.null(attrition)) {
+    cd@attrition <- attrition
   }
 
   if (!is.null(exit)) {
@@ -55,6 +140,37 @@ cohort <- function(entry,
 
   return(cd)
 }
+
+
+#' Create a Cohort Era class object
+#'
+#' The Cohort Era depicts the time span of the cohort. The Censor Window includes
+#' the date window for which we register events. The Collapse Settings identify the era padding
+#' between events before exiting a cohort.
+#'
+#' @param eraDays a numeric that specifies the number of days for the era padding
+#' @param studyStartDate a date string that specifies the starting date of registration
+#' @param studyEndDate a date string that specifies the end date of registration
+#' @export
+cohortEra <- function(eraDays = 0L,
+                      studyStartDate = NULL,
+                      studyEndDate = NULL) {
+  if (is.null(studyStartDate)) {
+    studyStartDate <- lubridate::date("1970-01-01")
+  }
+
+  if (is.null(studyEndDate)) {
+    studyEndDate <- lubridate::date("2099-12-31")
+  }
+  new("CohortEra",
+      eraPad = eraPad,
+      studyStartDate = studyStartDate,
+      studyEndDate = studyEndDate)
+}
+
+
+
+
 #'
 #' writeCohort <- function(x, path) {
 #'   checkmate::assertClass(x, "Cohort")
@@ -69,59 +185,4 @@ cohort <- function(entry,
 
 
 
-setClass("CohortEntry",
-         slot = c(
-           entryEvents = "list",
-           observationWindow = "ObservationWindow",
-           primaryCriteriaLimit = "character",
-           additionalCriteria = "Group",
-           qualifiedLimit = "character"
-         ),
-         prototype = list(
-           entryEvents = list(),
-           observationWindow = new("ObservationWindow"),
-           primaryCriteriaLimit = "First",
-           additionalCriteria = new("Group"),
-           qualifiedLimit = "First"
-         )
-)
 
-setClass("CohortExit",
-         slot = c(
-           endStrategy = "list",
-           censor = "list"
-         ),
-         prototype = list(
-           endStrategy = list('type' = "end of continuous observation"),
-           censor = list()
-         )
-)
-
-
-setClass("CohortEra",
-         slots = c(
-           era_pad = "integer",
-           start_date = "Date",
-           end_date = "Date"
-         ),
-         prototype = list(
-           era_pad = 0L,
-           start_date = lubridate::date("1970-01-01"),
-           end_date = lubridate::date("2099-12-31")
-         ))
-
-
-setClass("Cohort",
-         slot = c(
-           entry = "CohortEntry",
-           ir = "list",
-           exit = "CohortExit",
-           era = "CohortEra"
-         ),
-         prototype = list(
-           entry = new("CohortEntry"),
-           ir = list(),
-           exit = new("CohortExit"),
-           era = new("CohortEra")
-         )
-)
