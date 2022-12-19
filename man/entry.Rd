@@ -6,7 +6,7 @@
 \usage{
 entry(
   ...,
-  observationWindow = observeWindow(),
+  observationWindow = continuousObservation(0L, 0L),
   primaryCriteriaLimit = "First",
   additionalCriteria = NULL,
   qualifiedLimit = "First"
@@ -15,13 +15,13 @@ entry(
 \arguments{
 \item{...}{Capr Queries}
 
-\item{observationWindow}{a time specifying the minimal time a person is observed}
-
 \item{primaryCriteriaLimit}{Which primary criteria matches should be considered for inclusion? "First", "Last" or "All"}
 
 \item{additionalCriteria}{a Capr group that adds restriction to the entry event}
 
 \item{qualifiedLimit}{Which criteria matches should be considered for inclusion? "First", "Last" or "All"}
+
+\item{observationWindow1}{a time specifying the minimal time a person is observed}
 }
 \value{
 A cohort entry Capr object

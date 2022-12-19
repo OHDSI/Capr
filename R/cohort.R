@@ -80,7 +80,7 @@ setClass("Cohort",
 #' @return A cohort entry Capr object
 #' @export
 entry <- function(...,
-                  observationWindow = observeWindow(),
+                  observationWindow = continuousObservation(0L, 0L),
                   primaryCriteriaLimit = "First",
                   additionalCriteria = NULL,
                   qualifiedLimit = "First") {
