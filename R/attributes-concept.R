@@ -24,7 +24,6 @@ setValidity("conceptAttribute", function(object){
 
 # Console Print ---------------
 
-#' @rdname show-method
 #' @aliases show,conceptAttribute-method
 setMethod("show", "conceptAttribute", function(object) {
 
@@ -47,7 +46,7 @@ setMethod("show", "conceptAttribute", function(object) {
 #' @return An attribute that can be used in a query function
 #' @export
 #'
-#' @describeIn attributes
+#' @describeIn attributes male demographic attribute
 #'
 #' @examples
 #' \dontrun{
@@ -76,7 +75,7 @@ male <- function() {
 #' @return An attribute that can be used in a query function
 #' @export
 #'
-#' @describeIn attributes
+#' @describeIn attributes female demographic attribute
 #' @examples
 #' \dontrun{
 #' # Create a cohort of males with Type 1 diabetes

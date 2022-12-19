@@ -47,3 +47,16 @@ Remotes:
     ohdsi/CirceR
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Collate: 
+    'Capr.R'
+    'attributes-concept.R'
+    'attributes-logic.R'
+    'attributes-op.R'
+    'conceptSet.R'
+    'query.R'
+    'window.R'
+    'count.R'
+    'cohort.R'
+    'collectConceptSets_tmp.R'
+    'inquire.R'
+    'utils.R'

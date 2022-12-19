@@ -63,7 +63,6 @@ setValidity("Query", function(object) {
 
 # Printing ----
 
-#' @rdname show-method
 #' @aliases show,Query-method
 setMethod("show", "Query", function(object) {
   cat(glue::glue("<Capr {object@domain} Query> {object@conceptSet@Name}"), "\n")

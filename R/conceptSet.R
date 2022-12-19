@@ -46,7 +46,6 @@ setValidity("Concept", function(object) {
   TRUE
 })
 
-#' @rdname show-method
 #' @aliases show,Concept-method
 setMethod("show", "Concept", function(object) {
   nm <- methods::slotNames(methods::is(object))
@@ -92,7 +91,6 @@ setValidity("ConceptSetItem", function(object) {
 
 # print a checkmark
 # stringi::stri_unescape_unicode("\\u2714")
-#' @rdname show-method
 #' @aliases show,ConceptSetItem-method
 #' @export
 setMethod("show", "ConceptSetItem", function(object) {
@@ -128,7 +126,6 @@ setValidity("ConceptSet", function(object) {
   TRUE
 })
 
-#' @rdname show-method
 #' @aliases show,ConceptSet-method
 setMethod("show", "ConceptSet", function(object) {
   cli::cat_rule(paste("<Capr Concept Set>", object@Name))
@@ -242,7 +239,7 @@ cs <- function(..., name = "", id = NULL) {
 #'
 #' @return A list of Capr concepts
 #' @export
-#' @describeIn cs
+#' @describeIn cs exclude concepts
 exclude <- function(...) {
   dots <- unlist(list(...), recursive = F)
 
@@ -265,7 +262,7 @@ exclude <- function(...) {
 #'
 #' @return A list of Capr concepts
 #' @export
-#' @describeIn cs
+#' @describeIn cs Include mapped concepts
 mapped <- function(...) {
   dots <- unlist(list(...), recursive = F)
 
@@ -288,7 +285,7 @@ mapped <- function(...) {
 #'
 #' @return A list of Capr concepts
 #' @export
-#' @describeIn cs
+#' @describeIn cs Include descendants
 descendants <- function(...) {
   dots <- unlist(list(...), recursive = F)
 
@@ -480,7 +477,7 @@ getConceptSetDetails <- function(x,
 }
 
 
-#' @exportMethod
+#' @export
 setMethod("==", signature("ConceptSet", "ConceptSet"), function(e1, e2) {
   isTRUE(dplyr::all_equal(as.data.frame(e1),
                           as.data.frame(e2),
@@ -495,8 +492,10 @@ uniqueConceptSets <- function(x) {
   # Is there an efficient implementation using just equality? Seems like maybe not?
   l <- list()
   for (i in x) {
-    alreday_in <- any(purrr::map_lgl(l, ~i == .))
-    if(!alreday_in) l <- c(l, i)
+    already_in <- any(purrr::map_lgl(l, ~i == .))
+    if(!already_in) {
+      l <- c(l, i)
+    }
   }
   return(l)
 }

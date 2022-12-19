@@ -21,7 +21,6 @@ setClass("opAttributeNumeric",
            extent = NA_real_
          ))
 
-#' @rdname show-method
 #' @aliases show,opAttributeNumeric-method
 setMethod("show", "opAttributeNumeric", function(object) {
   symbol <- opToPrint(object@op)
@@ -61,7 +60,6 @@ setClass("opAttributeInteger",
          ))
 
 
-#' @rdname show-method
 #' @aliases show,opAttributeInteger-method
 setMethod("show", "opAttributeInteger", function(object) {
   symbol <- opToPrint(object@op)
@@ -100,7 +98,6 @@ setClass("opAttributeDate",
          ))
 
 
-#' @rdname show-method
 #' @aliases show,opAttributeDate-method
 setMethod("show", "opAttributeDate", function(object) {
   symbol <- opToPrint(object@op)
@@ -134,24 +131,25 @@ opToPrint <- function(x) {
 #' numeric, or Date data type. Different data types will return the appropriate opAttribute type
 #' @export
 #' @docType methods
-#' @rdname lt-methods
 setGeneric("lt", function(x) standardGeneric("lt"))
 
-#' @rdname lt-methods
+#' @rdname lt
 #' @aliases lt,integer-method
 setMethod('lt', "integer", function(x){
   new("opAttributeInteger",
       op = "lt",
       value = x)
 })
-#' @rdname lt-methods
+
+#' @rdname lt
 #' @aliases lt,numeric-method
 setMethod('lt', "numeric", function(x){
   new("opAttributeNumeric",
       op = "lt",
       value = x)
 })
-#' @rdname lt-method
+
+#' @rdname lt
 #' @aliases lt,Date-method
 setMethod('lt', "Date", function(x){
   new("opAttributeDate",
@@ -166,24 +164,23 @@ setMethod('lt', "Date", function(x){
 #' numeric, or Date data type. Different data types will return the appropriate opAttribute type
 #' @export
 #' @docType methods
-#' @rdname gt-methods
 setGeneric("gt", function(x) standardGeneric("gt"))
 
-#' @rdname gt-methods
+#' @rdname gt
 #' @aliases gt,integer-method
 setMethod('gt', "integer", function(x){
   new("opAttributeInteger",
       op = "gt",
       value = x)
 })
-#' @rdname gt-methods
+#' @rdname gt
 #' @aliases gt,numeric-method
 setMethod('gt', "numeric", function(x){
   new("opAttributeNumeric",
       op = "gt",
       value = x)
 })
-#' @rdname gt-method
+#' @rdname gt
 #' @aliases gt,Date-method
 setMethod('gt', "Date", function(x){
   new("opAttributeDate",
@@ -198,24 +195,23 @@ setMethod('gt', "Date", function(x){
 #' numeric, or Date data type. Different data types will return the appropriate opAttribute type
 #' @export
 #' @docType methods
-#' @rdname lte-methods
 setGeneric("lte", function(x) standardGeneric("lte"))
 
-#' @rdname lte-methods
+#' @rdname lte
 #' @aliases lte,integer-method
 setMethod('lte', "integer", function(x){
   new("opAttributeInteger",
       op = "lte",
       value = x)
 })
-#' @rdname lte-methods
+#' @rdname lte
 #' @aliases lte,numeric-method
 setMethod('lte', "numeric", function(x){
   new("opAttributeNumeric",
       op = "lte",
       value = x)
 })
-#' @rdname lte-method
+#' @rdname lte
 #' @aliases lte,Date-method
 setMethod('lte', "Date", function(x){
   new("opAttributeDate",
@@ -230,24 +226,23 @@ setMethod('lte', "Date", function(x){
 #' numeric, or Date data type. Different data types will return the appropriate opAttribute type
 #' @export
 #' @docType methods
-#' @rdname gte-methods
 setGeneric("gte", function(x) standardGeneric("gte"))
 
-#' @rdname gte-methods
+#' @rdname gte
 #' @aliases gte,integer-method
 setMethod('gte', "integer", function(x){
   new("opAttributeInteger",
       op = "gte",
       value = x)
 })
-#' @rdname gte-methods
+#' @rdname gte
 #' @aliases gte,numeric-method
 setMethod('gte', "numeric", function(x){
   new("opAttributeNumeric",
       op = "gte",
       value = x)
 })
-#' @rdname gte-method
+#' @rdname gte
 #' @aliases gte,Date-method
 setMethod('gte', "Date", function(x){
   new("opAttributeDate",
@@ -262,24 +257,23 @@ setMethod('gte', "Date", function(x){
 #' numeric, or Date data type. Different data types will return the appropriate opAttribute type
 #' @export
 #' @docType methods
-#' @rdname eq-methods
 setGeneric("eq", function(x) standardGeneric("eq"))
 
-#' @rdname eq-methods
+#' @rdname eq
 #' @aliases eq,integer-method
 setMethod('eq', "integer", function(x){
   new("opAttributeInteger",
       op = "eq",
       value = x)
 })
-#' @rdname eq-methods
+#' @rdname eq
 #' @aliases eq,numeric-method
 setMethod('eq', "numeric", function(x){
   new("opAttributeNumeric",
       op = "eq",
       value = x)
 })
-#' @rdname eq-method
+#' @rdname eq
 #' @aliases eq,Date-method
 setMethod('eq', "Date", function(x){
   new("opAttributeDate",
@@ -297,10 +291,9 @@ setMethod('eq', "Date", function(x){
 #' numeric, or Date data type. Different data types will return the appropriate opAttribute type
 #' @export
 #' @docType methods
-#' @rdname bt-methods
 setGeneric("bt", function(x, y) standardGeneric("bt"))
 
-#' @rdname bt-methods
+#' @rdname bt
 #' @aliases bt,integer-method
 setMethod('bt', "integer", function(x, y){
   new("opAttributeInteger",
@@ -308,7 +301,8 @@ setMethod('bt', "integer", function(x, y){
       value = x,
       extent = y)
 })
-#' @rdname bt-methods
+
+#' @rdname bt
 #' @aliases bt,numeric-method
 setMethod('bt', "numeric", function(x, y){
   new("opAttributeNumeric",
@@ -316,7 +310,8 @@ setMethod('bt', "numeric", function(x, y){
       value = x,
       extent = y)
 })
-#' @rdname bt-method
+
+#' @rdname bt
 #' @aliases bt,Date-method
 setMethod('bt', "Date", function(x, y){
   new("opAttributeDate",
@@ -334,10 +329,9 @@ setMethod('bt', "Date", function(x, y){
 #' numeric, or Date data type. Different data types will return the appropriate opAttribute type
 #' @export
 #' @docType methods
-#' @rdname nbt-methods
 setGeneric("nbt", function(x, y) standardGeneric("nbt"))
 
-#' @rdname nbt-methods
+#' @rdname nbt
 #' @aliases bt,integer-method
 setMethod('nbt', "integer", function(x, y){
   new("opAttributeInteger",
@@ -345,7 +339,7 @@ setMethod('nbt', "integer", function(x, y){
       value = x,
       extent = y)
 })
-#' @rdname nbt-methods
+#' @rdname nbt
 #' @aliases bt,numeric-method
 setMethod('nbt', "numeric", function(x, y){
   new("opAttributeNumeric",
@@ -353,7 +347,7 @@ setMethod('nbt', "numeric", function(x, y){
       value = x,
       extent = y)
 })
-#' @rdname nbt-method
+#' @rdname nbt
 #' @aliases nbt,Date-method
 setMethod('nbt', "Date", function(x, y){
   new("opAttributeDate",

@@ -1,5 +1,6 @@
 # Classes-----------------------
 
+#' @include window.R count.R query.R conceptSet.R
 setClass("CohortEntry",
          slots = c(
            entryEvents = "list",
@@ -72,11 +73,11 @@ setClass("Cohort",
 #'
 #' @param ... Capr Queries
 #' @param observationWindow a time specifying the minimal time a person is observed
-#' @param primaryCriteriaLimit
+#' @param primaryCriteriaLimit Which primary criteria matches should be considered for inclusion? "First", "Last" or "All"
 #' @param additionalCriteria a Capr group that adds restriction to the entry event
-#' @param qualifiedLimit
+#' @param qualifiedLimit Which criteria matches should be considered for inclusion? "First", "Last" or "All"
 #'
-#' @return
+#' @return A cohort entry Capr object
 #' @export
 entry <- function(...,
                   observationWindow = observeWindow(),
@@ -114,7 +115,7 @@ rules <- function(..., expressionLimit = c("First", "All", "Last")) {
 #' @param entry the index event of the cohort
 #' @param attrition rules that restrict the cohort further, developing attrition
 #' @param exit the event where the person exits the cohort
-#' @param era
+#' @param era Cohort era (collapse) logic created with the `cohortEra` function
 #' @export
 cohort <- function(entry,
                    attrition = NULL,

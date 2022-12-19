@@ -5,7 +5,7 @@
 #' An S4 class for an occurrence.
 #' @description This determines how many events need to occur to count the criteria
 #' in the cohort definition (relative to the index event)
-#' @slot type a character string determin the logic for counting occurrences. Can be
+#' @slot type a character string determine the logic for counting occurrences. Can be
 #' all, any, exactly, atLeast, or atMost
 #' @slot count an integer specifying the number of occurrences for a criteria
 setClass("Occurrence",
@@ -26,6 +26,7 @@ setClass("Occurrence",
 #' @slot query a query object that provides context to the clinical event of interest
 #' @slot aperture an eventAperture object that shows the temporal span where the event is to be observed
 #' relative to the index event
+#' @include window.R
 setClass("Criteria",
          slots = c(
            occurrence = 'Occurrence',
@@ -37,6 +38,7 @@ setClass("Criteria",
            aperture = new("EventAperture")
          )
 )
+
 ## Gorup ----------------
 #' An S4 class for a group
 #' @description a group is the combination of multiple criteria or sub groups

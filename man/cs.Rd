@@ -2,14 +2,22 @@
 % Please edit documentation in R/conceptSet.R
 \name{cs}
 \alias{cs}
+\alias{exclude}
+\alias{mapped}
+\alias{descendants}
 \title{Create a concept set}
 \usage{
 cs(..., name = "", id = NULL)
+
+exclude(...)
+
+mapped(...)
+
+descendants(...)
 }
 \arguments{
 \item{...}{One or more numeric vectors that can be coerced to integers, or
-Calls to helper functions "exclude", "descendants", or "mapped". Negative
-integers will be marked as excluded from the concept set.}
+Calls to helper functions "exclude", "descendants", or "mapped".}
 
 \item{name}{A name for the concept set}
 
@@ -17,10 +25,31 @@ integers will be marked as excluded from the concept set.}
 }
 \value{
 A Capr Concept Set Object
+
+A list of Capr concepts
+
+A list of Capr concepts
+
+A list of Capr concepts
 }
 \description{
 cs is used to create concept set expressions.
+
+`exclude` is meant to be used inside `cs` when creating a new concept set.
+
+`mapped` is meant to be used inside `cs` when creating a new concept set.
+
+`descendants` is meant to be used inside `cs` when creating a new concept set.
 }
+\section{Functions}{
+\itemize{
+\item \code{exclude()}: exclude concepts
+
+\item \code{mapped()}: Include mapped concepts
+
+\item \code{descendants()}: Include descendants
+
+}}
 \examples{
 \dontrun{
 cs(1, 2)
