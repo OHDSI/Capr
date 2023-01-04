@@ -30,12 +30,12 @@ setClass("CohortAttrition",
 
 setClass("CohortExit",
          slots = c(
-           endStrategy = "list",
-           censor = "list"
+           endStrategy = "ANY",
+           censoringCriteria = "CensoringCriteria"
          ),
          prototype = list(
-           endStrategy = list('type' = "end of continuous observation"),
-           censor = list()
+           endStrategy = new("ObservationExit"),
+           censoringCriteria = new("CensoringCriteria")
          )
 )
 
@@ -142,7 +142,29 @@ cohort <- function(entry,
   return(cd)
 }
 
+#' Function that creates a cohort exit object
+#' @param es the endStrategy object to specify for the exit
+#' @param censor the censoring criteria to specify for the exit
+#' @export
+exit <- function(es = NULL, censor = NULL){
+  if (is.null(es) & is.null(censor)) {
+    ee <- new("CohortExit")
+  } else if (is.null(censor)) {
+    ee <- new("CohortExit",
+              endStrategy = es)
+  } else if (is.null(es)) {
+    ee <- new("CohortExit",
+              censoringCriteria = censor)
+  } else {
+    ee <- new("CohortExit",
+              endStrategy = es,
+              censoringCriteria = censor)
+  }
 
+  return(ee)
+
+
+}
 #' Create a Cohort Era class object
 #'
 #' The Cohort Era depicts the time span of the cohort. The Censor Window includes
