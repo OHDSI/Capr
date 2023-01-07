@@ -2,8 +2,7 @@ setGeneric("collectConceptSets", function(x) standardGeneric("collectConceptSets
 
 #' @include query.R
 setMethod("collectConceptSets", "Query", function(x) {
-  tmp <- x@conceptSet
-  as.list(tmp)
+  x@conceptSet
 })
 
 #' @include count.R
