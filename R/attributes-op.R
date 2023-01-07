@@ -392,9 +392,9 @@ daysOfSupply <- function(op) {
   }
   new("opAttributeInteger",
       name = "DaysSupply",
-      op = opAttribute@op,
-      value = as.integer(opAttribute@value),
-      extent = as.integer(opAttribute@extent))
+      op = op@op,
+      value = as.integer(op@value),
+      extent = as.integer(op@extent))
 }
 
 
@@ -413,9 +413,9 @@ drugRefills <- function(op) {
   }
   new("opAttributeInteger",
       name = "Refills",
-      op = opAttribute@op,
-      value = as.integer(opAttribute@value),
-      extent = as.integer(opAttribute@extent))
+      op = op@op,
+      value = as.integer(op@value),
+      extent = as.integer(op@extent))
 }
 
 ## Numeric Constructors ----
@@ -436,8 +436,8 @@ valueAsNumber<- function(op) {
   new("opAttributeNumeric",
       name = "ValueAsNumber",
       op = op@op,
-      value = as.integer(op@value),
-      extent = as.integer(op@extent))
+      value = op@value,
+      extent = op@extent)
 }
 
 #' Function to create rangeHigh attribute
@@ -456,8 +456,8 @@ rangeHigh <- function(op) {
   new("opAttributeNumeric",
       name = "RangeHigh",
       op = op@op,
-      value = as.integer(op@value),
-      extent = as.integer(op@extent))
+      value = op@value,
+      extent = op@extent)
 }
 
 #' Function to create rangeLow attribute
@@ -475,9 +475,9 @@ rangeLow <- function(op) {
   }
   new("opAttributeNumeric",
       name = "RangeLow",
-      op = opAttribute@op,
-      value = as.integer(opAttribute@value),
-      extent = as.integer(opAttribute@extent))
+      op = op@op,
+      value = op@value,
+      extent = op@extent)
 }
 
 
@@ -497,9 +497,9 @@ drugQuantity <- function(op) {
   }
   new("opAttributeNumeric",
       name = "Quantity",
-      op = opAttribute@op,
-      value = as.integer(opAttribute@value),
-      extent = as.integer(opAttribute@extent))
+      op = op@op,
+      value = op@value,
+      extent = op@extent)
 }
 
 
@@ -520,9 +520,9 @@ startDate <- function(op) {
 
   new("opAttributeDate",
       name = "StartDate",
-      op = opAttribute@op,
-      value = as.integer(opAttribute@value),
-      extent = as.integer(opAttribute@extent))
+      op = op@op,
+      value = lubridate::as_date(op@value),
+      extent = lubridate::as_date(op@extent))
 }
 
 #' Function that creates a end date attribute
@@ -538,7 +538,30 @@ endDate <- function(op) {
 
   new("opAttributeDate",
       name = "EndDate",
-      op = opAttribute@op,
-      value = as.integer(opAttribute@value),
-      extent = as.integer(opAttribute@extent))
+      op = op@op,
+      value = lubridate::as_date(op@value),
+      extent = lubridate::as_date(op@extent))
 }
+
+# Coercion ------------
+
+listOpAttribute <- function(x) {
+  atr <- list(
+    Op = x@op,
+    Value = x@value,
+    Extent = x@extent
+  ) %>%
+    purrr::discard(is.na)
+
+  tibble::lst(
+    !!x@name := atr
+  )
+}
+## Coerce Numeric ----
+setMethod("as.list", "opAttributeNumeric", listOpAttribute)
+## Coerce Integer ----
+setMethod("as.list", "opAttributeInteger", listOpAttribute)
+## Coerce Date ----
+setMethod("as.list", "opAttributeDate", listOpAttribute)
+
+
