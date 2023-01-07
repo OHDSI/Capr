@@ -176,11 +176,36 @@ toPascal <- function(x) {
     stringr::str_replace_all("\\s", "")
 }
 
+## Coerce Observation Exit -------
+setMethod("as.list", "ObservationExit", function(x) {
+  ll <- list()
+  return(ll)
+})
+
 ## Coerce Fixed Duration Exit -------
 setMethod("as.list", "FixedDurationExit", function(x) {
   ll <- list(
     'DateField' = toPascal(x@index),
     'Offset' = x@offsetDays
   )
+  return(ll)
+})
+
+
+## Coerce Drug Exposure Exit -------
+setMethod("as.list", "DrugExposureExit", function(x) {
+  ll <- list(
+    'DrugCodesetId' = x@conceptSet@id,
+    'GapDays' = x@persistenceWindow,
+    'Offset' = x@surveillanceWindow,
+    'DaysSupplyOverride' = x@daysSupplyOverride
+  ) %>%
+    purrr::discard(is.na)
+  return(ll)
+})
+
+## Coerce Censoring Criteria -------
+setMethod("as.list", "CensoringCriteria", function(x) {
+  ll <-  purrr::map(x@criteria, ~as.list(.x))
   return(ll)
 })
