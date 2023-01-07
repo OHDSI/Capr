@@ -1,5 +1,7 @@
 # Classes-----------------------
 
+## CohortEntry ----
+
 #' @include window.R count.R query.R conceptSet.R
 setClass("CohortEntry",
          slots = c(
@@ -18,6 +20,8 @@ setClass("CohortEntry",
          )
 )
 
+## CohortAttrition ----
+
 setClass("CohortAttrition",
          slots = c(
            rules = "list",
@@ -28,6 +32,8 @@ setClass("CohortAttrition",
            expressionLimit = "First"
          ))
 
+
+## CohortExit ----
 setClass("CohortExit",
          slots = c(
            endStrategy = "ANY",
@@ -39,6 +45,7 @@ setClass("CohortExit",
          )
 )
 
+## CohortEra----
 
 setClass("CohortEra",
          slots = c(
@@ -105,7 +112,7 @@ entry <- function(...,
 #' @param ... Capr groups
 #' @param expressionLimit how to limit initial events per person either First, All, or Last
 #' @export
-rules <- function(..., expressionLimit = c("First", "All", "Last")) {
+attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
   new("CohortAttrition",
       rules = list(...),
       expressionLimit = expressionLimit)
@@ -196,6 +203,53 @@ cohort <- function(entry,
   return(cd)
 }
 
+# Coercion --------------------
+
+## Coerce CohortEntry ----------
+setMethod("as.list", "CohortEntry", function(x) {
+  pc <- list(
+    'CriteriaList' = purrr::map(x@entryEvents, ~as.list(.x)),
+    'ObservationWindow' = as.list(x@observationWindow),
+    'PrimaryCriteriaLimit' = list('Type' = x@primaryCriteriaLimit)
+  )
+
+  ac <- list(
+    'AdditionalCriteria' = as.list(x@additionalCriteria),
+    'QualifiedLimit' = list('Type' = x@qualifiedLimit)
+  )
+
+  ll <- list('PrimaryCriteria' = pc) %>%
+    append(ac)
+
+  if (is.na(ll$AdditionalCriteria$Type)) {
+    ll$AdditionalCriteria <- NULL
+  }
+
+  return(ll)
+})
+
+## Coerce CohortEntry ----------
+setMethod("as.list", "CohortAttrition", function(x) {
+  ir <- list(
+    'ExpressionLimit' = purrr::map(x@entryEvents, ~as.list(.x)),
+    'ObservationWindow' = as.list(x@observationWindow),
+    'PrimaryCriteriaLimit' = list('Type' = x@primaryCriteriaLimit)
+  )
+
+  ac <- list(
+    'AdditionalCriteria' = as.list(x@additionalCriteria),
+    'QualifiedLimit' = list('Type' = x@qualifiedLimit)
+  )
+
+  ll <- list('PrimaryCriteria' = pc) %>%
+    append(ac)
+
+  if (is.na(ll$AdditionalCriteria$Type)) {
+    ll$AdditionalCriteria <- NULL
+  }
+
+  return(ll)
+})
 
 
 
