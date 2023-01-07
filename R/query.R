@@ -182,6 +182,7 @@ conditionEra <- function(conceptSet, ...) {
 }
 
 # Coercion -----
+## Coerce Query ----
 setMethod("as.list", "Query", function(x) {
   #create initial list for query
   ll <- list('Domain' = x@domain,

@@ -22,12 +22,12 @@ setClass("ObservationWindow",
 #' @slot coeff a character string either before or after
 setClass("Endpoint",
          slots = c(
-           days = "ANY",
-           coeff = "character"
+           days = "numeric",
+           coeff = "numeric"
          ),
          prototype = list(
-           days = NA_character_,
-           coeff = NA_character_
+           days = NA_real_,
+           coeff = NA_real_
          ))
 
 
@@ -52,7 +52,7 @@ setClass("EventWindow",
            index = NA_character_
          ))
 
-## Aperture -------------------
+## EventAperture -------------------
 
 #' An S4 class for Aperture
 #'
@@ -90,34 +90,34 @@ continuousObservation <- function(priorDays = 0L,
 
 }
 
-## Endpoint ------
-#' A function to offset the number of days relative to index
-#' @param days a number specifying the number of days to offset from index where
-#' an event may be observed. In this function a negative number means days before index
-#' and a postive number means days after index.
-#' @export
-offset <- function(days) {
-  coeff <- dplyr::if_else(sign(days) == 1, "after", "before", "before")
-  new("Endpoint",
-      days = as.integer(abs(days)),
-      coeff = coeff)
-}
-
-#' Function looking at all time before an event
-#' @export
-allDaysBefore <- function() {
-  new("Endpoint",
-      days = "all",
-      coeff = "before")
-}
-
-#' Function looking at all time after an event
-#' @export
-allDaysAfter <- function() {
-  new("Endpoint",
-      days = "all",
-      coeff = "after")
-}
+#Depreciated Endpoint functions
+#' #' A function to offset the number of days relative to index
+#' #' @param days a number specifying the number of days to offset from index where
+#' #' an event may be observed. In this function a negative number means days before index
+#' #' and a postive number means days after index.
+#' #' @export
+#' offset <- function(days) {
+#'   coeff <- dplyr::if_else(sign(days) == 1, "after", "before", "before")
+#'   new("Endpoint",
+#'       days = as.integer(abs(days)),
+#'       coeff = coeff)
+#' }
+#'
+#' #' Function looking at all time before an event
+#' #' @export
+#' allDaysBefore <- function() {
+#'   new("Endpoint",
+#'       days = "all",
+#'       coeff = "before")
+#' }
+#'
+#' #' Function looking at all time after an event
+#' #' @export
+#' allDaysAfter <- function() {
+#'   new("Endpoint",
+#'       days = "all",
+#'       coeff = "after")
+#' }
 
 
 ## EventWindow ---------------------
@@ -131,10 +131,15 @@ allDaysAfter <- function() {
 eventStarts <- function(a, b, index = c("startDate", "endDate")){
 
   index <- checkmate::matchArg(index, c("startDate", "endDate"))
+
   new("EventWindow",
       event = "start",
-      start = a,
-      end = b,
+      start = new("Endpoint",
+                  days = abs(a),
+                  coeff = sign(b)),
+      end = new("Endpoint",
+                days = abs(b),
+                coeff = sign(b)),
       index = index)
 }
 
@@ -146,10 +151,15 @@ eventStarts <- function(a, b, index = c("startDate", "endDate")){
 #' @export
 eventEnds <- function(a, b, index = c("startDate", "endDate")) {
   index <- checkmate::matchArg(index, c("startDate", "endDate"))
+
   new("EventWindow",
       event = "end",
-      start = a,
-      end = b,
+      start = new("Endpoint",
+                  days = abs(a),
+                  coeff = sign(b)),
+      end = new("Endpoint",
+                days = abs(b),
+                coeff = sign(b)),
       index = index)
 }
 
@@ -184,4 +194,63 @@ duringInterval <- function(startWindow,
 }
 
 
-# Coersion ---------------------
+# Coercion ---------------------
+
+## Coerce ObservationWindow ----
+setMethod("as.list", "ObservationWindow", function(x) {
+  #create initial list for query
+  ll <- list('PriorDays' = x@priorDays,
+             'PostDays' = x@postDays)
+  return(ll)
+
+})
+
+## Coerce Endpoint ----
+setMethod("as.list", "Endpoint", function(x) {
+  #create initial list for query
+  ll <- list('Days' = x@days,
+             'Coeff' = as.integer(x@coeff))
+
+  if (is.infinite(ll$Days)) {
+    ll$Days <- NULL
+  } else {
+    ll$Days <- as.integer(ll$Days)
+  }
+
+  return(ll)
+
+})
+
+## Coerce EventWindow ----
+setMethod("as.list", "EventWindow", function(x) {
+
+  index <- ifelse(x@index == "endDate", TRUE, FALSE)
+  event <- ifelse(x@event == "end", TRUE, FALSE)
+
+  #create initial list for query
+  ll <- list('Start' = as.list(x@start),
+             'End' = as.list(x@end),
+             'UseIndexEnd' = index,
+             'UseEventEnd' = event)
+
+  return(ll)
+
+})
+
+## Coerce EventAperture ----
+
+setMethod("as.list", "EventAperture", function(x) {
+  ll <- list(
+    'StartWindow' = as.list(x@startWindow),
+    'EndWindow' = as.list(x@endWindow),
+    'RestrictVisit' = x@restrictVisit,
+    'IgnoreObservationPeriod' = x@ignoreObservationPeriod
+  ) %>%
+    purrr::discard(isFALSE)
+
+  if (is.na(ll$EndWindow$UseEventEnd)) {
+    ll$EndWindow <- NULL
+  }
+
+  return(ll)
+})
