@@ -198,7 +198,6 @@ duringInterval <- function(startWindow,
 
 ## Coerce ObservationWindow ----
 setMethod("as.list", "ObservationWindow", function(x) {
-  #create initial list for query
   ll <- list('PriorDays' = x@priorDays,
              'PostDays' = x@postDays)
   return(ll)
@@ -207,7 +206,6 @@ setMethod("as.list", "ObservationWindow", function(x) {
 
 ## Coerce Endpoint ----
 setMethod("as.list", "Endpoint", function(x) {
-  #create initial list for query
   ll <- list('Days' = x@days,
              'Coeff' = as.integer(x@coeff))
 
@@ -227,7 +225,6 @@ setMethod("as.list", "EventWindow", function(x) {
   index <- ifelse(x@index == "endDate", TRUE, FALSE)
   event <- ifelse(x@event == "end", TRUE, FALSE)
 
-  #create initial list for query
   ll <- list('Start' = as.list(x@start),
              'End' = as.list(x@end),
              'UseIndexEnd' = index,

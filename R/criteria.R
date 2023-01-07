@@ -58,6 +58,14 @@ setClass("Group",
          )
 )
 
+# Class Type ----
+is.Criteria <- function(x) {
+  methods::is(x) == "Criteria"
+}
+
+is.Group <- function(x) {
+  methods::is(x) == "Group"
+}
 
 # Constructors -----------------------
 
@@ -106,10 +114,6 @@ criteria <- function(occurrence,
 
 ## Group -------
 
-is.group <- function(x) {
-  methods::is(x) == "Group"
-}
-
 #' Function to construct a group where all criterias and groups must be satisfied
 #' @param ... a set of criteria or groups
 #' @export
@@ -117,8 +121,8 @@ withAll <- function(...){
   items <- list(...)
   new("Group",
       occurrence = new("Occurrence", type = "all"),
-      criteria = purrr::discard(items, is.group),
-      group = purrr::keep(items, is.group)
+      criteria = purrr::discard(items, is.Group),
+      group = purrr::keep(items, is.Group)
       )
 }
 
@@ -129,8 +133,8 @@ withAny <- function(...){
   items <- list(...)
   new("Group",
       occurrence = new("Occurrence", type = "any"),
-      criteria = purrr::discard(items, is.group),
-      group = purrr::keep(items, is.group)
+      criteria = purrr::discard(items, is.Group),
+      group = purrr::keep(items, is.Group)
   )
 }
 
@@ -142,8 +146,8 @@ withAtLeast <- function(x, ...){
   items <- list(...)
   new("Group",
       occurrence = new("Occurrence", type = "atLeast", count = as.integer(x)),
-      criteria = purrr::discard(items, is.group),
-      group = purrr::keep(items, is.group)
+      criteria = purrr::discard(items, is.Group),
+      group = purrr::keep(items, is.Group)
   )
 }
 #' Function to construct a group where at most some of the criterias or groups must be satisfied
@@ -154,15 +158,61 @@ withAtMost <- function(x, ...){
   items <- list(...)
   new("Group",
       occurrence = new("Occurrence", type = "atMost", count = as.integer(x)),
-      criteria = purrr::discard(items, is.group),
-      group = purrr::keep(items, is.group)
+      criteria = purrr::discard(items, is.Group),
+      group = purrr::keep(items, is.Group)
   )
 }
 
 # Coercion ----------------
 
+
+
 ## Coerce Occurrence -----
+
+#function to determine code occurrence type
+codeOccurrenceType <- function(x) {
+  dplyr::case_when(
+    x == "exactly" ~ 0L,
+    x == "atMost" ~ 1L,
+    x == "atLeast" ~ 2L,
+    TRUE ~ NA_integer_
+  )
+}
+
+setMethod("as.list", "Occurrence", function(x) {
+  ll <- list('Type' = codeOccurrenceType(x@type),
+             'Count' = x@count)
+  return(ll)
+
+})
 
 ## Coerce Criteria (Count) -----
 
+setMethod("as.list", "Criteria", function(x) {
+  ll <- list('Criteria' = as.list(x@query),
+             'Occurrence' = as.list(x@occurrence)) %>%
+    purrr::prepend(as.list(x@aperture), before = 2)
+  return(ll)
+})
+
 ## Coerce Group -----
+
+setMethod("as.list", "Group", function(x) {
+
+  criteriaList <- purrr::keep(x@criteria, is.Criteria) %>%
+    purrr::map(~as.list(.x))
+  demographicsList <- purrr::discard(x@criteria, is.Criteria) %>%
+    purrr::map(~as.list(.x))
+  groupsList <- purrr::map(x@group, ~as.list(x))
+
+  ll <- list('Type' = toupper(x@occurrence@type),
+             'Count' = x@occurrence@count,
+             'CriteriaList' = criteriaList,
+             'DemographicCriteriaList' = demographicsList,
+             'Groups' = groupsList)
+  if (is.na(ll$Count)) {
+    ll$Count <- NULL
+  }
+
+  return(ll)
+})
