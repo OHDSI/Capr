@@ -229,9 +229,17 @@ setMethod("as.list", "CohortEntry", function(x) {
 
 ## Coerce Attrition ----------
 setMethod("as.list", "CohortAttrition", function(x) {
+
+  irs <- purrr::map2(
+    names(x@rules),
+    unname(x@rules),
+    ~list('name' = .x,
+          'expression' = as.list(.y))
+  )
+
   ll <- list(
     'ExpressionLimit' = list('Type' = x@expressionLimit),
-    'InclusionRules' = purrr::map(x@rules, ~as.list(.x))
+    'InclusionRules' = irs
   )
   return(ll)
 })
