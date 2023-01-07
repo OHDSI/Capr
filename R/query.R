@@ -85,15 +85,23 @@ setMethod("show", "Query", function(object) {
 
 # Constructors -----
 
-query <- function(domain, conceptSet, ...) {
+query <- function(domain, conceptSet = NULL, ...) {
 
   # bundle attributes as a list
   atb <- list(...)
 
-  query <- new("Query",
-               domain = domain,
-               conceptSet = conceptSet,
-               attributes = atb)
+  if (is.null(conceptSet)) {
+    query <- new("Query",
+                 domain = domain,
+                 attributes = atb)
+  } else {
+    query <- new("Query",
+                 domain = domain,
+                 conceptSet = conceptSet,
+                 attributes = atb)
+  }
+
+
   return(query)
 }
 
@@ -181,12 +189,29 @@ conditionEra <- function(conceptSet, ...) {
         ...)
 }
 
+#' Query the condition era domain
+#'
+#' @param conceptSet A condition concept set
+#' @param ... optional attributes
+#'
+#' @return A Capr Query
+#' @export
+death <- function(conceptSet = NULL, ...) {
+
+  query(domain = "Death",
+        conceptSet = conceptSet,
+        ...)
+}
+
+
 # Coercion -----
 ## Coerce Query ----
 setMethod("as.list", "Query", function(x) {
   #create initial list for query
-  ll <- list('Domain' = x@domain,
-       'CodesetId' = x@conceptSet@id)
+  ll <- list(
+    'CodesetId' = x@conceptSet@id
+  ) %>%
+    purrr::discard(~length(.x) == 0)
   #list out attributes
   if (length(x@attributes) > 0) {
     atr <- purrr::map(x@attributes, ~as.list(.x)) %>%
@@ -194,7 +219,10 @@ setMethod("as.list", "Query", function(x) {
     #append to query list
     ll <- append(ll, atr)
   }
-  return(ll)
+
+  tibble::lst(
+    !!x@domain := ll
+  )
 
 })
 # class(x@conceptSet@Expression[[1]])
