@@ -492,13 +492,27 @@ uniqueConceptSets <- function(x) {
   # Is there an efficient implementation using just equality? Seems like maybe not?
   l <- list()
   for (i in x) {
-    already_in <- any(purrr::map_lgl(l, ~i == .))
-    if(!already_in) {
+    alreadyIn <- any(purrr::map_lgl(l, ~i == .))
+    if(!alreadyIn) {
       l <- c(l, i)
     }
   }
   return(l)
 }
+
+# numberConceptSets <- function(x) {
+#   stopifnot(is.list(x), all(purrr::map_lgl(x, ~is(., "ConceptSet"))))
+#   conceptSetList <- list()
+#   conceptSetIds <- list(0L = x@)
+#   for (i in seq_along(x)) {
+#
+#     alreadyIn <- any(purrr::map_lgl(l, ~i == .))
+#     if(!alreadyIn) {
+#       l <- c(l, i)
+#     }
+#   }
+#   return(l)
+# }
 
 # Build Capr call ----
 
@@ -560,5 +574,27 @@ getConceptSetCall <- function(x, name = x@Name){
 
 # getConceptSetCall(cs(1,2, exclude(4,3)), "blah")
 
+# create a lookup table mapping guids to codesetIds
+dedupConceptSets <- function(conceptSetList) {
+  uniqueConceptSets <- list(conceptSetList[[1]])
+  lookup <- c(0) %>% rlang::set_names(conceptSetList[[1]]@id)
+  i <- 1
+  for (newCS in conceptSetList[-1]) {
+    alreadyIn <- FALSE
+    for (existingCS in uniqueConceptSets) {
+      if (newCS == existingCS) {
+        lookup[newCS@id] <- lookup[existingCS@id]
+        alreadyIn <- TRUE
+        break
+      }
+    }
+    if (!alreadyIn) {
+      lookup[newCS@id] <- i
+      uniqueConceptSets <- c(uniqueConceptSets, newCS)
+      i <- i + 1
+    }
+  }
+  return(list(lookup = lookup, uniqueConceptSets = uniqueConceptSets))
+}
 
-
+# r <- dedupConceptSets(list(cs(2,1), cs(2,3), cs(1,2)))

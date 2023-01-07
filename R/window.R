@@ -82,7 +82,7 @@ setClass("EventAperture",
 #' @param postDays minimum number of observation days post cohort index. Default 0 days
 #' @export
 continuousObservation <- function(priorDays = 0L,
-                                  postDays = 0L) {
+                          postDays = 0L) {
 
   new("ObservationWindow",
       priorDays = as.integer(priorDays),
