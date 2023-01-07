@@ -101,7 +101,8 @@ female <- function() {
 
 
 unit <- function(...) {
-  concept_set <- purrr::map(..., ~new("Concept", concept_id = as.integer(.x)))
+  dots <- list(...)
+  concept_set <- purrr::map(dots, ~new("Concept", concept_id = as.integer(.x)))
   new("conceptAttribute",
       name = "unit",
       conceptSet = concept_set)
@@ -111,10 +112,11 @@ unit <- function(...) {
 
 setMethod("as.list", "conceptAttribute", function(x) {
 
-  concepts <- as.list(x@conceptSet[[1]])
+  concepts <- purrr::map(x@conceptSet, ~as.list(.x))
+  nm <- stringr::str_to_title(x@name)
 
   tibble::lst(
-    !!x@name := concepts
+    !!nm := concepts
   )
 })
 
