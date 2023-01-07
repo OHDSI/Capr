@@ -23,6 +23,15 @@ test_that("writeConceptSet works", {
 
 })
 
+test_that("dedupConceptSet works", {
+  allConceptSets <- list(cs(2,1), cs(2,3), cs(1,2))
+  r <- dedupConceptSets(allConceptSets)
+  uniqueConceptSets <- r$uniqueConceptSets
+  lookup <- r$lookup
+
+  expect_equal(unname(lookup[1]), unname(lookup[3]))
+  expect_equal(unname(lookup[allConceptSets[[1]]@id]), unname(lookup[allConceptSets[[3]]@id]))
+})
 
 test_that("equality works", {
   # order should not matter
