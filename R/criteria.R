@@ -158,3 +158,11 @@ withAtMost <- function(x, ...){
       group = purrr::keep(items, is.group)
   )
 }
+
+# Coercion ----------------
+
+## Coerce Occurrence -----
+
+## Coerce Criteria (Count) -----
+
+## Coerce Group -----
