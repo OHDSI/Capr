@@ -68,6 +68,7 @@ setClass("Cohort",
          )
 )
 
+# Constructors --------------------
 
 #' Create a cohort entry criteria
 #'
@@ -111,36 +112,7 @@ rules <- function(..., expressionLimit = c("First", "All", "Last")) {
 
 }
 
-#' Function that creates a cohort object
-#' @param entry the index event of the cohort
-#' @param attrition rules that restrict the cohort further, developing attrition
-#' @param exit the event where the person exits the cohort
-#' @param era Cohort era (collapse) logic created with the `cohortEra` function
-#' @export
-cohort <- function(entry,
-                   attrition = NULL,
-                   exit = NULL,
-                   era = NULL) {
 
-  # Entry should be a list of queries or groups
-  if (is(entry, "Query")) entry <- entry(entry)
-
-  cd <- new("Cohort", entry = entry)
-
-  if (!is.null(attrition)) {
-    cd@attrition <- attrition
-  }
-
-  if (!is.null(exit)) {
-    cd@exit <- new("Exit")
-  }
-
-  if (!is.null(era)) {
-    cd@era <- new("Era")
-  }
-
-  return(cd)
-}
 
 #' Function that creates a cohort exit object
 #' @param es the endStrategy object to specify for the exit
@@ -175,7 +147,7 @@ exit <- function(es = NULL, censor = NULL){
 #' @param studyStartDate a date string that specifies the starting date of registration
 #' @param studyEndDate a date string that specifies the end date of registration
 #' @export
-cohortEra <- function(eraDays = 0L,
+era <- function(eraDays = 0L,
                       studyStartDate = NULL,
                       studyEndDate = NULL) {
   if (is.null(studyStartDate)) {
@@ -191,18 +163,39 @@ cohortEra <- function(eraDays = 0L,
       studyEndDate = studyEndDate)
 }
 
+#' Function that creates a cohort object
+#' @param entry the index event of the cohort
+#' @param attrition rules that restrict the cohort further, developing attrition
+#' @param exit the event where the person exits the cohort
+#' @param era Cohort era (collapse) logic created with the `cohortEra` function
+#' @export
+cohort <- function(entry,
+                   attrition = NULL,
+                   exit = NULL,
+                   era = NULL) {
 
+  # Entry should be a list of queries or groups
+  if (is(entry, "Query")){
+    entry <- entry(entry)
+  }
 
+  cd <- new("Cohort", entry = entry)
 
-#'
-#' writeCohort <- function(x, path) {
-#'   checkmate::assertClass(x, "Cohort")
-#'   checkmate::assertCharacter(path, len = 1, min.chars = "1", pattern = "\\.json$")
-#'
-#' }
-#'
-#'
-#'
+  if (!is.null(attrition)) {
+    cd@attrition <- attrition
+  }
+
+  if (!is.null(exit)) {
+    cd@exit <- new("Exit")
+  }
+
+  if (!is.null(era)) {
+    cd@era <- new("Era")
+  }
+
+  return(cd)
+}
+
 
 
 

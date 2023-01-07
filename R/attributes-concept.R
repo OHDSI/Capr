@@ -57,7 +57,7 @@ setMethod("show", "conceptAttribute", function(object) {
 male <- function() {
 
   new("conceptAttribute",
-      name = "male",
+      name = "Gender",
       conceptSet = list(
         new("Concept",
             concept_id = 8507L,
@@ -85,7 +85,7 @@ male <- function() {
 female <- function() {
 
   new("conceptAttribute",
-      name = "female",
+      name = "Gender",
       conceptSet = list(
         new("Concept",
             concept_id = 8532L,
@@ -107,6 +107,15 @@ unit <- function(...) {
       conceptSet = concept_set)
 }
 
-# Type Coercion ------------------
+# Coercion ------------------
+
+setMethod("as.list", "conceptAttribute", function(x) {
+
+  concepts <- as.list(x@conceptSet[[1]])
+
+  tibble::lst(
+    !!x@name := concepts
+  )
+})
 
 # Capr Call -----------------
