@@ -91,6 +91,21 @@ setClass("CensoringCriteria",
 
 
 # Constructors -----
+
+#' Function to create an exit based on continuous observation
+#' @export
+observationExit <- function() {
+  new("ObservationExit")
+}
+
+#' Function to create an exit based on exit based on the end of a continuous drug exposure
+#' @param conceptSet the concept set of the drug exposure used to identify the exit
+#' @param persistenceWindow allow for a maximum of days between exposure records when inferring the era
+#' of persistence exposure
+#' @param surveillanceWindow add days to the end of the era of persistence exposure as an additional period of
+#' surveillance prior to cohort exit
+#' @param daysSupplyOverride force drug exposure days supply to a set number of days
+#' @export
 drugExit <- function(conceptSet,
                      persistenceWindow = 0L,
                      surveillanceWindow = 0L,
@@ -106,34 +121,42 @@ drugExit <- function(conceptSet,
       daysSupplyOverride = daysSupplyOverride)
 }
 
-fixedExit <- function(index, offsetDays){
+#' Function to create an exit based on exit based on the end of a continuous drug exposure
+#' @param index specification of event date to offset. Can be either startDate or endDate
+#' @param offsetDays an integer specifying the number of days to offset from the event date
+#' @export
+fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
+
+  index <- checkmate::matchArg(index, c("startDate", "endDate"))
+
   new("FixedDurationExit",
       index = index,
       offsetDays = offsetDays)
 }
-#' Constructor function for end strategies
-#' @description an end strategy defines how persons exit the cohort. There are
-#' two options: 1) exit based on a fixed duration relative to the initial event,
-#' and 2) exit based on the end of a continuous drug exposure
-#' @param type specify the type of end strategy
-#' @param ... dots collecting arguments for building the end strategy.
-#' If the type is DrugExposureExit the dots argument requires a minimum of a conceptSet and
-#' may also specify the surveillanceWindow, persistenceWindow and daysSupplyOverride.
-#' If the the type is FixedDurationExit the dots argument requires specification of
-#' the index and offsetDays.
-#' @export
-endStrategy <- function(type = c("DrugExposureExit",
-                                 "FixedDurationExit"),
-                        ...) {
-
-  args <- rlang::list2(...)
-  if (type == "DrugExposureExit") {
-    es <- rlang::inject(drugExit(!!!args))
-  } else{
-    es <- rlang::inject(fixedExit(!!!args))
-  }
-  return(es)
-}
+#Depcreciate endStrategy general function
+#' #' Constructor function for end strategies
+#' #' @description an end strategy defines how persons exit the cohort. There are
+#' #' two options: 1) exit based on a fixed duration relative to the initial event,
+#' #' and 2) exit based on the end of a continuous drug exposure
+#' #' @param type specify the type of end strategy
+#' #' @param ... dots collecting arguments for building the end strategy.
+#' #' If the type is DrugExposureExit the dots argument requires a minimum of a conceptSet and
+#' #' may also specify the surveillanceWindow, persistenceWindow and daysSupplyOverride.
+#' #' If the the type is FixedDurationExit the dots argument requires specification of
+#' #' the index and offsetDays.
+#' #' @export
+#' endStrategy <- function(type = c("DrugExposureExit",
+#'                                  "FixedDurationExit"),
+#'                         ...) {
+#'
+#'   args <- rlang::list2(...)
+#'   if (type == "DrugExposureExit") {
+#'     es <- rlang::inject(drugExit(!!!args))
+#'   } else{
+#'     es <- rlang::inject(fixedExit(!!!args))
+#'   }
+#'   return(es)
+#' }
 
 #' Constructor for a set of censoring events
 #' @param ... a list of Capr query objects that are used as censoring events
@@ -143,3 +166,8 @@ censoringEvents <- function(...) {
   new("CensoringCriteria",
       criteria = dots)
 }
+
+
+# Coercion -----------
+
+## Coerce Fixed Duration Exit -------
