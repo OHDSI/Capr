@@ -59,7 +59,7 @@ setClass("CohortEra",
            studyEndDate = lubridate::NA_Date_
          ))
 
-
+## Cohort----
 setClass("Cohort",
          slot = c(
            entry = "CohortEntry",
@@ -128,27 +128,20 @@ attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
 
 
 #' Function that creates a cohort exit object
-#' @param es the endStrategy object to specify for the exit
+#' @param endStrategy the endStrategy object to specify for the exit
 #' @param censor the censoring criteria to specify for the exit
 #' @export
-exit <- function(es = NULL, censor = NULL){
-  if (is.null(es) & is.null(censor)) {
-    ee <- new("CohortExit")
-  } else if (is.null(censor)) {
+exit <- function(endStrategy, censor = NULL){
+  if (is.null(censor)) {
     ee <- new("CohortExit",
-              endStrategy = es)
-  } else if (is.null(es)) {
-    ee <- new("CohortExit",
-              censoringCriteria = censor)
+              endStrategy = endStrategy)
   } else {
     ee <- new("CohortExit",
-              endStrategy = es,
+              endStrategy = endStrategy,
               censoringCriteria = censor)
   }
 
   return(ee)
-
-
 }
 #' Create a Cohort Era class object
 #'
@@ -247,9 +240,12 @@ setMethod("as.list", "CohortAttrition", function(x) {
 ## Coerce Exit ----------
 setMethod("as.list", "CohortExit", function(x) {
   ll <- list(
-    'EndStrategy' = list('Type' = x@expressionLimit),
-    'CensoringCrieria' = purrr::map(x@rules, ~as.list(.x))
+    'EndStrategy' = as.list(x@endStrategy),
+    'CensoringCrieria' = as.list(x@censoringCriteria)
   )
+  if (length(ll$EndStrategy) == 0) {
+    ll$EndStrategy <- NULL
+  }
   return(ll)
 })
 
@@ -271,3 +267,14 @@ setMethod("as.list", "CohortEra", function(x) {
   return(ll)
 })
 
+## Coerce Cohort ----------
+setMethod("as.list", "Cohort", function(x) {
+
+  ll <- as.list(x@entry) %>%
+    append(as.list(x@attrition)) %>%
+    append(as.list(x@exit)) %>%
+    append(as.list(x@era)) %>%
+    append(list("cdmVersionRange" = ">=5.0.0"))
+
+  return(ll)
+})
