@@ -55,8 +55,8 @@ setClass("CohortEra",
          ),
          prototype = list(
            eraDays = 0L,
-           studyStartDate = lubridate::date("1970-01-01"),
-           studyEndDate = lubridate::date("2099-12-31")
+           studyStartDate = lubridate::NA_Date_,
+           studyEndDate = lubridate::NA_Date_
          ))
 
 
@@ -89,9 +89,12 @@ setClass("Cohort",
 #' @export
 entry <- function(...,
                   observationWindow = continuousObservation(0L, 0L),
-                  primaryCriteriaLimit = "First",
+                  primaryCriteriaLimit = c("First", "All", "Last"),
                   additionalCriteria = NULL,
-                  qualifiedLimit = "First") {
+                  qualifiedLimit = c("First", "All", "Last")) {
+
+  primaryCriteriaLimit <- checkmate::matchArg(primaryCriteriaLimit, c("First", "All", "Last"))
+  qualifiedLimit <- checkmate::matchArg(qualifiedLimit, c("First", "All", "Last"))
 
   cohort_entry <- new("CohortEntry",
                       entryEvents = list(...),
@@ -113,6 +116,9 @@ entry <- function(...,
 #' @param expressionLimit how to limit initial events per person either First, All, or Last
 #' @export
 attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
+
+  expressionLimit <- checkmate::matchArg(expressionLimit, c("First", "All", "Last"))
+
   new("CohortAttrition",
       rules = list(...),
       expressionLimit = expressionLimit)
@@ -158,14 +164,14 @@ era <- function(eraDays = 0L,
                       studyStartDate = NULL,
                       studyEndDate = NULL) {
   if (is.null(studyStartDate)) {
-    studyStartDate <- lubridate::date("1970-01-01")
+    studyStartDate <- lubridate::NA_Date_
   }
 
   if (is.null(studyEndDate)) {
-    studyEndDate <- lubridate::date("2099-12-31")
+    studyEndDate <- lubridate::NA_Date_
   }
   new("CohortEra",
-      eraPad = eraPad,
+      eraDays = eraDays,
       studyStartDate = studyStartDate,
       studyEndDate = studyEndDate)
 }
@@ -205,7 +211,7 @@ cohort <- function(entry,
 
 # Coercion --------------------
 
-## Coerce CohortEntry ----------
+## Coerce Entry ----------
 setMethod("as.list", "CohortEntry", function(x) {
   pc <- list(
     'CriteriaList' = purrr::map(x@entryEvents, ~as.list(.x)),
@@ -228,31 +234,40 @@ setMethod("as.list", "CohortEntry", function(x) {
   return(ll)
 })
 
-## Coerce CohortEntry ----------
+## Coerce Attrition ----------
 setMethod("as.list", "CohortAttrition", function(x) {
-  ir <- list(
-    'ExpressionLimit' = purrr::map(x@entryEvents, ~as.list(.x)),
-    'ObservationWindow' = as.list(x@observationWindow),
-    'PrimaryCriteriaLimit' = list('Type' = x@primaryCriteriaLimit)
+  ll <- list(
+    'ExpressionLimit' = list('Type' = x@expressionLimit),
+    'InclusionRules' = purrr::map(x@rules, ~as.list(.x))
   )
-
-  ac <- list(
-    'AdditionalCriteria' = as.list(x@additionalCriteria),
-    'QualifiedLimit' = list('Type' = x@qualifiedLimit)
-  )
-
-  ll <- list('PrimaryCriteria' = pc) %>%
-    append(ac)
-
-  if (is.na(ll$AdditionalCriteria$Type)) {
-    ll$AdditionalCriteria <- NULL
-  }
-
   return(ll)
 })
 
 
+## Coerce Exit ----------
+setMethod("as.list", "CohortExit", function(x) {
+  ll <- list(
+    'EndStrategy' = list('Type' = x@expressionLimit),
+    'CensoringCrieria' = purrr::map(x@rules, ~as.list(.x))
+  )
+  return(ll)
+})
 
+## Coerce Era ----------
+setMethod("as.list", "CohortEra", function(x) {
+  ll <- list(
+    'CollapseSettings' = list(
+      'CollapseType' = "ERA",
+      'EraPad' = x@eraDays
+    ),
+    'CensorWindow' = list(
+      'StartDate' = x@studyStartDate,
+      'EndDate' = x@studyEndDate
+    )
+  )
 
+  ll$CensorWindow <- purrr::discard(ll$CensorWindow, is.na)
 
+  return(ll)
+})
 
