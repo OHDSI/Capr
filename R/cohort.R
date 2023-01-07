@@ -230,8 +230,13 @@ setMethod("as.list", "CohortEntry", function(x) {
 ## Coerce Attrition ----------
 setMethod("as.list", "CohortAttrition", function(x) {
 
+  nm <- names(x@rules)
+  if (is.null(nm)) {
+    nm <- paste0("rule", seq_along(x@rules))
+  }
+
   irs <- purrr::map2(
-    names(x@rules),
+    nm,
     unname(x@rules),
     ~list('name' = .x,
           'expression' = as.list(.y))
