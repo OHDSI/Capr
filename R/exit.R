@@ -133,6 +133,7 @@ fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
       index = index,
       offsetDays = offsetDays)
 }
+
 #Depcreciate endStrategy general function
 #' #' Constructor function for end strategies
 #' #' @description an end strategy defines how persons exit the cohort. There are
@@ -170,4 +171,16 @@ censoringEvents <- function(...) {
 
 # Coercion -----------
 
+toPascal <- function(x) {
+  SqlRender::camelCaseToTitleCase(x) %>%
+    stringr::str_replace_all("\\s", "")
+}
+
 ## Coerce Fixed Duration Exit -------
+setMethod("as.list", "FixedDurationExit", function(x) {
+  ll <- list(
+    'DateField' = toPascal(x@index),
+    'Offset' = x@offsetDays
+  )
+  return(ll)
+})
