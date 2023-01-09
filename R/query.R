@@ -85,15 +85,23 @@ setMethod("show", "Query", function(object) {
 
 # Constructors -----
 
-query <- function(domain, conceptSet, ...) {
+query <- function(domain, conceptSet = NULL, ...) {
 
   # bundle attributes as a list
   atb <- list(...)
 
-  query <- new("Query",
-               domain = domain,
-               conceptSet = conceptSet,
-               attributes = atb)
+  if (is.null(conceptSet)) {
+    query <- new("Query",
+                 domain = domain,
+                 attributes = atb)
+  } else {
+    query <- new("Query",
+                 domain = domain,
+                 conceptSet = conceptSet,
+                 attributes = atb)
+  }
+
+
   return(query)
 }
 
@@ -181,33 +189,67 @@ conditionEra <- function(conceptSet, ...) {
         ...)
 }
 
-# Serialization -----
+#' Query the condition era domain
+#'
+#' @param conceptSet A condition concept set
+#' @param ... optional attributes
+#'
+#' @return A Capr Query
+#' @export
+death <- function(conceptSet = NULL, ...) {
 
+  query(domain = "Death",
+        conceptSet = conceptSet,
+        ...)
+}
+
+
+# Coercion -----
+## Coerce Query ----
+setMethod("as.list", "Query", function(x) {
+  #create initial list for query
+  ll <- list(
+    'CodesetId' = x@conceptSet@id
+  ) %>%
+    purrr::discard(~length(.x) == 0)
+  #list out attributes
+  if (length(x@attributes) > 0) {
+    atr <- purrr::map(x@attributes, ~as.list(.x)) %>%
+      purrr::reduce(append)
+    #append to query list
+    ll <- append(ll, atr)
+  }
+
+  tibble::lst(
+    !!x@domain := ll
+  )
+
+})
 # class(x@conceptSet@Expression[[1]])
 # as.list(x@conceptSet@Expression[[1]])
-setMethod("as.list", "Query", function(x) {
-
-  x <- condition(cs(1:2))
-  # A query has exactly one concept set so id is always 0
-  conceptSetList <- list(id = 0,
-                         name = x@conceptSet@Name,
-                         items = lapply(x@conceptSet@Expression, as.list))
-
-  #TODO add attributes
-  atr <- list("Age" = list("Value" = 90, "Op" = "lt"),
-              "Age2" = list("Value" = 90, "Op" = "lt"))
-
-  domainList <- c(0, atr) %>%  rlang::set_names(c("CodesetId", names(atr)))
-
-  atr_name <- "Age2"
-  atr_value <- list("Value" = 90, "Op" = "lt")
-
-  ll <- lst("ConceptSets" = conceptSetList,
-              !!x@domain := lst('CodesetId' = 0, !!atr_name := atr_value))
-
-  jsonlite::toJSON(ll, pretty = TRUE, auto_unbox = TRUE)
-  return(ll)
-})
+# setMethod("as.list", "Query", function(x) {
+#
+#   x <- condition(cs(1:2))
+#   # A query has exactly one concept set so id is always 0
+#   conceptSetList <- list(id = 0,
+#                          name = x@conceptSet@Name,
+#                          items = lapply(x@conceptSet@Expression, as.list))
+#
+#   #TODO add attributes
+#   atr <- list("Age" = list("Value" = 90, "Op" = "lt"),
+#               "Age2" = list("Value" = 90, "Op" = "lt"))
+#
+#   domainList <- c(0, atr) %>%  rlang::set_names(c("CodesetId", names(atr)))
+#
+#   atr_name <- "Age2"
+#   atr_value <- list("Value" = 90, "Op" = "lt")
+#
+#   ll <- lst("ConceptSets" = conceptSetList,
+#               !!x@domain := lst('CodesetId' = 0, !!atr_name := atr_value))
+#
+#   jsonlite::toJSON(ll, pretty = TRUE, auto_unbox = TRUE)
+#   return(ll)
+# })
 
 
 

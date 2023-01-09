@@ -57,7 +57,7 @@ setMethod("show", "conceptAttribute", function(object) {
 male <- function() {
 
   new("conceptAttribute",
-      name = "male",
+      name = "Gender",
       conceptSet = list(
         new("Concept",
             concept_id = 8507L,
@@ -85,7 +85,7 @@ male <- function() {
 female <- function() {
 
   new("conceptAttribute",
-      name = "female",
+      name = "Gender",
       conceptSet = list(
         new("Concept",
             concept_id = 8532L,
@@ -101,12 +101,23 @@ female <- function() {
 
 
 unit <- function(...) {
-  concept_set <- purrr::map(..., ~new("Concept", concept_id = as.integer(.x)))
+  dots <- list(...)
+  concept_set <- purrr::map(dots, ~new("Concept", concept_id = as.integer(.x)))
   new("conceptAttribute",
       name = "unit",
       conceptSet = concept_set)
 }
 
-# Type Coercion ------------------
+# Coercion ------------------
+
+setMethod("as.list", "conceptAttribute", function(x) {
+
+  concepts <- purrr::map(x@conceptSet, ~as.list(.x))
+  nm <- stringr::str_to_title(x@name)
+
+  tibble::lst(
+    !!nm := concepts
+  )
+})
 
 # Capr Call -----------------

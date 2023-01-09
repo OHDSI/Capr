@@ -1,5 +1,7 @@
 # Classes-----------------------
 
+## CohortEntry ----
+
 #' @include window.R count.R query.R conceptSet.R
 setClass("CohortEntry",
          slots = c(
@@ -18,6 +20,8 @@ setClass("CohortEntry",
          )
 )
 
+## CohortAttrition ----
+
 setClass("CohortAttrition",
          slots = c(
            rules = "list",
@@ -28,17 +32,20 @@ setClass("CohortAttrition",
            expressionLimit = "First"
          ))
 
+
+## CohortExit ----
 setClass("CohortExit",
          slots = c(
-           endStrategy = "list",
-           censor = "list"
+           endStrategy = "ANY",
+           censoringCriteria = "CensoringCriteria"
          ),
          prototype = list(
-           endStrategy = list('type' = "end of continuous observation"),
-           censor = list()
+           endStrategy = new("ObservationExit"),
+           censoringCriteria = new("CensoringCriteria")
          )
 )
 
+## CohortEra----
 
 setClass("CohortEra",
          slots = c(
@@ -48,11 +55,11 @@ setClass("CohortEra",
          ),
          prototype = list(
            eraDays = 0L,
-           studyStartDate = lubridate::date("1970-01-01"),
-           studyEndDate = lubridate::date("2099-12-31")
+           studyStartDate = lubridate::NA_Date_,
+           studyEndDate = lubridate::NA_Date_
          ))
 
-
+## Cohort----
 setClass("Cohort",
          slot = c(
            entry = "CohortEntry",
@@ -68,6 +75,7 @@ setClass("Cohort",
          )
 )
 
+# Constructors --------------------
 
 #' Create a cohort entry criteria
 #'
@@ -81,9 +89,12 @@ setClass("Cohort",
 #' @export
 entry <- function(...,
                   observationWindow = continuousObservation(0L, 0L),
-                  primaryCriteriaLimit = "First",
+                  primaryCriteriaLimit = c("First", "All", "Last"),
                   additionalCriteria = NULL,
-                  qualifiedLimit = "First") {
+                  qualifiedLimit = c("First", "All", "Last")) {
+
+  primaryCriteriaLimit <- checkmate::matchArg(primaryCriteriaLimit, c("First", "All", "Last"))
+  qualifiedLimit <- checkmate::matchArg(qualifiedLimit, c("First", "All", "Last"))
 
   cohort_entry <- new("CohortEntry",
                       entryEvents = list(...),
@@ -104,11 +115,58 @@ entry <- function(...,
 #' @param ... Capr groups
 #' @param expressionLimit how to limit initial events per person either First, All, or Last
 #' @export
-rules <- function(..., expressionLimit = c("First", "All", "Last")) {
+attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
+
+  expressionLimit <- checkmate::matchArg(expressionLimit, c("First", "All", "Last"))
+
   new("CohortAttrition",
       rules = list(...),
       expressionLimit = expressionLimit)
 
+}
+
+
+
+#' Function that creates a cohort exit object
+#' @param endStrategy the endStrategy object to specify for the exit
+#' @param censor the censoring criteria to specify for the exit
+#' @export
+exit <- function(endStrategy, censor = NULL){
+  if (is.null(censor)) {
+    ee <- new("CohortExit",
+              endStrategy = endStrategy)
+  } else {
+    ee <- new("CohortExit",
+              endStrategy = endStrategy,
+              censoringCriteria = censor)
+  }
+
+  return(ee)
+}
+#' Create a Cohort Era class object
+#'
+#' The Cohort Era depicts the time span of the cohort. The Censor Window includes
+#' the date window for which we register events. The Collapse Settings identify the era padding
+#' between events before exiting a cohort.
+#'
+#' @param eraDays a numeric that specifies the number of days for the era padding
+#' @param studyStartDate a date string that specifies the starting date of registration
+#' @param studyEndDate a date string that specifies the end date of registration
+#' @export
+era <- function(eraDays = 0L,
+                      studyStartDate = NULL,
+                      studyEndDate = NULL) {
+  if (is.null(studyStartDate)) {
+    studyStartDate <- lubridate::NA_Date_
+  }
+
+  if (is.null(studyEndDate)) {
+    studyEndDate <- lubridate::NA_Date_
+  }
+  new("CohortEra",
+      eraDays = eraDays,
+      studyStartDate = studyStartDate,
+      studyEndDate = studyEndDate)
 }
 
 #' Function that creates a cohort object
@@ -123,7 +181,9 @@ cohort <- function(entry,
                    era = NULL) {
 
   # Entry should be a list of queries or groups
-  if (is(entry, "Query")) entry <- entry(entry)
+  if (is(entry, "Query")){
+    entry <- entry(entry)
+  }
 
   cd <- new("Cohort", entry = entry)
 
@@ -142,31 +202,112 @@ cohort <- function(entry,
   return(cd)
 }
 
+# Coercion --------------------
 
-#' Create a Cohort Era class object
-#'
-#' The Cohort Era depicts the time span of the cohort. The Censor Window includes
-#' the date window for which we register events. The Collapse Settings identify the era padding
-#' between events before exiting a cohort.
-#'
-#' @param eraDays a numeric that specifies the number of days for the era padding
-#' @param studyStartDate a date string that specifies the starting date of registration
-#' @param studyEndDate a date string that specifies the end date of registration
-#' @export
-cohortEra <- function(eraDays = 0L,
-                      studyStartDate = NULL,
-                      studyEndDate = NULL) {
-  if (is.null(studyStartDate)) {
-    studyStartDate <- lubridate::date("1970-01-01")
+## Coerce Entry ----------
+setMethod("as.list", "CohortEntry", function(x) {
+  pc <- list(
+    'CriteriaList' = purrr::map(x@entryEvents, ~as.list(.x)),
+    'ObservationWindow' = as.list(x@observationWindow),
+    'PrimaryCriteriaLimit' = list('Type' = x@primaryCriteriaLimit)
+  )
+
+  ac <- list(
+    'AdditionalCriteria' = as.list(x@additionalCriteria),
+    'QualifiedLimit' = list('Type' = x@qualifiedLimit)
+  )
+
+  ll <- list('PrimaryCriteria' = pc) %>%
+    append(ac)
+
+  if (is.na(ll$AdditionalCriteria$Type)) {
+    ll$AdditionalCriteria <- NULL
   }
 
-  if (is.null(studyEndDate)) {
-    studyEndDate <- lubridate::date("2099-12-31")
+  return(ll)
+})
+
+## Coerce Attrition ----------
+setMethod("as.list", "CohortAttrition", function(x) {
+
+  nm <- names(x@rules)
+  if (is.null(nm)) {
+    nm <- paste0("rule", seq_along(x@rules))
   }
-  new("CohortEra",
-      eraPad = eraPad,
-      studyStartDate = studyStartDate,
-      studyEndDate = studyEndDate)
+
+  irs <- purrr::map2(
+    nm,
+    unname(x@rules),
+    ~list('name' = .x,
+          'expression' = as.list(.y))
+  )
+
+  ll <- list(
+    'ExpressionLimit' = list('Type' = x@expressionLimit),
+    'InclusionRules' = irs
+  )
+  return(ll)
+})
+
+
+## Coerce Exit ----------
+setMethod("as.list", "CohortExit", function(x) {
+  ll <- list(
+    'EndStrategy' = as.list(x@endStrategy),
+    'CensoringCrieria' = as.list(x@censoringCriteria)
+  )
+  if (length(ll$EndStrategy) == 0) {
+    ll$EndStrategy <- NULL
+  }
+  return(ll)
+})
+
+## Coerce Era ----------
+setMethod("as.list", "CohortEra", function(x) {
+  ll <- list(
+    'CollapseSettings' = list(
+      'CollapseType' = "ERA",
+      'EraPad' = x@eraDays
+    ),
+    'CensorWindow' = list(
+      'StartDate' = x@studyStartDate,
+      'EndDate' = x@studyEndDate
+    )
+  )
+
+  ll$CensorWindow <- purrr::discard(ll$CensorWindow, is.na)
+
+  return(ll)
+})
+
+## Coerce Cohort ----------
+setMethod("as.list", "Cohort", function(x) {
+
+  ll <- as.list(x@entry) %>%
+    append(as.list(x@attrition)) %>%
+    append(as.list(x@exit)) %>%
+    append(as.list(x@era)) %>%
+    append(list("cdmVersionRange" = ">=5.0.0"))
+
+  return(ll)
+})
+
+toCirce <- function(cd) {
+
+  #get all guids from cohort definition and remove duplicates
+  guidTable <- collectGuid(cd)
+
+  #replace guids with codeset integer
+  cd2 <- replaceCodesetId(cd, guidTable = guidTable)
+
+  cdCirce <- list(
+    #start with getting concept set structure
+    'ConceptSets' = listConceptSets(cd2)
+  ) %>%
+    #append cohort structure
+    append(as.list(cd2))
+
+  return(cdCirce)
 }
 
 

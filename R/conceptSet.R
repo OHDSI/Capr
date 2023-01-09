@@ -111,14 +111,14 @@ setMethod("show", "ConceptSetItem", function(object) {
 #' @slot Name the name of the concept set expression
 #' @slot Expression a list containing expressions. expressions include multiple conceptSetItem objects
 setClass("ConceptSet",
-         slots = c(id = "character",
+         slots = c(id = "ANY",
                    Name = "character",
                    Expression = "list"))
 
 setValidity("ConceptSet", function(object) {
   stopifnot(is.character(object@id),
             length(object@id) == 1,
-            is.character(object@id),
+            #is.character(object@id),
             length(object@id) == 1,
             is.list(object@Expression),
             all(purrr::map_lgl(object@Expression, ~is(., "ConceptSetItem")))
