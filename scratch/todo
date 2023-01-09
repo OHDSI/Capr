@@ -1,0 +1,33 @@
+- conceptSet
+  * as.list
+  * as.json
+  * readConceptSet
+  * writeConceptSet
+  * uniqueConceptSets
+
+- Query
+  - constructors
+  - as.list
+  - as.json
+
+- Count
+  - constructors
+  - as.list
+  - as.json
+
+- Group
+  - constructors
+  - as.list
+  - as.json
+
+- Attributes ...
+
+- CohortSet
+  - constructor
+  - as.list
+  - as.json
+  - readCohortSet
+  - writeCohortSet
+
+- Vignettes
+

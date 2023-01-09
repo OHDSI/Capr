@@ -73,6 +73,7 @@ setMethod("collectGuid", "Cohort", function(x) {
 })
 
 # Replace CodesetId -----------------------
+## TODO HASH table implementation of find/replace
 setGeneric("replaceCodesetId", function(x, guidTable) standardGeneric("replaceCodesetId"))
 
 setMethod("replaceCodesetId", "Query", function(x, guidTable) {
