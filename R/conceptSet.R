@@ -219,7 +219,14 @@ cs <- function(..., name = "", id = NULL) {
   # TODO decide how to handle duplicate ids in `cs`. For now we throw error.
 
   if (is.null(id)) {
-    id <- as.character(digest::digest(ids, algo = "md5"))
+    id <- purrr::map_chr(conceptList, ~paste0(.@Concept@concept_id,
+                                              .@isExcluded,
+                                              .@includeDescendants,
+                                              .@includeMapped)) %>%
+      sort() %>%
+      paste0(collapse = "") %>%
+      digest::digest(algo = "md5") %>%
+      as.character()
   }
 
   methods::new("ConceptSet",

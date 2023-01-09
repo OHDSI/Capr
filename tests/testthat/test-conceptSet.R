@@ -64,6 +64,17 @@ test_that("uniqueConceptSets works", {
   expect_true(x[[2]] == cs(1,2, exclude(3)))
 })
 
+test_that("concept set id does not depend on order", {
+  a <- cs(1,descendants(9),3)
+  b <- cs(1,3,descendants(9))
+  c <- cs(1,3,9)
+  d <- cs(1,descendants(9),3)
+
+  expect_type(a@id, "character")
+  expect_true(a@id == b@id)
+  expect_true(a@id == d@id)
+  expect_false(b@id == c@id)
+})
 
 
 
