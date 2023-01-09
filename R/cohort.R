@@ -291,3 +291,21 @@ setMethod("as.list", "Cohort", function(x) {
 
   return(ll)
 })
+
+toCirce <- function(cd) {
+
+  #get all guids from cohort definition and remove duplicates
+  guidTable <- collectGuid(cd)
+
+  #replace guids with codeset integer
+  cd2 <- replaceCodesetId(cd, guidTable = guidTable)
+
+  cdCirce <- list(
+    #start with getting concept set structure
+    'ConceptSets' = listConceptSets(cd2)
+  ) %>%
+    #append cohort structure
+    append(as.list(cd2))
+
+  return(cdCirce)
+}
