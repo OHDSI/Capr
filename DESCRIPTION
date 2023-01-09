@@ -58,3 +58,4 @@ Collate:
     'window.R'
     'criteria.R'
     'cohort.R'
+    'utils-pipe.R'
