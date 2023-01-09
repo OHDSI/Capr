@@ -342,7 +342,7 @@ setMethod("as.list", "ConceptSetItem", function(x){
 setMethod("as.list", "ConceptSet", function(x){
             list('id' = x@id,
                  'name' = x@Name,
-                 'expression' = lapply(x@Expression, as.list))
+                 'expression' = list('items' = lapply(x@Expression, as.list)))
 })
 
 #' Save a concept set as a json file
