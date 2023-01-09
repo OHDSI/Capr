@@ -58,4 +58,5 @@ Collate:
     'window.R'
     'criteria.R'
     'cohort.R'
+    'collectCodesetId.R'
     'utils-pipe.R'

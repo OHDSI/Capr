@@ -191,7 +191,7 @@ setMethod("as.list", "Occurrence", function(x) {
 setMethod("as.list", "Criteria", function(x) {
   ll <- list('Criteria' = as.list(x@query),
              'Occurrence' = as.list(x@occurrence)) %>%
-    purrr::prepend(as.list(x@aperture), before = 2)
+    purrr::prepend(as.list(x@aperture), before = 2) # TODO prepend was deprecated in purrr 1.0. Switch to append
   return(ll)
 })
 

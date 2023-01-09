@@ -29,7 +29,6 @@ test_that("dedupConceptSet works", {
   uniqueConceptSets <- r$uniqueConceptSets
   lookup <- r$lookup
 
-  expect_equal(unname(lookup[1]), unname(lookup[3]))
   expect_equal(unname(lookup[allConceptSets[[1]]@id]), unname(lookup[allConceptSets[[3]]@id]))
 })
 
