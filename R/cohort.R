@@ -358,6 +358,17 @@ setMethod("as.list", "Cohort", function (x, ...) {
   cohortList
 })
 
+#' @export
+setGeneric("as.json", function(x, pretty = TRUE, ...) {
+  as.character(jsonlite::toJSON(as.list(x), auto_unbox = TRUE, pretty = pretty, ...))
+})
+
+#' @export
+setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
+  as.character(jsonlite::toJSON(as.list(x), auto_unbox = TRUE, pretty = pretty, ...))
+})
+
+
 # as.list(x) %>% jsonlite::toJSON(auto_unbox = T, pretty = T)
 
 #' Write Cohort json file
