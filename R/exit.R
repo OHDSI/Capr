@@ -57,6 +57,7 @@ setClass("FixedDurationExit",
 #' surveillance prior to cohort exit
 #' @slot daysSupplyOverride force drug exposure days supply to a set number of days
 #' @slot count an integer specifying the number of occurrences for a criteria
+#' @include conceptSet.R
 setClass("DrugExposureExit",
          slots = c(
            conceptSet = "ConceptSet",
@@ -134,30 +135,30 @@ fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
       offsetDays = offsetDays)
 }
 
-#Depcreciate endStrategy general function
-#' #' Constructor function for end strategies
-#' #' @description an end strategy defines how persons exit the cohort. There are
-#' #' two options: 1) exit based on a fixed duration relative to the initial event,
-#' #' and 2) exit based on the end of a continuous drug exposure
-#' #' @param type specify the type of end strategy
-#' #' @param ... dots collecting arguments for building the end strategy.
-#' #' If the type is DrugExposureExit the dots argument requires a minimum of a conceptSet and
-#' #' may also specify the surveillanceWindow, persistenceWindow and daysSupplyOverride.
-#' #' If the the type is FixedDurationExit the dots argument requires specification of
-#' #' the index and offsetDays.
-#' #' @export
-#' endStrategy <- function(type = c("DrugExposureExit",
-#'                                  "FixedDurationExit"),
-#'                         ...) {
-#'
-#'   args <- rlang::list2(...)
-#'   if (type == "DrugExposureExit") {
-#'     es <- rlang::inject(drugExit(!!!args))
-#'   } else{
-#'     es <- rlang::inject(fixedExit(!!!args))
-#'   }
-#'   return(es)
-#' }
+# Deprecate endStrategy general function
+# #' Constructor function for end strategies
+# #' @description an end strategy defines how persons exit the cohort. There are
+# #' two options: 1) exit based on a fixed duration relative to the initial event,
+# #' and 2) exit based on the end of a continuous drug exposure
+# #' @param type specify the type of end strategy
+# #' @param ... dots collecting arguments for building the end strategy.
+# #' If the type is DrugExposureExit the dots argument requires a minimum of a conceptSet and
+# #' may also specify the surveillanceWindow, persistenceWindow and daysSupplyOverride.
+# #' If the the type is FixedDurationExit the dots argument requires specification of
+# #' the index and offsetDays.
+# #' @export
+# endStrategy <- function(type = c("DrugExposureExit",
+#                                  "FixedDurationExit"),
+#                         ...) {
+#
+#   args <- rlang::list2(...)
+#   if (type == "DrugExposureExit") {
+#     es <- rlang::inject(drugExit(!!!args))
+#   } else{
+#     es <- rlang::inject(fixedExit(!!!args))
+#   }
+#   return(es)
+# }
 
 #' Constructor for a set of censoring events
 #' @param ... a list of Capr query objects that are used as censoring events

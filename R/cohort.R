@@ -2,7 +2,7 @@
 
 ## CohortEntry ----
 
-#' @include window.R count.R query.R conceptSet.R
+#' @include window.R query.R conceptSet.R criteria.R
 setClass("CohortEntry",
          slots = c(
            entryEvents = "list",
@@ -34,6 +34,7 @@ setClass("CohortAttrition",
 
 
 ## CohortExit ----
+#' @include exit.R
 setClass("CohortExit",
          slots = c(
            endStrategy = "ANY",
@@ -315,48 +316,44 @@ toCirce <- function(cd) {
 # cs2 <- cs(descendants(exclude(436665),440383,4175329))
 
 
-# getConceptSetDetails(cs, )
-# x <- cohort(entry(condition(cs1), drug(cs2)))
-# writeCohort(x, here::here("cohort.json"))
-#'
-#' #' @export
-#' setMethod("as.list", "Cohort", function (x, ...) {
-#'
-#'   # entry events
-#'   entryConceptSets <- purrr::map(x@entry@entryEvents, collectConceptSets)
-#'
-#'   # re-number concept sets
-#'   allConceptSets <- entryConceptSets # need to add criteria concept sets
-#'
-#'   r <- dedupConceptSets(allConceptSets)
-#'   lookup <- r$lookup
-#'   uniqueConceptSets <- purrr::map(r$uniqueConceptSets, function(x) {
-#'     x <- as.list(x)
-#'     x$id <- unname(lookup[x$id])
-#'     x
-#'   })
-#'
-#'   cohortList <- list(
-#'     ConceptSets = uniqueConceptSets,
-#'     PrimaryCriteria = list(CriteriaList = purrr::map(x@entry@entryEvents, ~lst(!!.@domain := list(CodesetId = .@conceptSet@id))),
-#'        ObservationWindow = list(priorDays = x@entry@observationWindow@priorDays, postDays = x@entry@observationWindow@postDays),
-#'        PrimaryCriteriaLimit = list(Type = x@entry@primaryCriteriaLimit)
-#'     ),
-#'     QualifiedLimit = list(Type = x@entry@qualifiedLimit),
-#'     ExpressionLimit = list(Type = x@attrition@expressionLimit),
-#'     InclusionRules = x@attrition@rules, # TODO use map(rules, as.list)
-#'     CensoringCriteria = x@exit@censor,
-#'     CollapseSettings = list(collapseType = "ERA", EraPad = x@era@eraDays),
-#'     CensorWindow = list() # TODO implement censor window
-#'   )
-#'
-#'   cohortList$PrimaryCriteria$CriteriaList <- purrr::map(cohortList$PrimaryCriteria$CriteriaList,
-#'                                                         function(criteria) {
-#'                                                           criteria[[1]]$CodesetId <- unname(lookup[criteria[[1]]$CodesetId])
-#'                                                           criteria
-#'                                                         })
-#'   cohortList
-#' })
+# #' @export
+# setMethod("as.list", "Cohort", function (x, ...) {
+#
+#   # entry events
+#   entryConceptSets <- purrr::map(x@entry@entryEvents, collectConceptSets)
+#
+#   # re-number concept sets
+#   allConceptSets <- entryConceptSets # need to add criteria concept sets
+#
+#   r <- dedupConceptSets(allConceptSets)
+#   lookup <- r$lookup
+#   uniqueConceptSets <- purrr::map(r$uniqueConceptSets, function(x) {
+#     x <- as.list(x)
+#     x$id <- unname(lookup[x$id])
+#     x
+#   })
+#
+#   cohortList <- list(
+#     ConceptSets = uniqueConceptSets,
+#     PrimaryCriteria = list(CriteriaList = purrr::map(x@entry@entryEvents, ~lst(!!.@domain := list(CodesetId = .@conceptSet@id))),
+#        ObservationWindow = list(priorDays = x@entry@observationWindow@priorDays, postDays = x@entry@observationWindow@postDays),
+#        PrimaryCriteriaLimit = list(Type = x@entry@primaryCriteriaLimit)
+#     ),
+#     QualifiedLimit = list(Type = x@entry@qualifiedLimit),
+#     ExpressionLimit = list(Type = x@attrition@expressionLimit),
+#     InclusionRules = x@attrition@rules, # TODO use map(rules, as.list)
+#     CensoringCriteria = x@exit@censor,
+#     CollapseSettings = list(collapseType = "ERA", EraPad = x@era@eraDays),
+#     CensorWindow = list() # TODO implement censor window
+#   )
+#
+#   cohortList$PrimaryCriteria$CriteriaList <- purrr::map(cohortList$PrimaryCriteria$CriteriaList,
+#                                                         function(criteria) {
+#                                                           criteria[[1]]$CodesetId <- unname(lookup[criteria[[1]]$CodesetId])
+#                                                           criteria
+#                                                         })
+#   cohortList
+# })
 
 #' @export
 setGeneric("as.json", function(x, pretty = TRUE, ...) {

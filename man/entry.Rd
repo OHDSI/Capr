@@ -7,9 +7,9 @@
 entry(
   ...,
   observationWindow = continuousObservation(0L, 0L),
-  primaryCriteriaLimit = "First",
+  primaryCriteriaLimit = c("First", "All", "Last"),
   additionalCriteria = NULL,
-  qualifiedLimit = "First"
+  qualifiedLimit = c("First", "All", "Last")
 )
 }
 \arguments{

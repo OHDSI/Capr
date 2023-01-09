@@ -56,6 +56,5 @@ Collate:
     'exit.R'
     'query.R'
     'window.R'
-    'r_criteria.R'
-    'z_cohort.R'
-    'z_collectConceptSets_tmp.R'
+    'criteria.R'
+    'cohort.R'
