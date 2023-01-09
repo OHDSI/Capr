@@ -17,7 +17,7 @@ test_that("cohort entry works", {
   cs2 <- cs(descendants(exclude(436665),440383,442306))
   x <- cohort(entry(condition(cs1), drug(cs2)))
   expect_s4_class(x, "Cohort")
-  expect_type(as.list(x), "list")
+   expect_type(as.list(x), "list")
   j <- as.json(x)
   class(j)
 
