@@ -5,4 +5,5 @@ errorReportSql.txt
 *.log
 /Meta/
 work/*
-
+scratch/roadmap/Capr_roadmap_files
+scratch/roadmap/caperFlower.PNG

@@ -1,0 +1,87 @@
+---
+title: "Capr Development Roadmap"
+author: 
+  - name: Martin Lavallee
+  - name: Adam Black
+format:
+  html:
+    toc: true
+    css: styles.css
+---
+
+# What does the package do
+
+::: {.column-margin}
+![`Capr` (pronounced: caper)](caperFlower.png)
+:::
+
+Capr is a programmatic interface to defining cohort definition for the OMOP CDM. Capr builds a representation of a cohort through R that can be seralized to json. The json structure can be imported into ATLAS. This structure follows that of circe-be, that object representation of cohort definitions in OHDSI. A valid circe-be json can be seralized into ohdsisql, a parameterized version of sql that builds cohort under the assumptions of the OMOP CDM structure. The advantage of Capr is that a user has more control over the underlying pieces of a valid circe-be structure, which enables us to create cohort templates to iterate across multiple variations of a skeletal cohort definition.
+
+# Applications of Capr
+
+The main applications of Capr are as follows:
+
+1. **Construction**: defining a cohort definition in R and the ability to serialize this into a valid circe-be json structure.
+    a) **Templating**: within construction comes the idea of templating cohort definitions. A user can define a function using Capr constructors to build various iterations of a skeleton definition. This is seen as the primary use case of Capr.
+    b) **Import and modify**: a user can import a circe-be json into R using Capr and modify its structure. We plan to add some modification functionality to Capr (such as combining inclusion rules of two cohort definitions) but otherwise we encourage users to construct novel pieces of the cohort definition and modify in place.
+2. **Inquire** (planned feature): the idea of inquire is to see, how much data is available in the active database based on a sub-component of a cohort definition. Using the inquire functions will help users see the magnitude of adding complexity to a definition without building the entire definition.
+3. **Describe** (planned feature): providing a layman interpretation of a cohort definition through text and figures. A future implementation plans to allow users to:
+    a) console print a Capr object to provide a simple explanation of the object,   
+    b) provide a markdown representation of the cohort and 
+    c) provide a graphical figure of the cohort.    
+
+# Where does Capr start and where does it stop?
+
+## Starting point
+
+Ideally, Capr should be used in tandem with a connection to an OMOP vocabulary. Connection to an OMOP vocabulary can be done through DatabaseConnector or CDMConnector. This allows users to lookup concepts before applying them in Capr objects. Capr does not provide functionality to optimize concept lookup; this is a feature passed to other OHDSI software. Capr assumes the list of concepts as inputs.
+
+## End point
+
+Capr stops upon development of the json structure, which is typically saved as a file in a directory. The previous version of Capr allowed for the user to create the ohdsiSql via CirceR. However, this was deemed an overlap between other OHDSI R packages (CirceR, CohortGenerator etc.) and it felt more appropriate for the Capr process to end at building the json file. Ultimately the item that is passed across the OHDSI network is the cohort definition json. The json file can be upload into ATLAS or into R where the ohdsiSql can be built using CirceR. Json is a straight input to build the sql, so it was deemed the minimially sufficient output needed. We intend to draw distinct lines between OHDSI software in order to improve standard workflows, that are either site internal or for network studies.
+
+# Version 2
+
+Capr version 2 entails an overhaul of the user-interface. It follows a shiny style syntax to defining cohort definitions instead of using piping. Version 2 maintains all the features available from version 1 and has potential expansions. 
+
+## Community Feedback
+
+Prior to release on `main` branch of Capr in HADES, we will push Capr v2.0 to the `develop` branch in HADES and allow for 2 weeks of testing from HADES contributors. We will open a discussions page for testers to provide feedback and suggestions of Capr v2.0. We ask for volunteers who would be willing beta test Capr.
+
+After the beta release period we will consider the comments from our testers and release Capr v2 into the `main` branch of the HADES repo. From there we will provide at least a month for the OHDSI community to test out the package and explore the vignette before pushing subsequent releases. 
+
+## Release Roadmap
+
+### Version 2.0 (New and improved)
+
+-   Updated release of Capr
+-   Alteration to Capr UI, adopting shiny style
+-   Capr constructors for all circe elements
+-   Coercion for all circe elements
+-   Write Capr to json function
+-   'Hello Capr' vignette
+
+### Version 2.1 (finishing touches to v2 base)
+
+-   Feature Releases:
+    -   Save/load Capr objects (i.e. query, entry)
+    -   Write Capr call and importing json into Capr
+-   Code Improvements:
+    -   show methods for Capr objects
+    -   more thorough validity checks of Capr objects
+    -   helper functions for concept sets
+        -   handling tibble input of concepts
+        -   contextualize concepts via database connection
+        -   `readConceptSet`: import concept sets from file (.csv or .json)
+
+### Version 2.2 and beyond (new functionality)
+
+-   Describe Functions:
+    -   `describe`: function to describe cohort definition as markdown text
+    -   `sketch`: function to draw cohort figure from definition
+-   Inquire Functions:
+    -   `inquire`: with a db, determine how much count is a available for a query or sub-component of cohort defintition
+    -   Determine feasibility of adding ohdsisql serialization function
+-   Modify Functions (Definition Algebra):
+    -   `+`: add elements (entry, attrition and exit (censor)) of cohort B to cohort A
+    -   `-`: subtract elements (entry, attrition and exit (censor)) of cohort B from cohort A
