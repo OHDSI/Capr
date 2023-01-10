@@ -193,11 +193,11 @@ cohort <- function(entry,
   }
 
   if (!is.null(exit)) {
-    cd@exit <- new("Exit")
+    cd@exit <- new("CohortExit")
   }
 
   if (!is.null(era)) {
-    cd@era <- new("Era")
+    cd@era <- new("CohortEra")
   }
 
   return(cd)

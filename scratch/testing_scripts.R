@@ -12,12 +12,18 @@ library(tidyverse)
 
 
 
+
 # create cohort example
 #index event t2d with 365 pior observation
 # inclusion rules: 1) exactly 0 t1d 2) at least 1 abnormal lab
 cd <- cohort(
   entry = entry(
-    condition(cs(descendants(201826L)), male()),
+    # condition occurrence of t2d in males
+    condition(
+      #concept set
+      cs(descendants(201826L)),
+      #additional attributes
+      male()),
     observationWindow = continuousObservation(365, 0)
   ),
   attrition = attrition(
@@ -38,6 +44,9 @@ cd <- cohort(
         duringInterval(eventStarts(-Inf, -1))
       )
     )
+  ),
+  exit = exit(
+    endStrategy = observationExit()
   )
 )
 
