@@ -72,14 +72,11 @@ is.Group <- function(x) {
 ## Occurrences ----------------
 #' Function to enumerate an exact count of occurrences
 #' @param x the integer counting the number of occurrences
-#' @param occurrence an occurrence object specifying how many events must occur
-#' to consider the event as part of the cohort definition
 #' @param query a query object that provides context to the clinical event of interest
 #' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
 #' relative to the index event
 #' @export
 exactly <- function(x,
-                    occurrence,
                     query,
                     aperture) {
   occurrence <- new("Occurrence",
@@ -93,14 +90,11 @@ exactly <- function(x,
 }
 #' Function to enumerate an minimal count of occurrences
 #' @param x the integer counting the number of occurrences
-#' @param occurrence an occurrence object specifying how many events must occur
-#' to consider the event as part of the cohort definition
 #' @param query a query object that provides context to the clinical event of interest
 #' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
 #' relative to the index event
 #' @export
 atLeast <- function(x,
-                    occurrence,
                     query,
                     aperture) {
   occurrence <- new("Occurrence",
@@ -115,14 +109,11 @@ atLeast <- function(x,
 
 #' Function to enumerate a maximum count of occurrences
 #' @param x the integer counting the number of occurrences
-#' @param occurrence an occurrence object specifying how many events must occur
-#' to consider the event as part of the cohort definition
 #' @param query a query object that provides context to the clinical event of interest
 #' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
 #' relative to the index event
 #' @export
 atMost <- function(x,
-                   occurrence,
                    query,
                    aperture) {
 
