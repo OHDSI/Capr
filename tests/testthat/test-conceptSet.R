@@ -76,4 +76,36 @@ test_that("concept set id does not depend on order", {
 })
 
 
+test_that("read/writeConceptSet works", {
+
+  # read in a csv file exported from Atlas
+  cs1 <- readConceptSet(system.file("extdata/conceptSetExpressionAtlasExportExample.csv", mustWork = TRUE, package = "Capr"))
+  expect_s4_class(cs1, "ConceptSet")
+  expect_true(nrow(as.data.frame(cs1)) == 10)
+
+  # write and read concept set as csv
+  f1 <- tempfile(fileext = ".csv")
+  aceInhibitors <- cs(descendants(1335471, 1340128, 1341927, 1363749, 1308216, 1310756, 1373225, 1331235, 1334456, 1342439))
+  writeConceptSet(aceInhibitors, f1)
+  comparison1 <- readConceptSet(f1)
+  expect_true(aceInhibitors == comparison1)
+  # waldo::compare(aceInhibitors, comparison)
+
+  # write and read concept set as json
+  f2 <- tempfile(fileext = ".json")
+  writeConceptSet(aceInhibitors, f2)
+  comparison2 <- readConceptSet(f2)
+  expect_true(aceInhibitors == comparison2)
+
+  # read from a subset of the concept table
+  cs3 <- readConceptSet(system.file("extdata/selectionFromConceptTable.csv", mustWork = TRUE, package = "Capr"))
+  expect_s4_class(cs3, "ConceptSet")
+  expect_true(nrow(as.data.frame(cs3)) == 1)
+
+  # read from output of Codelist Generator
+  cs4 <- readConceptSet(system.file("extdata/codelistGeneratorOutputExample.csv", mustWork = TRUE, package = "Capr"))
+  expect_s4_class(cs4, "ConceptSet")
+  expect_true(nrow(as.data.frame(cs4)) == 2)
+})
+
 

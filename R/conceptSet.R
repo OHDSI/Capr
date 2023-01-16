@@ -365,25 +365,69 @@ setMethod("as.list", "ConceptSet", function(x){
 #' \dontrun{
 #' anemia <- cs(descendants(439777,4013073,4013074))
 #' writeConceptSet(anemia, 'anemia.json')
+#' writeConceptSet(anemia, 'anemia.csv')
 #' }
-writeConceptSet <- function(x, path) {
-  items <- list(items = lapply(x@Expression, as.list))
-  jsonlite::write_json(x = items, path = path, pretty = TRUE, auto_unbox = TRUE)
+writeConceptSet <- function(x, path, format = "auto", ...) {
+  checkmate::assertChoice(format, choices = c("auto", "json", "csv"))
+  if (format == "auto") {
+
+    ext <- fs::path_ext(path)
+    if (ext %in% c("json", "csv")) {
+      format <- ext
+    } else {
+      rlang::abort("Unable to auto-detect file format. `path` must end with '.json' or '.csv'.")
+    }
+  }
+
+  if (format == "json") {
+    items <- list(items = lapply(x@Expression, as.list))
+    jsonlite::write_json(x = items, path = path, pretty = TRUE, auto_unbox = TRUE, ...)
+  } else if (format == "csv") {
+    df <- tibble::tibble(
+      concept_set_name = x@Name,
+      concept_id = purrr::map_int(x@Expression, ~.@Concept@concept_id),
+      concept_name = purrr::map_chr(x@Expression, ~.@Concept@concept_name),
+      domain_id = purrr::map_chr(x@Expression, ~.@Concept@domain_id),
+      vocabulary_id = purrr::map_chr(x@Expression, ~.@Concept@vocabulary_id),
+      concept_class_id = purrr::map_chr(x@Expression, ~.@Concept@concept_class_id),
+      standard_concept = purrr::map_chr(x@Expression, ~.@Concept@standard_concept),
+      standard_concept_caption = purrr::map_chr(x@Expression, ~.@Concept@standard_concept_caption),
+      concept_code = purrr::map_chr(x@Expression, ~.@Concept@concept_code),
+      invalid_reason = purrr::map_chr(x@Expression, ~.@Concept@invalid_reason),
+      invalid_reason_caption = purrr::map_chr(x@Expression, ~.@Concept@invalid_reason_caption),
+      includeDescendants = purrr::map_lgl(x@Expression, "includeDescendants"),
+      isExcluded = purrr::map_lgl(x@Expression, "isExcluded"),
+      includeMapped = purrr::map_lgl(x@Expression, "includeMapped")
+    )
+    readr::write_csv(df, path, ...)
+  }
+
+  invisible(x)
 }
 
-#' Write a concept set to a json file
+#' Read a concept set json or csv into R
 #'
-#' The resulting concept Set JSON file can be imported into Atlas.
+#' Concept sets can be serialized to json or csv file formats. `readConceptSet`
+#' reads the files into R as Capr concepts sets.
 #'
-#' @param path Name of concept set file to read. (e.g. "concepts.json")
+#' @param path Name of concept set file to read in csv or json format. (e.g. "concepts.json")
 #'
 #' @export
+#' @importFrom rlang %||%
 #'
 #' @examples
 #' \dontrun{
 #' anemia <- readConceptSet('anemia.json')
+#' anemia <- readConceptSet('anemia.csv')
 #' }
 readConceptSet <- function(path, name, id = NULL) {
+
+  checkmate::assertFileExists(path)
+
+  ext <- tolower(fs::path_ext(path))
+  if (!(ext %in% c("json", "csv"))) {
+    rlang::abort("Unable to auto-detect file format. `path` must end with '.json' or '.csv'.")
+  }
 
   if (missing(name)) {
     name <- fs::path_ext_remove(basename(path))
@@ -391,29 +435,61 @@ readConceptSet <- function(path, name, id = NULL) {
     checkmate::assertCharacter(name, len = 1)
   }
 
-  items <- jsonlite::read_json(path = path)
-  # TODO do some validation of the input. Also check that this works with Atlas.
-  conceptList <- purrr::map(items[[1]], function(.) {
-    newConcept(id = .$concept$CONCEPT_ID,
-               isExcluded = .$isExcluded,
-               includeDescendants = .$includeDescendants,
-               includeMapped = .$includeMapped,
-               conceptName = .$concept$CONCEPT_NAME,
-               standardConcept = .$concept$STANDARD_CONCEPT,
-               standardConceptCaption = .$concept$STANDARD_CONCEPT_CAPTION,
-               invalidReason = .$concept$INVALID_REASON,
-               conceptCode = .$concept$CONCEPT_CODE,
-               domainId = .$concept$DOMAIN_ID,
-               vocabularyId = .$concept$VOCABULARY_ID,
-               conceptClassId = .$concept$CONCEPT_CLASS_ID)
-  })
+  if (ext == "json") {
+    items <- jsonlite::read_json(path = path)
+    # TODO do some validation of the input. Also check that this works with Atlas.
+    conceptList <- purrr::map(items[[1]], function(.) {
+      newConcept(id = .$concept$CONCEPT_ID,
+                 isExcluded = .$isExcluded,
+                 includeDescendants = .$includeDescendants,
+                 includeMapped = .$includeMapped,
+                 conceptName = .$concept$CONCEPT_NAME,
+                 standardConcept = .$concept$STANDARD_CONCEPT,
+                 standardConceptCaption = .$concept$STANDARD_CONCEPT_CAPTION,
+                 invalidReason = .$concept$INVALID_REASON,
+                 conceptCode = .$concept$CONCEPT_CODE,
+                 domainId = .$concept$DOMAIN_ID,
+                 vocabularyId = .$concept$VOCABULARY_ID,
+                 conceptClassId = .$concept$CONCEPT_CLASS_ID)
+    })
+
+  } else if (ext == "csv") {
+    df <- readr::read_csv(path, show_col_types = FALSE)
+    names(df) <- tolower(names(df))
+
+    if (is.null(df[["concept_id"]] %||% df[["concept id"]])) {
+      rlang::abort("`concept_id` cannot be missing in the input csv file")
+    }
+
+    # prefer a name in the csv file if it exists
+    name <- df[["name"]][1] %||%
+      df[["concept_set_name"]][1] %||%
+      name
+
+    if (is.na(name) || is.null(name)) {
+      name <- ""
+    }
+
+    conceptDf <- tibble::tibble(
+      id = df[["concept_id"]] %||% df[["concept id"]] %>% as.integer(),
+      isExcluded = df[["isexcluded"]] %||% df[["exclude"]] %||% FALSE %>% as.logical(),
+      includeDescendants = df[["includedescendants"]] %||% df[["descendants"]] %||% FALSE %>% as.logical(),
+      includeMapped = df[["includemapped"]] %||% df[["mapped"]] %||% FALSE %>%  as.logical(),
+      conceptName = df[["concept_name"]] %||% df[["concept name"]] %||% "" %>% as.character(),
+      standardConcept = df[["standard_concept"]] %||% df[["standard concept"]] %||% "" %>% as.character(),
+      standardConceptCaption = df[["standard_concept_caption"]] %||% "" %>% as.character(),
+      invalidReason = df[["invalid_reason"]] %||% "" %>% as.character(),
+      invalidReasonCaption = df[["invalid_reason_caption"]] %||% "" %>% as.character(),
+      conceptCode = df[["concept_code"]] %||%  df[["concept code"]] %||% "" %>% as.character(),
+      domainId = df[["domain_id"]] %||%  df[["domain"]] %||% "" %>% as.character(),
+      vocabularyId = df[["vocabulary_id"]] %||%  df[["vocabulary"]] %||% "" %>% as.character(),
+      conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()
+    )
+    conceptList <- purrr::pmap(conceptDf, newConcept)
+  }
 
   rlang::inject(cs(!!!conceptList, name = name, id = id))
 }
-
-# condition_anemia <- cs(descendants(439777,4013073,4013074))
-# jsonlite::write_json()
-# x <- condition_anemia
 
 # Other ----
 
