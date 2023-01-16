@@ -72,40 +72,64 @@ is.Group <- function(x) {
 ## Occurrences ----------------
 #' Function to enumerate an exact count of occurrences
 #' @param x the integer counting the number of occurrences
-#' @export
-exactly <- function(x) {
-  new("Occurrence",
-      type = "exactly",
-      count = as.integer(x))
-}
-#' Function to enumerate an minimal count of occurrences
-#' @param x the integer counting the number of occurrences
-#' @export
-atLeast <- function(x) {
-  new("Occurrence",
-      type = "atLeast",
-      count = as.integer(x))
-}
-#' Function to enumerate a maximum count of occurrences
-#' @param x the integer counting the number of occurrences
-#' @export
-atMost <- function(x) {
-  new("Occurrence",
-      type = "atMost",
-      count = as.integer(x))
-}
-
-## Criteria -------------------
-#' Function to construct a criteria object
 #' @param occurrence an occurrence object specifying how many events must occur
 #' to consider the event as part of the cohort definition
 #' @param query a query object that provides context to the clinical event of interest
 #' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
 #' relative to the index event
 #' @export
-criteria <- function(occurrence,
-                     query,
-                     aperture) {
+exactly <- function(x,
+                    occurrence,
+                    query,
+                    aperture) {
+  occurrence <- new("Occurrence",
+      type = "exactly",
+      count = as.integer(x))
+
+  new("Criteria",
+      occurrence = occurrence,
+      query = query,
+      aperture = aperture)
+}
+#' Function to enumerate an minimal count of occurrences
+#' @param x the integer counting the number of occurrences
+#' @param occurrence an occurrence object specifying how many events must occur
+#' to consider the event as part of the cohort definition
+#' @param query a query object that provides context to the clinical event of interest
+#' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
+#' relative to the index event
+#' @export
+atLeast <- function(x,
+                    occurrence,
+                    query,
+                    aperture) {
+  occurrence <- new("Occurrence",
+      type = "atLeast",
+      count = as.integer(x))
+
+  new("Criteria",
+      occurrence = occurrence,
+      query = query,
+      aperture = aperture)
+}
+
+#' Function to enumerate a maximum count of occurrences
+#' @param x the integer counting the number of occurrences
+#' @param occurrence an occurrence object specifying how many events must occur
+#' to consider the event as part of the cohort definition
+#' @param query a query object that provides context to the clinical event of interest
+#' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
+#' relative to the index event
+#' @export
+atMost <- function(x,
+                   occurrence,
+                   query,
+                   aperture) {
+
+  occurrence <- new("Occurrence",
+      type = "atMost",
+      count = as.integer(x))
+
   new("Criteria",
       occurrence = occurrence,
       query = query,
@@ -114,7 +138,7 @@ criteria <- function(occurrence,
 
 ## Group -------
 
-#' Function to construct a group where all criterias and groups must be satisfied
+#' Function to construct a group where all criteria and groups must be satisfied
 #' @param ... a set of criteria or groups
 #' @export
 withAll <- function(...){
@@ -126,7 +150,7 @@ withAll <- function(...){
       )
 }
 
-#' Function to construct a group where any criterias and groups may be satisfied
+#' Function to construct a group where any criteria and groups may be satisfied
 #' @param ... a set of criteria or groups
 #' @export
 withAny <- function(...){
@@ -138,7 +162,7 @@ withAny <- function(...){
   )
 }
 
-#' Function to construct a group where at least some of the criterias or groups must be satisfied
+#' Function to construct a group where at least some of the criteria or groups must be satisfied
 #' @param x an integer specifying the number of criterias or groups that must be satisfied
 #' @param ... a set of criteria or groups
 #' @export
@@ -191,7 +215,7 @@ setMethod("as.list", "Occurrence", function(x) {
 setMethod("as.list", "Criteria", function(x) {
   ll <- list('Criteria' = as.list(x@query),
              'Occurrence' = as.list(x@occurrence)) %>%
-    purrr::prepend(as.list(x@aperture), before = 2) # TODO prepend was deprecated in purrr 1.0. Switch to append
+    append(as.list(x@aperture), after = 1)
   return(ll)
 })
 

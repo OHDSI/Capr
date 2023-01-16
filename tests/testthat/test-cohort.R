@@ -51,19 +51,18 @@ test_that("full cohort works", {
     ),
     attrition = attrition(
       'no t1d' = withAll(
-        criteria(
-          exactly(0),
+        exactly(0,
           condition(cs(descendants(201254L))),
           duringInterval(eventStarts(-Inf, -1))
         )
       ),
       'abnormal hba1c' = withAll(
-        criteria(
-          atLeast(1),
+        atLeast(1,
           measurement(
             cs(descendants(4184637L)),
             valueAsNumber(lt(13)),
-            unit(8713L)),
+            unit(8713L)
+          ),
           duringInterval(eventStarts(-Inf, -1))
         )
       )

@@ -2,7 +2,7 @@
 % Please edit documentation in R/criteria.R
 \name{withAll}
 \alias{withAll}
-\title{Function to construct a group where all criterias and groups must be satisfied}
+\title{Function to construct a group where all criteria and groups must be satisfied}
 \usage{
 withAll(...)
 }
@@ -10,5 +10,5 @@ withAll(...)
 \item{...}{a set of criteria or groups}
 }
 \description{
-Function to construct a group where all criterias and groups must be satisfied
+Function to construct a group where all criteria and groups must be satisfied
 }

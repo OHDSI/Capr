@@ -2,7 +2,7 @@
 % Please edit documentation in R/criteria.R
 \name{withAny}
 \alias{withAny}
-\title{Function to construct a group where any criterias and groups may be satisfied}
+\title{Function to construct a group where any criteria and groups may be satisfied}
 \usage{
 withAny(...)
 }
@@ -10,5 +10,5 @@ withAny(...)
 \item{...}{a set of criteria or groups}
 }
 \description{
-Function to construct a group where any criterias and groups may be satisfied
+Function to construct a group where any criteria and groups may be satisfied
 }

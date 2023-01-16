@@ -2,7 +2,7 @@
 % Please edit documentation in R/criteria.R
 \name{withAtLeast}
 \alias{withAtLeast}
-\title{Function to construct a group where at least some of the criterias or groups must be satisfied}
+\title{Function to construct a group where at least some of the criteria or groups must be satisfied}
 \usage{
 withAtLeast(x, ...)
 }
@@ -12,5 +12,5 @@ withAtLeast(x, ...)
 \item{...}{a set of criteria or groups}
 }
 \description{
-Function to construct a group where at least some of the criterias or groups must be satisfied
+Function to construct a group where at least some of the criteria or groups must be satisfied
 }

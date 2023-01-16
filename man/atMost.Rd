@@ -4,10 +4,18 @@
 \alias{atMost}
 \title{Function to enumerate a maximum count of occurrences}
 \usage{
-atMost(x)
+atMost(x, occurrence, query, aperture)
 }
 \arguments{
 \item{x}{the integer counting the number of occurrences}
+
+\item{occurrence}{an occurrence object specifying how many events must occur
+to consider the event as part of the cohort definition}
+
+\item{query}{a query object that provides context to the clinical event of interest}
+
+\item{aperture}{an eventAperture object that shows the temporal span where the event is to be observed
+relative to the index event}
 }
 \description{
 Function to enumerate a maximum count of occurrences
