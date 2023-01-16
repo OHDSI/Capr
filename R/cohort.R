@@ -292,7 +292,9 @@ setMethod("as.list", "Cohort", function(x) {
 
   return(ll)
 })
-
+#' Function to coerce cohort to circe
+#' @param cd the Capr cohort class
+#' @export
 toCirce <- function(cd) {
 
   #get all guids from cohort definition and remove duplicates
@@ -386,16 +388,34 @@ setMethod("show", "Cohort", function(object) {
 #' x <- cohort(condition(cs1))
 #' writeCohort(x, "cohortDefinition.json")
 #' }
-writeCohort <- function(x, path, ...) {
+writeCohort <- function(x, path) {
+
   checkmate::assertClass(x, "Cohort")
   checkmate::assertCharacter(path, len = 1, min.chars = 1, pattern = "\\.json$")
-  # check that concept set details are filled in
-  check <- unlist(x$ConceptSets, recursive = TRUE)
-  if (any(check[grepl( "CONCEPT_NAME|STANDARD_CONCEPT", names(check))] == "")) {
-    rlang::abort("Concept set details are missing. Fill in concept set details using `getConceptSetDetails()`")
-  }
-  jsonlite::write_json(x = as.list(x), path = path, auto_unbox = TRUE, pretty = TRUE, ...)
+
+  ParallelLogger::logInfo(
+    "Cohort written to", path
+  )
+  toCirce(x) %>%
+    jsonlite::write_json(
+      path = path,
+      auto_unbox = TRUE,
+      pretty = TRUE
+    )
 }
+
+
+
+# writeCohort <- function(x, path, ...) {
+#   checkmate::assertClass(x, "Cohort")
+#   checkmate::assertCharacter(path, len = 1, min.chars = 1, pattern = "\\.json$")
+#   # check that concept set details are filled in
+#   check <- unlist(x$ConceptSets, recursive = TRUE)
+#   if (any(check[grepl( "CONCEPT_NAME|STANDARD_CONCEPT", names(check))] == "")) {
+#     rlang::abort("Concept set details are missing. Fill in concept set details using `getConceptSetDetails()`")
+#   }
+#   jsonlite::write_json(x = as.list(x), path = path, auto_unbox = TRUE, pretty = TRUE, ...)
+# }
 
 
 
