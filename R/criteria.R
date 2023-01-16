@@ -154,7 +154,7 @@ withAny <- function(...){
 }
 
 #' Function to construct a group where at least some of the criteria or groups must be satisfied
-#' @param x an integer specifying the number of criterias or groups that must be satisfied
+#' @param x an integer specifying the number of criteria or groups that must be satisfied
 #' @param ... a set of criteria or groups
 #' @export
 withAtLeast <- function(x, ...){
@@ -165,8 +165,8 @@ withAtLeast <- function(x, ...){
       group = purrr::keep(items, is.Group)
   )
 }
-#' Function to construct a group where at most some of the criterias or groups must be satisfied
-#' @param x an integer specifying the number of criterias or groups that must be satisfied
+#' Function to construct a group where at most some of the criteria or groups must be satisfied
+#' @param x an integer specifying the number of criteria or groups that must be satisfied
 #' @param ... a set of criteria or groups
 #' @export
 withAtMost <- function(x, ...){

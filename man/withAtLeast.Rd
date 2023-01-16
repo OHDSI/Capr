@@ -7,7 +7,7 @@
 withAtLeast(x, ...)
 }
 \arguments{
-\item{x}{an integer specifying the number of criterias or groups that must be satisfied}
+\item{x}{an integer specifying the number of criteria or groups that must be satisfied}
 
 \item{...}{a set of criteria or groups}
 }
