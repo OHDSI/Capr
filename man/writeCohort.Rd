@@ -4,7 +4,7 @@
 \alias{writeCohort}
 \title{Write Cohort json file}
 \usage{
-writeCohort(x, path, ...)
+writeCohort(x, path)
 }
 \arguments{
 \item{x}{A Capr cohort}

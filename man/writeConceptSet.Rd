@@ -4,7 +4,7 @@
 \alias{writeConceptSet}
 \title{Save a concept set as a json file}
 \usage{
-writeConceptSet(x, path)
+writeConceptSet(x, path, format = "auto", ...)
 }
 \arguments{
 \item{x}{A Capr concept set created by `cs()`}
@@ -18,5 +18,6 @@ The resulting concept Set JSON file can be imported into Atlas.
 \dontrun{
 anemia <- cs(descendants(439777,4013073,4013074))
 writeConceptSet(anemia, 'anemia.json')
+writeConceptSet(anemia, 'anemia.csv')
 }
 }
