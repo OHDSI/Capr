@@ -38,7 +38,10 @@ Imports:
   utils,
   stringr,
   glue,
-  cli
+  cli,
+  digest,
+  fs,
+  lubridate
 Suggests:
     testthat (>= 3.0.0),
     knitr,

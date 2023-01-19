@@ -332,7 +332,7 @@ setMethod('bt', "Date", function(x, y){
 setGeneric("nbt", function(x, y) standardGeneric("nbt"))
 
 #' @rdname nbt
-#' @aliases bt,integer-method
+#' @aliases nbt,integer-method
 setMethod('nbt', "integer", function(x, y){
   methods::new("opAttributeInteger",
       op = "!bt",
@@ -340,7 +340,7 @@ setMethod('nbt', "integer", function(x, y){
       extent = y)
 })
 #' @rdname nbt
-#' @aliases bt,numeric-method
+#' @aliases nbt,numeric-method
 setMethod('nbt', "numeric", function(x, y){
   methods::new("opAttributeNumeric",
       op = "!bt",
@@ -544,7 +544,7 @@ endDate <- function(op) {
 }
 
 # Coercion ------------
-
+#' @importFrom rlang :=
 listOpAttribute <- function(x) {
   atr <- list(
     Op = x@op,

@@ -8,6 +8,8 @@ getConceptSetCall(x, name = x@Name)
 }
 \arguments{
 \item{x}{A concept set}
+
+\item{name}{the name of the concept set}
 }
 \value{
 The Capr code required to build the concept set

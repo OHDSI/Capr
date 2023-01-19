@@ -152,7 +152,7 @@ newConcept <- function(id,
                        conceptClassId = "") {
   checkmate::assertIntegerish(id, len = 1)
 
-  concept <- new("Concept",
+  concept <- methods::new("Concept",
                  concept_id = as.integer(id),
                  concept_name = conceptName,
                  standard_concept = standardConcept,
@@ -205,7 +205,7 @@ cs <- function(..., name = "", id = NULL) {
       } else {
         return(newConcept(x))
       }
-    } else if (is(x, "ConceptSetItem") || is.null(x)) {
+    } else if (methods::is(x, "ConceptSetItem") || is.null(x)) {
       return(x)
     }
   })
@@ -253,7 +253,7 @@ exclude <- function(...) {
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
       return(newConcept(x, isExcluded = TRUE))
-    } else if (is(x, "ConceptSetItem")) {
+    } else if (methods::is(x, "ConceptSetItem")) {
       x@isExcluded <- TRUE
       return(x)
     }
@@ -276,7 +276,7 @@ mapped <- function(...) {
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
       return(newConcept(x, includeMapped = TRUE))
-    } else if (is(x, "ConceptSetItem")) {
+    } else if (methods::is(x, "ConceptSetItem")) {
       x@includeMapped <- TRUE
       return(x)
     }
@@ -299,7 +299,7 @@ descendants <- function(...) {
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
       return(newConcept(x, includeDescendants = TRUE))
-    } else if (is(x, "ConceptSetItem")) {
+    } else if (methods::is(x, "ConceptSetItem")) {
       x@includeDescendants <- TRUE
       return(x)
     }
@@ -358,6 +358,8 @@ setMethod("as.list", "ConceptSet", function(x){
 #'
 #' @param x A Capr concept set created by `cs()`
 #' @param path Name of file to write to. (e.g. "concepts.json")
+#' @param format the file extension to write
+#' @param ... additional arguments
 #'
 #' @export
 #'
@@ -411,7 +413,8 @@ writeConceptSet <- function(x, path, format = "auto", ...) {
 #' reads the files into R as Capr concepts sets.
 #'
 #' @param path Name of concept set file to read in csv or json format. (e.g. "concepts.json")
-#'
+#' @param name the name of the concept set
+#' @param id the id for the concept set (keep?)
 #' @export
 #' @importFrom rlang %||%
 #'
@@ -504,6 +507,7 @@ readConceptSet <- function(path, name, id = NULL) {
 #' @template VocabularyDatabaseSchema
 #' @return A modified version of the input concept set with concept details filled in.
 #'
+#' @importFrom methods slot<-
 #' @export
 #'
 #' @examples
@@ -551,7 +555,7 @@ getConceptSetDetails <- function(x,
 
   for (i in seq_along(x@Expression)) {
     id <- x@Expression[[i]]@Concept@concept_id
-    for (n in slotNames("Concept")[-1]) {
+    for (n in methods::slotNames("Concept")[-1]) {
       dtl <- dplyr::filter(df, .data$concept_id == .env$id) %>% dplyr::pull(!!n)
       if (length(dtl > 0)) slot(x@Expression[[i]]@Concept, n) <- dtl
     }
@@ -602,6 +606,7 @@ uniqueConceptSets <- function(x) {
 #' Create the Capr code to build a concept set
 #'
 #' @param x A concept set
+#' @param name the name of the concept set
 #' @return The Capr code required to build the concept set
 #'
 getConceptSetCall <- function(x, name = x@Name){

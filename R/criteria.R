@@ -78,11 +78,11 @@ is.Group <- function(x) {
 exactly <- function(x,
                     query,
                     aperture) {
-  occurrence <- new("Occurrence",
+  occurrence <- methods::new("Occurrence",
       type = "exactly",
       count = as.integer(x))
 
-  new("Criteria",
+  methods::new("Criteria",
       occurrence = occurrence,
       query = query,
       aperture = aperture)
@@ -96,11 +96,11 @@ exactly <- function(x,
 atLeast <- function(x,
                     query,
                     aperture) {
-  occurrence <- new("Occurrence",
+  occurrence <- methods::new("Occurrence",
       type = "atLeast",
       count = as.integer(x))
 
-  new("Criteria",
+  methods::new("Criteria",
       occurrence = occurrence,
       query = query,
       aperture = aperture)
@@ -116,11 +116,11 @@ atMost <- function(x,
                    query,
                    aperture) {
 
-  occurrence <- new("Occurrence",
+  occurrence <- methods::new("Occurrence",
       type = "atMost",
       count = as.integer(x))
 
-  new("Criteria",
+  methods::new("Criteria",
       occurrence = occurrence,
       query = query,
       aperture = aperture)
@@ -133,8 +133,8 @@ atMost <- function(x,
 #' @export
 withAll <- function(...){
   items <- list(...)
-  new("Group",
-      occurrence = new("Occurrence", type = "all"),
+  methods::new("Group",
+      occurrence = methods::new("Occurrence", type = "all"),
       criteria = purrr::discard(items, is.Group),
       group = purrr::keep(items, is.Group)
       )
@@ -145,8 +145,8 @@ withAll <- function(...){
 #' @export
 withAny <- function(...){
   items <- list(...)
-  new("Group",
-      occurrence = new("Occurrence", type = "any"),
+  methods::new("Group",
+      occurrence = methods::new("Occurrence", type = "any"),
       criteria = purrr::discard(items, is.Group),
       group = purrr::keep(items, is.Group)
   )
@@ -158,8 +158,8 @@ withAny <- function(...){
 #' @export
 withAtLeast <- function(x, ...){
   items <- list(...)
-  new("Group",
-      occurrence = new("Occurrence", type = "atLeast", count = as.integer(x)),
+  methods::new("Group",
+      occurrence = methods::new("Occurrence", type = "atLeast", count = as.integer(x)),
       criteria = purrr::discard(items, is.Group),
       group = purrr::keep(items, is.Group)
   )
@@ -170,8 +170,8 @@ withAtLeast <- function(x, ...){
 #' @export
 withAtMost <- function(x, ...){
   items <- list(...)
-  new("Group",
-      occurrence = new("Occurrence", type = "atMost", count = as.integer(x)),
+  methods::new("Group",
+      occurrence = methods::new("Occurrence", type = "atMost", count = as.integer(x)),
       criteria = purrr::discard(items, is.Group),
       group = purrr::keep(items, is.Group)
   )

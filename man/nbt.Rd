@@ -4,9 +4,7 @@
 \name{nbt}
 \alias{nbt}
 \alias{nbt,integer-method}
-\alias{bt,integer-method}
 \alias{nbt,numeric-method}
-\alias{bt,numeric-method}
 \alias{nbt,Date-method}
 \title{Not between operator}
 \usage{

@@ -10,8 +10,6 @@ writeCohort(x, path)
 \item{x}{A Capr cohort}
 
 \item{path}{The name of the file to create}
-
-\item{...}{Further arguments passed on to jsonlite::toJSON}
 }
 \description{
 Write Cohort json file

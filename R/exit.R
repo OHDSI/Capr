@@ -95,7 +95,7 @@ setClass("CensoringCriteria",
 #' Function to create an exit based on continuous observation
 #' @export
 observationExit <- function() {
-  new("ObservationExit")
+  methods::new("ObservationExit")
 }
 
 #' Function to create an exit based on exit based on the end of a continuous drug exposure
@@ -114,7 +114,7 @@ drugExit <- function(conceptSet,
     daysSupplyOverride <- NA_integer_
   }
 
-  new("DrugExposureExit",
+  methods::new("DrugExposureExit",
       conceptSet = conceptSet,
       persistenceWindow = persistenceWindow,
       surveillanceWindow = surveillanceWindow,
@@ -129,7 +129,7 @@ fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
 
   index <- checkmate::matchArg(index, c("startDate", "endDate"))
 
-  new("FixedDurationExit",
+  methods::new("FixedDurationExit",
       index = index,
       offsetDays = offsetDays)
 }
@@ -164,7 +164,7 @@ fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
 #' @export
 censoringEvents <- function(...) {
   dots <- list(...)
-  new("CensoringCriteria",
+  methods::new("CensoringCriteria",
       criteria = dots)
 }
 

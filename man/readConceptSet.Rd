@@ -8,6 +8,10 @@ readConceptSet(path, name, id = NULL)
 }
 \arguments{
 \item{path}{Name of concept set file to read in csv or json format. (e.g. "concepts.json")}
+
+\item{name}{the name of the concept set}
+
+\item{id}{the id for the concept set (keep?)}
 }
 \description{
 Concept sets can be serialized to json or csv file formats. `readConceptSet`

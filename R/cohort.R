@@ -97,7 +97,7 @@ entry <- function(...,
   primaryCriteriaLimit <- checkmate::matchArg(primaryCriteriaLimit, c("First", "All", "Last"))
   qualifiedLimit <- checkmate::matchArg(qualifiedLimit, c("First", "All", "Last"))
 
-  cohort_entry <- new("CohortEntry",
+  cohort_entry <- methods::new("CohortEntry",
                       entryEvents = list(...),
                       observationWindow = observationWindow,
                       primaryCriteriaLimit = primaryCriteriaLimit,
@@ -120,7 +120,7 @@ attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
 
   expressionLimit <- checkmate::matchArg(expressionLimit, c("First", "All", "Last"))
 
-  new("CohortAttrition",
+  methods::new("CohortAttrition",
       rules = list(...),
       expressionLimit = expressionLimit)
 
@@ -134,10 +134,10 @@ attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
 #' @export
 exit <- function(endStrategy, censor = NULL){
   if (is.null(censor)) {
-    ee <- new("CohortExit",
+    ee <- methods::new("CohortExit",
               endStrategy = endStrategy)
   } else {
-    ee <- new("CohortExit",
+    ee <- methods::new("CohortExit",
               endStrategy = endStrategy,
               censoringCriteria = censor)
   }
@@ -164,7 +164,7 @@ era <- function(eraDays = 0L,
   if (is.null(studyEndDate)) {
     studyEndDate <- lubridate::NA_Date_
   }
-  new("CohortEra",
+  methods::new("CohortEra",
       eraDays = eraDays,
       studyStartDate = studyStartDate,
       studyEndDate = studyEndDate)
@@ -183,22 +183,22 @@ cohort <- function(entry,
                    era = NULL) {
 
   # Entry should be a list of queries or groups
-  if (is(entry, "Query")){
+  if (methods::is(entry, "Query")){
     entry <- entry(entry)
   }
 
-  cd <- new("Cohort", entry = entry)
+  cd <- methods::new("Cohort", entry = entry)
 
   if (!is.null(attrition)) {
     cd@attrition <- attrition
   }
 
   if (!is.null(exit)) {
-    cd@exit <- new("CohortExit")
+    cd@exit <- methods::new("CohortExit")
   }
 
   if (!is.null(era)) {
-    cd@era <- new("CohortEra")
+    cd@era <- methods::new("CohortEra")
   }
 
   return(cd)
@@ -378,7 +378,6 @@ setMethod("show", "Cohort", function(object) {
 #'
 #' @param x A Capr cohort
 #' @param path The name of the file to create
-#' @param ... Further arguments passed on to jsonlite::toJSON
 #'
 #' @export
 #'

@@ -10,6 +10,10 @@ writeConceptSet(x, path, format = "auto", ...)
 \item{x}{A Capr concept set created by `cs()`}
 
 \item{path}{Name of file to write to. (e.g. "concepts.json")}
+
+\item{format}{the file extension to write}
+
+\item{...}{additional arguments}
 }
 \description{
 The resulting concept Set JSON file can be imported into Atlas.
