@@ -47,8 +47,8 @@ setClass("EventWindow",
                    index = "character"),
          prototype = list(
            event = NA_character_,
-           start = new("Endpoint"),
-           end = new("Endpoint"),
+           start = methods::new("Endpoint"),
+           end = methods::new("Endpoint"),
            index = NA_character_
          ))
 
@@ -68,8 +68,8 @@ setClass("EventAperture",
                    restrictVisit = "logical",
                    ignoreObservationPeriod = "logical"),
          prototype = list(
-           startWindow = new("EventWindow"),
-           endWindow = new("EventWindow"),
+           startWindow = methods::new("EventWindow"),
+           endWindow = methods::new("EventWindow"),
            restrictVisit = FALSE,
            ignoreObservationPeriod = FALSE
          ))
@@ -84,7 +84,7 @@ setClass("EventAperture",
 continuousObservation <- function(priorDays = 0L,
                           postDays = 0L) {
 
-  new("ObservationWindow",
+  methods::new("ObservationWindow",
       priorDays = as.integer(priorDays),
       postDays = as.integer(postDays))
 
@@ -135,12 +135,12 @@ eventStarts <- function(a, b, index = c("startDate", "endDate")){
   sign_a <- ifelse(a == 0, -1, sign(a))
   sign_b <- ifelse(b == 0, -1, sign(b))
 
-  new("EventWindow",
+  methods::new("EventWindow",
       event = "start",
-      start = new("Endpoint",
+      start = methods::new("Endpoint",
                   days = abs(a),
                   coeff = sign_a),
-      end = new("Endpoint",
+      end = methods::new("Endpoint",
                 days = abs(b),
                 coeff = sign_b),
       index = index)
@@ -159,12 +159,12 @@ eventEnds <- function(a, b, index = c("startDate", "endDate")) {
   sign_a <- ifelse(a == 0, -1, sign(a))
   sign_b <- ifelse(b == 0, -1, sign(b))
 
-  new("EventWindow",
+  methods::new("EventWindow",
       event = "end",
-      start = new("Endpoint",
+      start = methods::new("Endpoint",
                   days = abs(a),
                   coeff = sign_a),
-      end = new("Endpoint",
+      end = methods::new("Endpoint",
                 days = abs(b),
                 coeff = sign_b),
       index = index)
@@ -186,12 +186,12 @@ duringInterval <- function(startWindow,
                            ignoreObservationPeriod = FALSE) {
 
   if (is.null(endWindow)) {
-    res <- new("EventAperture",
+    res <- methods::new("EventAperture",
                startWindow = startWindow,
                restrictVisit = restrictVisit,
                ignoreObservationPeriod = ignoreObservationPeriod)
   } else {
-    res <- new("EventAperture",
+    res <- methods::new("EventAperture",
                startWindow = startWindow,
                endWindow = endWindow,
                restrictVisit = restrictVisit,
