@@ -1,5 +1,5 @@
-# Classes -----------------------
 
+# Exit Classes --------------
 ## ObservationExit --------------
 
 #' An S4 class for a cohort exit based on end of continuous observation.
@@ -89,7 +89,6 @@ setClass("CensoringCriteria",
            criteria = list()
          )
 )
-
 
 # Constructors -----
 

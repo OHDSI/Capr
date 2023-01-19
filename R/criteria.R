@@ -1,5 +1,4 @@
-# Classes -----------------------
-
+# Criteria Classes ---------------
 ## Occurrence --------------
 
 #' An S4 class for an occurrence.
@@ -39,7 +38,7 @@ setClass("Criteria",
          )
 )
 
-## Gorup ----------------
+## Group ----------------
 #' An S4 class for a group
 #' @description a group is the combination of multiple criteria or sub groups
 #' @slot occurrence an occurrence object specifying how many events must occur

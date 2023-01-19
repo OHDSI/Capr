@@ -170,6 +170,7 @@ era <- function(eraDays = 0L,
       studyEndDate = studyEndDate)
 }
 
+
 #' Function that creates a cohort object
 #' @param entry the index event of the cohort
 #' @param attrition rules that restrict the cohort further, developing attrition

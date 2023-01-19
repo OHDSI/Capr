@@ -132,14 +132,17 @@ eventStarts <- function(a, b, index = c("startDate", "endDate")){
 
   index <- checkmate::matchArg(index, c("startDate", "endDate"))
 
+  sign_a <- ifelse(a == 0, -1, sign(a))
+  sign_b <- ifelse(b == 0, -1, sign(b))
+
   new("EventWindow",
       event = "start",
       start = new("Endpoint",
                   days = abs(a),
-                  coeff = sign(b)),
+                  coeff = sign_a),
       end = new("Endpoint",
                 days = abs(b),
-                coeff = sign(b)),
+                coeff = sign_b),
       index = index)
 }
 
@@ -152,14 +155,18 @@ eventStarts <- function(a, b, index = c("startDate", "endDate")){
 eventEnds <- function(a, b, index = c("startDate", "endDate")) {
   index <- checkmate::matchArg(index, c("startDate", "endDate"))
 
+
+  sign_a <- ifelse(a == 0, -1, sign(a))
+  sign_b <- ifelse(b == 0, -1, sign(b))
+
   new("EventWindow",
       event = "end",
       start = new("Endpoint",
                   days = abs(a),
-                  coeff = sign(b)),
+                  coeff = sign_a),
       end = new("Endpoint",
                 days = abs(b),
-                coeff = sign(b)),
+                coeff = sign_b),
       index = index)
 }
 
