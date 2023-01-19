@@ -190,6 +190,20 @@ conditionEra <- function(conceptSet, ...) {
         ...)
 }
 
+#' Query the visit occurrence domain
+#'
+#' @param conceptSet A condition concept set
+#' @param ... optional attributes
+#'
+#' @return A Capr Query
+#' @export
+visit <- function(conceptSet, ...) {
+
+  query(domain = "VisitOccurrence",
+        conceptSet = conceptSet,
+        ...)
+}
+
 #' Query the condition era domain
 #'
 #' @param conceptSet A condition concept set
@@ -203,6 +217,20 @@ death <- function(conceptSet = NULL, ...) {
         conceptSet = conceptSet,
         ...)
 }
+
+#' Query the observation domain
+#'
+#' @param conceptSet A condition concept set
+#' @param ... optional attributes
+#'
+#' @return A Capr Query
+#' @export
+observation <- function(conceptSet, ...) {
+  query(domain = "Observation",
+        conceptSet = conceptSet,
+        ...)
+}
+
 
 
 # Coercion -----
