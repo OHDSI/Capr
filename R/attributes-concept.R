@@ -56,10 +56,10 @@ setMethod("show", "conceptAttribute", function(object) {
 #' }
 male <- function() {
 
-  new("conceptAttribute",
+  methods::new("conceptAttribute",
       name = "Gender",
       conceptSet = list(
-        new("Concept",
+        methods::new("Concept",
             concept_id = 8507L,
             concept_name = "MALE",
             concept_code = "M",
@@ -84,10 +84,10 @@ male <- function() {
 #' }
 female <- function() {
 
-  new("conceptAttribute",
+  methods::new("conceptAttribute",
       name = "Gender",
       conceptSet = list(
-        new("Concept",
+        methods::new("Concept",
             concept_id = 8532L,
             concept_name = "FEMALE",
             concept_code = "F",
@@ -102,8 +102,8 @@ female <- function() {
 
 unit <- function(...) {
   dots <- list(...)
-  concept_set <- purrr::map(dots, ~new("Concept", concept_id = as.integer(.x)))
-  new("conceptAttribute",
+  concept_set <- purrr::map(dots, ~methods::new("Concept", concept_id = as.integer(.x)))
+  methods::new("conceptAttribute",
       name = "unit",
       conceptSet = concept_set)
 }
