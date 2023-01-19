@@ -136,7 +136,7 @@ setGeneric("lt", function(x) standardGeneric("lt"))
 #' @rdname lt
 #' @aliases lt,integer-method
 setMethod('lt', "integer", function(x){
-  new("opAttributeInteger",
+  methods::new("opAttributeInteger",
       op = "lt",
       value = x)
 })
@@ -144,7 +144,7 @@ setMethod('lt', "integer", function(x){
 #' @rdname lt
 #' @aliases lt,numeric-method
 setMethod('lt', "numeric", function(x){
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       op = "lt",
       value = x)
 })
@@ -152,7 +152,7 @@ setMethod('lt', "numeric", function(x){
 #' @rdname lt
 #' @aliases lt,Date-method
 setMethod('lt', "Date", function(x){
-  new("opAttributeDate",
+  methods::new("opAttributeDate",
       op = "lt",
       value = x)
 })
@@ -169,21 +169,21 @@ setGeneric("gt", function(x) standardGeneric("gt"))
 #' @rdname gt
 #' @aliases gt,integer-method
 setMethod('gt', "integer", function(x){
-  new("opAttributeInteger",
+  methods::new("opAttributeInteger",
       op = "gt",
       value = x)
 })
 #' @rdname gt
 #' @aliases gt,numeric-method
 setMethod('gt', "numeric", function(x){
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       op = "gt",
       value = x)
 })
 #' @rdname gt
 #' @aliases gt,Date-method
 setMethod('gt', "Date", function(x){
-  new("opAttributeDate",
+  methods::new("opAttributeDate",
       op = "gt",
       value = x)
 })
@@ -200,21 +200,21 @@ setGeneric("lte", function(x) standardGeneric("lte"))
 #' @rdname lte
 #' @aliases lte,integer-method
 setMethod('lte', "integer", function(x){
-  new("opAttributeInteger",
+  methods::new("opAttributeInteger",
       op = "lte",
       value = x)
 })
 #' @rdname lte
 #' @aliases lte,numeric-method
 setMethod('lte', "numeric", function(x){
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       op = "lte",
       value = x)
 })
 #' @rdname lte
 #' @aliases lte,Date-method
 setMethod('lte', "Date", function(x){
-  new("opAttributeDate",
+  methods::new("opAttributeDate",
       op = "lte",
       value = x)
 })
@@ -231,21 +231,21 @@ setGeneric("gte", function(x) standardGeneric("gte"))
 #' @rdname gte
 #' @aliases gte,integer-method
 setMethod('gte', "integer", function(x){
-  new("opAttributeInteger",
+  methods::new("opAttributeInteger",
       op = "gte",
       value = x)
 })
 #' @rdname gte
 #' @aliases gte,numeric-method
 setMethod('gte', "numeric", function(x){
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       op = "gte",
       value = x)
 })
 #' @rdname gte
 #' @aliases gte,Date-method
 setMethod('gte', "Date", function(x){
-  new("opAttributeDate",
+  methods::new("opAttributeDate",
       op = "gte",
       value = x)
 })
@@ -262,21 +262,21 @@ setGeneric("eq", function(x) standardGeneric("eq"))
 #' @rdname eq
 #' @aliases eq,integer-method
 setMethod('eq', "integer", function(x){
-  new("opAttributeInteger",
+  methods::new("opAttributeInteger",
       op = "eq",
       value = x)
 })
 #' @rdname eq
 #' @aliases eq,numeric-method
 setMethod('eq', "numeric", function(x){
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       op = "eq",
       value = x)
 })
 #' @rdname eq
 #' @aliases eq,Date-method
 setMethod('eq', "Date", function(x){
-  new("opAttributeDate",
+  methods::new("opAttributeDate",
       op = "eq",
       value = x)
 })
@@ -296,7 +296,7 @@ setGeneric("bt", function(x, y) standardGeneric("bt"))
 #' @rdname bt
 #' @aliases bt,integer-method
 setMethod('bt', "integer", function(x, y){
-  new("opAttributeInteger",
+  methods::new("opAttributeInteger",
       op = "bt",
       value = x,
       extent = y)
@@ -305,7 +305,7 @@ setMethod('bt', "integer", function(x, y){
 #' @rdname bt
 #' @aliases bt,numeric-method
 setMethod('bt', "numeric", function(x, y){
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       op = "bt",
       value = x,
       extent = y)
@@ -314,7 +314,7 @@ setMethod('bt', "numeric", function(x, y){
 #' @rdname bt
 #' @aliases bt,Date-method
 setMethod('bt', "Date", function(x, y){
-  new("opAttributeDate",
+  methods::new("opAttributeDate",
       op = "bt",
       value = x,
       extent = y)
@@ -334,7 +334,7 @@ setGeneric("nbt", function(x, y) standardGeneric("nbt"))
 #' @rdname nbt
 #' @aliases bt,integer-method
 setMethod('nbt', "integer", function(x, y){
-  new("opAttributeInteger",
+  methods::new("opAttributeInteger",
       op = "!bt",
       value = x,
       extent = y)
@@ -342,7 +342,7 @@ setMethod('nbt', "integer", function(x, y){
 #' @rdname nbt
 #' @aliases bt,numeric-method
 setMethod('nbt', "numeric", function(x, y){
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       op = "!bt",
       value = x,
       extent = y)
@@ -350,7 +350,7 @@ setMethod('nbt', "numeric", function(x, y){
 #' @rdname nbt
 #' @aliases nbt,Date-method
 setMethod('nbt', "Date", function(x, y){
-  new("opAttributeDate",
+  methods::new("opAttributeDate",
       op = "!bt",
       value = x,
       extent = y)
@@ -370,7 +370,7 @@ age <- function(op) {
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
-  new("opAttributeInteger",
+  methods::new("opAttributeInteger",
       name = "Age",
       op = op@op,
       value = as.integer(op@value),
@@ -390,7 +390,7 @@ daysOfSupply <- function(op) {
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
-  new("opAttributeInteger",
+  methods::new("opAttributeInteger",
       name = "DaysSupply",
       op = op@op,
       value = as.integer(op@value),
@@ -411,7 +411,7 @@ drugRefills <- function(op) {
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
-  new("opAttributeInteger",
+  methods::new("opAttributeInteger",
       name = "Refills",
       op = op@op,
       value = as.integer(op@value),
@@ -433,7 +433,7 @@ valueAsNumber<- function(op) {
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       name = "ValueAsNumber",
       op = op@op,
       value = op@value,
@@ -453,7 +453,7 @@ rangeHigh <- function(op) {
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       name = "RangeHigh",
       op = op@op,
       value = op@value,
@@ -473,7 +473,7 @@ rangeLow <- function(op) {
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       name = "RangeLow",
       op = op@op,
       value = op@value,
@@ -495,7 +495,7 @@ drugQuantity <- function(op) {
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
-  new("opAttributeNumeric",
+  methods::new("opAttributeNumeric",
       name = "Quantity",
       op = op@op,
       value = op@value,
@@ -518,7 +518,7 @@ startDate <- function(op) {
     stop("Input must be an opAttributeDate.")
   }
 
-  new("opAttributeDate",
+  methods::new("opAttributeDate",
       name = "StartDate",
       op = op@op,
       value = lubridate::as_date(op@value),
@@ -536,7 +536,7 @@ endDate <- function(op) {
     stop("Input must be an opAttributeDate.")
   }
 
-  new("opAttributeDate",
+  methods::new("opAttributeDate",
       name = "EndDate",
       op = op@op,
       value = lubridate::as_date(op@value),
