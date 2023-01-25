@@ -74,19 +74,32 @@ connectionDetails <- Eunomia::getEunomiaConnectionDetails()
 
 sql <- CirceR::buildCohortQuery(CirceR::cohortExpressionFromJson(as.json(giBleedCohort)),
                                 CirceR::createGenerateOptions(
-                                  cohortIdFieldName = "subject_id",
-                                  cohortId = 1,
-                                  cdmSchema = "main",
-                                  targetTable = "cohort",
-                                  resultSchema = "main",
-                                  vocabularySchema = "main",
                                   generateStats = FALSE
                                 ))
 
+cohortsToCreate <- tibble::tibble(
+  cohortId = 1,
+  cohortName = "GI Bleed",
+  sql = sql
+)
 
-con <- DatabaseConnector::connect(connectionDetails)
-DatabaseConnector::executeSql(con, sql)
 
+cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = "my_cohort_table")
+CohortGenerator::createCohortTables(connectionDetails = connectionDetails,
+                                                        cohortDatabaseSchema = "main",
+                                                        cohortTableNames = cohortTableNames)
+# Generate the cohorts
+cohortsGenerated <- CohortGenerator::generateCohortSet(connectionDetails = connectionDetails,
+                                                       cdmDatabaseSchema = "main",
+                                                       cohortDatabaseSchema = "main",
+                                                       cohortTableNames = cohortTableNames,
+                                                       cohortDefinitionSet = cohortsToCreate)
+
+# Get the cohort counts
+cohortCounts <- CohortGenerator::getCohortCounts(connectionDetails = connectionDetails,
+                                                 cohortDatabaseSchema = "main",
+                                                 cohortTable = cohortTableNames$cohortTable)
+print(cohortCounts)
 
 
 
