@@ -99,7 +99,10 @@ female <- function() {
 }
 
 
-
+#' Add unit attribute to a query
+#' @param ... list of concept ids that identify units
+#' @return An attribute that can be used in a query function
+#' @export
 unit <- function(...) {
   dots <- list(...)
   concept_set <- purrr::map(dots, ~methods::new("Concept", concept_id = as.integer(.x)))
