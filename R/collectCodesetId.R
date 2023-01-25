@@ -16,9 +16,30 @@ replaceGuid <- function(x, y) {
 
 setGeneric("collectGuid", function(x) standardGeneric("collectGuid"))
 
+
+# setMethod("collectGuid", "Query", function(x) {
+#   getGuid(x)
+# })
+#
+# setMethod("collectGuid", "nestedAttribute", function(x) {
+#   collectGuid(x@group)
+# })
+
 #' @include query.R
 setMethod("collectGuid", "Query", function(x) {
-  getGuid(x)
+  ids <- getGuid(x)
+
+  #collect guids for nested attributes
+  checkNest <- purrr::map_chr(x@attributes, ~.x@name)
+  if (any(checkNest %in% c("CorrelatedCriteria"))) {
+    ii <- which(checkNest == "CorrelatedCriteria")
+    id2 <- collectGuid(x@attributes[[ii]]@group) %>%
+      purrr::flatten()
+
+    ids <- dplyr::bind_rows(ids, id2)
+  }
+  return(ids)
+
 })
 
 #' @include criteria.R
@@ -76,13 +97,24 @@ setMethod("collectGuid", "Cohort", function(x) {
 ## TODO HASH table implementation of find/replace
 setGeneric("replaceCodesetId", function(x, guidTable) standardGeneric("replaceCodesetId"))
 
+
 setMethod("replaceCodesetId", "Query", function(x, guidTable) {
 
   y <- getGuid(x) %>%
     dplyr::inner_join(guidTable, by = c("guid")) %>%
-    pull(codesetId)
-
+    dplyr::pull(codesetId)
+  #first replace the query id
   x <- replaceGuid(x, y)
+
+  #next check for any nested criteria and replace
+  #replace guids for nested attributes
+  checkNest <- purrr::map_chr(x@attributes, ~.x@name)
+  if (any(checkNest %in% c("CorrelatedCriteria"))) {
+    ii <- which(checkNest == "CorrelatedCriteria")
+    nest <- replaceCodesetId(x@attributes[[ii]]@group, guidTable)
+
+    x@attributes[[ii]]@group <- nest
+  }
 
   return(x)
 })
@@ -91,12 +123,13 @@ setMethod("replaceCodesetId", "DrugExposureExit", function(x, guidTable) {
 
   y <- getGuid(x) %>%
     dplyr::inner_join(guidTable, by = c("guid")) %>%
-    pull(codesetId)
+    dplyr::pull(codesetId)
 
   x <- replaceGuid(x, y)
 
   return(x)
 })
+
 
 
 setMethod("replaceCodesetId", "Criteria", function(x, guidTable) {
@@ -166,7 +199,21 @@ setGeneric("listConceptSets", function(x) standardGeneric("listConceptSets"))
 
 #' @include query.R
 setMethod("listConceptSets", "Query", function(x) {
-  as.list(x@conceptSet)
+  qs <- as.list(x@conceptSet)
+
+  # handle listing concepts if have nestedAttribute
+  #next check for any nested criteria and replace
+  #replace guids for nested attributes
+  checkNest <- purrr::map_chr(x@attributes, ~.x@name)
+  if (any(checkNest %in% c("CorrelatedCriteria"))) {
+    ii <- which(checkNest == "CorrelatedCriteria")
+    nest <- listConceptSets(x@attributes[[ii]]@group) %>%
+      purrr::flatten()
+
+    qs <- list(qs, nest)
+  }
+
+  return(qs)
 })
 
 #' @include criteria.R
@@ -183,7 +230,15 @@ setMethod("listConceptSets", "Group", function(x) {
 
 
 setMethod("listConceptSets", "CohortEntry", function(x) {
-  purrr::map(x@entryEvents, ~listConceptSets(.x)) %>%
+
+  ce <- purrr::map(x@entryEvents, ~listConceptSets(.x))
+  check <- purrr::map_int(ce, ~length(.x))
+  if (!all(check == 3)) {
+    ce <- ce %>%
+      purrr::flatten()
+  }
+
+  ce %>%
     append(listConceptSets(x@additionalCriteria))
   #TODO may need a flatten here with additional criteria
 })
