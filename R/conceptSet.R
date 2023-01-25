@@ -534,7 +534,7 @@ getConceptSetDetails <- function(x,
 
   sql <- "SELECT * FROM @schema.concept WHERE concept_id IN (@ids);" %>%
     SqlRender::render(schema = vocabularyDatabaseSchema, ids = ids) %>%
-    SqlRender::translate(targetDialect = dbms(con))
+    SqlRender::translate(targetDialect = DatabaseConnector::dbms(con))
 
   df <- DBI::dbGetQuery(con, sql) %>%
     tibble::tibble() %>%
