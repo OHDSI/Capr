@@ -16,7 +16,7 @@ test_that("Nesting Criteria works", {
   expect_equal(names(query_list$VisitOccurrence)[2], "CorrelatedCriteria")
 })
 
-test_that("Can build a nested cohort", {
+test_that("Can build a cohort with nested attribute", {
 
   cd <- cohort(
     entry = entry(
@@ -55,5 +55,113 @@ test_that("Can build a nested cohort", {
   expect_type(sql, "character")
   expect_true(nchar(sql) > 1)
 
+
+})
+
+
+test_that("Can build a cohort with nested groups", {
+
+  t2dDrug <- drug(cs(descendants(1502809,1502826,1503297,1510202,1515249,1516766,
+                                 1525215,1529331,1530014,1547504,1559684,1560171,
+                                 1580747,1583722,1594973,1597756)))
+  t2d <- condition(cs(descendants(201826)))
+
+  t1d <- condition(cs(descendants(201254)))
+
+
+  t1dDrug <- drug(cs(descendants(1502905,1513876,1516976,1517998,
+                                 1531601,1544838,1550023,1567198)))
+
+  t1dDrugWT2Drug <- drug(cs(descendants(1502905,1513876,1516976,1517998,
+                                        1531601,1544838,1550023,1567198)),
+                         nestedWithAll(
+                           atLeast(1, t2dDrug,
+                                   duringInterval(startWindow = eventStarts(-Inf, -1))
+                           )
+                         )
+  )
+
+  abLabFast <- measurement(cs(descendants(3037110)),
+                           valueAsNumber(gte(125)))
+  abLabHb <- measurement(cs(descendants(3003309,3004410,3005673,3007263)),
+                         valueAsNumber(gte(6)))
+  abLabRan <- measurement(cs(descendants(3000483,3004501)),
+                          valueAsNumber(gte(200)))
+
+
+  cd <- cohort(
+    entry = entry(
+      t2d,
+      t2dDrug,
+      abLabHb,
+      abLabRan,
+      abLabFast,
+      observationWindow = continuousObservation(0L, 0L),
+      primaryCriteriaLimit = "All",
+      additionalCriteria = withAll(
+        exactly(0,
+                t1d,
+                duringInterval(startWindow = eventStarts(-Inf, 0)))
+      ),
+      qualifiedLimit = "First"
+    ),
+    attrition = attrition(
+      't2dAlgo' = withAny(
+        # Path 1
+        withAll(
+          exactly(0, t2d, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          atLeast(1, t2dDrug, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          withAny(
+            atLeast(1, abLabHb, duringInterval(startWindow = eventStarts(-Inf, 0))),
+            atLeast(1, abLabRan, duringInterval(startWindow = eventStarts(-Inf, 0))),
+            atLeast(1, abLabFast, duringInterval(startWindow = eventStarts(-Inf, 0)))
+          )
+        ),
+        #Path 2
+        withAll(
+          atLeast(1, t2d, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          exactly(0, t1dDrug, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          exactly(0, t2dDrug, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          withAny(
+            atLeast(1, abLabHb, duringInterval(startWindow = eventStarts(-Inf, 0))),
+            atLeast(1, abLabRan, duringInterval(startWindow = eventStarts(-Inf, 0))),
+            atLeast(1, abLabFast, duringInterval(startWindow = eventStarts(-Inf, 0)))
+          )
+        ),
+        #Path 3
+        withAll(
+          atLeast(1, t2d, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          exactly(0, t1dDrug, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          atLeast(0, t2dDrug, duringInterval(startWindow = eventStarts(-Inf, 0)))
+        ),
+        #Path 4
+        withAll(
+          atLeast(1, t2d, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          atLeast(1, t1dDrug, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          atLeast(1, t1dDrugWT2Drug, duringInterval(startWindow = eventStarts(-Inf, 0)))
+        ),
+        #Path 5
+        withAll(
+          atLeast(1, t2d, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          atLeast(1, t1dDrug, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          exactly(0, t2dDrug, duringInterval(startWindow = eventStarts(-Inf, 0))),
+          atLeast(2, t2d, duringInterval(startWindow = eventStarts(-Inf, 0)))
+        )
+      )
+    ),
+    exit = exit(
+      endStrategy = observationExit(),
+      censor = censoringEvents(t1d)
+    )
+  )
+
+  cohortList <- toCirce(cd)
+  expect_type(cohortList, "list")
+
+  cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) %>%
+    as.character()
+
+  expect_type(cohortJson, "character")
+  expect_true(nchar(cohortJson) > 1)
 
 })

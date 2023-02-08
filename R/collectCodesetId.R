@@ -221,10 +221,48 @@ setMethod("listConceptSets", "Criteria", function(x) {
   listConceptSets(x@query)
 })
 
+check_names <- function(x) {
+  check <- names(x) %in% c("id", "name", "expression")
+  if (length(check) == 0) {
+    FALSE
+  } else{
+    all(check)
+  }
+}
+
 #' @include criteria.R
 setMethod("listConceptSets", "Group", function(x) {
-  purrr::map(x@criteria, ~listConceptSets(.x)) %>%
-    append(purrr::map(x@group, ~listConceptSets(.x)))
+
+  #Start with criteria
+  a <- purrr::map(x@criteria, ~listConceptSets(.x))
+  if (length(a) == 0) {
+    ll1 <- list()
+  } else {
+    la1 <- purrr::keep(a, ~check_names(.x))
+    la2 <- purrr::discard(a, ~check_names(.x))
+    if (length(la2) > 0) {
+      la2 <- purrr::list_flatten(la2)
+    }
+
+    ll1 <- c(la1, la2)
+  }
+
+  # Next Group
+  b <- purrr::map(x@group, ~listConceptSets(.x))
+  if (length(b) == 0) {
+    ll2 <- list()
+  } else {
+    lb1 <- purrr::keep(b, ~check_names(.x))
+    lb2 <- purrr::discard(b, ~check_names(.x))
+    if (length(lb2) > 0) {
+      lb2 <- purrr::list_flatten(lb2)
+    }
+
+    ll2 <- c(lb1, lb2)
+  }
+
+  c(ll1, ll2)
+
 })
 
 
@@ -245,7 +283,7 @@ setMethod("listConceptSets", "CohortEntry", function(x) {
 
 setMethod("listConceptSets", "CohortAttrition", function(x) {
   purrr::map(unname(x@rules), ~listConceptSets(.x)) %>%
-    purrr::flatten()
+    purrr::list_flatten()
 })
 
 setMethod("listConceptSets", "CohortExit", function(x) {
@@ -267,6 +305,8 @@ setMethod("listConceptSets", "Cohort", function(x) {
     append(listConceptSets(x@exit))
 
   #TODO Remove duplicates
+  #ids <- purrr::map_chr(ll, ~.x$id) %>%
+
 
   return(ll)
 
