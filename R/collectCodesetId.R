@@ -304,10 +304,10 @@ setMethod("listConceptSets", "Cohort", function(x) {
     append(listConceptSets(x@attrition)) %>%
     append(listConceptSets(x@exit))
 
-  #TODO Remove duplicates
-  #ids <- purrr::map_chr(ll, ~.x$id) %>%
+  ids <- purrr::map_chr(ll, ~.x$id)
 
+  rr <- ll[!duplicated(ids)]
 
-  return(ll)
+  return(rr)
 
 })
