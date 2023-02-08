@@ -84,8 +84,10 @@ setMethod("collectGuid", "Cohort", function(x) {
   collectGuid(x@entry) %>%
     append(collectGuid(x@attrition)) %>%
     append(collectGuid(x@exit)) %>%
-    purrr::map_dfr(~.x) %>%
-    dplyr::distinct() %>%
+    unlist() %>%
+    unname() %>%
+    unique() %>%
+    tibble::tibble(guid = .) %>%
     dplyr::mutate(
       codesetId = dplyr::row_number() - 1,
       codesetId = as.integer(codesetId)
