@@ -61,7 +61,7 @@ giBleedCohort <- cohort(condition(GIBleed))
 giBleedCohort
 ```
 
-Cohort geneartion is the process of converting a cohort definition to a table with four columns:
+Cohort generation is the process of converting a cohort definition to a table with four columns:
 cohort_definition_id, subject_id, cohort_start_date, cohort_end_date. This table contains the person IDs
 and dates that people are in the cohort.
 
@@ -69,7 +69,6 @@ and dates that people are in the cohort.
 
 
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-
 
 
 sql <- CirceR::buildCohortQuery(CirceR::cohortExpressionFromJson(as.json(giBleedCohort)),
@@ -100,6 +99,12 @@ cohortCounts <- CohortGenerator::getCohortCounts(connectionDetails = connectionD
                                                  cohortDatabaseSchema = "main",
                                                  cohortTable = cohortTableNames$cohortTable)
 print(cohortCounts)
+sql <- SqlRender::render(sql)
+sql <- SqlRender::translate(sql, "sqlite")
+
+con <- DatabaseConnector::connect(connectionDetails)
+
+DatabaseConnector::executeSql(con, sql)
 
 
 
