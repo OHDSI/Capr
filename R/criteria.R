@@ -217,7 +217,13 @@ setMethod("as.list", "Group", function(x) {
     purrr::map(~as.list(.x))
   demographicsList <- purrr::discard(x@criteria, is.Criteria) %>%
     purrr::map(~as.list(.x))
-  groupsList <- purrr::map(x@group, ~as.list(x))
+
+
+  if (length(x@group) == 0) {
+    groupsList <- list()
+  } else {
+    groupsList <- purrr::map(x@group, ~as.list(.x))
+  }
 
   ll <- list('Type' = toupper(x@occurrence@type),
              'Count' = x@occurrence@count,
