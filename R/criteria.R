@@ -1,4 +1,5 @@
-# Criteria Classes ---------------
+# Classes -----------------------
+
 ## Occurrence --------------
 
 #' An S4 class for an occurrence.
@@ -38,7 +39,7 @@ setClass("Criteria",
          )
 )
 
-## Group ----------------
+## Gorup ----------------
 #' An S4 class for a group
 #' @description a group is the combination of multiple criteria or sub groups
 #' @slot occurrence an occurrence object specifying how many events must occur
@@ -68,7 +69,8 @@ is.Group <- function(x) {
 
 # Constructors -----------------------
 
-## Occurrences ----------------
+## Criteria ----------------
+
 #' Function to enumerate an exact count of occurrences
 #' @param x the integer counting the number of occurrences
 #' @param query a query object that provides context to the clinical event of interest
@@ -77,16 +79,17 @@ is.Group <- function(x) {
 #' @export
 exactly <- function(x,
                     query,
-                    aperture) {
-  occurrence <- methods::new("Occurrence",
+                    aperture = duringInterval(eventStarts(-Inf, Inf))) {
+  occurrence <- new("Occurrence",
       type = "exactly",
       count = as.integer(x))
 
-  methods::new("Criteria",
+  new("Criteria",
       occurrence = occurrence,
       query = query,
       aperture = aperture)
 }
+
 #' Function to enumerate an minimal count of occurrences
 #' @param x the integer counting the number of occurrences
 #' @param query a query object that provides context to the clinical event of interest
@@ -95,12 +98,12 @@ exactly <- function(x,
 #' @export
 atLeast <- function(x,
                     query,
-                    aperture) {
-  occurrence <- methods::new("Occurrence",
+                    aperture = duringInterval(eventStarts(-Inf, Inf))) {
+  occurrence <- new("Occurrence",
       type = "atLeast",
       count = as.integer(x))
 
-  methods::new("Criteria",
+  new("Criteria",
       occurrence = occurrence,
       query = query,
       aperture = aperture)
@@ -114,13 +117,13 @@ atLeast <- function(x,
 #' @export
 atMost <- function(x,
                    query,
-                   aperture) {
+                   aperture = duringInterval(eventStarts(-Inf, Inf))) {
 
-  occurrence <- methods::new("Occurrence",
+  occurrence <- new("Occurrence",
       type = "atMost",
       count = as.integer(x))
 
-  methods::new("Criteria",
+  new("Criteria",
       occurrence = occurrence,
       query = query,
       aperture = aperture)
@@ -133,8 +136,8 @@ atMost <- function(x,
 #' @export
 withAll <- function(...){
   items <- list(...)
-  methods::new("Group",
-      occurrence = methods::new("Occurrence", type = "all"),
+  new("Group",
+      occurrence = new("Occurrence", type = "all"),
       criteria = purrr::discard(items, is.Group),
       group = purrr::keep(items, is.Group)
       )
@@ -145,8 +148,8 @@ withAll <- function(...){
 #' @export
 withAny <- function(...){
   items <- list(...)
-  methods::new("Group",
-      occurrence = methods::new("Occurrence", type = "any"),
+  new("Group",
+      occurrence = new("Occurrence", type = "any"),
       criteria = purrr::discard(items, is.Group),
       group = purrr::keep(items, is.Group)
   )
@@ -158,8 +161,8 @@ withAny <- function(...){
 #' @export
 withAtLeast <- function(x, ...){
   items <- list(...)
-  methods::new("Group",
-      occurrence = methods::new("Occurrence", type = "atLeast", count = as.integer(x)),
+  new("Group",
+      occurrence = new("Occurrence", type = "atLeast", count = as.integer(x)),
       criteria = purrr::discard(items, is.Group),
       group = purrr::keep(items, is.Group)
   )
@@ -170,8 +173,8 @@ withAtLeast <- function(x, ...){
 #' @export
 withAtMost <- function(x, ...){
   items <- list(...)
-  methods::new("Group",
-      occurrence = methods::new("Occurrence", type = "atMost", count = as.integer(x)),
+  new("Group",
+      occurrence = new("Occurrence", type = "atMost", count = as.integer(x)),
       criteria = purrr::discard(items, is.Group),
       group = purrr::keep(items, is.Group)
   )
@@ -217,7 +220,6 @@ setMethod("as.list", "Group", function(x) {
     purrr::map(~as.list(.x))
   demographicsList <- purrr::discard(x@criteria, is.Criteria) %>%
     purrr::map(~as.list(.x))
-
 
   if (length(x@group) == 0) {
     groupsList <- list()

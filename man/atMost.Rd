@@ -4,7 +4,7 @@
 \alias{atMost}
 \title{Function to enumerate a maximum count of occurrences}
 \usage{
-atMost(x, query, aperture)
+atMost(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
 }
 \arguments{
 \item{x}{the integer counting the number of occurrences}

@@ -4,7 +4,7 @@
 \alias{exactly}
 \title{Function to enumerate an exact count of occurrences}
 \usage{
-exactly(x, query, aperture)
+exactly(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
 }
 \arguments{
 \item{x}{the integer counting the number of occurrences}

@@ -539,7 +539,7 @@ getConceptSetDetails <- function(x,
   df <- DBI::dbGetQuery(con, sql) %>%
     tibble::tibble() %>%
     dplyr::rename_all(tolower) %>%
-    # Not exactly sure what the logic is for filling in the captions and invalid_reason
+    # TODO what is the logic is for filling in the caption and invalid_reason fields?
     dplyr::mutate(invalid_reason = ifelse(is.na(invalid_reason), "V", invalid_reason)) %>%
     dplyr::mutate(
       standard_concept_caption = case_when(

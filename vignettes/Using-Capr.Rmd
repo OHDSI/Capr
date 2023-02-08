@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
@@ -65,7 +66,7 @@ Cohort generation is the process of converting a cohort definition to a table wi
 cohort_definition_id, subject_id, cohort_start_date, cohort_end_date. This table contains the person IDs
 and dates that people are in the cohort.
 
-```{r setup}
+```{r}
 
 
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()

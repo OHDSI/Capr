@@ -1,3 +1,7 @@
+Capr 2.0.0
+==========
+New user interface for cohort construction
+
 Capr 1.0.4
 ==========
 1. Bug Fixes

@@ -28,12 +28,12 @@ setValidity("conceptAttribute", function(object){
 setMethod("show", "conceptAttribute", function(object) {
 
   tbl <- tibble::tibble(
-    concept_id = purrr::map_int(object@conceptSet, ~.x@concept_id),
-    concept_name = purrr::map_chr(object@conceptSet, ~.x@concept_name),
-    concept_code = purrr::map_chr(object@conceptSet, ~.x@concept_code),
-    domain_id = purrr::map_chr(object@conceptSet, ~.x@domain_id),
-    vocabulary_id = purrr::map_chr(object@conceptSet, ~.x@vocabulary_id),
-    concept_class_id = purrr::map_chr(object@conceptSet, ~.x@concept_class_id)
+    concept_id = purrr::map_int(object@conceptSet, ~as.character(.x@concept_id)),
+    concept_name = purrr::map_chr(object@conceptSet, ~as.character(.x@concept_name)),
+    concept_code = purrr::map_chr(object@conceptSet, ~as.character(.x@concept_code)),
+    domain_id = purrr::map_chr(object@conceptSet, ~as.character(.x@domain_id)),
+    vocabulary_id = purrr::map_chr(object@conceptSet, ~as.character(.x@vocabulary_id)),
+    concept_class_id = purrr::map_chr(object@conceptSet, ~as.character(.x@concept_class_id))
   )
   cli::cat_bullet(paste("Capr Concept Attribute:", object@name), bullet = "sup_plus")
   print(tbl)

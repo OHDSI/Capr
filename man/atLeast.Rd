@@ -4,7 +4,7 @@
 \alias{atLeast}
 \title{Function to enumerate an minimal count of occurrences}
 \usage{
-atLeast(x, query, aperture)
+atLeast(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
 }
 \arguments{
 \item{x}{the integer counting the number of occurrences}

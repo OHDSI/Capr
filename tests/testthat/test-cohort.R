@@ -34,8 +34,12 @@ test_that("getConceptSetDetails works on Eunomia", {
   skip_if_not_installed("Eunomia")
   gibleed <- cs(descendants(192671))
   connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-  con <- DatabaseConnector::connect(connectionDetails)
-  gibleed <- getConceptSetDetails(gibleed, con, vocabularyDatabaseSchema = "main")
+  suppressMessages({
+    con <- DatabaseConnector::connect(connectionDetails)
+  })
+  suppressWarnings({ # DatabaseConnector will throw a warning when passing already translated SQL code to dbGetQuery
+    gibleed <- getConceptSetDetails(gibleed, con, vocabularyDatabaseSchema = "main")
+  })
   expect_equal(gibleed@Expression[[1]]@Concept@concept_name, "Gastrointestinal hemorrhage")
   DatabaseConnector::disconnect(con)
 })
@@ -69,10 +73,12 @@ test_that("full cohort works", {
     )
   )
 
+  conceptSets <- listConceptSets(cd)
+
   cohortList <- toCirce(cd)
   expect_type(cohortList, "list")
 
-  cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) %>%
+  cohortJson <- jsonlite::toJSON(cohortList, pretty = TRUE, auto_unbox = TRUE) %>%
     as.character()
 
   expect_type(cohortJson, "character")
@@ -86,10 +92,8 @@ test_that("full cohort works", {
 })
 
 
-
 test_that("full cohort works without group", {
   skip_if_not_installed("CirceR")
-  skip("failing test")
 
   cd <- cohort(
     entry = entry(
@@ -97,13 +101,11 @@ test_that("full cohort works without group", {
       observationWindow = continuousObservation(365, 0)
     ),
     attrition = attrition(
-      'no t1d' = criteria(
-          exactly(0),
+      'no t1d' = exactly(0,
           condition(cs(descendants(201254L))),
           duringInterval(eventStarts(-Inf, -1))
       ),
-      'abnormal hba1c' = criteria(
-          atLeast(1),
+      'abnormal hba1c' = atLeast(1,
           measurement(
             cs(descendants(4184637L)),
             valueAsNumber(lt(13)),
@@ -112,6 +114,9 @@ test_that("full cohort works without group", {
       )
     )
   )
+
+  conceptSets <- listConceptSets(cd)
+  expect_true(all(purrr::map_lgl(conceptSets, ~all(names(.) == c("id", "name", "expression")))))
 
   cohortList <- toCirce(cd)
   expect_type(cohortList, "list")
@@ -157,9 +162,6 @@ test_that("Capr cohort generates on synpuf", {
   expect_type(sql, "character")
   expect_true(nchar(sql) > 1)
 
-
-
-
   cohortsToCreate <- tibble::tibble(
     cohortId = 999,
     cohortName = "CaprTest",
@@ -170,19 +172,24 @@ test_that("Capr cohort generates on synpuf", {
 
   cohortTableNames <- CohortGenerator::getCohortTableNames("cohort")
 
-  CohortGenerator::createCohortTables(connectionDetails, cohortDatabaseSchema = "main", cohortTableNames = cohortTableNames)
+  invisible(capture_output(suppressMessages({
+    CohortGenerator::createCohortTables(connectionDetails,
+                                        cohortDatabaseSchema = "main",
+                                        cohortTableNames = cohortTableNames)
 
-  CohortGenerator::generateCohortSet(connectionDetails = connectionDetails,
-                                     cdmDatabaseSchema = "main" ,
-                                     cohortTableNames = cohortTableNames,
-                                     cohortDefinitionSet = cohortsToCreate,
-                                     incremental = FALSE)
+
+    CohortGenerator::generateCohortSet(connectionDetails = connectionDetails,
+                                       cdmDatabaseSchema = "main" ,
+                                       cohortTableNames = cohortTableNames,
+                                       cohortDefinitionSet = cohortsToCreate,
+                                       incremental = FALSE)
 
   df <- CohortGenerator::getCohortCounts(connectionDetails = connectionDetails,
                                          cohortDatabaseSchema = "main",
                                          cohortTable = "cohort",
                                          cohortIds = c(999),
                                          cohortDefinitionSet = cohortsToCreate)
+  })))
 
   expect_true(df$cohortEntries > 1)
 

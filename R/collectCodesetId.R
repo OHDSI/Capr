@@ -13,7 +13,6 @@ replaceGuid <- function(x, y) {
 
 # Collect Guid --------------------------
 
-
 setGeneric("collectGuid", function(x) standardGeneric("collectGuid"))
 
 
@@ -30,7 +29,7 @@ setMethod("collectGuid", "Query", function(x) {
   ids <- getGuid(x)
 
   #collect guids for nested attributes
-  checkNest <- purrr::map_chr(x@attributes, ~.x@name)
+  checkNest <- purrr::map_chr(x@attributes, ~as.character(.x@name))
   if (any(checkNest %in% c("CorrelatedCriteria"))) {
     ii <- which(checkNest == "CorrelatedCriteria")
     id2 <- collectGuid(x@attributes[[ii]]@group) %>%
@@ -110,7 +109,7 @@ setMethod("replaceCodesetId", "Query", function(x, guidTable) {
 
   #next check for any nested criteria and replace
   #replace guids for nested attributes
-  checkNest <- purrr::map_chr(x@attributes, ~.x@name)
+  checkNest <- purrr::map_chr(x@attributes, ~as.character(.x@name))
   if (any(checkNest %in% c("CorrelatedCriteria"))) {
     ii <- which(checkNest == "CorrelatedCriteria")
     nest <- replaceCodesetId(x@attributes[[ii]]@group, guidTable)
@@ -206,21 +205,21 @@ setMethod("listConceptSets", "Query", function(x) {
   # handle listing concepts if have nestedAttribute
   #next check for any nested criteria and replace
   #replace guids for nested attributes
-  checkNest <- purrr::map_chr(x@attributes, ~.x@name)
+  checkNest <- purrr::map_chr(x@attributes, ~as.character(.x@name))
   if (any(checkNest %in% c("CorrelatedCriteria"))) {
     ii <- which(checkNest == "CorrelatedCriteria")
-    nest <- listConceptSets(x@attributes[[ii]]@group) %>%
-      purrr::flatten()
-
-    qs <- list(qs, nest)
+    nest <- listConceptSets(x@attributes[[ii]]@group)
+    out <- c(list(qs), nest)
+  } else {
+    out <- list(qs)
   }
 
-  return(qs)
+  return(out)
 })
 
 #' @include criteria.R
 setMethod("listConceptSets", "Criteria", function(x) {
-  listConceptSets(x@query)
+ listConceptSets(x@query)
 })
 
 check_names <- function(x) {
@@ -264,10 +263,7 @@ setMethod("listConceptSets", "Group", function(x) {
   }
 
   c(ll1, ll2)
-
 })
-
-
 
 setMethod("listConceptSets", "CohortEntry", function(x) {
 
@@ -280,7 +276,7 @@ setMethod("listConceptSets", "CohortEntry", function(x) {
 
   ce %>%
     append(listConceptSets(x@additionalCriteria))
-  #TODO may need a flatten here with additional criteria
+  # TODO may need a flatten here with additional criteria
 })
 
 setMethod("listConceptSets", "CohortAttrition", function(x) {
@@ -289,27 +285,25 @@ setMethod("listConceptSets", "CohortAttrition", function(x) {
 })
 
 setMethod("listConceptSets", "CohortExit", function(x) {
-  #check if endstrategy is drug exit
+  # check if endstrategy is drug exit
   es_nm_check <- "conceptSet" %in% methods::slotNames(methods::is(x@endStrategy))
   if (es_nm_check) {
-    #get concept sets from drug exit
+    # get concept sets from drug exit
     ll <- list(as.list(x@endStrategy@conceptSet))
   } else {
     ll <- list()
   }
   append(ll, purrr::map(x@censoringCriteria@criteria, ~listConceptSets(.x)))
-
 })
 
 setMethod("listConceptSets", "Cohort", function(x) {
-  ll <- listConceptSets(x@entry) %>%
-    append(listConceptSets(x@attrition)) %>%
-    append(listConceptSets(x@exit))
+  l1 <- listConceptSets(x@entry)
+  l2 <- listConceptSets(x@attrition)
+  l3 <- listConceptSets(x@exit)
+  ll <- c(l1, l2, l3)
 
-  ids <- purrr::map_chr(ll, ~.x$id)
+  ids <- purrr::map_chr(ll, ~as.character(.x$id))
 
   rr <- ll[!duplicated(ids)]
-
   return(rr)
-
 })

@@ -1,5 +1,5 @@
 test_that("cohort with additional criteria works", {
-  #LEGEND storke
+  # LEGEND stroke
   cd <- cohort(
     entry = entry(
       condition(cs(372924, 376713, 441874, 439847,
@@ -23,6 +23,7 @@ test_that("cohort with additional criteria works", {
     era = era(eraDays = 180L)
   )
 
+  # debugonce(toCirce)
   cohortList <- toCirce(cd)
   expect_type(cohortList, "list")
 
