@@ -1,0 +1,286 @@
+---
+title: "Cohort Definition Examples"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE # for now...
+)
+
+```
+
+
+```{r setup}
+
+library(Capr)
+
+# Function to test that cohort compiles
+assertCohortCompiles <- function(cohortDefinition) {
+  sql <- CirceR::cohortExpressionFromJson(as.json(ch))
+  sql <- CirceR::buildCohortQuery(sql, options = CirceR::createGenerateOptions(generateStats = TRUE))
+  
+  stopifnot(nchar(sql) > 1)
+  invisible(NULL)
+}
+
+```
+
+This vignette provides a number of example cohorts built with Capr from the OHDSI *Phenotype Phebruary* event.
+
+# Type 2 diabetes mellitus
+
+**Persons with new type 2 diabetes mellitus at first diagnosis**
+
+https://atlas-phenotype.ohdsi.org/#/cohortdefinition/88/definition
+
+```{r, include=FALSE, eval=FALSE}
+
+# DRAFT version that uses observationPeriod Query type
+# TODO implement observation period Query type
+cs1 <- cs(descendants(443238, 201820, 442793), 
+          descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
+          name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
+
+ch <- cohort(
+  entry = condition(cs1),
+  attrition = attrition(
+    atLeast(1, 
+            observationPeriod(), 
+            duringInterval(eventStarts(-Inf, -365, "startDate"))
+    )
+  )
+)
+```
+
+
+```{r, eval=FALSE}
+library(Capr)
+
+cs0 <- cs(descendants(443238, 201820, 442793), 
+          descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
+          name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
+
+ch <- cohort(
+  entry = entry(
+    condition(cs0),
+    observationWindow = continuousObservation(priorDays = 365)
+  )
+)
+
+```
+
+```{r, include=FALSE}
+assertCohortCompiles(ch)
+```
+
+
+**Persons with new type 2 diabetes and no prior T1DM or secondary diabetes**
+
+https://atlas-phenotype.ohdsi.org/#/cohortdefinition/89/export
+
+```{r, eval=FALSE}
+library(Capr)
+
+cs0 <- cs(descendants(443238, 201820, 442793), 
+          descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
+          name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
+
+cs1 <- cs(descendants(201254, 435216, 40484648),
+          name = "Type 1 diabetes mellitus")
+
+cs2 <- cs(descendants(195771),
+          name = "Secondary diabetes mellitus")
+
+ch <- cohort(
+  entry = entry(
+    condition(cs0),
+    observationWindow = continuousObservation(priorDays = 365)
+  ),
+  attrition = attrition(
+    exactly(0, condition(cs1), duringInterval(eventStarts(-Inf, 0))),
+    exactly(0, condition(cs2), duringInterval(eventStarts(-Inf, 0)))
+  )
+)
+
+```
+
+```{r, include=FALSE}
+assertCohortCompiles(ch)
+```
+
+
+**Persons with new type 2 diabetes mellitus at first dx rx or lab**
+
+https://atlas-phenotype.ohdsi.org/#/cohortdefinition/90
+
+```{r, eval=FALSE}
+library(Capr)
+
+cs0 <- cs(descendants(443238, 201820, 442793), 
+          descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
+          name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
+
+cs1 <- cs(descendants(201254, 435216, 40484648),
+          name = "Type 1 diabetes mellitus")
+
+cs2 <- cs(descendants(195771),
+          name = "Secondary diabetes mellitus")
+
+cs3 <- cs(descendants(4184637, 37059902),
+          name = "Hemoglobin A1c (HbA1c) measurements")
+
+cs4 <- cs(descendants(21600744),
+          name = "Drugs for diabetes except insulin")
+
+
+ch <- cohort(
+  entry = entry(
+    condition(cs0),
+    drug(cs4),
+    measurement(cs3, valueAsNumber(bt(6.5, 30)), unit("%")),
+    measurement(cs3, valueAsNumber(bt(48, 99)), unit("mmol/mol")),
+    observationWindow = continuousObservation(priorDays = 365)
+  ),
+  attrition = attrition(
+    exactly(0, condition(cs1), duringInterval(eventStarts(-Inf, 0))),
+    exactly(0, condition(cs2), duringInterval(eventStarts(-Inf, 0)))
+  )
+)
+
+```
+
+```{r, include=FALSE}
+assertCohortCompiles(ch)
+```
+
+# Type 1 diabetes mellitus
+
+**Persons with new type 1 diabetes**
+
+https://atlas-phenotype.ohdsi.org/#/cohortdefinition/92
+
+```{r}
+cs0 <- cs(descendants(195771),
+          name = "Type 1 diabetes mellitus")
+
+ch <- cohort(
+  entry = entry(
+    condition(cs0),
+    observationWindow = continuousObservation(priorDays = 365)
+  )
+)
+
+```
+
+```{r}
+assertCohortCompiles(ch)
+```
+
+**Persons with new type 1 diabetes and no prior T2DM or secondary diabetes**
+
+https://atlas-phenotype.ohdsi.org/#/cohortdefinition/91
+
+
+```{r}
+
+cs0 <- cs(descendants(443238, 201820, 442793), 
+          descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
+          name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
+
+cs1 <- cs(descendants(201254, 435216, 40484648),
+          name = "Type 1 diabetes mellitus")
+
+cs2 <- cs(descendants(195771),
+          name = "Secondary diabetes mellitus")
+
+ch <- cohort(
+  entry = entry(
+    condition(cs1),
+    observationWindow = continuousObservation(priorDays = 365)
+  ),
+  attrition = attrition(
+    "no prior T2DM" = exactly(0, condition(cs0), duringInterval(eventStarts(-Inf, 0))),
+    "no prior secondary T1DM" = exactly(0, condition(cs2), duringInterval(eventStarts(-Inf, 0)))
+  )
+)
+
+```
+
+```{r, include=FALSE}
+assertCohortCompiles(ch)
+```
+
+
+# Atrial Fibrillation
+
+**Persons with atrial fibrillation per Wharton et al 2021**
+
+https://atlas-phenotype.ohdsi.org/#/cohortdefinition/93
+
+```{r}
+
+cs0 <- cs(descendants(313217),
+          name = "Atrial fibrillation")
+
+ch <- cohort(condition(cs0))
+
+```
+
+```{r, include=FALSE}
+assertCohortCompiles(ch)
+```
+
+
+**Persons with atrial fibrillation per Subramanya et al 2021**
+
+https://atlas-phenotype.ohdsi.org/#/cohortdefinition/94
+
+```{r}
+
+afib <- cs(descendants(313217),
+           name = "Atrial fibrillation")
+
+ip <- cs(descendants(262, 9201),
+         name = "Inpatient or inpatient ER visit")
+
+op <- cs(descendants(9202, 9203),
+         name = "Outpatient or ER visit")
+
+ch <- cohort(
+  entry = entry(
+    condition(afib,
+      nestedWithAny(
+        atLeast(1, visit(ip), duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf))),
+        nestedWithAll(
+          atLeast(1, visit(op, duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf)),
+            nestedWithAll(
+              atLeast(1, condition(afib, duringInterval(eventStarts(7, 365)),
+                nestedWithAll(
+                  atLeast(1, visit(op, duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf))))
+                )
+              ))
+            )
+          ))
+        )
+      )
+    )
+  )
+)
+
+```
+
+```{r, include=FALSE, eval=FALSE}
+# not compiling
+assertCohortCompiles(ch)
+```
+
+

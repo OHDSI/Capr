@@ -4,10 +4,10 @@
 \alias{unit}
 \title{Add unit attribute to a query}
 \usage{
-unit(...)
+unit(x)
 }
 \arguments{
-\item{...}{list of concept ids that identify units}
+\item{x}{A single character idetifier for a unit or a concept set that identifies units}
 }
 \value{
 An attribute that can be used in a query function
