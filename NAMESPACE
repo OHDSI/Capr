@@ -2,7 +2,6 @@
 
 export("%>%")
 export(age)
-export(as.data.frame.ConceptSet)
 export(as.json)
 export(atLeast)
 export(atMost)

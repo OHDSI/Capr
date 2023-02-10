@@ -10,4 +10,4 @@ compare_versions
 ^extras$
 ^man-roxygen$
 scratch/
-work/
+^work$

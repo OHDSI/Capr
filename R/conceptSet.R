@@ -313,18 +313,14 @@ descendants <- function(...) {
 #' @param x A Caper Concept Set
 #'
 #' @return A tibble (dataframe) with columns: concept_id, includeDescendants, isExcluded, includeMapped.
-#' @export
-as.data.frame.ConceptSet <- function(x) {
+setMethod("as.data.frame", "ConceptSet", function(x) {
   tibble::tibble(
     conceptId = purrr::map_int(x@Expression, ~.@Concept@concept_id),
     includeDescendants = purrr::map_lgl(x@Expression, "includeDescendants"),
     isExcluded = purrr::map_lgl(x@Expression, "isExcluded"),
     includeMapped = purrr::map_lgl(x@Expression, "includeMapped")
   )
-}
-
-# setGeneric("as.data.frame")
-setMethod("as.data.frame", "ConceptSet", as.data.frame.ConceptSet)
+})
 
 setMethod("as.list", "Concept", function(x){
   nm <- methods::slotNames(methods::is(x))

@@ -427,7 +427,7 @@ drugRefills <- function(op) {
 #' @param op an opAttribute object that is either numeric or integer that defines
 #' the logical operation used to determine eligible patient age
 #' @export
-valueAsNumber<- function(op) {
+valueAsNumber <- function(op) {
 
   check <- grepl("opAttribute", methods::is(op))
   if (!check) {

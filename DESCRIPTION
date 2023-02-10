@@ -28,9 +28,7 @@ Imports:
   dplyr,
   checkmate,
   tibble,
-  withr,
   readr,
-  utils,
   stringr,
   glue,
   cli,
@@ -41,19 +39,19 @@ Imports:
   DatabaseConnector,
   SqlRender
 Suggests:
-    testthat (>= 3.0.0),
-    knitr,
-    rmarkdown,
-    CohortGenerator,
-    CirceR,
-    Eunomia
+  testthat (>= 3.0.0),
+  knitr,
+  rmarkdown,
+  CohortGenerator,
+  CirceR,
+  Eunomia
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
     'Capr.R'
+    'conceptSet.R'
     'attributes-concept.R'
     'attributes-logic.R'
-    'conceptSet.R'
     'query.R'
     'window.R'
     'criteria.R'

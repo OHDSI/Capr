@@ -358,6 +358,8 @@ toCirce <- function(cd) {
 #   cohortList
 # })
 
+#' Coerce Capr object to json
+#'
 #' @export
 setGeneric("as.json", function(x, pretty = TRUE, ...) {
   # TODO Question: what should this generic implementation be?
