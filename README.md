@@ -35,7 +35,7 @@ version of Capr from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("OdyOSG/Capr")
+devtools::install_github("ohdsi/Capr")
 ```
 
 ## Example
