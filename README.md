@@ -240,7 +240,7 @@ for building large numbers of similar cohorts in R.
 
 ``` r
 
-# A Capr cohort templat is a function that returns a cohort
+# A Capr cohort template is a function that returns a cohort
 drugEraTemplate <- function(ingredientConceptId) {
   
   drugConceptSet <- cs(descendants(ingredientConceptId))
