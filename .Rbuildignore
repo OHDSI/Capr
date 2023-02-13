@@ -11,3 +11,4 @@ compare_versions
 ^man-roxygen$
 scratch/
 ^work$
+^README\.Rmd$

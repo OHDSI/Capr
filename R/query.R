@@ -30,6 +30,7 @@ setValidity("Query", function(object) {
                     "DeviceExposure",
                     "DoseEra",
                     "DrugExposure",
+                    "DrugEra",
                     "Measurement",
                     "Observation",
                     "PayerPlanPeriod",

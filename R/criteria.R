@@ -80,6 +80,11 @@ is.Group <- function(x) {
 exactly <- function(x,
                     query,
                     aperture = duringInterval(eventStarts(-Inf, Inf))) {
+
+  if (is(aperture, "EventWindow")) {
+    aperture <- duringInterval(aperture)
+  }
+
   occurrence <- new("Occurrence",
       type = "exactly",
       count = as.integer(x))
@@ -99,6 +104,11 @@ exactly <- function(x,
 atLeast <- function(x,
                     query,
                     aperture = duringInterval(eventStarts(-Inf, Inf))) {
+
+  if (is(aperture, "EventWindow")) {
+    aperture <- duringInterval(aperture)
+  }
+
   occurrence <- new("Occurrence",
       type = "atLeast",
       count = as.integer(x))
@@ -118,6 +128,10 @@ atLeast <- function(x,
 atMost <- function(x,
                    query,
                    aperture = duringInterval(eventStarts(-Inf, Inf))) {
+
+  if (is(aperture, "EventWindow")) {
+    aperture <- duringInterval(aperture)
+  }
 
   occurrence <- new("Occurrence",
       type = "atMost",

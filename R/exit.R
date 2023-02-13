@@ -110,6 +110,15 @@ drugExit <- function(conceptSet,
                      persistenceWindow = 0L,
                      surveillanceWindow = 0L,
                      daysSupplyOverride = NULL) {
+
+  checkmate::expect_integerish(persistenceWindow, len = 1)
+  checkmate::expect_integerish(surveillanceWindow, len = 1)
+  checkmate::expect_integerish(daysSupplyOverride, len = 1, null.ok = TRUE)
+
+  persistenceWindow <- as.integer(persistenceWindow)
+  surveillanceWindow <- as.integer(surveillanceWindow)
+  daysSupplyOverride <- as.integer(daysSupplyOverride)
+
   if(is.null(daysSupplyOverride)) {
     daysSupplyOverride <- NA_integer_
   }
