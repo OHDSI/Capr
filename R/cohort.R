@@ -406,7 +406,22 @@ writeCohort <- function(x, path) {
     )
 }
 
+# Templates ------------
+#' Generate a Capr cohort using a template
+#' @param file the input file of a concept set
+#' @param .capr a function that creates a capr cohort
+#' @export
+generateCaprTemplate <- function(file, .capr) {
 
+  # get file name
+  name <- tools::file_path_sans_ext(basename(file))
+  #retreive concept set
+  conceptSet <- Capr::readConceptSet(path = file, name = name)
+
+  #generate cohort from template
+  .capr(conceptSet)
+
+}
 
 # writeCohort <- function(x, path, ...) {
 #   checkmate::assertClass(x, "Cohort")
