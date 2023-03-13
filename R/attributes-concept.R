@@ -1,0 +1,153 @@
+# Concept Attribute class ----------------------------
+
+#' An S4 class for a concept attribute
+#' @slot name the name of the attribute
+#' @slot conceptSet a list representing the concepts for the attribute
+#' @include conceptSet.R
+setClass("conceptAttribute",
+         slots = c(
+           name = "character",
+           conceptSet = "list" # TODO why is this a list and not a concept set object?
+         ),
+         prototype = list(
+           name = NA_character_,
+           conceptSet = list()
+         )
+)
+
+setValidity("conceptAttribute", function(object){
+  #TODO check that each object in conceptSet list is of Concept Class
+  stopifnot(is.list(object@conceptSet),
+            is.character(object@name),
+            length(object@name) == 1)
+  TRUE
+})
+
+# Console Print ---------------
+
+#' @aliases show,conceptAttribute-method
+setMethod("show", "conceptAttribute", function(object) {
+
+  tbl <- tibble::tibble(
+    concept_id = purrr::map_int(object@conceptSet, ~as.character(.x@concept_id)),
+    concept_name = purrr::map_chr(object@conceptSet, ~as.character(.x@concept_name)),
+    concept_code = purrr::map_chr(object@conceptSet, ~as.character(.x@concept_code)),
+    domain_id = purrr::map_chr(object@conceptSet, ~as.character(.x@domain_id)),
+    vocabulary_id = purrr::map_chr(object@conceptSet, ~as.character(.x@vocabulary_id)),
+    concept_class_id = purrr::map_chr(object@conceptSet, ~as.character(.x@concept_class_id))
+  )
+  cli::cat_bullet(paste("Capr Concept Attribute:", object@name), bullet = "sup_plus")
+  print(tbl)
+})
+
+# Constructors -------------
+
+#' Add male attribute to a query
+#'
+#' @return An attribute that can be used in a query function
+#' @export
+#'
+#' @describeIn attributes male demographic attribute
+#'
+#' @examples
+#' \dontrun{
+#' # Create a cohort of males with Type 1 diabetes
+#' t1dm <- cs(descendants(201254,435216,40484648))
+#' t1dm_males <- cohort(condition(t1dm, male()))
+#' }
+male <- function() {
+
+  methods::new("conceptAttribute",
+      name = "Gender",
+      conceptSet = list(
+        methods::new("Concept",
+            concept_id = 8507L,
+            concept_name = "MALE",
+            concept_code = "M",
+            domain_id = "Gender",
+            vocabulary_id = "Gender",
+            concept_class_id = "Gender")
+      )
+  )
+}
+
+#' Add female attribute to a query
+#'
+#' @return An attribute that can be used in a query function
+#' @export
+#'
+#' @describeIn attributes female demographic attribute
+#' @examples
+#' \dontrun{
+#' # Create a cohort of males with Type 1 diabetes
+#' t1dm <- cs(descendants(201254,435216,40484648))
+#' t1dm_females <- cohort(condition(t1dm, female()))
+#' }
+female <- function() {
+
+  methods::new("conceptAttribute",
+      name = "Gender",
+      conceptSet = list(
+        methods::new("Concept",
+            concept_id = 8532L,
+            concept_name = "FEMALE",
+            concept_code = "F",
+            domain_id = "Gender",
+            vocabulary_id = "Gender",
+            concept_class_id = "Gender")
+      )
+  )
+}
+
+
+#' Add unit attribute to a query
+#' @param x A single character idetifier for a unit or a concept set that identifies units
+#' @return An attribute that can be used in a query function
+#' @export
+unit <- function(x) {
+  if (missing(x)) {
+    rlang::abort("Unit must be specified")
+  }
+
+  stopifnot(is.character(x) || is.numeric(x) || methods::is(x, "ConceptSet"))
+
+  if (is.character(x)) {
+    stopifnot(length(x) == 1)
+    conceptId <- switch(x,
+      "%" = 8554,
+      "percent" = 8554,
+      "mmol/mol" = 9579,
+      "millimole per mole" = 9579,
+      rlang::abort(paste(x, "is not a recogized unit identifier")))
+
+    conceptSet <- methods::new("Concept", concept_id = conceptId)
+  } else if (is.numeric(x)) {
+    conceptSet <- purrr::map(x, ~methods::new("Concept", concept_id = as.integer(.x)))
+  } else if (is(x, "ConceptSet")) {
+    x <- as.data.frame(cs(1:3))$conceptId
+    conceptSet <- purrr::map(x, ~methods::new("Concept", concept_id = as.integer(.x)))
+  } else {
+    rlang::abort("unit only accepts concept sets, integers, or character unit ids")
+  }
+
+  # conceptSet <- as.list(as.data.frame(conceptSet)$conceptId)
+  conceptSet <- as.list(conceptSet)
+
+  methods::new("conceptAttribute",
+      name = "unit",
+      conceptSet = conceptSet)
+}
+
+# Coercion ------------------
+
+setMethod("as.list", "conceptAttribute", function(x) {
+
+  concepts <- purrr::map(x@conceptSet, ~as.list(.x))
+  nm <- stringr::str_to_title(x@name)
+
+  tibble::lst(
+    !!nm := concepts
+  )
+})
+
+# Capr Call -----------------

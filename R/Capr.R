@@ -17,7 +17,6 @@
 #' @keywords internal
 "_PACKAGE"
 
-#' @import DatabaseConnector
 #' @import dplyr
 #' @importFrom rlang .data
 NULL
