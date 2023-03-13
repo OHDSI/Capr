@@ -60,4 +60,4 @@ Collate:
     'exit.R'
     'cohort.R'
     'collectCodesetId.R'
-    'utils-pipe.R'
+    'utils.R'
