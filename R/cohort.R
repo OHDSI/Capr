@@ -193,12 +193,16 @@ cohort <- function(entry,
     cd@attrition <- attrition
   }
 
-  if (!is.null(exit)) {
+  if (is.null(exit)) {
     cd@exit <- methods::new("CohortExit")
+  } else{
+    cd@exit <- exit
   }
 
-  if (!is.null(era)) {
+  if (is.null(era)) {
     cd@era <- methods::new("CohortEra")
+  } else{
+    cd@era <- era
   }
 
   return(cd)
