@@ -1,6 +1,6 @@
-# Capr
+# Capr <a href="https://ohdsi.github.io/Capr"><img src="man/figures/logo.png" align="right" height="138"/></a>
 
-Capr is part of [HADES](https://ohdsi.github.io/Hades/)
+
 
 <!-- badges: start -->
 
@@ -8,9 +8,11 @@ Capr is part of [HADES](https://ohdsi.github.io/Hades/)
 
 <!-- badges: end -->
 
+Capr is part of [HADES](https://ohdsi.github.io/Hades/)
+
 # Introduction
 
-The goal of Capr is to provide a language for expressing OHDSI Cohort definitions in R code. OHDSI defines a cohort as "a set of persons who satisfy one or more inclusion criteria for a duration of time" and provides a standardized approach for defining them (Circe-be). Capr exposes the standardized approach to cohort building through a programmatic interface in R which is particularly helpful when creating a large number of similar cohorts. Capr version 2 introduces a new user interface designed for readability with the goal that Capr code being a human readable description of a cohort while also being executable on an OMOP Common Data Model.
+The goal of Capr, pronounced 'kay-pr' like the edible flower, is to provide a language for expressing OHDSI Cohort definitions in R code. OHDSI defines a cohort as "a set of persons who satisfy one or more inclusion criteria for a duration of time" and provides a standardized approach for defining them (Circe-be). Capr exposes the standardized approach to cohort building through a programmatic interface in R which is particularly helpful when creating a large number of similar cohorts. Capr version 2 introduces a new user interface designed for readability with the goal that Capr code being a human readable description of a cohort while also being executable on an OMOP Common Data Model.
 
 Learn more about the OHDSI approach to cohort building in the [cohorts chapter of the Book of OHDSI.](https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html)
 
