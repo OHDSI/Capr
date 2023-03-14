@@ -6,6 +6,13 @@
 \usage{
 as.json(x, pretty = TRUE, ...)
 }
+\arguments{
+\item{x}{the capr object}
+
+\item{pretty}{a toggle to make the json look nice, part of jsonlite}
+
+\item{...}{additional arguments passes to jsonlite::toJSON}
+}
 \description{
 Coerce Capr object to json
 }

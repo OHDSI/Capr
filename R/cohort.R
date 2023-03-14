@@ -363,7 +363,9 @@ toCirce <- function(cd) {
 # })
 
 #' Coerce Capr object to json
-#'
+#' @param x the capr object
+#' @param pretty a toggle to make the json look nice, part of jsonlite
+#' @param ... additional arguments passes to jsonlite::toJSON
 #' @export
 setGeneric("as.json", function(x, pretty = TRUE, ...) {
   # TODO Question: what should this generic implementation be?
