@@ -1,6 +1,10 @@
 Capr 2.0.0
 ==========
 New user interface for cohort construction
+    - `cs()` function to build and combine concept ids into sets
+    - improved readability code to build cohort definition
+    - coercion of Capr object to json to save as file for study
+    - maintained support for Capr templates
 
 Capr 1.0.4
 ==========
