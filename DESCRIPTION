@@ -45,6 +45,10 @@ Suggests:
   CohortGenerator,
   CirceR,
   Eunomia
+Remotes:
+  ohdsi/CohortGenerator,
+  ohdsi/CirceR,
+  ohdsi/Eunomia
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
