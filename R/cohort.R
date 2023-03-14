@@ -377,7 +377,7 @@ setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
 
 setMethod("show", "Cohort", function(object) {
   # TODO make this pretty on the console
-  str(object, max.level = 2)
+  utils::str(object, max.level = 2)
 })
 
 #' Write Cohort json file

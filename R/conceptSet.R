@@ -49,7 +49,7 @@ setValidity("Concept", function(object) {
 #' @aliases show,Concept-method
 setMethod("show", "Concept", function(object) {
   nm <- methods::slotNames(methods::is(object))
-  concept <- unname(sapply(nm, slot, object = object))
+  concept <- unname(sapply(nm, methods::slot, object = object))
   cid <- paste("conceptId:", concept[1])
   cname <- paste("conceptName:", concept[2])
   cstd <- paste("standardConcept:", concept[3])
@@ -164,11 +164,12 @@ newConcept <- function(id,
                  vocabulary_id = vocabularyId,
                  concept_class_id = conceptClassId)
 
-  new("ConceptSetItem",
+  res <- methods::new("ConceptSetItem",
       Concept = concept,
       isExcluded = isExcluded,
       includeDescendants = includeDescendants,
       includeMapped = includeMapped)
+  return(res)
 }
 
 
@@ -536,14 +537,16 @@ getConceptSetDetails <- function(x,
     tibble::tibble() %>%
     dplyr::rename_all(tolower) %>%
     # TODO what is the logic is for filling in the caption and invalid_reason fields?
-    dplyr::mutate(invalid_reason = ifelse(is.na(invalid_reason), "V", invalid_reason)) %>%
+    dplyr::mutate(invalid_reason = ifelse(
+      is.na(.data$invalid_reason), "V", .data$invalid_reason)
+      ) %>%
     dplyr::mutate(
-      standard_concept_caption = case_when(
+      standard_concept_caption = dplyr::case_when(
         standard_concept == "S" ~ "Standard",
         standard_concept == "" ~ "Non-Standard",
         standard_concept == "C" ~ "Classification",
         TRUE ~ "")) %>%
-    dplyr::mutate(invalid_reason_caption = case_when(
+    dplyr::mutate(invalid_reason_caption = dplyr::case_when(
         invalid_reason == "V" ~ "Valid",
         invalid_reason == "I" ~ "Invalid",
         TRUE ~ "")

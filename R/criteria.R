@@ -81,11 +81,11 @@ exactly <- function(x,
                     query,
                     aperture = duringInterval(eventStarts(-Inf, Inf))) {
 
-  if (is(aperture, "EventWindow")) {
+  if (methods::is(aperture, "EventWindow")) {
     aperture <- duringInterval(aperture)
   }
 
-  occurrence <- methods:new("Occurrence",
+  occurrence <- methods::new("Occurrence",
       type = "exactly",
       count = as.integer(x))
 
@@ -106,7 +106,7 @@ atLeast <- function(x,
                     query,
                     aperture = duringInterval(eventStarts(-Inf, Inf))) {
 
-  if (is(aperture, "EventWindow")) {
+  if (methods::is(aperture, "EventWindow")) {
     aperture <- duringInterval(aperture)
   }
 
@@ -131,7 +131,7 @@ atMost <- function(x,
                    query,
                    aperture = duringInterval(eventStarts(-Inf, Inf))) {
 
-  if (is(aperture, "EventWindow")) {
+  if (methods::is(aperture, "EventWindow")) {
     aperture <- duringInterval(aperture)
   }
 
@@ -154,7 +154,7 @@ atMost <- function(x,
 withAll <- function(...){
   items <- list(...)
   res <- methods::new("Group",
-                      occurrence = new("Occurrence", type = "all"),
+                      occurrence = methods::new("Occurrence", type = "all"),
                       criteria = purrr::discard(items, is.Group),
                       group = purrr::keep(items, is.Group)
   )
@@ -167,7 +167,7 @@ withAll <- function(...){
 withAny <- function(...){
   items <- list(...)
   res <- methods::new("Group",
-                      occurrence = new("Occurrence", type = "any"),
+                      occurrence = methods::new("Occurrence", type = "any"),
                       criteria = purrr::discard(items, is.Group),
                       group = purrr::keep(items, is.Group)
   )
@@ -181,7 +181,7 @@ withAny <- function(...){
 withAtLeast <- function(x, ...){
   items <- list(...)
   res <- methods::new("Group",
-                     occurrence = new("Occurrence", type = "atLeast", count = as.integer(x)),
+                     occurrence = methods::new("Occurrence", type = "atLeast", count = as.integer(x)),
                      criteria = purrr::discard(items, is.Group),
                      group = purrr::keep(items, is.Group)
   )
@@ -194,7 +194,7 @@ withAtLeast <- function(x, ...){
 withAtMost <- function(x, ...){
   items <- list(...)
   res <- methods::new("Group",
-      occurrence = new("Occurrence", type = "atMost", count = as.integer(x)),
+      occurrence = methods::new("Occurrence", type = "atMost", count = as.integer(x)),
       criteria = purrr::discard(items, is.Group),
       group = purrr::keep(items, is.Group)
   )

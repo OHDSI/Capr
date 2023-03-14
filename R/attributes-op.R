@@ -117,11 +117,11 @@ setMethod("show", "opAttributeDate", function(object) {
 
 opToPrint <- function(x) {
   tibble::tibble(
-    symbol = c("<", "<=", ">", ">=", "==", "-", "!-"),
-    op = c("lt", "lte", "gt", "gte", "eq", "bt", "!bt")
+    'symbol' = c("<", "<=", ">", ">=", "==", "-", "!-"),
+    'op' = c("lt", "lte", "gt", "gte", "eq", "bt", "!bt")
     ) %>%
-    dplyr::filter(op == x) %>%
-    dplyr::pull(symbol)
+    dplyr::filter(.data$op == x) %>%
+    dplyr::pull(.data$symbol)
 }
 
 ## lt --------
