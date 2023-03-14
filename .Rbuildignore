@@ -9,6 +9,6 @@ compare_versions
 ^docs$
 ^extras$
 ^man-roxygen$
-scratch/
+^scratch$
 ^work$
 ^README\.Rmd$
