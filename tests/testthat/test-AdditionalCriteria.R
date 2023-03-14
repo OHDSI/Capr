@@ -1,4 +1,5 @@
 test_that("cohort with additional criteria works", {
+  skip_if_not_installed("CirceR")
   # LEGEND stroke
   cd <- cohort(
     entry = entry(
@@ -32,6 +33,7 @@ test_that("cohort with additional criteria works", {
 
   expect_type(cohortJson, "character")
   expect_true(nchar(cohortJson) > 1)
+
 
   sql <- CirceR::cohortExpressionFromJson(cohortJson) %>%
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))

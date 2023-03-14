@@ -12,6 +12,8 @@ test_that("cohort entry works", {
   expect_type(as.list(x), "list") # TODO Do we keep as.list and as.json?
   expect_type(toCirce(x), "list")
   expect_type(as.json(x), "character")
+
+
   sql <- CirceR::cohortExpressionFromJson(as.json(x)) %>%
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
   expect_type(sql, "character")
@@ -24,6 +26,7 @@ test_that("cohort entry works", {
   expect_type(as.list(x), "list") # TODO Do we keep as.list and as.json?
   expect_type(toCirce(x), "list")
   expect_type(as.json(x), "character")
+
   sql <- CirceR::cohortExpressionFromJson(as.json(x)) %>%
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
   expect_type(sql, "character")
@@ -138,7 +141,7 @@ test_that("full cohort works without group", {
 
 
 test_that("Capr cohort generates on synpuf", {
-
+  skip_if_not_installed("CirceR")
   # need simple cohort for synpuf
   cd <- cohort(
     entry = entry(

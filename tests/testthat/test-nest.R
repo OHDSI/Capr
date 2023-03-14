@@ -21,7 +21,7 @@ test_that("Nesting Criteria works", {
 })
 
 test_that("Can build a cohort with nested attribute", {
-
+  skip_if_not_installed("CirceR")
   cd <- cohort(
     entry = entry(
       visit(cs(descendants(9201, 9203, 262)),
@@ -94,7 +94,7 @@ test_that("Can build a cohort with nested attribute", {
 
 
 test_that("Can build a cohort with nested groups", {
-
+  skip_if_not_installed("CirceR")
   t2dDrug <- drug(cs(descendants(1502809,1502826,1503297,1510202,1515249,1516766,
                                  1525215,1529331,1530014,1547504,1559684,1560171,
                                  1580747,1583722,1594973,1597756)))
