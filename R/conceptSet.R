@@ -552,11 +552,16 @@ getConceptSetDetails <- function(x,
         TRUE ~ "")
     )
 
+  checkSlotNames <- methods::slotNames("Concept")[-1]
+
   for (i in seq_along(x@Expression)) {
     id <- x@Expression[[i]]@Concept@concept_id
-    for (n in methods::slotNames("Concept")[-1]) {
-      dtl <- dplyr::filter(df, .data$concept_id == id) %>% dplyr::pull(!!n)
-      if (length(dtl > 0)) slot(x@Expression[[i]]@Concept, n) <- dtl
+    for (n in checkSlotNames) {
+      dtl <- dplyr::filter(df, .data$concept_id == id) %>%
+        dplyr::pull(!!n)
+      if (length(dtl > 0)) {
+        methods::slot(x@Expression[[i]]@Concept, n) <- dtl
+      }
     }
   }
   return(x)
