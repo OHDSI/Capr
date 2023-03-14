@@ -8,7 +8,7 @@
 #' @slot concept_id the OMOP/OHDSI concept ID
 #' @slot concept_name the name of the concept
 #' @slot standard_concept whether the concept is standard 'S', classification 'C', or  non-standard NA
-#' @slot standrad_concept_caption Whether the concept is standard full phrase
+#' @slot standard_concept_caption Whether the concept is standard full phrase
 #' @slot invalid_reason Whether the concept is invalid single letter
 #' @slot invalid_reason_caption whether the concept is invalid standard phrase
 #' @slot concept_code The original code of the concept from its vocabulary
@@ -46,7 +46,7 @@ setValidity("Concept", function(object) {
   TRUE
 })
 
-#' @aliases show,Concept-method
+
 setMethod("show", "Concept", function(object) {
   nm <- methods::slotNames(methods::is(object))
   concept <- unname(sapply(nm, methods::slot, object = object))
@@ -91,8 +91,6 @@ setValidity("ConceptSetItem", function(object) {
 
 # print a checkmark
 # stringi::stri_unescape_unicode("\\u2714")
-#' @aliases show,ConceptSetItem-method
-#' @export
 setMethod("show", "ConceptSetItem", function(object) {
   id <- object@Concept@concept_id
   exc <- ifelse(object@isExcluded, "-", "")
@@ -126,7 +124,6 @@ setValidity("ConceptSet", function(object) {
   TRUE
 })
 
-#' @aliases show,ConceptSet-method
 setMethod("show", "ConceptSet", function(object) {
   cli::cat_rule(paste("<Capr Concept Set>", object@Name))
   print(as.data.frame(object))

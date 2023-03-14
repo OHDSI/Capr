@@ -25,7 +25,6 @@ setValidity("conceptAttribute", function(object){
 
 # Console Print ---------------
 
-#' @aliases show,conceptAttribute-method
 setMethod("show", "conceptAttribute", function(object) {
 
   tbl <- tibble::tibble(

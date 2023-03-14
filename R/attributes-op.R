@@ -21,7 +21,6 @@ setClass("opAttributeNumeric",
            extent = NA_real_
          ))
 
-#' @aliases show,opAttributeNumeric-method
 setMethod("show", "opAttributeNumeric", function(object) {
   symbol <- opToPrint(object@op)
   if (symbol == "-") {
@@ -60,7 +59,6 @@ setClass("opAttributeInteger",
          ))
 
 
-#' @aliases show,opAttributeInteger-method
 setMethod("show", "opAttributeInteger", function(object) {
   symbol <- opToPrint(object@op)
   if (symbol == "-") {
@@ -98,7 +96,6 @@ setClass("opAttributeDate",
          ))
 
 
-#' @aliases show,opAttributeDate-method
 setMethod("show", "opAttributeDate", function(object) {
   symbol <- opToPrint(object@op)
   if (symbol == "-") {

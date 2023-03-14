@@ -16,7 +16,7 @@ A concept class contains all the information about the concept from the OMOP voa
 
 \item{\code{standard_concept}}{whether the concept is standard 'S', classification 'C', or  non-standard NA}
 
-\item{\code{standrad_concept_caption}}{Whether the concept is standard full phrase}
+\item{\code{standard_concept_caption}}{Whether the concept is standard full phrase}
 
 \item{\code{invalid_reason}}{Whether the concept is invalid single letter}
 
