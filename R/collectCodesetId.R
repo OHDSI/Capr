@@ -89,7 +89,7 @@ setMethod("collectGuid", "Cohort", function(x) {
     tibble::tibble(guid = .) %>%
     dplyr::mutate(
       codesetId = dplyr::row_number() - 1,
-      codesetId = as.integer(codesetId)
+      codesetId = as.integer(.data$codesetId)
     )
 
 })
@@ -293,7 +293,13 @@ setMethod("listConceptSets", "CohortExit", function(x) {
   } else {
     ll <- list()
   }
-  append(ll, purrr::map(x@censoringCriteria@criteria, ~listConceptSets(.x)))
+  # get concept sets from censoring criteria
+  ll2 <- purrr::map(x@censoringCriteria@criteria,
+                    ~listConceptSets(.x) %>%
+                      purrr::flatten())
+
+  res <- append(ll, ll2)
+  return(res)
 })
 
 setMethod("listConceptSets", "Cohort", function(x) {
