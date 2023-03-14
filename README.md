@@ -1,4 +1,4 @@
-# Capr <a href="https://ohdsi.github.io/Capr"><img src="man/figures/logo.png" align="right" height="138"/></a>
+# Capr <a href="https://ohdsi.github.io/Capr"><img src="man/figures/logo.png" align="right" height="110"/></a>
 
 
 
