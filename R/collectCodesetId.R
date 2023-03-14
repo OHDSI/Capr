@@ -103,7 +103,7 @@ setMethod("replaceCodesetId", "Query", function(x, guidTable) {
 
   y <- getGuid(x) %>%
     dplyr::inner_join(guidTable, by = c("guid")) %>%
-    dplyr::pull(codesetId)
+    dplyr::pull(.data$codesetId)
   #first replace the query id
   x <- replaceGuid(x, y)
 
@@ -124,7 +124,7 @@ setMethod("replaceCodesetId", "DrugExposureExit", function(x, guidTable) {
 
   y <- getGuid(x) %>%
     dplyr::inner_join(guidTable, by = c("guid")) %>%
-    dplyr::pull(codesetId)
+    dplyr::pull(.data$codesetId)
 
   x <- replaceGuid(x, y)
 
