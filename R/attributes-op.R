@@ -518,8 +518,8 @@ startDate <- function(op) {
   methods::new("opAttributeDate",
       name = "StartDate",
       op = op@op,
-      value = lubridate::as_date(op@value),
-      extent = lubridate::as_date(op@extent))
+      value = op@value,
+      extent = op@extent)
 }
 
 #' Function that creates a end date attribute
@@ -536,8 +536,8 @@ endDate <- function(op) {
   methods::new("opAttributeDate",
       name = "EndDate",
       op = op@op,
-      value = lubridate::as_date(op@value),
-      extent = lubridate::as_date(op@extent))
+      value = op@value,
+      extent = op@extent)
 }
 
 # Coercion ------------
