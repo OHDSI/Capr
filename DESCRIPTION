@@ -1,5 +1,5 @@
 Package: Capr
-Title: Cohort definition Application Programming in R
+Title: Cohort Definition Application Programming in R
 Version: 2.0.0
 Authors@R: c(
     person("Martin", "Lavallee", , "mdlavallee92@gmail.com", role = c("aut", "cre")),
