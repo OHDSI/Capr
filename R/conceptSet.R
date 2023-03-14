@@ -564,9 +564,14 @@ getConceptSetDetails <- function(x,
   return(x)
 }
 
-
+#' FUnction checks if two concept set class objects are equivalent
+#' @name ==
+#' @param e1,e2 a ConceptSet Class object
+#' @aliases ==,ConceptSet,ConceptSet-method
+#' @docType methods
+#' @rdname equals-methods
 #' @export
-setMethod("==", signature("ConceptSet", "ConceptSet"), function(e1, e2) {
+setMethod("==", signature = c(e1 = "ConceptSet", e2 = "ConceptSet"), function(e1, e2) {
   isTRUE(dplyr::all_equal(as.data.frame(e1),
                           as.data.frame(e2),
                           ignore_row_order = TRUE))
@@ -576,7 +581,7 @@ setMethod("==", signature("ConceptSet", "ConceptSet"), function(e1, e2) {
 
 # TODO convert this to vctrs. use generic.
 uniqueConceptSets <- function(x) {
-  stopifnot(is.list(x), all(purrr::map_lgl(x, ~is(., "ConceptSet"))))
+  stopifnot(is.list(x), all(purrr::map_lgl(x, ~methods::is(., "ConceptSet"))))
   # Is there an efficient implementation using just equality? Seems like maybe not?
   l <- list()
   for (i in x) {
