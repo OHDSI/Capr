@@ -325,7 +325,7 @@ setMethod("as.data.frame", "ConceptSet", function(x) {
 
 setMethod("as.list", "Concept", function(x){
   nm <- methods::slotNames(methods::is(x))
-  concept <- lapply(nm, slot, object = x)
+  concept <- lapply(nm, methods::slot, object = x)
   # Convert NA_character to empty string
   concept <- lapply(concept, function(.) ifelse(is.character(.) && is.na(.), "", .))
   names(concept) <- toupper(nm)
@@ -555,7 +555,7 @@ getConceptSetDetails <- function(x,
   for (i in seq_along(x@Expression)) {
     id <- x@Expression[[i]]@Concept@concept_id
     for (n in methods::slotNames("Concept")[-1]) {
-      dtl <- dplyr::filter(df, .data$concept_id == .env$id) %>% dplyr::pull(!!n)
+      dtl <- dplyr::filter(df, .data$concept_id == id) %>% dplyr::pull(!!n)
       if (length(dtl > 0)) slot(x@Expression[[i]]@Concept, n) <- dtl
     }
   }
