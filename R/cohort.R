@@ -367,12 +367,11 @@ toCirce <- function(cd) {
 #' @param pretty a toggle to make the json look nice, part of jsonlite
 #' @param ... additional arguments passes to jsonlite::toJSON
 #' @export
-setGeneric("as.json", function(x, pretty = TRUE, ...) {
-  # TODO Question: what should this generic implementation be?
-  as.character(jsonlite::toJSON(as.list(x), auto_unbox = TRUE, pretty = pretty, ...))
-})
+#' @docType methods
+setGeneric("as.json", function(x, pretty = TRUE, ...)  standardGeneric("as.json"))
 
-#' @export
+#' @rdname as.json
+#' @aliases as.json,Cohort-method
 setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
   as.character(jsonlite::toJSON(toCirce(x), auto_unbox = TRUE, pretty = pretty, ...))
 })
