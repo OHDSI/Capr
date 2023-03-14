@@ -25,7 +25,6 @@ setValidity("conceptAttribute", function(object){
 
 # Console Print ---------------
 
-#' @aliases show,conceptAttribute-method
 setMethod("show", "conceptAttribute", function(object) {
 
   tbl <- tibble::tibble(
@@ -123,7 +122,7 @@ unit <- function(x) {
     conceptSet <- methods::new("Concept", concept_id = conceptId)
   } else if (is.numeric(x)) {
     conceptSet <- purrr::map(x, ~methods::new("Concept", concept_id = as.integer(.x)))
-  } else if (is(x, "ConceptSet")) {
+  } else if (methods::is(x, "ConceptSet")) {
     x <- as.data.frame(cs(1:3))$conceptId
     conceptSet <- purrr::map(x, ~methods::new("Concept", concept_id = as.integer(.x)))
   } else {
@@ -133,9 +132,10 @@ unit <- function(x) {
   # conceptSet <- as.list(as.data.frame(conceptSet)$conceptId)
   conceptSet <- as.list(conceptSet)
 
-  methods::new("conceptAttribute",
+  res <- methods::new("conceptAttribute",
       name = "unit",
       conceptSet = conceptSet)
+  return(res)
 }
 
 # Coercion ------------------

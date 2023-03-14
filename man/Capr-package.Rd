@@ -4,7 +4,7 @@
 \name{Capr-package}
 \alias{Capr}
 \alias{Capr-package}
-\title{Capr: Cohort definition Application Programming in R}
+\title{Capr: Cohort Definition Application Programming in R}
 \description{
 The Capr package provides a programming language for defining OHDSI cohort definitions in R. The functions in Capr allow for the programmatic creation of OHDSI concept sets and cohorts that can be serialized to Atlas/CIRCE-BE compatible json files or to OHDSI-SQL. Capr functions can be used to create, save, and load component parts to a cohort definition allowing R programmers to easily reuse cohort logic. Capr provides tools to create a large number of OHDSI cohorts programmatically while also helping bridge the gap between human readable descriptions of clinical phenotypes and their computational implmentation.
 }

@@ -117,17 +117,24 @@ drugExit <- function(conceptSet,
 
   persistenceWindow <- as.integer(persistenceWindow)
   surveillanceWindow <- as.integer(surveillanceWindow)
-  daysSupplyOverride <- as.integer(daysSupplyOverride)
+
+  if (is.null(daysSupplyOverride)) {
+    daysSupplyOverride <- NA_integer_
+  } else {
+    daysSupplyOverride <- as.integer(daysSupplyOverride)
+  }
+
 
   if(is.null(daysSupplyOverride)) {
     daysSupplyOverride <- NA_integer_
   }
 
-  methods::new("DrugExposureExit",
+  ee <- methods::new("DrugExposureExit",
       conceptSet = conceptSet,
       persistenceWindow = persistenceWindow,
       surveillanceWindow = surveillanceWindow,
       daysSupplyOverride = daysSupplyOverride)
+  return(ee)
 }
 
 #' Function to create an exit based on exit based on the end of a continuous drug exposure
@@ -138,9 +145,10 @@ fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
 
   index <- checkmate::matchArg(index, c("startDate", "endDate"))
 
-  methods::new("FixedDurationExit",
+  ee <- methods::new("FixedDurationExit",
       index = index,
       offsetDays = offsetDays)
+  return(ee)
 }
 
 # Deprecate endStrategy general function
@@ -173,8 +181,9 @@ fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
 #' @export
 censoringEvents <- function(...) {
   dots <- list(...)
-  methods::new("CensoringCriteria",
+  ee <- methods::new("CensoringCriteria",
       criteria = dots)
+  return(ee)
 }
 
 
@@ -194,8 +203,10 @@ setMethod("as.list", "ObservationExit", function(x) {
 ## Coerce Fixed Duration Exit -------
 setMethod("as.list", "FixedDurationExit", function(x) {
   ll <- list(
-    'DateField' = toPascal(x@index),
-    'Offset' = x@offsetDays
+    'DateOffset' = list(
+      'DateField' = toPascal(x@index),
+      'Offset' = x@offsetDays
+    )
   )
   return(ll)
 })
@@ -210,6 +221,7 @@ setMethod("as.list", "DrugExposureExit", function(x) {
     'DaysSupplyOverride' = x@daysSupplyOverride
   ) %>%
     purrr::discard(is.na)
+  ll <- list('CustomEra' = ll)
   return(ll)
 })
 

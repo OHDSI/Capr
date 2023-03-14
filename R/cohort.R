@@ -193,12 +193,16 @@ cohort <- function(entry,
     cd@attrition <- attrition
   }
 
-  if (!is.null(exit)) {
+  if (is.null(exit)) {
     cd@exit <- methods::new("CohortExit")
+  } else{
+    cd@exit <- exit
   }
 
-  if (!is.null(era)) {
+  if (is.null(era)) {
     cd@era <- methods::new("CohortEra")
+  } else{
+    cd@era <- era
   }
 
   return(cd)
@@ -359,21 +363,22 @@ toCirce <- function(cd) {
 # })
 
 #' Coerce Capr object to json
-#'
+#' @param x the capr object
+#' @param pretty a toggle to make the json look nice, part of jsonlite
+#' @param ... additional arguments passes to jsonlite::toJSON
 #' @export
-setGeneric("as.json", function(x, pretty = TRUE, ...) {
-  # TODO Question: what should this generic implementation be?
-  as.character(jsonlite::toJSON(as.list(x), auto_unbox = TRUE, pretty = pretty, ...))
-})
+#' @docType methods
+setGeneric("as.json", function(x, pretty = TRUE, ...)  standardGeneric("as.json"))
 
-#' @export
+#' @rdname as.json
+#' @aliases as.json,Cohort-method
 setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
   as.character(jsonlite::toJSON(toCirce(x), auto_unbox = TRUE, pretty = pretty, ...))
 })
 
 setMethod("show", "Cohort", function(object) {
   # TODO make this pretty on the console
-  str(object, max.level = 2)
+  utils::str(object, max.level = 2)
 })
 
 #' Write Cohort json file

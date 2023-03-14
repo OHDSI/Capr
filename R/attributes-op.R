@@ -21,7 +21,6 @@ setClass("opAttributeNumeric",
            extent = NA_real_
          ))
 
-#' @aliases show,opAttributeNumeric-method
 setMethod("show", "opAttributeNumeric", function(object) {
   symbol <- opToPrint(object@op)
   if (symbol == "-") {
@@ -60,7 +59,6 @@ setClass("opAttributeInteger",
          ))
 
 
-#' @aliases show,opAttributeInteger-method
 setMethod("show", "opAttributeInteger", function(object) {
   symbol <- opToPrint(object@op)
   if (symbol == "-") {
@@ -98,7 +96,6 @@ setClass("opAttributeDate",
          ))
 
 
-#' @aliases show,opAttributeDate-method
 setMethod("show", "opAttributeDate", function(object) {
   symbol <- opToPrint(object@op)
   if (symbol == "-") {
@@ -117,11 +114,11 @@ setMethod("show", "opAttributeDate", function(object) {
 
 opToPrint <- function(x) {
   tibble::tibble(
-    symbol = c("<", "<=", ">", ">=", "==", "-", "!-"),
-    op = c("lt", "lte", "gt", "gte", "eq", "bt", "!bt")
+    'symbol' = c("<", "<=", ">", ">=", "==", "-", "!-"),
+    'op' = c("lt", "lte", "gt", "gte", "eq", "bt", "!bt")
     ) %>%
-    dplyr::filter(op == x) %>%
-    dplyr::pull(symbol)
+    dplyr::filter(.data$op == x) %>%
+    dplyr::pull(.data$symbol)
 }
 
 ## lt --------
@@ -521,8 +518,8 @@ startDate <- function(op) {
   methods::new("opAttributeDate",
       name = "StartDate",
       op = op@op,
-      value = lubridate::as_date(op@value),
-      extent = lubridate::as_date(op@extent))
+      value = op@value,
+      extent = op@extent)
 }
 
 #' Function that creates a end date attribute
@@ -539,8 +536,8 @@ endDate <- function(op) {
   methods::new("opAttributeDate",
       name = "EndDate",
       op = op@op,
-      value = lubridate::as_date(op@value),
-      extent = lubridate::as_date(op@extent))
+      value = op@value,
+      extent = op@extent)
 }
 
 # Coercion ------------

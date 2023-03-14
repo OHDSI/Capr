@@ -81,18 +81,19 @@ exactly <- function(x,
                     query,
                     aperture = duringInterval(eventStarts(-Inf, Inf))) {
 
-  if (is(aperture, "EventWindow")) {
+  if (methods::is(aperture, "EventWindow")) {
     aperture <- duringInterval(aperture)
   }
 
-  occurrence <- new("Occurrence",
+  occurrence <- methods::new("Occurrence",
       type = "exactly",
       count = as.integer(x))
 
-  new("Criteria",
+  res <- methods::new("Criteria",
       occurrence = occurrence,
       query = query,
       aperture = aperture)
+  return(res)
 }
 
 #' Function to enumerate an minimal count of occurrences
@@ -105,18 +106,19 @@ atLeast <- function(x,
                     query,
                     aperture = duringInterval(eventStarts(-Inf, Inf))) {
 
-  if (is(aperture, "EventWindow")) {
+  if (methods::is(aperture, "EventWindow")) {
     aperture <- duringInterval(aperture)
   }
 
-  occurrence <- new("Occurrence",
+  occurrence <- methods::new("Occurrence",
       type = "atLeast",
       count = as.integer(x))
 
-  new("Criteria",
+  res <- methods::new("Criteria",
       occurrence = occurrence,
       query = query,
       aperture = aperture)
+  return(res)
 }
 
 #' Function to enumerate a maximum count of occurrences
@@ -129,18 +131,19 @@ atMost <- function(x,
                    query,
                    aperture = duringInterval(eventStarts(-Inf, Inf))) {
 
-  if (is(aperture, "EventWindow")) {
+  if (methods::is(aperture, "EventWindow")) {
     aperture <- duringInterval(aperture)
   }
 
-  occurrence <- new("Occurrence",
+  occurrence <- methods::new("Occurrence",
       type = "atMost",
       count = as.integer(x))
 
-  new("Criteria",
+  res <- methods::new("Criteria",
       occurrence = occurrence,
       query = query,
       aperture = aperture)
+  return(res)
 }
 
 ## Group -------
@@ -150,11 +153,12 @@ atMost <- function(x,
 #' @export
 withAll <- function(...){
   items <- list(...)
-  new("Group",
-      occurrence = new("Occurrence", type = "all"),
-      criteria = purrr::discard(items, is.Group),
-      group = purrr::keep(items, is.Group)
-      )
+  res <- methods::new("Group",
+                      occurrence = methods::new("Occurrence", type = "all"),
+                      criteria = purrr::discard(items, is.Group),
+                      group = purrr::keep(items, is.Group)
+  )
+  return(res)
 }
 
 #' Function to construct a group where any criteria and groups may be satisfied
@@ -162,11 +166,12 @@ withAll <- function(...){
 #' @export
 withAny <- function(...){
   items <- list(...)
-  new("Group",
-      occurrence = new("Occurrence", type = "any"),
-      criteria = purrr::discard(items, is.Group),
-      group = purrr::keep(items, is.Group)
+  res <- methods::new("Group",
+                      occurrence = methods::new("Occurrence", type = "any"),
+                      criteria = purrr::discard(items, is.Group),
+                      group = purrr::keep(items, is.Group)
   )
+  return(res)
 }
 
 #' Function to construct a group where at least some of the criteria or groups must be satisfied
@@ -175,11 +180,12 @@ withAny <- function(...){
 #' @export
 withAtLeast <- function(x, ...){
   items <- list(...)
-  new("Group",
-      occurrence = new("Occurrence", type = "atLeast", count = as.integer(x)),
-      criteria = purrr::discard(items, is.Group),
-      group = purrr::keep(items, is.Group)
+  res <- methods::new("Group",
+                     occurrence = methods::new("Occurrence", type = "atLeast", count = as.integer(x)),
+                     criteria = purrr::discard(items, is.Group),
+                     group = purrr::keep(items, is.Group)
   )
+  return(res)
 }
 #' Function to construct a group where at most some of the criteria or groups must be satisfied
 #' @param x an integer specifying the number of criteria or groups that must be satisfied
@@ -187,11 +193,12 @@ withAtLeast <- function(x, ...){
 #' @export
 withAtMost <- function(x, ...){
   items <- list(...)
-  new("Group",
-      occurrence = new("Occurrence", type = "atMost", count = as.integer(x)),
+  res <- methods::new("Group",
+      occurrence = methods::new("Occurrence", type = "atMost", count = as.integer(x)),
       criteria = purrr::discard(items, is.Group),
       group = purrr::keep(items, is.Group)
   )
+  return(res)
 }
 
 # Coercion ----------------

@@ -12,7 +12,11 @@ setClass("logicAttribute",
            name = NA_character_
          ))
 # Constructors -----------
+#' Add first occurrence attribute
+#' @return An attribute that can be used in a query function
+#' @export
 firstOccurrence <- function() {
-  new("logicAttribute",
+  res <- methods::new("logicAttribute",
       name = "First")
+  return(res)
 }

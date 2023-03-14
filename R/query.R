@@ -93,11 +93,11 @@ query <- function(domain, conceptSet = NULL, ...) {
   atb <- list(...)
 
   if (is.null(conceptSet)) {
-    query <- new("Query",
+    query <- methods::new("Query",
                  domain = domain,
                  attributes = atb)
   } else {
-    query <- new("Query",
+    query <- methods::new("Query",
                  domain = domain,
                  conceptSet = conceptSet,
                  attributes = atb)

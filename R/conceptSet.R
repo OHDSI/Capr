@@ -8,7 +8,7 @@
 #' @slot concept_id the OMOP/OHDSI concept ID
 #' @slot concept_name the name of the concept
 #' @slot standard_concept whether the concept is standard 'S', classification 'C', or  non-standard NA
-#' @slot standrad_concept_caption Whether the concept is standard full phrase
+#' @slot standard_concept_caption Whether the concept is standard full phrase
 #' @slot invalid_reason Whether the concept is invalid single letter
 #' @slot invalid_reason_caption whether the concept is invalid standard phrase
 #' @slot concept_code The original code of the concept from its vocabulary
@@ -46,10 +46,10 @@ setValidity("Concept", function(object) {
   TRUE
 })
 
-#' @aliases show,Concept-method
+
 setMethod("show", "Concept", function(object) {
   nm <- methods::slotNames(methods::is(object))
-  concept <- unname(sapply(nm, slot, object = object))
+  concept <- unname(sapply(nm, methods::slot, object = object))
   cid <- paste("conceptId:", concept[1])
   cname <- paste("conceptName:", concept[2])
   cstd <- paste("standardConcept:", concept[3])
@@ -91,8 +91,6 @@ setValidity("ConceptSetItem", function(object) {
 
 # print a checkmark
 # stringi::stri_unescape_unicode("\\u2714")
-#' @aliases show,ConceptSetItem-method
-#' @export
 setMethod("show", "ConceptSetItem", function(object) {
   id <- object@Concept@concept_id
   exc <- ifelse(object@isExcluded, "-", "")
@@ -126,7 +124,6 @@ setValidity("ConceptSet", function(object) {
   TRUE
 })
 
-#' @aliases show,ConceptSet-method
 setMethod("show", "ConceptSet", function(object) {
   cli::cat_rule(paste("<Capr Concept Set>", object@Name))
   print(as.data.frame(object))
@@ -164,11 +161,12 @@ newConcept <- function(id,
                  vocabulary_id = vocabularyId,
                  concept_class_id = conceptClassId)
 
-  new("ConceptSetItem",
+  res <- methods::new("ConceptSetItem",
       Concept = concept,
       isExcluded = isExcluded,
       includeDescendants = includeDescendants,
       includeMapped = includeMapped)
+  return(res)
 }
 
 
@@ -324,7 +322,7 @@ setMethod("as.data.frame", "ConceptSet", function(x) {
 
 setMethod("as.list", "Concept", function(x){
   nm <- methods::slotNames(methods::is(x))
-  concept <- lapply(nm, slot, object = x)
+  concept <- lapply(nm, methods::slot, object = x)
   # Convert NA_character to empty string
   concept <- lapply(concept, function(.) ifelse(is.character(.) && is.na(.), "", .))
   names(concept) <- toupper(nm)
@@ -536,32 +534,44 @@ getConceptSetDetails <- function(x,
     tibble::tibble() %>%
     dplyr::rename_all(tolower) %>%
     # TODO what is the logic is for filling in the caption and invalid_reason fields?
-    dplyr::mutate(invalid_reason = ifelse(is.na(invalid_reason), "V", invalid_reason)) %>%
+    dplyr::mutate(invalid_reason = ifelse(
+      is.na(.data$invalid_reason), "V", .data$invalid_reason)
+      ) %>%
     dplyr::mutate(
-      standard_concept_caption = case_when(
+      standard_concept_caption = dplyr::case_when(
         standard_concept == "S" ~ "Standard",
         standard_concept == "" ~ "Non-Standard",
         standard_concept == "C" ~ "Classification",
         TRUE ~ "")) %>%
-    dplyr::mutate(invalid_reason_caption = case_when(
+    dplyr::mutate(invalid_reason_caption = dplyr::case_when(
         invalid_reason == "V" ~ "Valid",
         invalid_reason == "I" ~ "Invalid",
         TRUE ~ "")
     )
 
+  checkSlotNames <- methods::slotNames("Concept")[-1]
+
   for (i in seq_along(x@Expression)) {
     id <- x@Expression[[i]]@Concept@concept_id
-    for (n in methods::slotNames("Concept")[-1]) {
-      dtl <- dplyr::filter(df, .data$concept_id == .env$id) %>% dplyr::pull(!!n)
-      if (length(dtl > 0)) slot(x@Expression[[i]]@Concept, n) <- dtl
+    for (n in checkSlotNames) {
+      dtl <- dplyr::filter(df, .data$concept_id == id) %>%
+        dplyr::pull(!!n)
+      if (length(dtl > 0)) {
+        methods::slot(x@Expression[[i]]@Concept, n) <- dtl
+      }
     }
   }
   return(x)
 }
 
-
+#' FUnction checks if two concept set class objects are equivalent
+#' @name ==
+#' @param e1,e2 a ConceptSet Class object
+#' @aliases ==,ConceptSet,ConceptSet-method
+#' @docType methods
+#' @rdname equals-methods
 #' @export
-setMethod("==", signature("ConceptSet", "ConceptSet"), function(e1, e2) {
+setMethod("==", signature = c(e1 = "ConceptSet", e2 = "ConceptSet"), function(e1, e2) {
   isTRUE(dplyr::all_equal(as.data.frame(e1),
                           as.data.frame(e2),
                           ignore_row_order = TRUE))
@@ -571,7 +581,7 @@ setMethod("==", signature("ConceptSet", "ConceptSet"), function(e1, e2) {
 
 # TODO convert this to vctrs. use generic.
 uniqueConceptSets <- function(x) {
-  stopifnot(is.list(x), all(purrr::map_lgl(x, ~is(., "ConceptSet"))))
+  stopifnot(is.list(x), all(purrr::map_lgl(x, ~methods::is(., "ConceptSet"))))
   # Is there an efficient implementation using just equality? Seems like maybe not?
   l <- list()
   for (i in x) {

@@ -12,3 +12,5 @@
 #' @param rhs A function call using the magrittr semantics.
 #' @return The result of calling `rhs(lhs)`.
 NULL
+
+utils::globalVariables(".") # so we can use `.` in dplyr pipelines.
