@@ -1,51 +1,35 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # Capr
+
+Capr is part of [HADES](https://ohdsi.github.io/Hades/)
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/Capr)](https://CRAN.R-project.org/package=Capr)
-[![codecov.io](https://codecov.io/github/OdyOSG/Capr/coverage.svg?branch=main)](https://codecov.io/github/OdyOSG/Capr?branch=main)
-[![Build
-Status](https://github.com/OdyOSG/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OdyOsg/Capr/actions?query=workflow%3AR-CMD-check)
+[![CRAN status](https://www.r-pkg.org/badges/version/Capr)](https://CRAN.R-project.org/package=Capr) [![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/Capr?branch=main) [![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/Capr/actions?query=workflow%3AR-CMD-check)
 
 <!-- badges: end -->
 
-The goal of Capr is to provide a language for expressing OHDSI Cohort
-definitions in R code. OHDSI defines a cohort as “a set of persons who
-satisfy one or more inclusion criteria for a duration of time” and
-provides a standardized approach for defining them (Circe-be). Capr
-exposes the standardized approach to cohort building through a
-programmatic interface in R which is particularly helpful when creating
-a large number of similar cohorts. Capr version 2 introduces a new user
-interface designed for readability with the goal that Capr code being a
-human readable description of a cohort while also being executable on an
-OMOP Common Data Model.
+# Introduction
 
-Learn more about the OHDSI approach to cohort building in the [cohorts
-chapter of the Book of
-OHDSI.](https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html)
+The goal of Capr is to provide a language for expressing OHDSI Cohort definitions in R code. OHDSI defines a cohort as "a set of persons who satisfy one or more inclusion criteria for a duration of time" and provides a standardized approach for defining them (Circe-be). Capr exposes the standardized approach to cohort building through a programmatic interface in R which is particularly helpful when creating a large number of similar cohorts. Capr version 2 introduces a new user interface designed for readability with the goal that Capr code being a human readable description of a cohort while also being executable on an OMOP Common Data Model.
 
-## Installation
+Learn more about the OHDSI approach to cohort building in the [cohorts chapter of the Book of OHDSI.](https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html)
 
-Capr will be on CRAN for now you can install the current development
-version of Capr from [GitHub](https://github.com/) with:
+# Installation
+
+In the future, Capr will be avaiable on CRAN. For now you can install the current development version of Capr from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("OdyOSG/Capr")
+devtools::install_github("ohdsi/Capr")
 ```
 
-## Example
+# How to Use
 
-Capr uses many defaults that match the defaults in Atlas. Creating a
-simple cohort is a single line of code. As an example we will define a
-cohort of new users of diclofenac described in the [Book of
-OHDSI.](https://ohdsi.github.io/TheBookOfOhdsi/SuggestedAnswers.html#Cohortsanswers)
+## Examples
 
-- New users of diclofenac
+Capr uses many defaults that match the defaults in Atlas. Creating a simple cohort is a single line of code. As an example we will define a cohort of new users of diclofenac described in the [Book of OHDSI.](https://ohdsi.github.io/TheBookOfOhdsi/SuggestedAnswers.html#Cohortsanswers)
+
+### Simple diclofenac cohort
 
 ``` r
 library(Capr)
@@ -53,7 +37,9 @@ library(Capr)
 # Define concepts sets with cs()
 diclofenac <- cs(descendants(1124300))
 
-ch <- cohort(drugEra(diclofenac))
+ch <- cohort(
+  entry = drugEra(diclofenac)
+)
 
 ch
 #> Formal class 'Cohort' [package "Capr"] with 4 slots
@@ -63,16 +49,13 @@ ch
 #>   ..@ era      :Formal class 'CohortEra' [package "Capr"] with 3 slots
 ```
 
-This is a valid OHDSI cohort definition where persons enter at their
-first drug era record of diclofenac and exit at the end of their
-observation time.
+### Adding more complexity
 
-- Ages 16 or older
+We can make more complex cohorts by adding a window of continuous observation and a custom cohort exit. The following information was added to the diclofenac cohort:
 
-- With at least 365 days of continuous observation prior to exposure
-
-- With cohort exit defined as discontinuation of exposure (allowing for
-  a 30-day gap)
+-   Ages 16 or older
+-   With at least 365 days of continuous observation prior to exposure
+-   With cohort exit defined as discontinuation of exposure (allowing for a 30-day gap)
 
 ``` r
 diclofenac <- cs(descendants(1124300))
@@ -91,10 +74,12 @@ ch
 #>   ..@ era      :Formal class 'CohortEra' [package "Capr"] with 3 slots
 ```
 
-- Without prior exposure to any NSAID (Non-Steroidal Anti-Inflammatory
-  Drug)
+### Adding cohort attrition
 
-- Without prior diagnosis of cancer
+Users can also add attrition to the cohort by specifying inclusion and exclusion criteria to modify the cohort entry. The following exclusion criteria were added to the diclofenac cohort:
+
+-   Without prior exposure to any NSAID (Non-Steroidal Anti-Inflammatory Drug)
+-   Without prior diagnosis of cancer
 
 ``` r
 diclofenac <- cs(descendants(1124300), name = "diclofenac")
@@ -121,8 +106,7 @@ ch
 
 ## Save cohort as JSON
 
-OHDSI standard cohorts are represented as json files and can be copy and
-pasted into Atlas.
+OHDSI standard cohorts are represented as json files and can be copy and pasted into Atlas.
 
 ``` r
 
@@ -140,15 +124,11 @@ cat(substr(readr::read_file(path), 1, 100))
 #> 
 ```
 
-## Fill in missing concept set details
+### Fill in missing concept set details
 
-When saving cohorts it is helpful to fill in the concept details. This
-requires a live connection to an OMOP CDM database that includes the
-vocabularies used in the cohort definition.
+Users can build valid cohorts with minimal concept information, only supplying a concept id and name. The example below shows the minimal concept set input for Capr.
 
 ``` r
-
-con <- DatabaseConnector::connect(Eunomia::getEunomiaConnectionDetails())
 
 diclofenac <- cs(descendants(1124300), name = "diclofenac")
 
@@ -180,8 +160,10 @@ cat(as.json(diclofenac))
 #> }
 ```
 
-``` r
+However, when saving cohorts it is helpful to fill in the concept details. This requires a live connection to an OMOP CDM database that includes the vocabularies used in the cohort definition.
 
+``` r
+con <- DatabaseConnector::connect(Eunomia::getEunomiaConnectionDetails())
 diclofenac <- getConceptSetDetails(diclofenac, con, vocabularyDatabaseSchema = "main")
 cat(as.json(diclofenac))
 #> {
@@ -211,32 +193,13 @@ cat(as.json(diclofenac))
 #> }
 ```
 
-## Get Parameterized Cohort Generation SQL
+### Generating Capr Cohorts
 
-``` r
- sql <- CirceR::cohortExpressionFromJson(as.json(ch)) %>%
-    CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
+Once a Capr cohort has been constructed, the user can generate this cohort definition on an OMOP CDM connection. It is suggested to use [CohortGenerator](https://github.com/OHDSI/CohortGenerator) and [CirceR](https://github.com/OHDSI/CirceR) to generate Capr cohorts on a database.
 
- cat(substr(sql, 1, 220))
-#> CREATE TABLE #Codesets (
-#>   codeset_id int NOT NULL,
-#>   concept_id bigint NOT NULL
-#> )
-#> ;
-#> 
-#> INSERT INTO #Codesets (codeset_id, concept_id)
-#> SELECT 0 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
-#> ( 
-```
+## Building Capr Templates
 
-## 
-
-## Create cohort ‘templates’
-
-A Capr cohort template is a function that always returns a Capr cohort.
-It can accept arguments that can be used to parameterize any part of a
-cohort definition. Capr cohort templates are the recommended approach
-for building large numbers of similar cohorts in R.
+A Capr cohort template is a function that always returns a Capr cohort. It can accept arguments that can be used to parameterize any part of a cohort definition. Capr cohort templates are the recommended approach for building large numbers of similar cohorts in R.
 
 ``` r
 
@@ -280,9 +243,36 @@ df
 #> # … with 81 more rows
 ```
 
-The capr_cohort column of the dataframe is a list of Capr cohort object.
-The cohort_json column contains the json specifications for each cohort.
+The capr_cohort column of the dataframe is a list of Capr cohort object. The cohort_json column contains the json specifications for each cohort.
 
 ``` r
 DatabaseConnector::disconnect(con)
 ```
+
+# User Documentation
+
+Documentation can be found on the [package website](https://ohdsi.github.io/Capr).
+
+PDF versions of the documentation are also available: \* Vignette: [Using Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Using-Capr.pdf) \* Vignette: [Examples](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Examples.pdf) \* [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
+
+# Support
+
+-   Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a>
+-   We use the <a href="https://github.com/OHDSI/Capr/issues">GitHub issue tracker</a> for all bugs/issues/enhancements
+
+# Contributing
+
+Read [here](https://ohdsi.github.io/Hades/contribute.html) how you can contribute to this package.
+
+# License
+
+Capr is licensed under Apache License 2.0
+
+# Development
+
+Capr is being developed in R Studio.
+
+# Acknowledgements
+
+-   This package is maintained by Martin Lavallee and Adam Black
+-   Guidance and support for the original development of Capr came from Lee Evans and LTS Computing LLC
