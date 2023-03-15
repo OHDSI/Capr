@@ -5,5 +5,4 @@ errorReportSql.txt
 *.log
 /Meta/
 work/*
-inst/doc
 scratch/
