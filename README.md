@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 
-[![CRAN status](https://www.r-pkg.org/badges/version/Capr)](https://CRAN.R-project.org/package=Capr) [![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/Capr?branch=main) [![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/Capr/actions?query=workflow%3AR-CMD-check)
+[![CRAN status](https://www.r-pkg.org/badges/version/Capr)](https://CRAN.R-project.org/package=Capr) [![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main)](https://app.codecov.io/gh/OHDSI/Capr?branch=main) [![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/Capr/actions?query=workflow%3AR-CMD-check)
 
 <!-- badges: end -->
 
