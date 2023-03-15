@@ -1,8 +1,8 @@
-# Capr <a href="https://ohdsi.github.io/Capr"><img src="man/figures/logo.png" align="right" height="90"/></a>
+# Capr <a href="https://ohdsi.github.io/Capr/"><img src="man/figures/logo.png" align="right" height="90"/></a>
 
 <!-- badges: start -->
 
-[![CRAN status](https://www.r-pkg.org/badges/version/Capr)](https://CRAN.R-project.org/package=Capr) [![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main)](https://app.codecov.io/gh/OHDSI/Capr?branch=main) [![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/Capr/actions?query=workflow%3AR-CMD-check)
+[![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main)](https://app.codecov.io/gh/OHDSI/Capr?branch=main) [![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/Capr/actions?query=workflow%3AR-CMD-check)
 
 <!-- badges: end -->
 
@@ -16,7 +16,14 @@ Learn more about the OHDSI approach to cohort building in the [cohorts chapter o
 
 # Installation
 
-In the future, Capr will be avaiable on CRAN. For now you can install the current development version of Capr from [GitHub](https://github.com/) with:
+Capr can be installed via:
+
+``` r
+# install.packages("Capr")
+```
+
+
+Users can install the current development version of Capr from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -251,7 +258,7 @@ DatabaseConnector::disconnect(con)
 
 # User Documentation
 
-Documentation can be found on the [package website](https://ohdsi.github.io/Capr).
+Documentation can be found on the [package website](https://ohdsi.github.io/Capr/).
 
 -   Vignette: [Using Capr](https://ohdsi.github.io/Capr/articles/Using-Capr.html)
 -   Vignette: [Examples](https://ohdsi.github.io/Capr/articles/Examples.html)
