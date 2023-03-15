@@ -1,6 +1,6 @@
 # @file PackageMaintenance
 #
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -32,31 +32,29 @@ unlink("extras/Capr.pdf")
 # for windows
 shell('R CMD Rd2pdf ./ --output=extras/Capr.pdf')
 
-# Capr_tutorial vignette
+# Capr design
 dir.create(path = "./inst/doc/", showWarnings = FALSE)
-rmarkdown::render("vignettes/CAPR_tutorial.Rmd",
-                  output_file = "../inst/doc/CAPR_tutorial.pdf",
+rmarkdown::render("vignettes/capr_design.Rmd",
+                  output_file = "../inst/doc/capr_design.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
   toc = TRUE, number_sections = TRUE))
-unlink("inst/doc/CAPR_tutorial.tex")
+unlink("inst/doc/capr_design.tex")
 
 
-# complex-cohort-example
+# Examples
 dir.create(path = "./inst/doc/", showWarnings = FALSE)
-rmarkdown::render("vignettes/complex-cohort-example.Rmd",
-                  output_file = "../inst/doc/complex-cohort-example.pdf",
-
+rmarkdown::render("vignettes/Examples.Rmd",
+                  output_file = "../inst/doc/Examples.pdf",
   rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
-unlink("inst/doc/complex-cohort-example.tex")
+unlink("inst/doc/Examples.tex")
 
 
-# complex-cohort-example
+# Using Capr
 dir.create(path = "./inst/doc/", showWarnings = FALSE)
-rmarkdown::render("vignettes/Capr_Attributes_Extended.Rmd",
-                  output_file = "../inst/doc/Capr_Attributes_Extended.pdf",
-
+rmarkdown::render("vignettes/Using-Capr.Rmd",
+                  output_file = "../inst/doc/Using-Capr.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
-unlink("inst/doc/Capr_Attributes_Extended.tex")
+unlink("inst/doc/Using-Capr.tex")
 
 # build site
 pkgdown::build_site()

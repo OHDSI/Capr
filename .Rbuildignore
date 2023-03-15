@@ -12,3 +12,4 @@ compare_versions
 ^scratch$
 ^work$
 ^README\.Rmd$
+^pkgdown$
