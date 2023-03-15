@@ -28,7 +28,7 @@ setValidity("conceptAttribute", function(object){
 setMethod("show", "conceptAttribute", function(object) {
 
   tbl <- tibble::tibble(
-    concept_id = purrr::map_int(object@conceptSet, ~as.character(.x@concept_id)),
+    concept_id = purrr::map_int(object@conceptSet, ~as.integer(.x@concept_id)),
     concept_name = purrr::map_chr(object@conceptSet, ~as.character(.x@concept_name)),
     concept_code = purrr::map_chr(object@conceptSet, ~as.character(.x@concept_code)),
     domain_id = purrr::map_chr(object@conceptSet, ~as.character(.x@domain_id)),
@@ -103,6 +103,12 @@ female <- function() {
 #' @param x A single character idetifier for a unit or a concept set that identifies units
 #' @return An attribute that can be used in a query function
 #' @export
+#' @examples
+#' \dontrun{
+#' # create a unit attribute
+#' unit(8713L)
+#' unit("%")
+#' }
 unit <- function(x) {
   if (missing(x)) {
     rlang::abort("Unit must be specified")
@@ -119,7 +125,10 @@ unit <- function(x) {
       "millimole per mole" = 9579,
       rlang::abort(paste(x, "is not a recogized unit identifier")))
 
-    conceptSet <- methods::new("Concept", concept_id = conceptId)
+    conceptSet <- list(
+      methods::new("Concept", concept_id = as.integer(conceptId),
+                               concept_name = x)
+      )
   } else if (is.numeric(x)) {
     conceptSet <- purrr::map(x, ~methods::new("Concept", concept_id = as.integer(.x)))
   } else if (methods::is(x, "ConceptSet")) {
@@ -130,7 +139,7 @@ unit <- function(x) {
   }
 
   # conceptSet <- as.list(as.data.frame(conceptSet)$conceptId)
-  conceptSet <- as.list(conceptSet)
+  #conceptSet <- as.list(conceptSet)
 
   res <- methods::new("conceptAttribute",
       name = "unit",
