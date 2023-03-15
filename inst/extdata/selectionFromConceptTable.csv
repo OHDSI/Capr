@@ -1,0 +1,2 @@
+concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason
+35208414,"Gastrointestinal hemorrhage, unspecified",Condition,ICD10CM,4-char billing code,NA,K92.2,2007-01-01,2099-12-31,NA

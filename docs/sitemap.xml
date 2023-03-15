@@ -7,13 +7,22 @@
     <loc>/articles/Capr_Attributes_Extended.html</loc>
   </url>
   <url>
+    <loc>/articles/capr_design.html</loc>
+  </url>
+  <url>
     <loc>/articles/CAPR_tutorial.html</loc>
   </url>
   <url>
     <loc>/articles/complex-cohort-example.html</loc>
   </url>
   <url>
+    <loc>/articles/Examples.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/Using-Capr.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -29,6 +38,9 @@
   </url>
   <url>
     <loc>/reference/addAttributeToQuery.html</loc>
+  </url>
+  <url>
+    <loc>/reference/age.html</loc>
   </url>
   <url>
     <loc>/reference/as.AttributeLoad.html</loc>
@@ -58,6 +70,9 @@
     <loc>/reference/as.CountLoad.html</loc>
   </url>
   <url>
+    <loc>/reference/as.data.frame-ConceptSet-method.html</loc>
+  </url>
+  <url>
     <loc>/reference/as.EndStrategyLoad.html</loc>
   </url>
   <url>
@@ -65,6 +80,9 @@
   </url>
   <url>
     <loc>/reference/as.GroupLoad.html</loc>
+  </url>
+  <url>
+    <loc>/reference/as.json.html</loc>
   </url>
   <url>
     <loc>/reference/as.Limit.html</loc>
@@ -88,7 +106,28 @@
     <loc>/reference/as.Window.html</loc>
   </url>
   <url>
+    <loc>/reference/atLeast.html</loc>
+  </url>
+  <url>
+    <loc>/reference/atMost.html</loc>
+  </url>
+  <url>
+    <loc>/reference/attributes.html</loc>
+  </url>
+  <url>
+    <loc>/reference/attrition.html</loc>
+  </url>
+  <url>
+    <loc>/reference/bt.html</loc>
+  </url>
+  <url>
     <loc>/reference/Capr-package.html</loc>
+  </url>
+  <url>
+    <loc>/reference/CensoringCriteria-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/censoringEvents.html</loc>
   </url>
   <url>
     <loc>/reference/CensorWindow-class.html</loc>
@@ -98,6 +137,9 @@
   </url>
   <url>
     <loc>/reference/checkConceptIds.html</loc>
+  </url>
+  <url>
+    <loc>/reference/cohort.html</loc>
   </url>
   <url>
     <loc>/reference/CohortDefinition-class.html</loc>
@@ -127,10 +169,22 @@
     <loc>/reference/ConceptAttribute-class.html</loc>
   </url>
   <url>
+    <loc>/reference/ConceptSet-class.html</loc>
+  </url>
+  <url>
     <loc>/reference/ConceptSetExpression-class.html</loc>
   </url>
   <url>
     <loc>/reference/ConceptSetItem-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/condition.html</loc>
+  </url>
+  <url>
+    <loc>/reference/conditionEra.html</loc>
+  </url>
+  <url>
+    <loc>/reference/continuousObservation.html</loc>
   </url>
   <url>
     <loc>/reference/convertAdditionalCriteriaToCIRCE.html</loc>
@@ -439,6 +493,9 @@
     <loc>/reference/createValueAsNumberAttribute.html</loc>
   </url>
   <url>
+    <loc>/reference/createVisitLengthAttribute.html</loc>
+  </url>
+  <url>
     <loc>/reference/createVisitOccurrence.html</loc>
   </url>
   <url>
@@ -457,10 +514,43 @@
     <loc>/reference/createWindowCall.html</loc>
   </url>
   <url>
+    <loc>/reference/Criteria-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/cs.html</loc>
+  </url>
+  <url>
     <loc>/reference/CustomEraEndStrategy-class.html</loc>
   </url>
   <url>
     <loc>/reference/DateOffsetEndStrategy-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/daysOfSupply.html</loc>
+  </url>
+  <url>
+    <loc>/reference/death.html</loc>
+  </url>
+  <url>
+    <loc>/reference/drug.html</loc>
+  </url>
+  <url>
+    <loc>/reference/drugEra.html</loc>
+  </url>
+  <url>
+    <loc>/reference/drugExit.html</loc>
+  </url>
+  <url>
+    <loc>/reference/DrugExposureExit-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/drugQuantity.html</loc>
+  </url>
+  <url>
+    <loc>/reference/drugRefills.html</loc>
+  </url>
+  <url>
+    <loc>/reference/duringInterval.html</loc>
   </url>
   <url>
     <loc>/reference/editConceptSetItem.html</loc>
@@ -499,13 +589,61 @@
     <loc>/reference/editWindow.html</loc>
   </url>
   <url>
+    <loc>/reference/endDate.html</loc>
+  </url>
+  <url>
     <loc>/reference/EndOfCtsObsEndStrategy-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Endpoint-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/entry.html</loc>
+  </url>
+  <url>
+    <loc>/reference/eq.html</loc>
+  </url>
+  <url>
+    <loc>/reference/equals-methods.html</loc>
+  </url>
+  <url>
+    <loc>/reference/era.html</loc>
+  </url>
+  <url>
+    <loc>/reference/EventAperture-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/eventEnds.html</loc>
+  </url>
+  <url>
+    <loc>/reference/eventStarts.html</loc>
+  </url>
+  <url>
+    <loc>/reference/EventWindow-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/exactly.html</loc>
+  </url>
+  <url>
+    <loc>/reference/exit.html</loc>
   </url>
   <url>
     <loc>/reference/ExpressionType-class.html</loc>
   </url>
   <url>
+    <loc>/reference/firstOccurrence.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FixedDurationExit-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fixedExit.html</loc>
+  </url>
+  <url>
     <loc>/reference/formatConceptTable.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generateCaprTemplate.html</loc>
   </url>
   <url>
     <loc>/reference/getACCall.html</loc>
@@ -529,6 +667,9 @@
     <loc>/reference/getConceptSetCall.html</loc>
   </url>
   <url>
+    <loc>/reference/getConceptSetDetails.html</loc>
+  </url>
+  <url>
     <loc>/reference/getConceptSetExpression-method.html</loc>
   </url>
   <url>
@@ -545,6 +686,12 @@
   </url>
   <url>
     <loc>/reference/Group-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/gt.html</loc>
+  </url>
+  <url>
+    <loc>/reference/gte.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
@@ -598,13 +745,49 @@
     <loc>/reference/lookupVocabulary.html</loc>
   </url>
   <url>
+    <loc>/reference/lt.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lte.html</loc>
+  </url>
+  <url>
     <loc>/reference/mapConceptToStandard.html</loc>
   </url>
   <url>
     <loc>/reference/mapOperator.html</loc>
   </url>
   <url>
+    <loc>/reference/measurement.html</loc>
+  </url>
+  <url>
     <loc>/reference/MetaData-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nbt.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nestedAttribute-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nestedWithAll.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nestedWithAny.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nestedWithAtLeast.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nestedWithAtMost.html</loc>
+  </url>
+  <url>
+    <loc>/reference/observation.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ObservationExit-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/observationExit.html</loc>
   </url>
   <url>
     <loc>/reference/ObservationWindow-class.html</loc>
@@ -616,13 +799,37 @@
     <loc>/reference/OpAttribute-class.html</loc>
   </url>
   <url>
+    <loc>/reference/opAttributeDate-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/opAttributeInteger-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/opAttributeNumeric-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pipe.html</loc>
+  </url>
+  <url>
     <loc>/reference/printCapr-method.html</loc>
   </url>
   <url>
     <loc>/reference/printComponent.html</loc>
   </url>
   <url>
+    <loc>/reference/procedure.html</loc>
+  </url>
+  <url>
     <loc>/reference/Query-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rangeHigh.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rangeLow.html</loc>
+  </url>
+  <url>
+    <loc>/reference/readConceptSet.html</loc>
   </url>
   <url>
     <loc>/reference/readInCirce.html</loc>
@@ -643,10 +850,19 @@
     <loc>/reference/SourceConceptAttribute-class.html</loc>
   </url>
   <url>
+    <loc>/reference/startDate.html</loc>
+  </url>
+  <url>
     <loc>/reference/Timeline-class.html</loc>
   </url>
   <url>
+    <loc>/reference/toCirce.html</loc>
+  </url>
+  <url>
     <loc>/reference/toggleConceptMapping.html</loc>
+  </url>
+  <url>
+    <loc>/reference/unit.html</loc>
   </url>
   <url>
     <loc>/reference/UpdateAndConvert.html</loc>
@@ -658,9 +874,33 @@
     <loc>/reference/UpdateCodesetIdRule.html</loc>
   </url>
   <url>
+    <loc>/reference/valueAsNumber.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visit.html</loc>
+  </url>
+  <url>
     <loc>/reference/Window-class.html</loc>
   </url>
   <url>
+    <loc>/reference/withAll.html</loc>
+  </url>
+  <url>
+    <loc>/reference/withAny.html</loc>
+  </url>
+  <url>
+    <loc>/reference/withAtLeast.html</loc>
+  </url>
+  <url>
+    <loc>/reference/withAtMost.html</loc>
+  </url>
+  <url>
     <loc>/reference/writeCaprCall.html</loc>
+  </url>
+  <url>
+    <loc>/reference/writeCohort.html</loc>
+  </url>
+  <url>
+    <loc>/reference/writeConceptSet.html</loc>
   </url>
 </urlset>

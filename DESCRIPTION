@@ -1,68 +1,63 @@
 Package: Capr
-Title: Cohort definition Application Programming in R
-Version: 1.0.3
-Authors@R: 
-    person(given = "Martin",
-           family = "Lavallee",
-           role = c("aut", "cre"),
-           email = "mdlavallee92@gmail.com")
-Description: The CAPR package develops cohort definitions to implement across an OMOP mapped dbms. This pacakge allows 
-    allows for the programmatic creation of OMOP cohorts that compile to the CIRCE-BE engine. CAPR utilizes s4 to construct
-    component parts to the cohort definition (i.e. Primary Criteria, Inclusion Rules, Additional Criteria, Censoring Criteria,
-    and End Strategy) and then packs them together into a Cohort Definition class. The Cohort Definition can be rendered into a 
-    CIRCE-BE object that will generate ohdsiSQL to query against an OMOP dbms. CAPR adds component parts to the OMOP cohort
-    definition in order to combine Concept Set Expressions with its definition logic in the same position, facilitating the 
-    transition between scientific description and computational implmentation. 
+Title: Cohort Definition Application Programming in R
+Version: 2.0.0
+Authors@R: c(
+    person("Martin", "Lavallee", , "mdlavallee92@gmail.com", role = c("aut", "cre")),
+    person("Adam", "Black", , "black@ohdsi.org", role = "aut")
+  )
+Description: The Capr package provides a programming language for defining OHDSI cohort definitions in R. 
+    The functions in Capr allow for the programmatic creation of OHDSI concept sets and cohorts that can be serialized 
+    to Atlas/CIRCE-BE compatible json files or to OHDSI-SQL. Capr functions can be used to create, save, and load 
+    component parts to a cohort definition allowing R programmers to easily reuse cohort logic. Capr provides tools
+    to create a large number of OHDSI cohorts programmatically while also helping bridge the gap between human readable
+    descriptions of clinical phenotypes and their computational implmentation. 
 License: Apache License 2.0
 URL: https://ohdsi.github.io/Capr, https://github.com/OHDSI/Capr
 BugReports: https://github.com/OHDSI/Capr/issues
 Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Depends: 
   R (>= 3.5.0),
-  CirceR (>= 1.0.0),
-  DatabaseConnector (>= 2.4.2),
-  magrittr (>= 1.5.0)
 Imports: 
+  magrittr (>= 1.5.0),
   jsonlite,
-  RJSONIO,
   methods,
   purrr,
   rlang,
-  uuid,
-  SqlRender,
   dplyr,
   checkmate,
   tibble,
-  withr,
   readr,
-  utils,
   stringr,
   glue,
-  cli
+  cli,
+  digest,
+  fs,
+  lubridate,
+  DBI,
+  DatabaseConnector,
+  SqlRender
 Suggests:
-    testthat (>= 3.0.0),
-    knitr,
-    rmarkdown
-Remotes:
-    ohdsi/CirceR
+  testthat (>= 3.0.0),
+  knitr,
+  rmarkdown,
+  CohortGenerator,
+  CirceR,
+  Eunomia
+VignetteBuilder: knitr
+Additional_repositories: https://OHDSI.github.io/drat
+Config/testthat/edition: 3
 Collate: 
     'Capr.R'
-    'LowLevelClasses.R'
-    'LowLevelUtilityFn.R'
-    'LowLevelBuildLangFn.R'
-    'LowLevelCoercionFn.R'
-    'LowLevelCreateFn.R'
-    'LowLevelLoadFn.R'
-    'LowLevelSaveFn.R'
-    'UserAttributeEdit.R'
-    'UserCommands.R'
-    'UserConceptLookupFn.R'
-    'UserCreateAttributeFn.R'
-    'UserCreateDomainFn.R'
-    'UserCreateFn.R'
-    'UserEditFn.R'
+    'conceptSet.R'
+    'attributes-concept.R'
+    'attributes-logic.R'
+    'query.R'
+    'window.R'
+    'criteria.R'
+    'attributes-nested.R'
+    'attributes-op.R'
+    'exit.R'
+    'cohort.R'
+    'collectCodesetId.R'
     'utils.R'
-VignetteBuilder: knitr
-Config/testthat/edition: 3

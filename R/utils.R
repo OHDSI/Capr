@@ -1,20 +1,16 @@
-#' Print a line break
+#' Pipe operator
 #'
-#' @param t A number from 1 to 4 representing the type of line break
+#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
 #'
-#' @return Prints a line break. Does not return a value.
-lineBreak <- function(t = c(1,2,3,4)) {
-  if (t == 1) {
-    cat("\n=====================================================================\n")
-  }
-  if (t == 2) {
-    cat("\n______________________________________________\n\n")
-  }
-  if (t == 3) {
-    cat("\n----------------------------\n")
-  }
-  if (t == 4) {
-    cat("\n*****\n")
-  }
-}
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @export
+#' @importFrom magrittr %>%
+#' @usage lhs \%>\% rhs
+#' @param lhs A value or the magrittr placeholder.
+#' @param rhs A function call using the magrittr semantics.
+#' @return The result of calling `rhs(lhs)`.
+NULL
 
+utils::globalVariables(".") # so we can use `.` in dplyr pipelines.

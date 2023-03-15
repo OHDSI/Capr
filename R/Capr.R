@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Capr
 #
@@ -17,7 +17,6 @@
 #' @keywords internal
 "_PACKAGE"
 
-#' @import DatabaseConnector
 #' @import dplyr
 #' @importFrom rlang .data
 NULL
