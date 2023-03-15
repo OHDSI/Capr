@@ -12,7 +12,7 @@ Description: The Capr package provides a programming language for defining OHDSI
     to create a large number of OHDSI cohorts programmatically while also helping bridge the gap between human readable
     descriptions of clinical phenotypes and their computational implmentation. 
 License: Apache License 2.0
-URL: https://ohdsi.github.io/Capr, https://github.com/OHDSI/Capr
+URL: https://ohdsi.github.io/Capr/, https://github.com/OHDSI/Capr
 BugReports: https://github.com/OHDSI/Capr/issues
 Encoding: UTF-8
 RoxygenNote: 7.2.3
