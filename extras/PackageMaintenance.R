@@ -33,28 +33,28 @@ unlink("extras/Capr.pdf")
 shell('R CMD Rd2pdf ./ --output=extras/Capr.pdf')
 
 # Capr design
-dir.create(path = "./inst/doc/", showWarnings = FALSE)
+dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
 rmarkdown::render("vignettes/capr_design.Rmd",
-                  output_file = "../inst/doc/capr_design.pdf",
+                  output_file = "../extras/pdf_vignette/capr_design.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
   toc = TRUE, number_sections = TRUE))
-unlink("inst/doc/capr_design.tex")
+unlink("extras/pdf_vignette/capr_design.tex")
 
 
 # Examples
 dir.create(path = "./inst/doc/", showWarnings = FALSE)
 rmarkdown::render("vignettes/Examples.Rmd",
-                  output_file = "../inst/doc/Examples.pdf",
+                  output_file = "../extras/pdf_vignette/Examples.pdf",
   rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
-unlink("inst/doc/Examples.tex")
+unlink("extras/pdf_vignette/Examples.tex")
 
 
 # Using Capr
-dir.create(path = "./inst/doc/", showWarnings = FALSE)
+dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
 rmarkdown::render("vignettes/Using-Capr.Rmd",
-                  output_file = "../inst/doc/Using-Capr.pdf",
+                  output_file = "../extras/pdf_vignette/Using-Capr.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
-unlink("inst/doc/Using-Capr.tex")
+unlink("extras/pdf_vignette/Using-Capr.tex")
 
 # build site
 pkgdown::build_site()
