@@ -255,7 +255,10 @@ DatabaseConnector::disconnect(con)
 
 Documentation can be found on the [package website](https://ohdsi.github.io/Capr).
 
-PDF versions of the documentation are also available: \* Vignette: [Using Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Using-Capr.pdf) \* Vignette: [Examples](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Examples.pdf) \* [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
+- Vignette: [Using Capr](https://ohdsi.github.io/Capr/articles/Using-Capr.html) 
+- Vignette: [Examples](https://ohdsi.github.io/Capr/articles/Examples.html) 
+- [Design Document](https://ohdsi.github.io/Capr/articles/capr_design.html)
+- [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
 
 # Support
 
