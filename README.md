@@ -1,7 +1,5 @@
 # Capr <a href="https://ohdsi.github.io/Capr"><img src="man/figures/logo.png" align="right" height="90"/></a>
 
-
-
 <!-- badges: start -->
 
 [![CRAN status](https://www.r-pkg.org/badges/version/Capr)](https://CRAN.R-project.org/package=Capr) [![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/Capr?branch=main) [![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/Capr/actions?query=workflow%3AR-CMD-check)
@@ -255,10 +253,10 @@ DatabaseConnector::disconnect(con)
 
 Documentation can be found on the [package website](https://ohdsi.github.io/Capr).
 
-- Vignette: [Using Capr](https://ohdsi.github.io/Capr/articles/Using-Capr.html) 
-- Vignette: [Examples](https://ohdsi.github.io/Capr/articles/Examples.html) 
-- [Design Document](https://ohdsi.github.io/Capr/articles/capr_design.html)
-- [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
+-   Vignette: [Using Capr](https://ohdsi.github.io/Capr/articles/Using-Capr.html)
+-   Vignette: [Examples](https://ohdsi.github.io/Capr/articles/Examples.html)
+-   [Design Document](https://ohdsi.github.io/Capr/articles/capr_design.html)
+-   [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
 
 # Support
 
