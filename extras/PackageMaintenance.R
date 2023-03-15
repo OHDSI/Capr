@@ -42,7 +42,7 @@ unlink("extras/pdf_vignette/capr_design.tex")
 
 
 # Examples
-dir.create(path = "./inst/doc/", showWarnings = FALSE)
+dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
 rmarkdown::render("vignettes/Examples.Rmd",
                   output_file = "../extras/pdf_vignette/Examples.pdf",
   rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
