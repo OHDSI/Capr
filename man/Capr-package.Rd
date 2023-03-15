@@ -13,7 +13,7 @@ The Capr package provides a programming language for defining OHDSI cohort defin
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://ohdsi.github.io/Capr}
+  \item \url{https://ohdsi.github.io/Capr/}
   \item \url{https://github.com/OHDSI/Capr}
   \item Report bugs at \url{https://github.com/OHDSI/Capr/issues}
 }
