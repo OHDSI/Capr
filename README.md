@@ -22,7 +22,6 @@ Capr can be installed via:
 # install.packages("Capr")
 ```
 
-
 Users can install the current development version of Capr from [GitHub](https://github.com/) with:
 
 ``` r
