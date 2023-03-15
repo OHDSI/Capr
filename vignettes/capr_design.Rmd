@@ -95,21 +95,21 @@ Maintenance of Capr will be done by Martin Lavallee and Adam Black. We plan to r
 
 # Design
 
-## Orientation
+## A. Orientation
 
-### Entry Point
+### i. Entry Point
 
 Ideally, Capr should be used in tandem with a connection to an OMOP vocabulary. Connection to an OMOP vocabulary can be done through DatabaseConnector or CDMConnector. This allows users to lookup concepts before applying them in Capr objects. Capr does not provide functionality to optimize concept lookup; this is a feature passed to other OHDSI software. Capr assumes the list of concepts as inputs.
 
-### Exit Point
+### ii. Exit Point
 
 Capr stops upon development of the json structure, which is typically saved as a file in a directory. The previous version of Capr allowed for the user to create the ohdsiSql via CirceR. However, this was deemed an overlap between other OHDSI R packages (CirceR, CohortGenerator etc.) and it felt more appropriate for the Capr process to end at building the json file. Ultimately the item that is passed across the OHDSI network is the cohort definition json. The json file can be upload into ATLAS or into R where the ohdsiSql can be built using CirceR. Json is a straight input to build the SQL, so it was deemed the minimally sufficient output needed. We intend to draw distinct lines between OHDSI software in order to improve standard workflows, that are either site internal or for network studies.
 
-## Functionality
+## B. Functionality
 
 Capr provides the programmatic interface for constructing cohort definitions that maps to the circe-be logic. In order to maintain this correspondence, the functionality of Capr covers: building concept sets, composing and building the cohort definition, and coercing Capr to json. Future functionality will be added into the section once they are released.
 
-### Concept Set Builder
+### i. Concept Set Builder
 
 Before defining cohort logic, the user must specify concept sets. Capr provides functionality to build concept sets off standardized OMOP concept IDs. How the user finds these IDs is left to other tools. A concept set is built in Capr as follows:
 
@@ -122,7 +122,7 @@ The first example in code snippet 1 provides the concept set and specifies that 
 
 When a concept set is created in Capr, it is tagged with a global unique identifier (GUID) using the R package digest. The purpose of this is to ensure that the id of concept set is unique to its construction. In ATLAS, the concept id attached to the concept set is a local id. This means that the id is an integer starting from 0 that identifies the concept set in the definition. This creates an issue if we were to parameterize the concept set, therefore the tag must be unique to the concept set. Since circe-be uses integers, Capr must resolve this issue on the backend, something described in the coercion section.
 
-### Cohort Builder
+### ii. Cohort Builder
 
 Next, a user must be able to build a cohort definition in R, therefore Capr provides functionality to define a cohort definition and sub-components of the cohort definition. Capr provides a constructor for each circe-be element (i.e. query, count, group, windows). A cohort is defined using the function:
 
@@ -137,7 +137,7 @@ The inputs for the cohort function are the four components for defining a cohort
 3)  *Criteria*: an object that temporally enumerates the presence or absence of an event relative to a point in time; and
 4)  *Group*: an object that binds multiple criteria and sub-groups as a single expression.
 
-#### Query
+#### 1) Query
 
 A query is constructed via the name of the domain table in the OMOP CDM. For example:
 
@@ -149,9 +149,39 @@ condition(concept, ...)
 
 The conceptSet input takes on a a concept set built from the cs command. The dots argument is where the user can supply attributes that contextualize the query to a specific subpopulation.
 
-#### Attribute
+#### 2) Attribute
 
-#### Criteria
+An attribute has its own set of constructor functions that are variations on four types of attributes that may be used: 
+
+- **op**: a boolean operator matched with either a numeric, integer or date value
+- **concept**: attributed built on an OMOP concept id
+- **logic** an attribute defined by a `T/F` toggle
+- **nested**: an attribute based on a Capr group object
+
+An example of using an attribute within a query is shown in code snippet 4:
+
+```{r attr}
+condition(cs(descendants(201826L), name = "T2D"), male())
+condition(cs(descendants(201826L), name = "T2D"), age(gte(18)))
+condition(cs(descendants(201826L), name = "T2D"), first())
+
+```
+
+The first example in code snippet 4 utilizes a concept attribute. The `male()` function automatically maps the concept to the male concept id. Other concept attribute functions will have mappers and helpers to assist the user in selecting the correct concept to add as an attribute. The second example of an attribute in code snippet 4 is for an op attribute. Any op attribute begins with the domain (i.e. age, startDate etc) and then takes an input of an op. An op is a function with the following signatures:
+
+| Operator  | Name                      |
+|-----------|---------------------------|
+| gt        | Greater than              |
+| gte       | Greater than or equal to  |
+| lt        | Less than                 |
+| lte       | Less than or equal to     |
+| eq        | Equal to                  |
+| bt        | Between                   |
+| nbt       | Not between               |
+
+Note that with the bt and nbt functions the input requires two values, a start and stop, specifying a bounded range of values. The last example in code snippet 4 is for a logic attribute. The logic attribute is simple in that if it is added to the query it will toggle TRUE for a the specification of the domain. In the example we omit one for a nested attribute because it is more complex and requires explanation of a criteria and group, which are stated in the upcoming sections. A full list of available attributes will be included in a future appendix. 
+
+#### 3) Criteria
 
 A criteria is constructed first on an operator that specifies the number of times the criteria is observed, second the query of which the criteria is based on and finally an aperture (i.e. a time window) specifying the timing relative to the index event at which we are to observe the specified criteria. Code snippet 5 shows an example of a criteria call:
 
@@ -164,7 +194,7 @@ exactly(0,
 
 A note for the criteria is that its meaning is tethered to an event specified in another part of a cohort definition. This means that a criteria object applies either for cohort attrition (inclusion rules), additional criteria for the primary criteria or in a nested attribute where the index event is the query to which the attribute is attached. The aperture is what restricts the criteria to certain situations. An aperture is built using the `duringInterval` command, where the first option is the start of the window and second is the end of a window. The temporal deployment of the query makes this object complex.
 
-#### Group
+#### 4) Group
 
 The final sub-component binds multiple criteria and sub-groups in a single expression. In Capr, this is done using the term with, to which we attach the options all, any, at most or at least. This specifies for the candidate to enter the cohort they have to satisfy the specifications of the group, whether that is at least 1 criteria or all. In the example below we assume that the query and aperture have been specified elsewhere in a script.
 
@@ -178,23 +208,23 @@ withAny(
 
 In code snippet 6, we start the group by specifying what needs to be satisfied in order for the candidate to enter the cohort, in this case they must satisfy all the queries. If the group is based on `atLeast` or `atMost` then we must also specify an integer stating how many components need to be satisfied. Groups make complexity possible in a cohort definition where there are multiple factors that specify qualification of remaining in a cohort. Groups can also take on subgroups, for example we could say `withAll(withAny(..))`. The group is also the basis of the nested attribute. Specification that a group is for a nested attribute is as simple as adding `nestedWith` to the function signature.
 
-### Coercion/Mapping
+### iii. Coercion/Mapping
 
 For OHDSI studies, the key representation of a cohort definition from a software perspective is via a json file. Thus, we need to coerce the Capr object into a json file so that it can be used within studies or exchanged with other researchers. Previously we had constructed a cohort definition via an R representation supported by Capr. Now we must turn this R object into a json file to save to disk. Coercion is a complex task because Capr must track two aspects of the definition: 1) the concept sets indicating the codes to search within the CDM and 2) the logic specifying how to deploy the codes on the CDM. The following explains how this process is achieved in an abstract sense.
 
-\*\* Step 1: Collect and replace concept identifier \*\*
+**Step 1: Collect and replace concept identifier**
 
 Recall that a concept set is initialized with a GUID from the digest R package. While this identifier is useful in Capr, in circe the id must be an integer starting from 0. This ID is an internal reference for the cohort definition. When coercing the Capr structure to a json we need to collect all the GUIDs in the definition, remove duplicates and enumerate each unique concept set for the internal reference. Capr does this in the background using the internal functions `collectGuid` and `replaceCodeSetId`. The first function builds the unique list and the second goes into each Capr object and replace the id slot with the new integer. After this process the object remains a Capr S4 cohort structure but the ids within each query have changed from GUID (character) to integer.
 
-\*\* Step 2: Coerce concept set from S4 Capr to S4 list \*\*
+**Step 2: Coerce concept set from S4 Capr to S4 list**
 
 Once the concept sets have been set within the query object, Capr will then go through the entire definition and extract just the concept set objects and turn them into an S3 list. The internal function `listConceptSets` completes this task, returning a list of all the concept sets used in the definition and removing duplicates.
 
-\*\* Step 3: Coerce cohort logic from S4 Capr to S3 list \*\*
+**Step 3: Coerce cohort logic from S4 Capr to S3 list**
 
 The cohort logic is now coerced separately from the concept sets. In the circe-be json the concept sets are a different slot the remainder of the definition. Capr handles this the same using the internal `as.list` to coerce the Capr S4 object to an S3 list. It binds the concept set list with the cohort logic list.
 
-\*\* Step 4: Convert S3 list to json \*\*
+**Step 4: Convert S3 list to json**
 
 Once the object is coerced into an S3 list it can be converted into json using the `jsonlite` R package. The function `jsonlite::toJSON` only works on an S3 list. Capr is designed in S4 because of the complexity of the system, making it easier to prevent mistakes by the user.
 
@@ -203,3 +233,7 @@ Once the object is coerced into an S3 list it can be converted into json using t
 Capr uses S4 classes in order to define the underpinnings of the cohort definition. These S4 classes are closely related to the circe-be java classes that specify the structure of the cohort definition. The Capr classes assume a few differences in order to allow for parameterization of the cohort definition via templating and provided suggested organizational improvements to the structure. The decision to use S4 classes was made because of the need to have a strict interface to adhere to the circe-be class. S4 classes are well suited for very complex codebases, according to Advanced R. Capr's relation to circe-be has the sort of complexity, particularly for the coercion aspect of Capr where the same method is applied slightly differently to each class. Classes are an important aspect of Capr and S4 provides a good balance between functional and object-oriented programming.
 
 <!--Add more info on connection to circe--->
+
+# Appendix
+
+<!--Add Appendicies for classes, attributes, domains--->
