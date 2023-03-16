@@ -362,6 +362,28 @@ toCirce <- function(cd) {
 #   cohortList
 # })
 
+
+#' Compile a Capr cohort to json
+#'
+#' @param object A Capr cohort or list of Capr cohorts
+#' @param ... Arguments passed on to jsonlite::toJSON.
+#' e.g. `pretty = TRUE` for nicely formatted json.
+#'
+#' @return The json representation of Capr cohorts
+#' @export
+#' @importFrom generics compile
+#' @exportS3Method compile Cohort
+#' @examples
+#' \dontrun{
+#' ch <- cohort(condition(cs(1,2)))
+#' compile(ch)
+#' }
+compile.Cohort <- function(object, ...) {
+  as.character(jsonlite::toJSON(toCirce(object), auto_unbox = TRUE, ...))
+}
+
+setMethod("compile", "Cohort", compile.Cohort)
+
 #' Coerce Capr object to json
 #' @param x the capr object
 #' @param pretty a toggle to make the json look nice, part of jsonlite

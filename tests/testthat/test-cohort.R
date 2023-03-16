@@ -198,4 +198,7 @@ test_that("Capr cohort generates on synpuf", {
 
 })
 
-
+test_that("compile generic works", {
+  ch <- cohort(condition(cs(1,2)))
+  expect_gt(nchar(generics::compile(ch)), 10)
+})
