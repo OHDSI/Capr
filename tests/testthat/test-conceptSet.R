@@ -8,7 +8,12 @@ test_that("cs helpers work", {
      5,          TRUE ,               FALSE,      TRUE,
      6,          TRUE ,               TRUE  ,     TRUE)
 
-  expect_equal(as.data.frame(concepts), df)
+  expect_equal(as.data.frame(concepts)[,names(df)], df)
+
+  expect_named(as.data.frame(concepts),
+               c("conceptId", "conceptCode", "conceptName", "domainId",
+                  "vocabularyId", "standardConcept", "includeDescendants",
+                  "isExcluded", "includeMapped"))
 
 })
 

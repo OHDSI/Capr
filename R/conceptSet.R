@@ -312,12 +312,19 @@ descendants <- function(...) {
 #'
 #' @return A tibble (dataframe) with columns: concept_id, includeDescendants, isExcluded, includeMapped.
 setMethod("as.data.frame", "ConceptSet", function(x) {
-  tibble::tibble(
+  df <- tibble::tibble(
     conceptId = purrr::map_int(x@Expression, ~.@Concept@concept_id),
+    conceptCode = purrr::map_chr(x@Expression, ~.@Concept@concept_code),
+    conceptName = purrr::map_chr(x@Expression, ~.@Concept@concept_name),
+    domainId = purrr::map_chr(x@Expression, ~.@Concept@domain_id),
+    vocabularyId = purrr::map_chr(x@Expression, ~.@Concept@vocabulary_id),
+    standardConcept = purrr::map_chr(x@Expression, ~.@Concept@standard_concept),
     includeDescendants = purrr::map_lgl(x@Expression, "includeDescendants"),
     isExcluded = purrr::map_lgl(x@Expression, "isExcluded"),
     includeMapped = purrr::map_lgl(x@Expression, "includeMapped")
   )
+
+
 })
 
 setMethod("as.list", "Concept", function(x){
