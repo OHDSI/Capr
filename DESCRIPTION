@@ -25,6 +25,7 @@ Imports:
   purrr,
   rlang,
   dplyr,
+  tidyr,
   checkmate,
   tibble,
   readr,
