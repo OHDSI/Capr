@@ -459,6 +459,7 @@ readConceptSet <- function(path, name, id = NULL) {
 
   } else if (ext == "csv") {
     df <- readr::read_csv(path, show_col_types = FALSE)
+
     names(df) <- tolower(names(df))
 
     if (is.null(df[["concept_id"]] %||% df[["concept id"]])) {
@@ -488,7 +489,10 @@ readConceptSet <- function(path, name, id = NULL) {
       domainId = df[["domain_id"]] %||%  df[["domain"]] %||% "" %>% as.character(),
       vocabularyId = df[["vocabulary_id"]] %||%  df[["vocabulary"]] %||% "" %>% as.character(),
       conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()
-    )
+    ) %>%
+      dplyr::mutate(
+        dplyr::across(conceptName:conceptClassId, ~tidyr::replace_na(.x, "")) #convert na to ""
+      )
     conceptList <- purrr::pmap(conceptDf, newConcept)
   }
 
@@ -579,9 +583,10 @@ getConceptSetDetails <- function(x,
 #' @rdname equals-methods
 #' @export
 setMethod("==", signature = c(e1 = "ConceptSet", e2 = "ConceptSet"), function(e1, e2) {
-  isTRUE(dplyr::all_equal(as.data.frame(e1),
-                          as.data.frame(e2),
-                          ignore_row_order = TRUE))
+
+  lhs <- as.data.frame(e1) %>% dplyr::arrange(conceptId)
+  rhs <- as.data.frame(e2) %>% dplyr::arrange(conceptId)
+  isTRUE(all.equal(lhs, rhs))
 })
 
 # args(getGeneric("unique")) # get generic argument names
