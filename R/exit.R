@@ -57,7 +57,7 @@ setClass("FixedDurationExit",
 #' surveillance prior to cohort exit
 #' @slot daysSupplyOverride force drug exposure days supply to a set number of days
 #' @slot count an integer specifying the number of occurrences for a criteria
-#' @include conceptSet.R
+# @include conceptSet.R
 setClass("DrugExposureExit",
          slots = c(
            conceptSet = "ConceptSet",

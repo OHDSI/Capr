@@ -113,4 +113,8 @@ test_that("read/writeConceptSet works", {
   expect_true(nrow(as.data.frame(cs4)) == 2)
 })
 
+test_that("as.json for concept sets", {
+  giBleed <- cs(descendants(35208414), name = "Gastrointestinal hemorrhage")
+  expect_gt(nchar(as.json(giBleed)), 5)
+})
 

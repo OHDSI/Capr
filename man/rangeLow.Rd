@@ -7,11 +7,11 @@
 rangeLow(op)
 }
 \arguments{
-\item{op}{an opAttribute object that is either numeric or integer that defines
-the logical operation used to determine eligible range low}
+\item{op}{an opAttribute object that is either numeric or integer that defines the logical
+operation used to determine eligible range low}
 }
 \description{
-This function is used only for measurement query. range_low is a column
-in the measurement table of the cdm. This attribute allows a subquery to find measurements
-that satisfy certain values determined by the op logic.
+This function is used only for measurement query. range_low is a column in the measurement table of
+the cdm. This attribute allows a subquery to find measurements that satisfy certain values
+determined by the op logic.
 }

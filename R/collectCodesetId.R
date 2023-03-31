@@ -24,7 +24,7 @@ setGeneric("collectGuid", function(x) standardGeneric("collectGuid"))
 #   collectGuid(x@group)
 # })
 
-#' @include query.R
+# @include query.R
 setMethod("collectGuid", "Query", function(x) {
   ids <- getGuid(x)
 
@@ -41,12 +41,12 @@ setMethod("collectGuid", "Query", function(x) {
 
 })
 
-#' @include criteria.R
+# @include criteria.R
 setMethod("collectGuid", "Criteria", function(x) {
   collectGuid(x@query)
 })
 
-#' @include criteria.R
+# @include criteria.R
 setMethod("collectGuid", "Group", function(x) {
   purrr::map(x@criteria, ~collectGuid(.x)) %>%
     append(purrr::map(x@group, ~collectGuid(.x)))
@@ -198,7 +198,7 @@ setMethod("replaceCodesetId", "Cohort", function(x, guidTable = guidTable) {
 
 setGeneric("listConceptSets", function(x) standardGeneric("listConceptSets"))
 
-#' @include query.R
+# @include query.R
 setMethod("listConceptSets", "Query", function(x) {
   qs <- as.list(x@conceptSet)
 
@@ -217,7 +217,7 @@ setMethod("listConceptSets", "Query", function(x) {
   return(out)
 })
 
-#' @include criteria.R
+# @include criteria.R
 setMethod("listConceptSets", "Criteria", function(x) {
  listConceptSets(x@query)
 })
@@ -231,7 +231,7 @@ check_names <- function(x) {
   }
 }
 
-#' @include criteria.R
+# @include criteria.R
 setMethod("listConceptSets", "Group", function(x) {
 
   #Start with criteria

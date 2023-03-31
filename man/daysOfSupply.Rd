@@ -7,11 +7,11 @@
 daysOfSupply(op)
 }
 \arguments{
-\item{op}{an opAttribute object that is either numeric or integer that defines
-the logical operation used to determine eligible number of days of supply}
+\item{op}{an opAttribute object that is either numeric or integer that defines the logical
+operation used to determine eligible number of days of supply}
 }
 \description{
-This function is used only for a drug  query. days supply is a column
-in the drug exposure table of the cdm. This attribute allows a subquery to find drugs
-that satisfy certain values determined by the op logic.
+This function is used only for a drug query. days supply is a column in the drug exposure table of
+the cdm. This attribute allows a subquery to find drugs that satisfy certain values determined by
+the op logic.
 }

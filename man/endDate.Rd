@@ -7,8 +7,8 @@
 endDate(op)
 }
 \arguments{
-\item{op}{an opAttribute object must be a date that defines
-the logical operation used to determine eligible end dates}
+\item{op}{an opAttribute object must be a date that defines the logical operation used to
+determine eligible end dates}
 }
 \description{
 Function that creates a end date attribute

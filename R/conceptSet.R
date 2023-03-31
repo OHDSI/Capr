@@ -353,6 +353,19 @@ setMethod("as.list", "ConceptSet", function(x){
                  'expression' = list('items' = lapply(x@Expression, as.list)))
 })
 
+#' Coerce Capr object to json
+#' @param x the capr object
+#' @param pretty a toggle to make the json look nice, part of jsonlite
+#' @param ... additional arguments passes to jsonlite::toJSON
+#' @export
+#' @docType methods
+setGeneric("as.json", function(x, pretty = TRUE, ...)  standardGeneric("as.json"))
+
+setMethod("as.json", "ConceptSet", function(x, pretty = TRUE, ...){
+  items <- list(items = lapply(x@Expression, as.list))
+  jsonlite::toJSON(x = items, pretty = pretty, auto_unbox = TRUE, ...)
+})
+
 #' Save a concept set as a json file
 #'
 #' The resulting concept Set JSON file can be imported into Atlas.

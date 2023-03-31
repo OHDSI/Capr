@@ -2,7 +2,7 @@
 
 ## CohortEntry ----
 
-#' @include window.R query.R conceptSet.R criteria.R
+# @include window.R query.R conceptSet.R criteria.R
 setClass("CohortEntry",
          slots = c(
            entryEvents = "list",
@@ -34,7 +34,7 @@ setClass("CohortAttrition",
 
 
 ## CohortExit ----
-#' @include exit.R
+# @include exit.R
 setClass("CohortExit",
          slots = c(
            endStrategy = "ANY",
@@ -384,13 +384,6 @@ compile.Cohort <- function(object, ...) {
 
 setMethod("compile", "Cohort", compile.Cohort)
 
-#' Coerce Capr object to json
-#' @param x the capr object
-#' @param pretty a toggle to make the json look nice, part of jsonlite
-#' @param ... additional arguments passes to jsonlite::toJSON
-#' @export
-#' @docType methods
-setGeneric("as.json", function(x, pretty = TRUE, ...)  standardGeneric("as.json"))
 
 #' @rdname as.json
 #' @aliases as.json,Cohort-method

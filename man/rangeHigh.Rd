@@ -7,11 +7,11 @@
 rangeHigh(op)
 }
 \arguments{
-\item{op}{an opAttribute object that is either numeric or integer that defines
-the logical operation used to determine eligible range high}
+\item{op}{an opAttribute object that is either numeric or integer that defines the logical
+operation used to determine eligible range high}
 }
 \description{
-This function is used only for measurement query. range_high is a column
-in the measurement table of the cdm. This attribute allows a subquery to find measurements
-that satisfy certain values determined by the op logic.
+This function is used only for measurement query. range_high is a column in the measurement table
+of the cdm. This attribute allows a subquery to find measurements that satisfy certain values
+determined by the op logic.
 }

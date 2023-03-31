@@ -5,8 +5,7 @@
 #' name the name of the attribute
 #' @slot
 #' conceptSet a list representing the concepts for the attribute
-#' @include
-#' criteria.R
+# @include criteria.R
 setClass("nestedAttribute",
          slots = c(name = "character", group = "Group"),
          prototype = list(name = "CorrelatedCriteria",
@@ -17,6 +16,7 @@ setClass("nestedAttribute",
 
 #' Function to construct a nested group where all criteria and groups must be satisfied
 #' @param ...   a set of criteria or groups
+#'
 #' @export
 nestedWithAll <- function(...) {
   items <- list(...)
