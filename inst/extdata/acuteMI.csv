@@ -1,0 +1,6 @@
+"Concept Set ID","Name","Concept ID","Concept Code","Concept Name","Domain","Vocabulary","Standard Concept","Exclude","Descendants","Mapped"
+"2","Inpatient or ER visit","262","ERIP","Emergency Room and Inpatient Visit","Visit","Visit","S","false","true","false"
+"2","Inpatient or ER visit","9203","ER","Emergency Room Visit","Visit","Visit","S","false","true","false"
+"2","Inpatient or ER visit","9201","IP","Inpatient Visit","Visit","Visit","S","false","true","false"
+"3","Acute myocardial Infarction","4329847","22298006","Myocardial infarction","Condition","SNOMED","S","false","true","false"
+"3","Acute myocardial Infarction","314666","1755008","Old myocardial infarction","Condition","SNOMED","S","true","true","false"
