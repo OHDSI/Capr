@@ -2,7 +2,7 @@
 title: "Using Capr"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using-Capr}
+  %\VignetteIndexEntry{Using Capr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
