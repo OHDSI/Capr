@@ -13,3 +13,6 @@ compare_versions
 ^work$
 ^README\.Rmd$
 ^pkgdown$
+^cran-comments\.md$
+^CRAN-SUBMISSION$
+^LICENSE\.md$

@@ -2,7 +2,8 @@
 % Please edit documentation in R/attributes-nested.R
 \name{nestedWithAtLeast}
 \alias{nestedWithAtLeast}
-\title{Function to construct a nested group where at least some of the criteria or groups must be satisfied}
+\title{Function to construct a nested group where at least some of the criteria or groups must be
+satisfied}
 \usage{
 nestedWithAtLeast(x, ...)
 }
@@ -12,5 +13,6 @@ nestedWithAtLeast(x, ...)
 \item{...}{a set of criteria or groups}
 }
 \description{
-Function to construct a nested group where at least some of the criteria or groups must be satisfied
+Function to construct a nested group where at least some of the criteria or groups must be
+satisfied
 }

@@ -2,7 +2,7 @@
 
 ## CohortEntry ----
 
-#' @include window.R query.R conceptSet.R criteria.R
+# @include window.R query.R conceptSet.R criteria.R
 setClass("CohortEntry",
          slots = c(
            entryEvents = "list",
@@ -34,7 +34,7 @@ setClass("CohortAttrition",
 
 
 ## CohortExit ----
-#' @include exit.R
+# @include exit.R
 setClass("CohortExit",
          slots = c(
            endStrategy = "ANY",
@@ -362,13 +362,28 @@ toCirce <- function(cd) {
 #   cohortList
 # })
 
-#' Coerce Capr object to json
-#' @param x the capr object
-#' @param pretty a toggle to make the json look nice, part of jsonlite
-#' @param ... additional arguments passes to jsonlite::toJSON
+
+#' Compile a Capr cohort to json
+#'
+#' @param object A Capr cohort or list of Capr cohorts
+#' @param ... Arguments passed on to jsonlite::toJSON.
+#' e.g. `pretty = TRUE` for nicely formatted json.
+#'
+#' @return The json representation of Capr cohorts
 #' @export
-#' @docType methods
-setGeneric("as.json", function(x, pretty = TRUE, ...)  standardGeneric("as.json"))
+#' @importFrom generics compile
+#' @exportS3Method compile Cohort
+#' @examples
+#' \dontrun{
+#' ch <- cohort(condition(cs(1,2)))
+#' compile(ch)
+#' }
+compile.Cohort <- function(object, ...) {
+  as.character(jsonlite::toJSON(toCirce(object), auto_unbox = TRUE, ...))
+}
+
+setMethod("compile", "Cohort", compile.Cohort)
+
 
 #' @rdname as.json
 #' @aliases as.json,Cohort-method

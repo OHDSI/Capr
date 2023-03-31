@@ -7,8 +7,8 @@
 age(op)
 }
 \arguments{
-\item{op}{an opAttribute object that is either numeric or integer that defines
-the logical operation used to determine eligible patient age}
+\item{op}{an opAttribute object that is either numeric or integer that defines the logical
+operation used to determine eligible patient age}
 }
 \description{
 Function to create age attribute

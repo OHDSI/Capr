@@ -1,17 +1,18 @@
 Package: Capr
-Title: Cohort Definition Application Programming in R
-Version: 2.0.0
+Title: Cohort Definition Application Programming
+Version: 2.0.1
 Authors@R: c(
     person("Martin", "Lavallee", , "mdlavallee92@gmail.com", role = c("aut", "cre")),
     person("Adam", "Black", , "black@ohdsi.org", role = "aut")
   )
-Description: The Capr package provides a programming language for defining OHDSI cohort definitions in R. 
-    The functions in Capr allow for the programmatic creation of OHDSI concept sets and cohorts that can be serialized 
-    to Atlas/CIRCE-BE compatible json files or to OHDSI-SQL. Capr functions can be used to create, save, and load 
-    component parts to a cohort definition allowing R programmers to easily reuse cohort logic. Capr provides tools
-    to create a large number of OHDSI cohorts programmatically while also helping bridge the gap between human readable
-    descriptions of clinical phenotypes and their computational implmentation. 
-License: Apache License 2.0
+Description: Provides a programming language for defining OHDSI cohort definitions in R to use in studies for Observational 
+    Health Data Sciences and Informatics (OHDSI). The functions in 'Capr' allow for the programmatic creation of 
+    OHDSI concept sets and cohorts that can be serialized to 'Atlas/CIRCE-BE' compatible 'json' files or to 'OHDSI-SQL'. 
+    'Capr' functions can be used to create, save, and load component parts to a cohort definition allowing 
+    R programmers to easily reuse cohort logic. 'Capr' provides tools to create a large number of OHDSI cohorts 
+    programmatically while also helping bridge the gap between human readable descriptions of clinical phenotypes 
+    and their computational implmentation. 
+License: Apache License (>= 2)
 URL: https://ohdsi.github.io/Capr, https://github.com/OHDSI/Capr
 BugReports: https://github.com/OHDSI/Capr/issues
 Encoding: UTF-8
@@ -19,45 +20,43 @@ RoxygenNote: 7.2.3
 Depends: 
   R (>= 3.5.0),
 Imports: 
-  magrittr (>= 1.5.0),
-  jsonlite,
-  methods,
-  purrr,
-  rlang,
-  dplyr,
-  checkmate,
-  tibble,
-  readr,
-  stringr,
-  glue,
-  cli,
-  digest,
-  fs,
-  lubridate,
-  DBI,
-  DatabaseConnector,
-  SqlRender
+    magrittr (>= 1.5.0),
+    jsonlite,
+    methods,
+    purrr,
+    rlang,
+    dplyr,
+    tidyr,
+    checkmate,
+    tibble,
+    readr,
+    stringr,
+    glue,
+    cli,
+    digest,
+    fs,
+    lubridate,
+    DBI,
+    DatabaseConnector,
+    SqlRender,
+    generics
 Suggests:
   testthat (>= 3.0.0),
   knitr,
-  rmarkdown,
-  CohortGenerator,
-  CirceR,
-  Eunomia
+  rmarkdown
 VignetteBuilder: knitr
-Additional_repositories: https://OHDSI.github.io/drat
 Config/testthat/edition: 3
 Collate: 
     'Capr.R'
     'conceptSet.R'
-    'attributes-concept.R'
-    'attributes-logic.R'
     'query.R'
     'window.R'
     'criteria.R'
-    'attributes-nested.R'
-    'attributes-op.R'
     'exit.R'
     'cohort.R'
+    'attributes-concept.R'
+    'attributes-logic.R'
+    'attributes-nested.R'
+    'attributes-op.R'
     'collectCodesetId.R'
     'utils.R'

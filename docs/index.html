@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cohort Definition Application Programming in R • Capr</title>
+<title>Cohort Definition Application Programming • Capr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -17,13 +17,14 @@
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Cohort Definition Application Programming in R">
-<meta property="og:description" content="The Capr package provides a programming language for defining OHDSI cohort definitions in R. 
-    The functions in Capr allow for the programmatic creation of OHDSI concept sets and cohorts that can be serialized 
-    to Atlas/CIRCE-BE compatible json files or to OHDSI-SQL. Capr functions can be used to create, save, and load 
-    component parts to a cohort definition allowing R programmers to easily reuse cohort logic. Capr provides tools
-    to create a large number of OHDSI cohorts programmatically while also helping bridge the gap between human readable
-    descriptions of clinical phenotypes and their computational implmentation. ">
+<script src="pkgdown.js"></script><meta property="og:title" content="Cohort Definition Application Programming">
+<meta property="og:description" content="Provides a programming language for defining OHDSI cohort definitions in R to use in studies for Observational 
+    Health Data Sciences and Informatics (OHDSI). The functions in Capr allow for the programmatic creation of 
+    OHDSI concept sets and cohorts that can be serialized to Atlas/CIRCE-BE compatible json files or to OHDSI-SQL. 
+    Capr functions can be used to create, save, and load component parts to a cohort definition allowing 
+    R programmers to easily reuse cohort logic. Capr provides tools to create a large number of OHDSI cohorts 
+    programmatically while also helping bridge the gap between human readable descriptions of clinical phenotypes 
+    and their computational implmentation. ">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -45,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
       </span>
     </div>
 
@@ -62,7 +63,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/Capr-conceptSets.html">Working with Concept Sets in Capr</a>
+    </li>
+    <li>
       <a href="articles/capr_design.html">Capr Design Guide and Roadmap</a>
+    </li>
+    <li>
+      <a href="articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
       <a href="articles/Examples.html">Cohort Definition Examples</a>
@@ -100,7 +107,7 @@
   <div class="contents col-md-9">
 
 <div class="section level1">
-<div class="page-header"><h1 id="capr-">Capr <a href="https://ohdsi.github.io/Capr" class="external-link"><img src="reference/figures/logo.png" align="right" height="138"></a>
+<div class="page-header"><h1 id="capr-">Capr <a href="https://ohdsi.github.io/Capr/" class="external-link"><img src="reference/figures/logo.png" align="right" height="90"></a>
 <a class="anchor" aria-label="anchor" href="#capr-"></a>
 </h1></div>
 <!-- badges: start -->
@@ -117,8 +124,11 @@
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
-<p>In the future, Capr will be avaiable on CRAN. For now you can install the current development version of Capr from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>Capr can be installed via:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("Capr")</span></span></code></pre></div>
+<p>Users can install the current development version of Capr from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/Capr"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -132,14 +142,14 @@
 <div class="section level3">
 <h3 id="simple-diclofenac-cohort">Simple diclofenac cohort<a class="anchor" aria-label="anchor" href="#simple-diclofenac-cohort"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/Capr" class="external-link">Capr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define concepts sets with cs()</span></span>
 <span><span class="va">diclofenac</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1124300</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cohort.html">cohort</a></span><span class="op">(</span></span>
-<span>  entry <span class="op">=</span> <span class="fu"><a href="reference/drugEra.html">drugEra</a></span><span class="op">(</span><span class="va">diclofenac</span><span class="op">)</span></span>
+<span>  entry <span class="op">=</span> <span class="fu"><a href="reference/entry.html">entry</a></span><span class="op">(</span><span class="fu"><a href="reference/drugEra.html">drugEra</a></span><span class="op">(</span><span class="va">diclofenac</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ch</span></span>
@@ -158,13 +168,13 @@
 <li>With at least 365 days of continuous observation prior to exposure</li>
 <li>With cohort exit defined as discontinuation of exposure (allowing for a 30-day gap)</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">diclofenac</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1124300</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cohort.html">cohort</a></span><span class="op">(</span></span>
 <span>  entry <span class="op">=</span> <span class="fu"><a href="reference/entry.html">entry</a></span><span class="op">(</span><span class="fu"><a href="reference/drugEra.html">drugEra</a></span><span class="op">(</span><span class="va">diclofenac</span>, <span class="fu"><a href="reference/age.html">age</a></span><span class="op">(</span><span class="fu"><a href="reference/gte.html">gte</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                observationWindow <span class="op">=</span> <span class="fu"><a href="reference/continuousObservation.html">continuousObservation</a></span><span class="op">(</span><span class="op">-</span><span class="fl">365L</span>, <span class="fl">0L</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  exit <span class="op">=</span> <span class="fu"><a href="reference/drugExit.html">drugExit</a></span><span class="op">(</span><span class="va">diclofenac</span><span class="op">)</span></span>
+<span>  exit <span class="op">=</span> <span class="fu"><a href="reference/exit.html">exit</a></span><span class="op">(</span><span class="fu"><a href="reference/drugExit.html">drugExit</a></span><span class="op">(</span><span class="va">diclofenac</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ch</span></span>
@@ -182,7 +192,7 @@
 <li>Without prior exposure to any NSAID (Non-Steroidal Anti-Inflammatory Drug)</li>
 <li>Without prior diagnosis of cancer</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">diclofenac</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1124300</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"diclofenac"</span><span class="op">)</span></span>
 <span><span class="va">nsaid</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">21603933</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"nsaid"</span><span class="op">)</span></span>
 <span><span class="va">cancer</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">443392</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"cancer"</span><span class="op">)</span></span>
@@ -190,11 +200,15 @@
 <span><span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cohort.html">cohort</a></span><span class="op">(</span></span>
 <span>  entry <span class="op">=</span> <span class="fu"><a href="reference/entry.html">entry</a></span><span class="op">(</span><span class="fu"><a href="reference/drugEra.html">drugEra</a></span><span class="op">(</span><span class="va">diclofenac</span>, <span class="fu"><a href="reference/age.html">age</a></span><span class="op">(</span><span class="fu"><a href="reference/gte.html">gte</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                observationWindow <span class="op">=</span> <span class="fu"><a href="reference/continuousObservation.html">continuousObservation</a></span><span class="op">(</span><span class="op">-</span><span class="fl">365L</span>, <span class="fl">0L</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  attrition <span class="op">=</span> <span class="fu"><a href="reference/attrition.html">attrition</a></span><span class="op">(</span><span class="fu"><a href="reference/withAll.html">withAll</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="reference/drug.html">drug</a></span><span class="op">(</span><span class="va">nsaid</span><span class="op">)</span>, <span class="fu"><a href="reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="reference/condition.html">condition</a></span><span class="op">(</span><span class="va">cancer</span><span class="op">)</span>, <span class="fu"><a href="reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span><span class="op">)</span>,</span>
-<span>  exit <span class="op">=</span> <span class="fu"><a href="reference/drugExit.html">drugExit</a></span><span class="op">(</span><span class="va">diclofenac</span>, persistenceWindow <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
+<span>  attrition <span class="op">=</span> <span class="fu"><a href="reference/attrition.html">attrition</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/withAll.html">withAll</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="reference/drug.html">drug</a></span><span class="op">(</span><span class="va">nsaid</span><span class="op">)</span>, <span class="fu"><a href="reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="reference/condition.html">condition</a></span><span class="op">(</span><span class="va">cancer</span><span class="op">)</span>, <span class="fu"><a href="reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  exit <span class="op">=</span> <span class="fu"><a href="reference/exit.html">exit</a></span><span class="op">(</span></span>
+<span>    endStrategy <span class="op">=</span> <span class="fu"><a href="reference/drugExit.html">drugExit</a></span><span class="op">(</span><span class="va">diclofenac</span>, persistenceWindow <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ch</span></span>
@@ -209,7 +223,7 @@
 <h2 id="save-cohort-as-json">Save cohort as JSON<a class="anchor" aria-label="anchor" href="#save-cohort-as-json"></a>
 </h2>
 <p>OHDSI standard cohorts are represented as json files and can be copy and pasted into Atlas.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"diclofenacCohort.json"</span><span class="op">)</span></span>
 <span></span>
@@ -227,7 +241,7 @@
 <h3 id="fill-in-missing-concept-set-details">Fill in missing concept set details<a class="anchor" aria-label="anchor" href="#fill-in-missing-concept-set-details"></a>
 </h3>
 <p>Users can build valid cohorts with minimal concept information, only supplying a concept id and name. The example below shows the minimal concept set input for Capr.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">diclofenac</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1124300</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"diclofenac"</span><span class="op">)</span></span>
 <span></span>
@@ -258,7 +272,7 @@
 <span><span class="co">#&gt;   }</span></span>
 <span><span class="co">#&gt; }</span></span></code></pre></div>
 <p>However, when saving cohorts it is helpful to fill in the concept details. This requires a live connection to an OMOP CDM database that includes the vocabularies used in the cohort definition.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/connect.html" class="external-link">connect</a></span><span class="op">(</span><span class="fu">Eunomia</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Eunomia/man/getEunomiaConnectionDetails.html" class="external-link">getEunomiaConnectionDetails</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">diclofenac</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getConceptSetDetails.html">getConceptSetDetails</a></span><span class="op">(</span><span class="va">diclofenac</span>, <span class="va">con</span>, vocabularyDatabaseSchema <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="reference/as.json.html">as.json</a></span><span class="op">(</span><span class="va">diclofenac</span><span class="op">)</span><span class="op">)</span></span>
@@ -298,7 +312,7 @@
 <h2 id="building-capr-templates">Building Capr Templates<a class="anchor" aria-label="anchor" href="#building-capr-templates"></a>
 </h2>
 <p>A Capr cohort template is a function that always returns a Capr cohort. It can accept arguments that can be used to parameterize any part of a cohort definition. Capr cohort templates are the recommended approach for building large numbers of similar cohorts in R.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># A Capr cohort template is a function that returns a cohort</span></span>
 <span><span class="va">drugEraTemplate</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">ingredientConceptId</span><span class="op">)</span> <span class="op">{</span></span>
@@ -308,7 +322,7 @@
 <span>  <span class="fu"><a href="reference/cohort.html">cohort</a></span><span class="op">(</span></span>
 <span>    entry <span class="op">=</span> <span class="fu"><a href="reference/entry.html">entry</a></span><span class="op">(</span><span class="fu"><a href="reference/drugEra.html">drugEra</a></span><span class="op">(</span><span class="va">drugConceptSet</span>, <span class="fu"><a href="reference/age.html">age</a></span><span class="op">(</span><span class="fu"><a href="reference/gte.html">gte</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                  observationWindow <span class="op">=</span> <span class="fu"><a href="reference/continuousObservation.html">continuousObservation</a></span><span class="op">(</span><span class="op">-</span><span class="fl">365L</span>, <span class="fl">0L</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    exit <span class="op">=</span> <span class="fu"><a href="reference/drugExit.html">drugExit</a></span><span class="op">(</span><span class="va">drugConceptSet</span>, persistenceWindow <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
+<span>    exit <span class="op">=</span> <span class="fu"><a href="reference/exit.html">exit</a></span><span class="op">(</span><span class="fu"><a href="reference/drugExit.html">drugExit</a></span><span class="op">(</span><span class="va">drugConceptSet</span>, persistenceWindow <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
@@ -339,15 +353,22 @@
 <span><span class="co">#&gt; 10    1124300 Diclofenac      &lt;Cohort&gt;    "{\n  \"ConceptSets\": [\n    {\n    …</span></span>
 <span><span class="co">#&gt; # … with 81 more rows</span></span></code></pre></div>
 <p>The capr_cohort column of the dataframe is a list of Capr cohort object. The cohort_json column contains the json specifications for each cohort.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/disconnect.html" class="external-link">disconnect</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
 <h1 id="user-documentation">User Documentation<a class="anchor" aria-label="anchor" href="#user-documentation"></a>
 </h1>
-<p>Documentation can be found on the <a href="https://ohdsi.github.io/Capr" class="external-link">package website</a>.</p>
-<p>PDF versions of the documentation are also available: * Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Using-Capr.pdf" class="external-link">Using Capr</a> * Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Examples.pdf" class="external-link">Examples</a> * <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf" class="external-link">Package manual</a></p>
+<p>Documentation can be found on the <a href="https://ohdsi.github.io/Capr/" class="external-link">package website</a>.</p>
+<ul>
+<li>Vignette: <a href="https://ohdsi.github.io/Capr/articles/Using-Capr.html" class="external-link">Using Capr</a>
+</li>
+<li>Vignette: <a href="https://ohdsi.github.io/Capr/articles/Examples.html" class="external-link">Examples</a>
+</li>
+<li><a href="https://ohdsi.github.io/Capr/articles/capr_design.html" class="external-link">Design Document</a></li>
+<li><a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf" class="external-link">Package manual</a></li>
+</ul>
 </div>
 <div class="section level1">
 <h1 id="support">Support<a class="anchor" aria-label="anchor" href="#support"></a>
@@ -397,7 +418,8 @@
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>Apache License 2.0</li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small>Apache License (&gt;= 2)</small></li>
 </ul>
 </div>
 
@@ -420,8 +442,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://CRAN.R-project.org/package=Capr" class="external-link"><img src="https://www.r-pkg.org/badges/version/Capr" alt="CRAN status"></a></li>
-<li><a href="https://codecov.io/github/OHDSI/Capr?branch=main" class="external-link"><img src="https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main" alt="codecov.io"></a></li>
+<li><a href="https://app.codecov.io/gh/OHDSI/Capr?branch=main" class="external-link"><img src="https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main" alt="codecov.io"></a></li>
 <li><a href="https://github.com/OHDSI/Capr/actions?query=workflow%3AR-CMD-check" class="external-link"><img src="https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg" alt="Build Status"></a></li>
 </ul>
 </div>

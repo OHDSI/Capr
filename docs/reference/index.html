@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
       </span>
     </div>
 
@@ -32,7 +32,13 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/Capr-conceptSets.html">Working with Concept Sets in Capr</a>
+    </li>
+    <li>
       <a href="../articles/capr_design.html">Capr Design Guide and Roadmap</a>
+    </li>
+    <li>
+      <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
@@ -113,6 +119,10 @@
           <p><code><a href="cohort.html">cohort()</a></code> </p>
         </td>
         <td><p>Function that creates a cohort object</p></td>
+      </tr><tr><td>
+          <p><code><a href="compile.Cohort.html">compile.Cohort()</a></code> </p>
+        </td>
+        <td><p>Compile a Capr cohort to json</p></td>
       </tr><tr><td>
           <p><code><a href="Concept-class.html">Concept-class</a></code> </p>
         </td>
@@ -314,7 +324,8 @@ offset &lt;- function(days)
       </tr><tr><td>
           <p><code><a href="nestedWithAtLeast.html">nestedWithAtLeast()</a></code> </p>
         </td>
-        <td><p>Function to construct a nested group where at least some of the criteria or groups must be satisfied</p></td>
+        <td><p>Function to construct a nested group where at least some of the criteria or groups must be
+satisfied</p></td>
       </tr><tr><td>
           <p><code><a href="nestedWithAtMost.html">nestedWithAtMost()</a></code> </p>
         </td>

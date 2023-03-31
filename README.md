@@ -1,10 +1,8 @@
-# Capr <a href="https://ohdsi.github.io/Capr"><img src="man/figures/logo.png" align="right" height="110"/></a>
-
-
+# Capr <a href="https://ohdsi.github.io/Capr/"><img src="man/figures/logo.png" align="right" height="90"/></a>
 
 <!-- badges: start -->
 
-[![CRAN status](https://www.r-pkg.org/badges/version/Capr)](https://CRAN.R-project.org/package=Capr) [![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/Capr?branch=main) [![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/Capr/actions?query=workflow%3AR-CMD-check)
+[![codecov.io](https://codecov.io/github/OHDSI/Capr/coverage.svg?branch=main)](https://app.codecov.io/gh/OHDSI/Capr?branch=main) [![Build Status](https://github.com/OHDSI/Capr/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/Capr/actions?query=workflow%3AR-CMD-check)
 
 <!-- badges: end -->
 
@@ -18,7 +16,13 @@ Learn more about the OHDSI approach to cohort building in the [cohorts chapter o
 
 # Installation
 
-In the future, Capr will be avaiable on CRAN. For now you can install the current development version of Capr from [GitHub](https://github.com/) with:
+Capr can be installed via:
+
+``` r
+# install.packages("Capr")
+```
+
+Users can install the current development version of Capr from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -40,7 +44,7 @@ library(Capr)
 diclofenac <- cs(descendants(1124300))
 
 ch <- cohort(
-  entry = drugEra(diclofenac)
+  entry = entry(drugEra(diclofenac))
 )
 
 ch
@@ -65,7 +69,7 @@ diclofenac <- cs(descendants(1124300))
 ch <- cohort(
   entry = entry(drugEra(diclofenac, age(gte(16))),
                 observationWindow = continuousObservation(-365L, 0L)),
-  exit = drugExit(diclofenac)
+  exit = exit(drugExit(diclofenac))
 )
 
 ch
@@ -91,11 +95,15 @@ cancer <- cs(descendants(443392), name = "cancer")
 ch <- cohort(
   entry = entry(drugEra(diclofenac, age(gte(16))),
                 observationWindow = continuousObservation(-365L, 0L)),
-  attrition = attrition(withAll(
-    exactly(0, drug(nsaid), eventStarts(-Inf, 0, index = "startDate")),
-    exactly(0, condition(cancer), eventStarts(-Inf, 0, index = "startDate"))
-  )),
-  exit = drugExit(diclofenac, persistenceWindow = 30)
+  attrition = attrition(
+    withAll(
+      exactly(0, drug(nsaid), eventStarts(-Inf, 0, index = "startDate")),
+      exactly(0, condition(cancer), eventStarts(-Inf, 0, index = "startDate"))
+    )
+  ),
+  exit = exit(
+    endStrategy = drugExit(diclofenac, persistenceWindow = 30)
+    )
 )
 
 ch
@@ -213,7 +221,7 @@ drugEraTemplate <- function(ingredientConceptId) {
   cohort(
     entry = entry(drugEra(drugConceptSet, age(gte(16))),
                   observationWindow = continuousObservation(-365L, 0L)),
-    exit = drugExit(drugConceptSet, persistenceWindow = 30)
+    exit = exit(drugExit(drugConceptSet, persistenceWindow = 30))
   )
 }
 
@@ -253,13 +261,12 @@ DatabaseConnector::disconnect(con)
 
 # User Documentation
 
-Documentation can be found on the [package website](https://ohdsi.github.io/Capr).
+Documentation can be found on the [package website](https://ohdsi.github.io/Capr/).
 
-PDF versions of the documentation are also available: 
-
-- Vignette: [Using Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Using-Capr.pdf) 
-- Vignette: [Examples](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Examples.pdf) 
-- [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
+-   Vignette: [Using Capr](https://ohdsi.github.io/Capr/articles/Using-Capr.html)
+-   Vignette: [Examples](https://ohdsi.github.io/Capr/articles/Examples.html)
+-   [Design Document](https://ohdsi.github.io/Capr/articles/capr_design.html)
+-   [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
 
 # Support
 

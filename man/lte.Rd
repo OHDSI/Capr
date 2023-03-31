@@ -17,8 +17,8 @@ lte(x)
 \S4method{lte}{Date}(x)
 }
 \arguments{
-\item{x}{the value to used as a bound in the op logic. This can either be an integer,
-numeric, or Date data type. Different data types will return the appropriate opAttribute type}
+\item{x}{the value to used as a bound in the op logic. This can either be an integer, numeric, or
+Date data type. Different data types will return the appropriate opAttribute type}
 }
 \description{
 function that builds an opAttribute based on less than or equal to than logic

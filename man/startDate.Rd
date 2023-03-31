@@ -7,8 +7,8 @@
 startDate(op)
 }
 \arguments{
-\item{op}{an opAttribute object must be a date that defines
-the logical operation used to determine eligible start dates}
+\item{op}{an opAttribute object must be a date that defines the logical operation used to
+determine eligible start dates}
 }
 \description{
 Function that creates a start date attribute

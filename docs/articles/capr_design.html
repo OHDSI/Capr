@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
       </span>
     </div>
 
@@ -57,7 +57,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/Capr-conceptSets.html">Working with Concept Sets in Capr</a>
+    </li>
+    <li>
       <a href="../articles/capr_design.html">Capr Design Guide and Roadmap</a>
+    </li>
+    <li>
+      <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
@@ -353,10 +359,10 @@ branch, which will remain stable, as a experimental release.</p>
 <h2 id="design">Design<a class="anchor" aria-label="anchor" href="#design"></a>
 </h2>
 <div class="section level3">
-<h3 id="orientation">Orientation<a class="anchor" aria-label="anchor" href="#orientation"></a>
+<h3 id="a--orientation">A. Orientation<a class="anchor" aria-label="anchor" href="#a--orientation"></a>
 </h3>
 <div class="section level4">
-<h4 id="entry-point">Entry Point<a class="anchor" aria-label="anchor" href="#entry-point"></a>
+<h4 id="i--entry-point">i. Entry Point<a class="anchor" aria-label="anchor" href="#i--entry-point"></a>
 </h4>
 <p>Ideally, Capr should be used in tandem with a connection to an OMOP
 vocabulary. Connection to an OMOP vocabulary can be done through
@@ -366,7 +372,7 @@ functionality to optimize concept lookup; this is a feature passed to
 other OHDSI software. Capr assumes the list of concepts as inputs.</p>
 </div>
 <div class="section level4">
-<h4 id="exit-point">Exit Point<a class="anchor" aria-label="anchor" href="#exit-point"></a>
+<h4 id="ii--exit-point">ii. Exit Point<a class="anchor" aria-label="anchor" href="#ii--exit-point"></a>
 </h4>
 <p>Capr stops upon development of the json structure, which is typically
 saved as a file in a directory. The previous version of Capr allowed for
@@ -383,7 +389,7 @@ network studies.</p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="functionality">Functionality<a class="anchor" aria-label="anchor" href="#functionality"></a>
+<h3 id="b--functionality">B. Functionality<a class="anchor" aria-label="anchor" href="#b--functionality"></a>
 </h3>
 <p>Capr provides the programmatic interface for constructing cohort
 definitions that maps to the circe-be logic. In order to maintain this
@@ -392,7 +398,7 @@ composing and building the cohort definition, and coercing Capr to json.
 Future functionality will be added into the section once they are
 released.</p>
 <div class="section level4">
-<h4 id="concept-set-builder">Concept Set Builder<a class="anchor" aria-label="anchor" href="#concept-set-builder"></a>
+<h4 id="i--concept-set-builder">i. Concept Set Builder<a class="anchor" aria-label="anchor" href="#i--concept-set-builder"></a>
 </h4>
 <p>Before defining cohort logic, the user must specify concept sets.
 Capr provides functionality to build concept sets off standardized OMOP
@@ -420,7 +426,7 @@ concept set. Since circe-be uses integers, Capr must resolve this issue
 on the backend, something described in the coercion section.</p>
 </div>
 <div class="section level4">
-<h4 id="cohort-builder">Cohort Builder<a class="anchor" aria-label="anchor" href="#cohort-builder"></a>
+<h4 id="ii--cohort-builder">ii. Cohort Builder<a class="anchor" aria-label="anchor" href="#ii--cohort-builder"></a>
 </h4>
 <p>Next, a user must be able to build a cohort definition in R,
 therefore Capr provides functionality to define a cohort definition and
@@ -452,7 +458,7 @@ or absence of an event relative to a point in time; and</li>
 sub-groups as a single expression.</li>
 </ol>
 <div class="section level5">
-<h5 id="query">Query<a class="anchor" aria-label="anchor" href="#query"></a>
+<h5 id="query">1) Query<a class="anchor" aria-label="anchor" href="#query"></a>
 </h5>
 <p>A query is constructed via the name of the domain table in the OMOP
 CDM. For example:</p>
@@ -464,11 +470,85 @@ command. The dots argument is where the user can supply attributes that
 contextualize the query to a specific subpopulation.</p>
 </div>
 <div class="section level5">
-<h5 id="attribute">Attribute<a class="anchor" aria-label="anchor" href="#attribute"></a>
+<h5 id="attribute">2) Attribute<a class="anchor" aria-label="anchor" href="#attribute"></a>
 </h5>
+<p>An attribute has its own set of constructor functions that are
+variations on four types of attributes that may be used:</p>
+<ul>
+<li>
+<strong>op</strong>: a boolean operator matched with either a
+numeric, integer or date value</li>
+<li>
+<strong>concept</strong>: attributed built on an OMOP concept
+id</li>
+<li>
+<strong>logic</strong> an attribute defined by a <code>T/F</code>
+toggle</li>
+<li>
+<strong>nested</strong>: an attribute based on a Capr group
+object</li>
+</ul>
+<p>An example of using an attribute within a query is shown in code
+snippet 4:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/attributes.html">male</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/age.html">age</a></span><span class="op">(</span><span class="fu"><a href="../reference/gte.html">gte</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The first example in code snippet 4 utilizes a concept attribute. The
+<code><a href="../reference/attributes.html">male()</a></code> function automatically maps the concept to the male
+concept id. Other concept attribute functions will have mappers and
+helpers to assist the user in selecting the correct concept to add as an
+attribute. The second example of an attribute in code snippet 4 is for
+an op attribute. Any op attribute begins with the domain (i.e. age,
+startDate etc) and then takes an input of an op. An op is a function
+with the following signatures:</p>
+<table class="table">
+<thead><tr class="header">
+<th>Operator</th>
+<th>Name</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>gt</td>
+<td>Greater than</td>
+</tr>
+<tr class="even">
+<td>gte</td>
+<td>Greater than or equal to</td>
+</tr>
+<tr class="odd">
+<td>lt</td>
+<td>Less than</td>
+</tr>
+<tr class="even">
+<td>lte</td>
+<td>Less than or equal to</td>
+</tr>
+<tr class="odd">
+<td>eq</td>
+<td>Equal to</td>
+</tr>
+<tr class="even">
+<td>bt</td>
+<td>Between</td>
+</tr>
+<tr class="odd">
+<td>nbt</td>
+<td>Not between</td>
+</tr>
+</tbody>
+</table>
+<p>Note that with the bt and nbt functions the input requires two
+values, a start and stop, specifying a bounded range of values. The last
+example in code snippet 4 is for a logic attribute. The logic attribute
+is simple in that if it is added to the query it will toggle TRUE for a
+the specification of the domain. In the example we omit one for a nested
+attribute because it is more complex and requires explanation of a
+criteria and group, which are stated in the upcoming sections. A full
+list of available attributes will be included in a future appendix.</p>
 </div>
 <div class="section level5">
-<h5 id="criteria">Criteria<a class="anchor" aria-label="anchor" href="#criteria"></a>
+<h5 id="criteria">3) Criteria<a class="anchor" aria-label="anchor" href="#criteria"></a>
 </h5>
 <p>A criteria is constructed first on an operator that specifies the
 number of times the criteria is observed, second the query of which the
@@ -476,7 +556,7 @@ criteria is based on and finally an aperture (i.e. a time window)
 specifying the timing relative to the index event at which we are to
 observe the specified criteria. Code snippet 5 shows an example of a
 criteria call:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, </span>
 <span>        query <span class="op">=</span> <span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        aperture <span class="op">=</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
@@ -493,7 +573,7 @@ window. The temporal deployment of the query makes this object
 complex.</p>
 </div>
 <div class="section level5">
-<h5 id="group">Group<a class="anchor" aria-label="anchor" href="#group"></a>
+<h5 id="group">4) Group<a class="anchor" aria-label="anchor" href="#group"></a>
 </h5>
 <p>The final sub-component binds multiple criteria and sub-groups in a
 single expression. In Capr, this is done using the term with, to which
@@ -502,7 +582,7 @@ the candidate to enter the cohort they have to satisfy the
 specifications of the group, whether that is at least 1 criteria or all.
 In the example below we assume that the query and aperture have been
 specified elsewhere in a script.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/withAny.html">withAny</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span><span class="fl">1</span>, query <span class="op">=</span> <span class="va">abLabHb</span>, aperture <span class="op">=</span> <span class="va">ap1</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span><span class="fl">1</span>, query <span class="op">=</span> <span class="va">abLabRan</span>, aperture <span class="op">=</span> <span class="va">ap1</span><span class="op">)</span>,</span>
@@ -523,7 +603,7 @@ signature.</p>
 </div>
 </div>
 <div class="section level4">
-<h4 id="coercionmapping">Coercion/Mapping<a class="anchor" aria-label="anchor" href="#coercionmapping"></a>
+<h4 id="iii--coercionmapping">iii. Coercion/Mapping<a class="anchor" aria-label="anchor" href="#iii--coercionmapping"></a>
 </h4>
 <p>For OHDSI studies, the key representation of a cohort definition from
 a software perspective is via a json file. Thus, we need to coerce the
@@ -535,7 +615,7 @@ task because Capr must track two aspects of the definition: 1) the
 concept sets indicating the codes to search within the CDM and 2) the
 logic specifying how to deploy the codes on the CDM. The following
 explains how this process is achieved in an abstract sense.</p>
-<p>** Step 1: Collect and replace concept identifier **</p>
+<p><strong>Step 1: Collect and replace concept identifier</strong></p>
 <p>Recall that a concept set is initialized with a GUID from the digest
 R package. While this identifier is useful in Capr, in circe the id must
 be an integer starting from 0. This ID is an internal reference for the
@@ -548,19 +628,21 @@ and the second goes into each Capr object and replace the id slot with
 the new integer. After this process the object remains a Capr S4 cohort
 structure but the ids within each query have changed from GUID
 (character) to integer.</p>
-<p>** Step 2: Coerce concept set from S4 Capr to S4 list **</p>
+<p><strong>Step 2: Coerce concept set from S4 Capr to S4
+list</strong></p>
 <p>Once the concept sets have been set within the query object, Capr
 will then go through the entire definition and extract just the concept
 set objects and turn them into an S3 list. The internal function
 <code>listConceptSets</code> completes this task, returning a list of
 all the concept sets used in the definition and removing duplicates.</p>
-<p>** Step 3: Coerce cohort logic from S4 Capr to S3 list **</p>
+<p><strong>Step 3: Coerce cohort logic from S4 Capr to S3
+list</strong></p>
 <p>The cohort logic is now coerced separately from the concept sets. In
 the circe-be json the concept sets are a different slot the remainder of
 the definition. Capr handles this the same using the internal
 <code>as.list</code> to coerce the Capr S4 object to an S3 list. It
 binds the concept set list with the cohort logic list.</p>
-<p>** Step 4: Convert S3 list to json **</p>
+<p><strong>Step 4: Convert S3 list to json</strong></p>
 <p>Once the object is coerced into an S3 list it can be converted into
 json using the <code>jsonlite</code> R package. The function
 <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON</a></code> only works on an S3 list. Capr is designed
@@ -586,6 +668,11 @@ Classes are an important aspect of Capr and S4 provides a good balance
 between functional and object-oriented programming.</p>
 <!--Add more info on connection to circe--->
 </div>
+</div>
+<div class="section level2">
+<h2 id="appendix">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a>
+</h2>
+<!--Add Appendicies for classes, attributes, domains--->
 </div>
   </div>
 

@@ -312,12 +312,19 @@ descendants <- function(...) {
 #'
 #' @return A tibble (dataframe) with columns: concept_id, includeDescendants, isExcluded, includeMapped.
 setMethod("as.data.frame", "ConceptSet", function(x) {
-  tibble::tibble(
+  df <- tibble::tibble(
     conceptId = purrr::map_int(x@Expression, ~.@Concept@concept_id),
+    conceptCode = purrr::map_chr(x@Expression, ~.@Concept@concept_code),
+    conceptName = purrr::map_chr(x@Expression, ~.@Concept@concept_name),
+    domainId = purrr::map_chr(x@Expression, ~.@Concept@domain_id),
+    vocabularyId = purrr::map_chr(x@Expression, ~.@Concept@vocabulary_id),
+    standardConcept = purrr::map_chr(x@Expression, ~.@Concept@standard_concept),
     includeDescendants = purrr::map_lgl(x@Expression, "includeDescendants"),
     isExcluded = purrr::map_lgl(x@Expression, "isExcluded"),
     includeMapped = purrr::map_lgl(x@Expression, "includeMapped")
   )
+
+
 })
 
 setMethod("as.list", "Concept", function(x){
@@ -344,6 +351,21 @@ setMethod("as.list", "ConceptSet", function(x){
             list('id' = x@id,
                  'name' = x@Name,
                  'expression' = list('items' = lapply(x@Expression, as.list)))
+})
+
+#' Coerce Capr object to json
+#' @param x the capr object
+#' @param pretty a toggle to make the json look nice, part of jsonlite
+#' @param ... additional arguments passes to jsonlite::toJSON
+#' @export
+#' @docType methods
+setGeneric("as.json", function(x, pretty = TRUE, ...)  standardGeneric("as.json"))
+
+#' @rdname as.json
+#' @aliases as.json,ConceptSet-method
+setMethod("as.json", "ConceptSet", function(x, pretty = TRUE, ...){
+  items <- list(items = lapply(x@Expression, as.list))
+  jsonlite::toJSON(x = items, pretty = pretty, auto_unbox = TRUE, ...)
 })
 
 #' Save a concept set as a json file
@@ -452,6 +474,7 @@ readConceptSet <- function(path, name, id = NULL) {
 
   } else if (ext == "csv") {
     df <- readr::read_csv(path, show_col_types = FALSE)
+
     names(df) <- tolower(names(df))
 
     if (is.null(df[["concept_id"]] %||% df[["concept id"]])) {
@@ -481,7 +504,10 @@ readConceptSet <- function(path, name, id = NULL) {
       domainId = df[["domain_id"]] %||%  df[["domain"]] %||% "" %>% as.character(),
       vocabularyId = df[["vocabulary_id"]] %||%  df[["vocabulary"]] %||% "" %>% as.character(),
       conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()
-    )
+    ) %>%
+      dplyr::mutate(
+        dplyr::across(.data$conceptName:.data$conceptClassId, ~tidyr::replace_na(.x, "")) #convert na to ""
+      )
     conceptList <- purrr::pmap(conceptDf, newConcept)
   }
 
@@ -572,9 +598,10 @@ getConceptSetDetails <- function(x,
 #' @rdname equals-methods
 #' @export
 setMethod("==", signature = c(e1 = "ConceptSet", e2 = "ConceptSet"), function(e1, e2) {
-  isTRUE(dplyr::all_equal(as.data.frame(e1),
-                          as.data.frame(e2),
-                          ignore_row_order = TRUE))
+
+  lhs <- as.data.frame(e1) %>% dplyr::arrange(.data$conceptId)
+  rhs <- as.data.frame(e2) %>% dplyr::arrange(.data$conceptId)
+  isTRUE(all.equal(lhs, rhs))
 })
 
 # args(getGeneric("unique")) # get generic argument names

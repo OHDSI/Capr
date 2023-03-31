@@ -4,16 +4,13 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/articles/Capr_Attributes_Extended.html</loc>
+    <loc>/articles/Capr-conceptSets.html</loc>
   </url>
   <url>
     <loc>/articles/capr_design.html</loc>
   </url>
   <url>
-    <loc>/articles/CAPR_tutorial.html</loc>
-  </url>
-  <url>
-    <loc>/articles/complex-cohort-example.html</loc>
+    <loc>/articles/capr_templates.html</loc>
   </url>
   <url>
     <loc>/articles/Examples.html</loc>
@@ -32,6 +29,9 @@
   </url>
   <url>
     <loc>/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>/LICENSE.html</loc>
   </url>
   <url>
     <loc>/news/index.html</loc>
@@ -149,6 +149,9 @@
   </url>
   <url>
     <loc>/reference/CollapseSettings-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/compile.Cohort.html</loc>
   </url>
   <url>
     <loc>/reference/compileCohortDefinition.html</loc>
