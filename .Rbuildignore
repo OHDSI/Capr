@@ -15,3 +15,4 @@ compare_versions
 ^pkgdown$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^LICENSE\.md$

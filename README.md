@@ -99,7 +99,8 @@ ch <- cohort(
     exactly(0, drug(nsaid), eventStarts(-Inf, 0, index = "startDate")),
     exactly(0, condition(cancer), eventStarts(-Inf, 0, index = "startDate"))
   )),
-  exit = drugExit(diclofenac, persistenceWindow = 30)
+  exit = exit(
+    endStrategy = drugExit(diclofenac, persistenceWindow = 30)
 )
 
 ch
