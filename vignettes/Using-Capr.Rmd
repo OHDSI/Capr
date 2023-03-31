@@ -39,6 +39,8 @@ a publicly available vocabulary search tool called [Athena.](https://athena.ohds
 Let's jump into some simple cohort definitions with Capr. We can use an example 
 database called `Eunomia` to create reproducible code examples.
 
+## Building a concept set
+
 The condition concept ID for Gastrointestinal hemorrhage is 192671. We can create a concept set with the `cs` function which works similar to the `c` function for creating vectors in R.
 
 ```{r}
@@ -52,30 +54,44 @@ GIBleed
 The GIBleed concept set will include all descendants of the Gastrointestinal hemorrhage concept 192671.
 
 
+## Creating a cohort
+
 Creating a simple cohort with the index date at the first occurrence of a GI bleed 
 condition occurrence is done in a single line of R code. This cohort takes advantage
 of many defaults that match the defaults in Atlas.
 
 ```{r}
-giBleedCohort <- cohort(condition(GIBleed))
+giBleedCohort <- cohort(
+  entry = entry(
+    condition(GIBleed),
+    observationWindow = continuousObservation(0L, 0L),
+    primaryCriteriaLimit = "First"
+  ),
+  exit = exit(
+    endStrategy = observationExit()
+  )
+)
 
 giBleedCohort
 ```
 
-Cohort generation is the process of converting a cohort definition to a table with four columns:
-cohort_definition_id, subject_id, cohort_start_date, cohort_end_date. This table contains the person IDs
-and dates that people are in the cohort.
+Cohort definitions may get more complex than this example. In general there are four slots that need to be filled for a Capr cohort: first, entry which defines the index event; second, attrition which defines the persons that are withdrawn from the cohort given inclusion or exclusion criteria; third, exit which defines when the person leaves the cohort and is no longer observation; and fourth, the era which defines the span of time of which successive periods are combined into one as well as the truncation of the patient timeline. Capr allows you to define different permutations of this cohort structure given the clinical idea under analysis for the study. 
+
+## Generating a cohort
+
+Capr is only responsible for the definition of the cohort. Capr ends when it creates a Capr Cohort object or coerces it into a json structure. At this point, if we want to generate the cohort we would switch over to different HADES software, in particular [CirceR](https://github.com/OHDSI/CirceR) and [CohortGenerator](https://github.com/OHDSI/CohortGenerator). These two R packages will help convert the json definition into executable SQL to run on your database. A generated cohort in a table will have an nx4 structure with the following columns: *cohort_definition_id, subject_id, cohort_start_date, cohort_end_date*. This table is what is used to do subsequent portions of an OHDSI study. Below is an example of how we can take the cohort from Capr and generate it on our database. For more information on generation, follow the examples from [CohortGenerator](https://github.com/OHDSI/CohortGenerator)
 
 ```{r}
 
 
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
 
+giBleedCohortJson <- as.json(giBleedCohort)
 
-sql <- CirceR::buildCohortQuery(CirceR::cohortExpressionFromJson(as.json(giBleedCohort)),
-                                CirceR::createGenerateOptions(
-                                  generateStats = FALSE
-                                ))
+sql <- CirceR::buildCohortQuery(
+  expression = CirceR::cohortExpressionFromJson(giBleedCohortJson),
+  options = CirceR::createGenerateOptions(generateStats = FALSE)
+)
 
 cohortsToCreate <- tibble::tibble(
   cohortId = 1,
@@ -85,29 +101,26 @@ cohortsToCreate <- tibble::tibble(
 
 
 cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = "my_cohort_table")
-CohortGenerator::createCohortTables(connectionDetails = connectionDetails,
-                                                        cohortDatabaseSchema = "main",
-                                                        cohortTableNames = cohortTableNames)
+CohortGenerator::createCohortTables(
+  connectionDetails = connectionDetails,
+  cohortDatabaseSchema = "main",
+  cohortTableNames = cohortTableNames
+)
 # Generate the cohorts
-cohortsGenerated <- CohortGenerator::generateCohortSet(connectionDetails = connectionDetails,
-                                                       cdmDatabaseSchema = "main",
-                                                       cohortDatabaseSchema = "main",
-                                                       cohortTableNames = cohortTableNames,
-                                                       cohortDefinitionSet = cohortsToCreate)
+cohortsGenerated <- CohortGenerator::generateCohortSet(
+  connectionDetails = connectionDetails,
+  cdmDatabaseSchema = "main",
+  cohortDatabaseSchema = "main",
+  cohortTableNames = cohortTableNames,
+  cohortDefinitionSet = cohortsToCreate
+)
 
 # Get the cohort counts
-cohortCounts <- CohortGenerator::getCohortCounts(connectionDetails = connectionDetails,
-                                                 cohortDatabaseSchema = "main",
-                                                 cohortTable = cohortTableNames$cohortTable)
-print(cohortCounts)
-sql <- SqlRender::render(sql)
-sql <- SqlRender::translate(sql, "sqlite")
-
-con <- DatabaseConnector::connect(connectionDetails)
-
-DatabaseConnector::executeSql(con, sql)
-
-
+cohortCounts <- CohortGenerator::getCohortCounts(
+  connectionDetails = connectionDetails,
+  cohortDatabaseSchema = "main",
+  cohortTable = cohortTableNames$cohortTable
+)
 
 
 ```
