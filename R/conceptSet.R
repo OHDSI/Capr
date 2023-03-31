@@ -491,7 +491,7 @@ readConceptSet <- function(path, name, id = NULL) {
       conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()
     ) %>%
       dplyr::mutate(
-        dplyr::across(conceptName:conceptClassId, ~tidyr::replace_na(.x, "")) #convert na to ""
+        dplyr::across(.data$conceptName:.data$conceptClassId, ~tidyr::replace_na(.x, "")) #convert na to ""
       )
     conceptList <- purrr::pmap(conceptDf, newConcept)
   }
@@ -584,8 +584,8 @@ getConceptSetDetails <- function(x,
 #' @export
 setMethod("==", signature = c(e1 = "ConceptSet", e2 = "ConceptSet"), function(e1, e2) {
 
-  lhs <- as.data.frame(e1) %>% dplyr::arrange(conceptId)
-  rhs <- as.data.frame(e2) %>% dplyr::arrange(conceptId)
+  lhs <- as.data.frame(e1) %>% dplyr::arrange(.data$conceptId)
+  rhs <- as.data.frame(e2) %>% dplyr::arrange(.data$conceptId)
   isTRUE(all.equal(lhs, rhs))
 })
 

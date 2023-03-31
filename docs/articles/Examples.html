@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
       </span>
     </div>
 
@@ -57,7 +57,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/Capr-conceptSets.html">Working with Concept Sets in Capr</a>
+    </li>
+    <li>
       <a href="../articles/capr_design.html">Capr Design Guide and Roadmap</a>
+    </li>
+    <li>
+      <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
@@ -73,7 +79,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://ohdsi.github.io/Hades" class="external-link"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link">hadesLogo</a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/Capr/" class="external-link">
@@ -135,6 +141,9 @@ diagnosis</strong></p>
 <span>  entry <span class="op">=</span> <span class="fu"><a href="../reference/entry.html">entry</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="va">cs0</span><span class="op">)</span>,</span>
 <span>    observationWindow <span class="op">=</span> <span class="fu"><a href="../reference/continuousObservation.html">continuousObservation</a></span><span class="op">(</span>priorDays <span class="op">=</span> <span class="fl">365</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span></span>
+<span>    endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/observationExit.html">observationExit</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><strong>Persons with new type 2 diabetes and no prior T1DM or
@@ -161,6 +170,9 @@ secondary diabetes</strong></p>
 <span>  attrition <span class="op">=</span> <span class="fu"><a href="../reference/attrition.html">attrition</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="va">cs1</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="va">cs2</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span></span>
+<span>    endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/observationExit.html">observationExit</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><strong>Persons with new type 2 diabetes mellitus at first dx rx or
@@ -195,8 +207,15 @@ lab</strong></p>
 <span>    observationWindow <span class="op">=</span> <span class="fu"><a href="../reference/continuousObservation.html">continuousObservation</a></span><span class="op">(</span>priorDays <span class="op">=</span> <span class="fl">365</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  attrition <span class="op">=</span> <span class="fu"><a href="../reference/attrition.html">attrition</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="va">cs1</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="va">cs2</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="st">'no T1D'</span> <span class="op">=</span> <span class="fu"><a href="../reference/withAll.html">withAll</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="va">cs1</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>    <span class="st">'no secondary diabettes'</span> <span class="op">=</span> <span class="fu"><a href="../reference/withAll.html">withAll</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="va">cs2</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span></span>
+<span>    endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/observationExit.html">observationExit</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>

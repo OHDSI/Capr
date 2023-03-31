@@ -1,16 +1,17 @@
 Package: Capr
-Title: Cohort Definition Application Programming in R
-Version: 2.0.0
+Title: Cohort Definition Application Programming
+Version: 2.0.1
 Authors@R: c(
     person("Martin", "Lavallee", , "mdlavallee92@gmail.com", role = c("aut", "cre")),
     person("Adam", "Black", , "black@ohdsi.org", role = "aut")
   )
-Description: The Capr package provides a programming language for defining OHDSI cohort definitions in R. 
-    The functions in Capr allow for the programmatic creation of OHDSI concept sets and cohorts that can be serialized 
-    to Atlas/CIRCE-BE compatible json files or to OHDSI-SQL. Capr functions can be used to create, save, and load 
-    component parts to a cohort definition allowing R programmers to easily reuse cohort logic. Capr provides tools
-    to create a large number of OHDSI cohorts programmatically while also helping bridge the gap between human readable
-    descriptions of clinical phenotypes and their computational implmentation. 
+Description: Provides a programming language for defining OHDSI cohort definitions in R to use in studies for Observational 
+    Health Data Sciences and Informatics (OHDSI). The functions in 'Capr' allow for the programmatic creation of 
+    OHDSI concept sets and cohorts that can be serialized to 'Atlas/CIRCE-BE' compatible 'json' files or to 'OHDSI-SQL'. 
+    'Capr' functions can be used to create, save, and load component parts to a cohort definition allowing 
+    R programmers to easily reuse cohort logic. 'Capr' provides tools to create a large number of OHDSI cohorts 
+    programmatically while also helping bridge the gap between human readable descriptions of clinical phenotypes 
+    and their computational implmentation. 
 License: Apache License (>= 2)
 URL: https://ohdsi.github.io/Capr, https://github.com/OHDSI/Capr
 BugReports: https://github.com/OHDSI/Capr/issues

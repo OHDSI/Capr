@@ -44,7 +44,7 @@ library(Capr)
 diclofenac <- cs(descendants(1124300))
 
 ch <- cohort(
-  entry = drugEra(diclofenac)
+  entry = entry(drugEra(diclofenac))
 )
 
 ch
@@ -69,7 +69,7 @@ diclofenac <- cs(descendants(1124300))
 ch <- cohort(
   entry = entry(drugEra(diclofenac, age(gte(16))),
                 observationWindow = continuousObservation(-365L, 0L)),
-  exit = drugExit(diclofenac)
+  exit = exit(drugExit(diclofenac))
 )
 
 ch
@@ -95,12 +95,15 @@ cancer <- cs(descendants(443392), name = "cancer")
 ch <- cohort(
   entry = entry(drugEra(diclofenac, age(gte(16))),
                 observationWindow = continuousObservation(-365L, 0L)),
-  attrition = attrition(withAll(
-    exactly(0, drug(nsaid), eventStarts(-Inf, 0, index = "startDate")),
-    exactly(0, condition(cancer), eventStarts(-Inf, 0, index = "startDate"))
-  )),
+  attrition = attrition(
+    withAll(
+      exactly(0, drug(nsaid), eventStarts(-Inf, 0, index = "startDate")),
+      exactly(0, condition(cancer), eventStarts(-Inf, 0, index = "startDate"))
+    )
+  ),
   exit = exit(
     endStrategy = drugExit(diclofenac, persistenceWindow = 30)
+    )
 )
 
 ch
@@ -218,7 +221,7 @@ drugEraTemplate <- function(ingredientConceptId) {
   cohort(
     entry = entry(drugEra(drugConceptSet, age(gte(16))),
                   observationWindow = continuousObservation(-365L, 0L)),
-    exit = drugExit(drugConceptSet, persistenceWindow = 30)
+    exit = exit(drugExit(drugConceptSet, persistenceWindow = 30))
   )
 }
 

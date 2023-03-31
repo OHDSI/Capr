@@ -1,3 +1,10 @@
+Capr 2.0.1
+==========
+- additions and corrections to vignettes and documentation
+- compile cohort function added
+- fix concept set print 
+- prep for CRAN submission
+
 Capr 2.0.0
 ==========
 New user interface for cohort construction

@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
       </span>
     </div>
 
@@ -57,7 +57,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/Capr-conceptSets.html">Working with Concept Sets in Capr</a>
+    </li>
+    <li>
       <a href="../articles/capr_design.html">Capr Design Guide and Roadmap</a>
+    </li>
+    <li>
+      <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
@@ -73,7 +79,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://ohdsi.github.io/Hades" class="external-link"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link">hadesLogo</a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/Capr/" class="external-link">
@@ -127,6 +133,9 @@ search tool called <a href="https://athena.ohdsi.org/" class="external-link">Ath
 <p>Let’s jump into some simple cohort definitions with Capr. We can use
 an example database called <code>Eunomia</code> to create reproducible
 code examples.</p>
+<div class="section level2">
+<h2 id="building-a-concept-set">Building a concept set<a class="anchor" aria-label="anchor" href="#building-a-concept-set"></a>
+</h2>
 <p>The condition concept ID for Gastrointestinal hemorrhage is 192671.
 We can create a concept set with the <code>cs</code> function which
 works similar to the <code>c</code> function for creating vectors in
@@ -139,28 +148,64 @@ R.</p>
 <span><span class="va">GIBleed</span></span></code></pre></div>
 <p>The GIBleed concept set will include all descendants of the
 Gastrointestinal hemorrhage concept 192671.</p>
+</div>
+<div class="section level2">
+<h2 id="creating-a-cohort">Creating a cohort<a class="anchor" aria-label="anchor" href="#creating-a-cohort"></a>
+</h2>
 <p>Creating a simple cohort with the index date at the first occurrence
 of a GI bleed condition occurrence is done in a single line of R code.
 This cohort takes advantage of many defaults that match the defaults in
 Atlas.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">giBleedCohort</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span><span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="va">GIBleed</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">giBleedCohort</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span></span>
+<span>  entry <span class="op">=</span> <span class="fu"><a href="../reference/entry.html">entry</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="va">GIBleed</span><span class="op">)</span>,</span>
+<span>    observationWindow <span class="op">=</span> <span class="fu"><a href="../reference/continuousObservation.html">continuousObservation</a></span><span class="op">(</span><span class="fl">0L</span>, <span class="fl">0L</span><span class="op">)</span>,</span>
+<span>    primaryCriteriaLimit <span class="op">=</span> <span class="st">"First"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span></span>
+<span>    endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/observationExit.html">observationExit</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">giBleedCohort</span></span></code></pre></div>
-<p>Cohort generation is the process of converting a cohort definition to
-a table with four columns: cohort_definition_id, subject_id,
-cohort_start_date, cohort_end_date. This table contains the person IDs
-and dates that people are in the cohort.</p>
+<p>Cohort definitions may get more complex than this example. In general
+there are four slots that need to be filled for a Capr cohort: first,
+entry which defines the index event; second, attrition which defines the
+persons that are withdrawn from the cohort given inclusion or exclusion
+criteria; third, exit which defines when the person leaves the cohort
+and is no longer observation; and fourth, the era which defines the span
+of time of which successive periods are combined into one as well as the
+truncation of the patient timeline. Capr allows you to define different
+permutations of this cohort structure given the clinical idea under
+analysis for the study.</p>
+</div>
+<div class="section level2">
+<h2 id="generating-a-cohort">Generating a cohort<a class="anchor" aria-label="anchor" href="#generating-a-cohort"></a>
+</h2>
+<p>Capr is only responsible for the definition of the cohort. Capr ends
+when it creates a Capr Cohort object or coerces it into a json
+structure. At this point, if we want to generate the cohort we would
+switch over to different HADES software, in particular <a href="https://github.com/OHDSI/CirceR" class="external-link">CirceR</a> and <a href="https://github.com/OHDSI/CohortGenerator" class="external-link">CohortGenerator</a>.
+These two R packages will help convert the json definition into
+executable SQL to run on your database. A generated cohort in a table
+will have an nx4 structure with the following columns:
+<em>cohort_definition_id, subject_id, cohort_start_date,
+cohort_end_date</em>. This table is what is used to do subsequent
+portions of an OHDSI study. Below is an example of how we can take the
+cohort from Capr and generate it on our database. For more information
+on generation, follow the examples from <a href="https://github.com/OHDSI/CohortGenerator" class="external-link">CohortGenerator</a></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span></span>
 <span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu">Eunomia</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Eunomia/man/getEunomiaConnectionDetails.html" class="external-link">getEunomiaConnectionDetails</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">giBleedCohortJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.json.html">as.json</a></span><span class="op">(</span><span class="va">giBleedCohort</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CirceR/reference/buildCohortQuery.html" class="external-link">buildCohortQuery</a></span><span class="op">(</span><span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CirceR/reference/cohortExpressionFromJson.html" class="external-link">cohortExpressionFromJson</a></span><span class="op">(</span><span class="fu"><a href="../reference/as.json.html">as.json</a></span><span class="op">(</span><span class="va">giBleedCohort</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                                <span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CirceR/reference/createGenerateOptions.html" class="external-link">createGenerateOptions</a></span><span class="op">(</span></span>
-<span>                                  generateStats <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>                                <span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CirceR/reference/buildCohortQuery.html" class="external-link">buildCohortQuery</a></span><span class="op">(</span></span>
+<span>  expression <span class="op">=</span> <span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CirceR/reference/cohortExpressionFromJson.html" class="external-link">cohortExpressionFromJson</a></span><span class="op">(</span><span class="va">giBleedCohortJson</span><span class="op">)</span>,</span>
+<span>  options <span class="op">=</span> <span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CirceR/reference/createGenerateOptions.html" class="external-link">createGenerateOptions</a></span><span class="op">(</span>generateStats <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cohortsToCreate</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  cohortId <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -170,32 +215,34 @@ and dates that people are in the cohort.</p>
 <span></span>
 <span></span>
 <span><span class="va">cohortTableNames</span> <span class="op">&lt;-</span> <span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/getCohortTableNames.html" class="external-link">getCohortTableNames</a></span><span class="op">(</span>cohortTable <span class="op">=</span> <span class="st">"my_cohort_table"</span><span class="op">)</span></span>
-<span><span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/createCohortTables.html" class="external-link">createCohortTables</a></span><span class="op">(</span>connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span>,</span>
-<span>                                                        cohortDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
-<span>                                                        cohortTableNames <span class="op">=</span> <span class="va">cohortTableNames</span><span class="op">)</span></span>
+<span><span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/createCohortTables.html" class="external-link">createCohortTables</a></span><span class="op">(</span></span>
+<span>  connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span>,</span>
+<span>  cohortDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
+<span>  cohortTableNames <span class="op">=</span> <span class="va">cohortTableNames</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co"># Generate the cohorts</span></span>
-<span><span class="va">cohortsGenerated</span> <span class="op">&lt;-</span> <span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/generateCohortSet.html" class="external-link">generateCohortSet</a></span><span class="op">(</span>connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span>,</span>
-<span>                                                       cdmDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
-<span>                                                       cohortDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
-<span>                                                       cohortTableNames <span class="op">=</span> <span class="va">cohortTableNames</span>,</span>
-<span>                                                       cohortDefinitionSet <span class="op">=</span> <span class="va">cohortsToCreate</span><span class="op">)</span></span>
+<span><span class="va">cohortsGenerated</span> <span class="op">&lt;-</span> <span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/generateCohortSet.html" class="external-link">generateCohortSet</a></span><span class="op">(</span></span>
+<span>  connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span>,</span>
+<span>  cdmDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
+<span>  cohortDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
+<span>  cohortTableNames <span class="op">=</span> <span class="va">cohortTableNames</span>,</span>
+<span>  cohortDefinitionSet <span class="op">=</span> <span class="va">cohortsToCreate</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get the cohort counts</span></span>
-<span><span class="va">cohortCounts</span> <span class="op">&lt;-</span> <span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/getCohortCounts.html" class="external-link">getCohortCounts</a></span><span class="op">(</span>connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span>,</span>
-<span>                                                 cohortDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
-<span>                                                 cohortTable <span class="op">=</span> <span class="va">cohortTableNames</span><span class="op">$</span><span class="va">cohortTable</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">cohortCounts</span><span class="op">)</span></span>
-<span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu">SqlRender</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/SqlRender/reference/render.html" class="external-link">render</a></span><span class="op">(</span><span class="va">sql</span><span class="op">)</span></span>
-<span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu">SqlRender</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/SqlRender/reference/translate.html" class="external-link">translate</a></span><span class="op">(</span><span class="va">sql</span>, <span class="st">"sqlite"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/connect.html" class="external-link">connect</a></span><span class="op">(</span><span class="va">connectionDetails</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/executeSql.html" class="external-link">executeSql</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">sql</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">cohortCounts</span> <span class="op">&lt;-</span> <span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/getCohortCounts.html" class="external-link">getCohortCounts</a></span><span class="op">(</span></span>
+<span>  connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span>,</span>
+<span>  cohortDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
+<span>  cohortTable <span class="op">=</span> <span class="va">cohortTableNames</span><span class="op">$</span><span class="va">cohortTable</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

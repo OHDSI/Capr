@@ -26,18 +26,17 @@ devtools::spell_check()
 # Create manual and vignettes:
 unlink("extras/Capr.pdf")
 
-# for linux
-#system("R CMD Rd2pdf ./ --output=extras/Capr.pdf")
+# for linux system('R CMD Rd2pdf ./ --output=extras/Capr.pdf')
 
 # for windows
-shell('R CMD Rd2pdf ./ --output=extras/Capr.pdf')
+shell("R CMD Rd2pdf ./ --output=extras/Capr.pdf")
 
 # Capr design
 dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
 rmarkdown::render("vignettes/capr_design.Rmd",
                   output_file = "../extras/pdf_vignette/capr_design.pdf",
-                  rmarkdown::pdf_document(latex_engine = "pdflatex",
-  toc = TRUE, number_sections = TRUE))
+
+  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
 unlink("extras/pdf_vignette/capr_design.tex")
 
 
@@ -45,16 +44,31 @@ unlink("extras/pdf_vignette/capr_design.tex")
 dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
 rmarkdown::render("vignettes/Examples.Rmd",
                   output_file = "../extras/pdf_vignette/Examples.pdf",
-  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+  toc = TRUE, number_sections = TRUE))
 unlink("extras/pdf_vignette/Examples.tex")
 
 
 # Using Capr
 dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
-rmarkdown::render("vignettes/Using-Capr.Rmd",
-                  output_file = "../extras/pdf_vignette/Using-Capr.pdf",
-                  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
+rmarkdown::render("vignettes/Using-Capr.Rmd", output_file = "../extras/pdf_vignette/Using-Capr.pdf",
+  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
 unlink("extras/pdf_vignette/Using-Capr.tex")
+
+
+# capr templates
+dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
+rmarkdown::render("vignettes/capr_templates.Rmd", output_file = "../extras/pdf_vignette/capr_templates.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
+unlink("extras/pdf_vignette/capr_templates.tex")
+
+
+# capr concept sets
+dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
+rmarkdown::render("vignettes/Capr-conceptSets.Rmd", output_file = "../extras/pdf_vignette/Capr-conceptSets.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
+unlink("extras/pdf_vignette/Capr-conceptSets.tex")
+
 
 # build site
 pkgdown::build_site()
