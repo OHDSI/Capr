@@ -1,0 +1,123 @@
+---
+title: "Capr for Templating Cohort Definitions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Capr for Templating Cohort Definitions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r setup}
+library(Capr)
+```
+
+
+## Building a Template
+
+Capr is at its most valuable when it is used as a tool for templating cohort definitions. In a study we may need multiple cohort definitions that use the same logic but vary by concept sets. For example, in a study we need to create cohort covariates for various conditions. The cohort logic is simple, as condition occurrence with at least 365 days of prior observation. The concept sets used could be various cardiovascular events like stroke, myocardial infarction, heart failure, and atrial fibrillation. 
+
+To build all these cohorts using a template, we can easily define the logic in Capr. Capr templates are functions were the input is a concept set that differs in the logic.
+
+```{r}
+cvEvents <- function(conceptSet) {
+  cd <- cohort(
+    entry = entry(
+      condition(conceptSet),
+      observationWindow = continuousObservation(365, 0)
+    ),
+    exit = exit(
+      endStrategy = observationExit()
+    )
+  )
+  return(cd)
+}
+```
+
+The cohort template above describes the logic we desire. An entry event based on a condition occurrence with 365 days of prior observation and the cohort exit is based on the last available date of observation. 
+
+Once we have a Capr template, our next step is to add concept sets into the template functions. Using [Athena](https://athena.ohdsi.org/), I look up the OMOP concept ids for the concepts of interest. With these concept ids, I can create a concept set for each cardiovascular event
+
+```{r}
+afib <- cs(descendants(313217), name = "Atrial Fibrillation")
+stroke <- cs(descendants(4310996), name = "Ischemic Stroke")
+mi <- cs(descendants(4329847), name = "Myocardial Infarction")
+hf <- cs(descendants(316139), name = "Heart Failure")
+```
+
+Once I have my concept sets, I could build each cohort one at a time. What is preferred is to use the R functional factories in order to not write code for each concept set. It is recommended to use the function factories provided in the [`purrr`](https://purrr.tidyverse.org/) package. Below is an example of how we can use purrr to build multiple cohorts from our Capr template. The `cvCohorts` object returns a list of four Capr Cohort class objects. 
+
+```{r}
+cvSet <- list(afib, stroke, mi, hf)
+cvCohorts <- purrr::map(cvSet, ~cvEvents(.x))
+```
+
+
+## Improving the Template
+
+In the previous example, our `cvEvents` function returned a Capr Cohort object. What if we wanted the output to be json and even better save to a folder? We can improve the Capr template function to create the json object; an example is provided below.
+
+```{r}
+cvEvents <- function(conceptSet) {
+  
+  #Capr template logic
+  cd <- cohort(
+    entry = entry(
+      condition(conceptSet),
+      observationWindow = continuousObservation(365, 0)
+    ),
+    exit = exit(
+      endStrategy = observationExit()
+    )
+  )
+  
+  #coerce cohort to json
+  cohortJson <- cd %>%
+    toCirce() %>%
+    jsonlite::toJSON(pretty = TRUE, auto_unbox = TURE) %>%
+    as.character()
+    
+  return(cohortJson)
+}
+```
+
+## Building templates from concept sets
+
+Sometimes a single concept is insufficient for defining a clinical idea and we need multiple concepts in the set. Also we may want to use a concept set developed previously. The Capr function `readConceptSet` allows one to import a concept set from a .csv or .json file that we can use towards the cohort template. We update our Capr template function to handle the import of a concept set, as shown below. 
+
+```{r}
+cvEvents <- function(file) {
+  
+  # get file name
+  name <- tools::file_path_sans_ext(basename(file))
+  
+  #retreive concept set
+  conceptSet <- Capr::readConceptSet(path = file, name = name)
+  
+  #Capr template logic
+  cd <- cohort(
+    entry = entry(
+      condition(conceptSet),
+      observationWindow = continuousObservation(365, 0)
+    ),
+    exit = exit(
+      endStrategy = observationExit()
+    )
+  )
+  
+  #coerce cohort to json
+  cohortJson <- cd %>%
+    toCirce() %>%
+    jsonlite::toJSON(pretty = TRUE, auto_unbox = TURE) %>%
+    as.character()
+    
+  return(cohortJson)
+}
+```
