@@ -30,8 +30,8 @@ ace1 <- cs(1335471, #benazepril
            1340128, #captopril
            1341927, #enalapril
            1308216, #lisinopril
-           1363749  #fosinopril
-)
+           1363749,  #fosinopril
+           name = "aceInhibitors")
 ace1
 ```
 
@@ -40,10 +40,20 @@ ace1
 If you were only add the OMOP id for the ingredient, our query would only look at whether that specific ID is among the drug concepts for a set of patients. With OMOP, we often don't want just the ingredient ID but also its descendants. Descendants are child concepts that map to the adult concepts. For example a brand name or specific dosage of lisinopril would have a different OMOP concept Id but it would map to the ingredient term via the vocabulary hierarchy. This helps us include all variations of linisopril that could be seen in the data. In Capr we can easily add this logic using the `descendants` command
 
 ```{r}
-ace2 <- cs(descendants(1335471, 1340128, 1341927, 1363749, 1308216))
+ace2 <- cs(descendants(1335471, 1340128, 1341927, 1363749, 1308216),
+           name = "aceInhibitors")
 ace2
 ```
 
 ## Toggling other logic
 
-A similar strategy can be used to exclude concepts from a set or include mapped. 
+A similar strategy can be used to exclude concepts from a set or include mapped. We can also combine this within the `cs` function, as shown below
+
+```{r}
+ace3 <- cs(descendants(1335471, 1340128, 1341927, 1363749), exclude(1308216),
+           name = "aceInhibitors")
+ace3
+```
+
+
+
