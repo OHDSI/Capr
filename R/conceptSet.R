@@ -361,6 +361,8 @@ setMethod("as.list", "ConceptSet", function(x){
 #' @docType methods
 setGeneric("as.json", function(x, pretty = TRUE, ...)  standardGeneric("as.json"))
 
+#' @rdname as.json
+#' @aliases as.json,ConceptSet-method
 setMethod("as.json", "ConceptSet", function(x, pretty = TRUE, ...){
   items <- list(items = lapply(x@Expression, as.list))
   jsonlite::toJSON(x = items, pretty = pretty, auto_unbox = TRUE, ...)

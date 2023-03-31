@@ -3,10 +3,13 @@
 \docType{methods}
 \name{as.json}
 \alias{as.json}
+\alias{as.json,ConceptSet-method}
 \alias{as.json,Cohort-method}
 \title{Coerce Capr object to json}
 \usage{
 as.json(x, pretty = TRUE, ...)
+
+\S4method{as.json}{ConceptSet}(x, pretty = TRUE, ...)
 
 \S4method{as.json}{Cohort}(x, pretty = TRUE, ...)
 }
