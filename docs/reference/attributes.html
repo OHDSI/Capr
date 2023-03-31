@@ -52,7 +52,7 @@ Add female attribute to a query"><meta property="og:image" content="/logo.png"><
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://ohdsi.github.io/Hades" class="external-link">hadesLogo</a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/Capr/" class="external-link">
@@ -105,12 +105,12 @@ Add female attribute to a query"><meta property="og:image" content="/logo.png"><
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># Create a cohort of males with Type 1 diabetes</span></span></span>
-<span class="r-in"><span><span class="va">t1dm</span> <span class="op">&lt;-</span> <span class="fu"><a href="cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="cs.html">descendants</a></span><span class="op">(</span><span class="fl">201254</span>,<span class="fl">435216</span>,<span class="fl">40484648</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">t1dm</span> <span class="op">&lt;-</span> <span class="fu"><a href="cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="cs.html">descendants</a></span><span class="op">(</span><span class="fl">201254</span>, <span class="fl">435216</span>, <span class="fl">40484648</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">t1dm_males</span> <span class="op">&lt;-</span> <span class="fu"><a href="cohort.html">cohort</a></span><span class="op">(</span><span class="fu"><a href="condition.html">condition</a></span><span class="op">(</span><span class="va">t1dm</span>, <span class="fu">male</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># Create a cohort of males with Type 1 diabetes</span></span></span>
-<span class="r-in"><span><span class="va">t1dm</span> <span class="op">&lt;-</span> <span class="fu"><a href="cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="cs.html">descendants</a></span><span class="op">(</span><span class="fl">201254</span>,<span class="fl">435216</span>,<span class="fl">40484648</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">t1dm</span> <span class="op">&lt;-</span> <span class="fu"><a href="cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="cs.html">descendants</a></span><span class="op">(</span><span class="fl">201254</span>, <span class="fl">435216</span>, <span class="fl">40484648</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">t1dm_females</span> <span class="op">&lt;-</span> <span class="fu"><a href="cohort.html">cohort</a></span><span class="op">(</span><span class="fu"><a href="condition.html">condition</a></span><span class="op">(</span><span class="va">t1dm</span>, <span class="fu">female</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
