@@ -14,3 +14,4 @@ compare_versions
 ^README\.Rmd$
 ^pkgdown$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
