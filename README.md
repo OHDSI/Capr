@@ -95,7 +95,8 @@ ch <- cohort(
     exactly(0, drug(nsaid), eventStarts(-Inf, 0, index = "startDate")),
     exactly(0, condition(cancer), eventStarts(-Inf, 0, index = "startDate"))
   )),
-  exit = drugExit(diclofenac, persistenceWindow = 30)
+  exit = exit(
+    endStrategy = drugExit(diclofenac, persistenceWindow = 30)
 )
 
 ch
@@ -255,7 +256,11 @@ DatabaseConnector::disconnect(con)
 
 Documentation can be found on the [package website](https://ohdsi.github.io/Capr).
 
-PDF versions of the documentation are also available: \* Vignette: [Using Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Using-Capr.pdf) \* Vignette: [Examples](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Examples.pdf) \* [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
+PDF versions of the documentation are also available: 
+
+- Vignette: [Using Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Using-Capr.pdf) 
+- Vignette: [Examples](https://raw.githubusercontent.com/OHDSI/Capr/main/inst/doc/Examples.pdf) 
+- [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
 
 # Support
 

@@ -13,3 +13,4 @@ compare_versions
 ^work$
 ^README\.Rmd$
 ^pkgdown$
+^LICENSE\.md$
