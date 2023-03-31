@@ -11,7 +11,7 @@ Description: The Capr package provides a programming language for defining OHDSI
     component parts to a cohort definition allowing R programmers to easily reuse cohort logic. Capr provides tools
     to create a large number of OHDSI cohorts programmatically while also helping bridge the gap between human readable
     descriptions of clinical phenotypes and their computational implmentation. 
-License: Apache License 2.0
+License: Apache License (>= 2)
 URL: https://ohdsi.github.io/Capr, https://github.com/OHDSI/Capr
 BugReports: https://github.com/OHDSI/Capr/issues
 Encoding: UTF-8
@@ -40,12 +40,8 @@ Imports:
 Suggests:
   testthat (>= 3.0.0),
   knitr,
-  rmarkdown,
-  CohortGenerator,
-  CirceR,
-  Eunomia
+  rmarkdown
 VignetteBuilder: knitr
-Additional_repositories: https://OHDSI.github.io/drat
 Config/testthat/edition: 3
 Collate: 
     'Capr.R'
