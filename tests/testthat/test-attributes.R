@@ -245,4 +245,13 @@ test_that("concept attributes build", {
   expect_equal(tt@conceptSet[[1]]@concept_name, "%")
 })
 
+test_that("logical attributes build", {
 
+  t1 <- firstOccurrence()
+  expect_s4_class(t1, "logicAttribute")
+  expect_equal(t1@name, "First")
+
+  t2 <- as.list(t1)
+  expect_named(t2, "First")
+  expect_equal(t2$First, TRUE)
+})
