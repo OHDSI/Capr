@@ -16,3 +16,10 @@ firstOccurrence <- function() {
   res <- methods::new("logicAttribute", name = "First")
   return(res)
 }
+
+# Coercion ------------------
+
+setMethod("as.list", "logicAttribute", function(x) {
+
+  tibble::lst(`:=`(!!x@name, TRUE))
+})
