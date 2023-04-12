@@ -1,5 +1,27 @@
 # Classes ----------------------------
 
+## opAttributeSuper ----
+
+#' An S4 super class for other opAttribute objects to inherit.
+setClass("opAttributeSuper",
+         slots = c(name = "character"))
+
+setMethod("show", "opAttributeSuper", function(object) {
+  symbol <- opToPrint(object@op)
+  if (symbol == "-") {
+    pp <- paste0("in {", object@value, symbol, object@extent, "}")
+  } else if (symbol == "!-") {
+    pp <- paste0("not in {", object@value, "-", object@extent, "}")
+  } else {
+    pp <- paste(symbol, object@value)
+  }
+
+  txt <- paste0("Capr Op Attribute Numeric: ", object@name, " ", pp)
+  cli::cat_bullet(txt, bullet = "sup_plus")
+})
+
+setMethod("as.list", "opAttributeSuper", listOpAttribute)
+
 ## opAttributeNumeric ----
 
 #' An S4 class for a op attribute that is a numeric
@@ -12,24 +34,10 @@
 #' @slot
 #' extent a value serving as the upper limit in a bt, otherwise this is empty
 setClass("opAttributeNumeric",
+         contains = "opAttributeSuper",
          slots = c(name = "character", op = "character", value = "numeric", extent = "numeric"),
 
-  prototype = list(name = NA_character_, op = NA_character_, value = NA_real_, extent = NA_real_))
-
-setMethod("show", "opAttributeNumeric", function(object) {
-  symbol <- opToPrint(object@op)
-  if (symbol == "-") {
-    pp <- paste0("in {", object@value, symbol, object@extent, "}")
-  } else if (symbol == "!-") {
-    pp <- paste0("not in {", object@value, "-", object@extent, "}")
-  } else {
-    pp <- paste(symbol, object@value)
-  }
-
-  txt <- paste0("Capr Op Attribute Numeric: ", object@name, " ", pp)
-  cli::cat_bullet(txt, bullet = "sup_plus")
-
-})
+         prototype = list(name = NA_character_, op = NA_character_, value = NA_real_, extent = NA_real_))
 
 
 ## opAttributeInteger ----
@@ -44,27 +52,13 @@ setMethod("show", "opAttributeNumeric", function(object) {
 #' @slot
 #' extent a value serving as the upper limit in a bt, otherwise this is empty
 setClass("opAttributeInteger",
+         contains = "opAttributeSuper",
          slots = c(name = "character", op = "character", value = "integer", extent = "integer"),
 
-  prototype = list(name = NA_character_,
-                   op = NA_character_,
-                   value = NA_integer_,
-                   extent = NA_integer_))
-
-
-setMethod("show", "opAttributeInteger", function(object) {
-  symbol <- opToPrint(object@op)
-  if (symbol == "-") {
-    pp <- paste0("in {", object@value, symbol, object@extent, "}")
-  } else if (symbol == "!-") {
-    pp <- paste0("not in {", object@value, "-", object@extent, "}")
-  } else {
-    pp <- paste(symbol, object@value)
-  }
-  txt <- paste0("Capr Op Attribute Integer: ", object@name, " ", pp)
-  cli::cat_bullet(txt, bullet = "sup_plus")
-
-})
+         prototype = list(name = NA_character_,
+                          op = NA_character_,
+                          value = NA_integer_,
+                          extent = NA_integer_))
 
 
 ## opAttributeDate ----
@@ -79,33 +73,19 @@ setMethod("show", "opAttributeInteger", function(object) {
 #' @slot
 #' extent a value serving as the upper limit in a bt, otherwise this is empty
 setClass("opAttributeDate",
+         contains = "opAttributeSuper",
          slots = c(name = "character", op = "character", value = "Date", extent = "Date"),
 
-  prototype = list(name = NA_character_,
-                   op = NA_character_,
-                   value = lubridate::NA_Date_,
-                   extent = lubridate::NA_Date_))
-
-
-setMethod("show", "opAttributeDate", function(object) {
-  symbol <- opToPrint(object@op)
-  if (symbol == "-") {
-    pp <- paste0("in {", object@value, symbol, object@extent, "}")
-  } else if (symbol == "!-") {
-    pp <- paste0("not in {", object@value, "-", object@extent, "}")
-  } else {
-    pp <- paste(symbol, object@value)
-  }
-  txt <- paste0("Capr Op Attribute Date: ", object@name, " ", pp)
-  cli::cat_bullet(txt, bullet = "sup_plus")
-
-})
+         prototype = list(name = NA_character_,
+                          op = NA_character_,
+                          value = lubridate::NA_Date_,
+                          extent = lubridate::NA_Date_))
 
 # Helpers --------------------
 
 opToPrint <- function(x) {
   tibble::tibble(symbol = c("<", "<=", ">", ">=", "==", "-", "!-"), op = c("lt", "lte", "gt", "gte",
-    "eq", "bt", "!bt")) %>%
+                                                                           "eq", "bt", "!bt")) %>%
     dplyr::filter(.data$op == x) %>%
     dplyr::pull(.data$symbol)
 }
@@ -379,7 +359,7 @@ daysOfSupply <- function(op) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
   methods::new("opAttributeInteger", name = "DaysSupply", op = op@op, value = as.integer(op@value),
-    extent = as.integer(op@extent))
+               extent = as.integer(op@extent))
 }
 
 
@@ -541,11 +521,6 @@ listOpAttribute <- function(x) {
 
   tibble::lst(`:=`(!!x@name, atr))
 }
+
 ## Coerce Numeric ----
-setMethod("as.list", "opAttributeNumeric", listOpAttribute)
-## Coerce Integer ----
-setMethod("as.list", "opAttributeInteger", listOpAttribute)
-## Coerce Date ----
-setMethod("as.list", "opAttributeDate", listOpAttribute)
-
-
+setMethod("as.list", "opAttributeSuper", listOpAttribute)
