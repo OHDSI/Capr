@@ -16,11 +16,9 @@ setMethod("show", "opAttributeSuper", function(object) {
     pp <- paste(symbol, object@value)
   }
 
-  txt <- paste0("Capr Op Attribute Numeric: ", object@name, " ", pp)
+  txt <- paste0("Capr Op Attribute: ", object@name, " ", pp)
   cli::cat_bullet(txt, bullet = "sup_plus")
 })
-
-setMethod("as.list", "opAttributeSuper", listOpAttribute)
 
 ## opAttributeNumeric ----
 
@@ -333,7 +331,7 @@ setMethod("nbt", "Date", function(x, y) {
 #' @export
 age <- function(op) {
 
-  check <- grepl("opAttribute", methods::is(op))
+  check <- all(grepl("opAttribute", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
@@ -354,7 +352,7 @@ age <- function(op) {
 #' @export
 daysOfSupply <- function(op) {
 
-  check <- grepl("opAttribute", methods::is(op))
+  check <- all(grepl("opAttribute", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
@@ -373,7 +371,7 @@ daysOfSupply <- function(op) {
 #' @export
 drugRefills <- function(op) {
 
-  check <- grepl("opAttribute", methods::is(op))
+  check <- all(grepl("opAttribute", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
@@ -396,7 +394,7 @@ drugRefills <- function(op) {
 #' @export
 valueAsNumber <- function(op) {
 
-  check <- grepl("opAttribute", methods::is(op))
+  check <- all(grepl("opAttribute", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
@@ -417,7 +415,7 @@ valueAsNumber <- function(op) {
 #' @export
 rangeHigh <- function(op) {
 
-  check <- grepl("opAttribute", methods::is(op))
+  check <- all(grepl("opAttribute", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
@@ -438,7 +436,7 @@ rangeHigh <- function(op) {
 #' @export
 rangeLow <- function(op) {
 
-  check <- grepl("opAttribute", methods::is(op))
+  check <- all(grepl("opAttribute", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
@@ -461,7 +459,7 @@ rangeLow <- function(op) {
 #' @export
 drugQuantity <- function(op) {
 
-  check <- grepl("opAttribute", methods::is(op))
+  check <- all(grepl("opAttribute", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeNumeric or opAttributeInteger.")
   }
@@ -483,7 +481,7 @@ drugQuantity <- function(op) {
 #' @export
 startDate <- function(op) {
 
-  check <- grepl("opAttributeDate", methods::is(op))
+  check <- all(grepl("opAttribute(Date|Super)", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeDate.")
   }
@@ -501,7 +499,7 @@ startDate <- function(op) {
 #' @export
 endDate <- function(op) {
 
-  check <- grepl("opAttributeDate", methods::is(op))
+  check <- all(grepl("opAttribute(Date|Super)", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeDate.")
   }
