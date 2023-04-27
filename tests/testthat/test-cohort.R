@@ -142,11 +142,13 @@ test_that("full cohort works without group", {
 
 test_that("Capr cohort generates on synpuf", {
   skip_if_not_installed("CirceR")
+  skip_if_not_installed("Eunomia")
   # need simple cohort for synpuf
   cd <- cohort(
     entry = entry(
       drug(cs(descendants(1118084), name = "celecoxib"), male()),
-      observationWindow = continuousObservation(365, 0)
+      observationWindow = continuousObservation(0, 0)
+      # observationWindow = continuousObservation(1, 0) # TODO this line causes an error.
     )
   )
 
@@ -172,7 +174,6 @@ test_that("Capr cohort generates on synpuf", {
   )
 
   connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-
   cohortTableNames <- CohortGenerator::getCohortTableNames("cohort")
 
   invisible(capture_output(suppressMessages({

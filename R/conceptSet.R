@@ -504,7 +504,7 @@ readConceptSet <- function(path, name, id = NULL) {
       conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()
     ) %>%
       dplyr::mutate(
-        dplyr::across(.data$conceptName:.data$conceptClassId, ~tidyr::replace_na(.x, "")) #convert na to ""
+        dplyr::across(conceptName:conceptClassId, ~tidyr::replace_na(.x, "")) #convert na to ""
       )
     conceptList <- purrr::pmap(conceptDf, newConcept)
   }
