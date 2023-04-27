@@ -1,3 +1,7 @@
+Capr 2.0.2
+==========
+- fix tests for CRAN
+
 Capr 2.0.1
 ==========
 - additions and corrections to vignettes and documentation
