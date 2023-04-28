@@ -97,10 +97,12 @@ exactly <- function(x,
 }
 
 #' Function to enumerate an minimal count of occurrences
+#'
 #' @param x the integer counting the number of occurrences
 #' @param query a query object that provides context to the clinical event of interest
 #' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
 #' relative to the index event
+#' @return A criteria that can be used in a cohort definition
 #' @export
 atLeast <- function(x,
                     query,
@@ -126,6 +128,7 @@ atLeast <- function(x,
 #' @param query a query object that provides context to the clinical event of interest
 #' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
 #' relative to the index event
+#' @param A criteria that can be used in a cohort definition
 #' @export
 atMost <- function(x,
                    query,

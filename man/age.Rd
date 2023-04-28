@@ -10,6 +10,9 @@ age(op)
 \item{op}{an opAttribute object that is either numeric or integer that defines the logical
 operation used to determine eligible patient age}
 }
+\value{
+An age attribute that can be used in a cohort definition
+}
 \description{
 Function to create age attribute
 }

@@ -114,6 +114,7 @@ entry <- function(...,
 #'
 #' @param ... Capr groups
 #' @param expressionLimit how to limit initial events per person either First, All, or Last
+#' @return A cohort attrition object that can be used in a cohort definition
 #' @export
 attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
 
@@ -128,6 +129,7 @@ attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
 #' Function that creates a cohort exit object
 #' @param endStrategy the endStrategy object to specify for the exit
 #' @param censor the censoring criteria to specify for the exit
+#' @return A cohort exit object that can be used in a cohort definition
 #' @export
 exit <- function(endStrategy, censor = NULL){
   if (is.null(censor)) {

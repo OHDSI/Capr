@@ -8,19 +8,19 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Provides a programming language for defining OHDSI cohort definitions in R to use in studies for Observational Health Data Sciences and Informatics (OHDSI). The functions in 'Capr' allow for the programmatic creation of OHDSI concept sets and cohorts that can be serialized to 'Atlas/CIRCE-BE' compatible 'json' files or to 'OHDSI-SQL'. 'Capr' functions can be used to create, save, and load component parts to a cohort definition allowing R programmers to easily reuse cohort logic. 'Capr' provides tools to create a large number of OHDSI cohorts programmatically while also helping bridge the gap between human readable descriptions of clinical phenotypes and their computational implmentation.
+Provides a programming language for defining OHDSI cohort definitions in R to use in studies for Observational Health Data Sciences and Informatics (OHDSI). The functions in 'Capr' allow for the programmatic creation of OHDSI concept sets and cohorts that can be serialized to 'Atlas/CIRCE-BE' compatible 'json' files or to 'OHDSI-SQL'. 'Capr' functions can be used to create, save, and load component parts to a cohort definition allowing R programmers to easily reuse cohort logic. 'Capr' provides tools to create a large number of OHDSI cohorts programmatically while also helping bridge the gap between human readable descriptions of clinical phenotypes and their computational implementation.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://ohdsi.github.io/Capr}
-  \item \url{https://github.com/OHDSI/Capr}
+  \item \url{https://github.com/OHDSI/Capr/}
   \item Report bugs at \url{https://github.com/OHDSI/Capr/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Martin Lavallee \email{mdlavallee92@gmail.com}
+\strong{Maintainer}: Martin Lavallee \email{adam.black@odysseusinc.com}
 
 Authors:
 \itemize{

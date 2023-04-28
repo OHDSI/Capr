@@ -14,6 +14,9 @@ atLeast(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
 \item{aperture}{an eventAperture object that shows the temporal span where the event is to be observed
 relative to the index event}
 }
+\value{
+A criteria that can be used in a cohort definition
+}
 \description{
 Function to enumerate an minimal count of occurrences
 }
