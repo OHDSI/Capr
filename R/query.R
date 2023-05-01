@@ -3,7 +3,7 @@
 
 #' An S4 class for a Circe Query
 #'
-#' A query is a medical concept that can be extracted from a database through a 'where' clause in a SQL statement.
+#' A query is a medical concept that can be extracted from a database through a 'where' clause in a 'SQL' statement.
 #' This includes concepts.
 #'
 #' @slot domain The domain to search (e.g. "Condition", "Drug", "Measurement", etc)

@@ -4,7 +4,19 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>/articles/Capr-conceptSets.html</loc>
+  </url>
+  <url>
+    <loc>/articles/Examples.html</loc>
+  </url>
+  <url>
+    <loc>/articles/Using-Capr.html</loc>
   </url>
   <url>
     <loc>/articles/capr_design.html</loc>
@@ -13,13 +25,7 @@
     <loc>/articles/capr_templates.html</loc>
   </url>
   <url>
-    <loc>/articles/Examples.html</loc>
-  </url>
-  <url>
     <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Using-Capr.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -28,13 +34,124 @@
     <loc>/index.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
     <loc>/news/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Capr-package.html</loc>
+  </url>
+  <url>
+    <loc>/reference/CensorWindow-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/CensoringCriteria-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/CohortDefinition-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/CohortDetails-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/CollapseSettings-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Component-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Concept-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ConceptAttribute-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ConceptSet-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ConceptSetExpression-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ConceptSetItem-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/CorrelatedCriteriaAttribute-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Count-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Criteria-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/CustomEraEndStrategy-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/DateOffsetEndStrategy-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/DrugExposureExit-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/EndOfCtsObsEndStrategy-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Endpoint-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/EventAperture-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/EventWindow-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ExpressionType-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FixedDurationExit-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Group-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Limit-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/LogicAttribute-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/MetaData-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ObservationExit-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ObservationWindow-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Occurrence-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/OpAttribute-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Query-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/SourceConceptAttribute-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Timeline-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/UpdateAndConvert.html</loc>
+  </url>
+  <url>
+    <loc>/reference/UpdateCirceCodesetId-method.html</loc>
+  </url>
+  <url>
+    <loc>/reference/UpdateCodesetIdRule.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Window-class.html</loc>
   </url>
   <url>
     <loc>/reference/addAttributeToQuery.html</loc>
@@ -70,9 +187,6 @@
     <loc>/reference/as.CountLoad.html</loc>
   </url>
   <url>
-    <loc>/reference/as.data.frame-ConceptSet-method.html</loc>
-  </url>
-  <url>
     <loc>/reference/as.EndStrategyLoad.html</loc>
   </url>
   <url>
@@ -80,9 +194,6 @@
   </url>
   <url>
     <loc>/reference/as.GroupLoad.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.json.html</loc>
   </url>
   <url>
     <loc>/reference/as.Limit.html</loc>
@@ -106,6 +217,12 @@
     <loc>/reference/as.Window.html</loc>
   </url>
   <url>
+    <loc>/reference/as.data.frame-ConceptSet-method.html</loc>
+  </url>
+  <url>
+    <loc>/reference/as.json.html</loc>
+  </url>
+  <url>
     <loc>/reference/atLeast.html</loc>
   </url>
   <url>
@@ -121,16 +238,7 @@
     <loc>/reference/bt.html</loc>
   </url>
   <url>
-    <loc>/reference/Capr-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/CensoringCriteria-class.html</loc>
-  </url>
-  <url>
     <loc>/reference/censoringEvents.html</loc>
-  </url>
-  <url>
-    <loc>/reference/CensorWindow-class.html</loc>
   </url>
   <url>
     <loc>/reference/checkConceptField.html</loc>
@@ -142,43 +250,22 @@
     <loc>/reference/cohort.html</loc>
   </url>
   <url>
-    <loc>/reference/CohortDefinition-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/CohortDetails-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/CollapseSettings-class.html</loc>
+    <loc>/reference/compile-methods.html</loc>
   </url>
   <url>
     <loc>/reference/compile.Cohort.html</loc>
   </url>
   <url>
-    <loc>/reference/compileCohortDefinition.html</loc>
+    <loc>/reference/compile.html</loc>
   </url>
   <url>
-    <loc>/reference/Component-class.html</loc>
+    <loc>/reference/compileCohortDefinition.html</loc>
   </url>
   <url>
     <loc>/reference/componentClass-method.html</loc>
   </url>
   <url>
     <loc>/reference/componentType-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Concept-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ConceptAttribute-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ConceptSet-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ConceptSetExpression-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ConceptSetItem-class.html</loc>
   </url>
   <url>
     <loc>/reference/condition.html</loc>
@@ -212,12 +299,6 @@
   </url>
   <url>
     <loc>/reference/convertRuleToCIRCE.html</loc>
-  </url>
-  <url>
-    <loc>/reference/CorrelatedCriteriaAttribute-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Count-class.html</loc>
   </url>
   <url>
     <loc>/reference/createAdditionalCriteria.html</loc>
@@ -517,16 +598,7 @@
     <loc>/reference/createWindowCall.html</loc>
   </url>
   <url>
-    <loc>/reference/Criteria-class.html</loc>
-  </url>
-  <url>
     <loc>/reference/cs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/CustomEraEndStrategy-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DateOffsetEndStrategy-class.html</loc>
   </url>
   <url>
     <loc>/reference/daysOfSupply.html</loc>
@@ -542,9 +614,6 @@
   </url>
   <url>
     <loc>/reference/drugExit.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DrugExposureExit-class.html</loc>
   </url>
   <url>
     <loc>/reference/drugQuantity.html</loc>
@@ -595,12 +664,6 @@
     <loc>/reference/endDate.html</loc>
   </url>
   <url>
-    <loc>/reference/EndOfCtsObsEndStrategy-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Endpoint-class.html</loc>
-  </url>
-  <url>
     <loc>/reference/entry.html</loc>
   </url>
   <url>
@@ -613,16 +676,10 @@
     <loc>/reference/era.html</loc>
   </url>
   <url>
-    <loc>/reference/EventAperture-class.html</loc>
-  </url>
-  <url>
     <loc>/reference/eventEnds.html</loc>
   </url>
   <url>
     <loc>/reference/eventStarts.html</loc>
-  </url>
-  <url>
-    <loc>/reference/EventWindow-class.html</loc>
   </url>
   <url>
     <loc>/reference/exactly.html</loc>
@@ -631,13 +688,7 @@
     <loc>/reference/exit.html</loc>
   </url>
   <url>
-    <loc>/reference/ExpressionType-class.html</loc>
-  </url>
-  <url>
     <loc>/reference/firstOccurrence.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FixedDurationExit-class.html</loc>
   </url>
   <url>
     <loc>/reference/fixedExit.html</loc>
@@ -688,9 +739,6 @@
     <loc>/reference/getPCCall.html</loc>
   </url>
   <url>
-    <loc>/reference/Group-class.html</loc>
-  </url>
-  <url>
     <loc>/reference/gt.html</loc>
   </url>
   <url>
@@ -721,9 +769,6 @@
     <loc>/reference/initialize-Query-method.html</loc>
   </url>
   <url>
-    <loc>/reference/Limit-class.html</loc>
-  </url>
-  <url>
     <loc>/reference/lineBreak.html</loc>
   </url>
   <url>
@@ -731,9 +776,6 @@
   </url>
   <url>
     <loc>/reference/loadComponent.html</loc>
-  </url>
-  <url>
-    <loc>/reference/LogicAttribute-class.html</loc>
   </url>
   <url>
     <loc>/reference/lookupConceptCodes.html</loc>
@@ -763,9 +805,6 @@
     <loc>/reference/measurement.html</loc>
   </url>
   <url>
-    <loc>/reference/MetaData-class.html</loc>
-  </url>
-  <url>
     <loc>/reference/nbt.html</loc>
   </url>
   <url>
@@ -787,19 +826,7 @@
     <loc>/reference/observation.html</loc>
   </url>
   <url>
-    <loc>/reference/ObservationExit-class.html</loc>
-  </url>
-  <url>
     <loc>/reference/observationExit.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ObservationWindow-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Occurrence-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/OpAttribute-class.html</loc>
   </url>
   <url>
     <loc>/reference/opAttributeDate-class.html</loc>
@@ -821,9 +848,6 @@
   </url>
   <url>
     <loc>/reference/procedure.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Query-class.html</loc>
   </url>
   <url>
     <loc>/reference/rangeHigh.html</loc>
@@ -850,13 +874,7 @@
     <loc>/reference/show-method.html</loc>
   </url>
   <url>
-    <loc>/reference/SourceConceptAttribute-class.html</loc>
-  </url>
-  <url>
     <loc>/reference/startDate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Timeline-class.html</loc>
   </url>
   <url>
     <loc>/reference/toCirce.html</loc>
@@ -868,22 +886,10 @@
     <loc>/reference/unit.html</loc>
   </url>
   <url>
-    <loc>/reference/UpdateAndConvert.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UpdateCirceCodesetId-method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UpdateCodesetIdRule.html</loc>
-  </url>
-  <url>
     <loc>/reference/valueAsNumber.html</loc>
   </url>
   <url>
     <loc>/reference/visit.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Window-class.html</loc>
   </url>
   <url>
     <loc>/reference/withAll.html</loc>

@@ -353,19 +353,6 @@ setMethod("as.list", "ConceptSet", function(x){
                  'expression' = list('items' = lapply(x@Expression, as.list)))
 })
 
-#' Coerce Capr object to json
-#' @param x the capr object
-#' @param pretty a toggle to make the json look nice, part of jsonlite
-#' @param ... additional arguments passes to jsonlite::toJSON
-#' @export
-#' @docType methods
-setGeneric("as.json", function(x, pretty = TRUE, ...)  standardGeneric("as.json"))
-
-setMethod("as.json", "ConceptSet", function(x, pretty = TRUE, ...){
-  items <- list(items = lapply(x@Expression, as.list))
-  jsonlite::toJSON(x = items, pretty = pretty, auto_unbox = TRUE, ...)
-})
-
 #' Save a concept set as a json file
 #'
 #' The resulting concept Set JSON file can be imported into Atlas.
@@ -501,11 +488,9 @@ readConceptSet <- function(path, name, id = NULL) {
       conceptCode = df[["concept_code"]] %||%  df[["concept code"]] %||% "" %>% as.character(),
       domainId = df[["domain_id"]] %||%  df[["domain"]] %||% "" %>% as.character(),
       vocabularyId = df[["vocabulary_id"]] %||%  df[["vocabulary"]] %||% "" %>% as.character(),
-      conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()
-    ) %>%
-      dplyr::mutate(
-        dplyr::across(.data$conceptName:.data$conceptClassId, ~tidyr::replace_na(.x, "")) #convert na to ""
-      )
+      conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()) %>%
+      dplyr::mutate_if(is.character, ~tidyr::replace_na(.x, ""))
+
     conceptList <- purrr::pmap(conceptDf, newConcept)
   }
 

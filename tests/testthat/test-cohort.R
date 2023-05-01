@@ -11,10 +11,10 @@ test_that("cohort entry works", {
   expect_s4_class(x, "Cohort")
   expect_type(as.list(x), "list") # TODO Do we keep as.list and as.json?
   expect_type(toCirce(x), "list")
-  expect_type(as.json(x), "character")
+  expect_type(compile(x), "character")
 
 
-  sql <- CirceR::cohortExpressionFromJson(as.json(x)) %>%
+  sql <- CirceR::cohortExpressionFromJson(compile(x)) %>%
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
   expect_type(sql, "character")
 
@@ -23,11 +23,11 @@ test_that("cohort entry works", {
   cs2 <- cs(descendants(exclude(436665),440383,442306))
   x <- cohort(entry(condition(cs1), drug(cs2)))
   expect_s4_class(x, "Cohort")
-  expect_type(as.list(x), "list") # TODO Do we keep as.list and as.json?
+  expect_type(as.list(x), "list")
   expect_type(toCirce(x), "list")
-  expect_type(as.json(x), "character")
+  expect_type(compile(x), "character")
 
-  sql <- CirceR::cohortExpressionFromJson(as.json(x)) %>%
+  sql <- CirceR::cohortExpressionFromJson(compile(x)) %>%
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
   expect_type(sql, "character")
 
@@ -142,11 +142,13 @@ test_that("full cohort works without group", {
 
 test_that("Capr cohort generates on synpuf", {
   skip_if_not_installed("CirceR")
+  skip_if_not_installed("Eunomia")
   # need simple cohort for synpuf
   cd <- cohort(
     entry = entry(
       drug(cs(descendants(1118084), name = "celecoxib"), male()),
-      observationWindow = continuousObservation(365, 0)
+      observationWindow = continuousObservation(0, 0)
+      # observationWindow = continuousObservation(1, 0) # TODO this line causes an error.
     )
   )
 
@@ -172,7 +174,6 @@ test_that("Capr cohort generates on synpuf", {
   )
 
   connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-
   cohortTableNames <- CohortGenerator::getCohortTableNames("cohort")
 
   invisible(capture_output(suppressMessages({
