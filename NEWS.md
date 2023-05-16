@@ -1,3 +1,12 @@
+Capr 2.0.3
+==========
+- add opAttribute super class
+- add version dependency for purrr v1.0.1 for list_flatten
+
+Capr 2.0.2
+==========
+- fix issue with first exposure
+
 Capr 2.0.1
 ==========
 - additions and corrections to vignettes and documentation
