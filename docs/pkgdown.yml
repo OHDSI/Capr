@@ -1,5 +1,5 @@
 pandoc: 2.19.2
-pkgdown: 2.0.7
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   Capr-conceptSets: Capr-conceptSets.html
