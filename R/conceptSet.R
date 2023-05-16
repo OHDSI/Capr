@@ -524,7 +524,9 @@ readConceptSet <- function(path, name, id = NULL) {
 #'
 #' @param x A concept set created by `cs`
 #' @param con A connection to an OMOP CDM database
-#' @template VocabularyDatabaseSchema
+#' @param vocabularyDatabaseSchema   Schema name where your OMOP vocabulary format resides. Note that
+#'                                   for SQL Server, this should include both the database and schema
+#'                                   name, for example 'vocabulary.dbo'.
 #' @return A modified version of the input concept set with concept details filled in.
 #'
 #' @importFrom methods slot<-
