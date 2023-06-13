@@ -1,3 +1,8 @@
+Capr 2.0.4
+==========
+- hot fix add procedure occurrence into query
+
+
 Capr 2.0.3
 ==========
 - add opAttribute super class

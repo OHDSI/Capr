@@ -35,7 +35,6 @@ shell("R CMD Rd2pdf ./ --output=extras/Capr.pdf")
 dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
 rmarkdown::render("vignettes/capr_design.Rmd",
                   output_file = "../extras/pdf_vignette/capr_design.pdf",
-
   rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
 unlink("extras/pdf_vignette/capr_design.tex")
 

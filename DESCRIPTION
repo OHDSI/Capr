@@ -1,6 +1,6 @@
 Package: Capr
 Title: Cohort Definition Application Programming
-Version: 2.0.3
+Version: 2.0.4
 Authors@R: c(
     person("Martin", "Lavallee", , "mdlavallee92@gmail.com", role = c("aut", "cre")),
     person("Adam", "Black", , "black@ohdsi.org", role = "aut")
