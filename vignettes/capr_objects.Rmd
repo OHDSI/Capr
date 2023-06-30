@@ -1,0 +1,156 @@
+---
+title: "Capr Objects"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Capr Objects}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE}
+library(Capr)
+```
+
+
+# Intro
+
+`Capr` allows users to build OHDSI cohort definitions in R outside of ATLAS. `Capr`, like ATLAS, uses the same underlying software `circe-be` to compose the cohort logic into an actionable query. Therefore we must understand sub-components of the cohort definition, in order to properly apply them to our cohort construction. There are three main sub-components that drive building of the cohort logic: 1) query, 2) criteria and 3) group. In this vignette, we will describe the purpose of each sub-component and demonstrate the `Capr` commands to invoke these structures. 
+
+# Query 
+
+## Definition
+
+The *query* is a `circe-be` construct that defines which concepts to extract from which domain table in the OMOP CDM. In basic terms it is finding the persons that have a particular code in the data. Through a more technical lens, the query is supplying the **WHERE** and **FROM** logic in portions of the SQL script. Ultimately the logic we construct in `Capr` or ATLAS render a standardized SQL script that finds persons in the database, of which the query is vital in providing the code sets to search from. The *query* will be found all over the cohort definition. Whenever we need to apply a concept set, it will be through a *query*. In `Capr` the *query* function is specified based on the domain tables available in the CDM. The table below provides the mapping between the OMOP domain and the the `Capr` function call. 
+
+```{r queryTable, echo=FALSE}
+tb <- tibble::tribble(
+  ~`OMOP Domain`, ~`Capr Function`,
+  "DrugExposure", "drugExposure",
+  "DrugEra", "drugEra",
+  "ConditionOccurrence", "conditionOccurrence",
+  "ConditionEra", "conditionEra",
+  "ProcedureOccurrence", "procedure",
+  "Measurement", "measurement",
+  "VisitOccurrence", "visit",
+  "Observation", "observation",
+  "Death", "death"
+)
+knitr::kable(tb)
+```
+
+## Example
+
+A simple example of how to use a query in `Capr` can be seen below:
+
+```{r}
+t1dConceptSet <- cs(descendants(195771), name = "T1D")
+t1dQuery <- conditionOccurrence(t1dConceptSet)
+```
+
+
+With our query we can apply this in a variety of places within the cohort definition. Below we give an example of a cohort of persons starting on metformin as our index event, where they could not have been diagnosed with Type 1 Diabetes any time prior. 
+
+```{r queryInCohort}
+metforminConceptSet <- cs(descendants(1503297), name = "metformin")
+t1dConceptSet <- cs(descendants(195771), name = "T1D")
+
+metforminCohort <- cohort(
+  entry = entry(
+    drugExposure(metforminConceptSet, firstOccurrence()), # metformin drug query as index event
+    observationWindow = continuousObservation(priorDays = -365, postDays = 365L),
+    primaryCriteriaLimit = "All"
+  ),
+  attrition = attrition(
+    'noT1d' = withAll(
+      exactly(
+        x = 0, 
+        query = conditionOccurrence(t1dConceptSet), # query for t1d occurrence to exclude patients
+        aperture = duringInterval(startWindow = eventStarts(a = -Inf, b = 0, index = "startDate")))
+    )
+  ),
+  exit = exit(
+    endStrategy = observationExit(),
+    censor = censoringEvents(
+      #exit based on observence of t1d condition
+      conditionOccurrence(t1dConceptSet) # query for t1d occurrence for censor
+    )
+  )
+)
+```
+
+Notice that the *query* is applied all over this cohort definition. The metformin query sets the concept set to use as the index event. The Type 1 Diabetes (T1D) query sets the attrition of the patients identified at index who should be excluded for having the condition. The T1D query also sets the exit from cohort. The cohort ends when the person has no more observation time in the database or they have been diagnosed with T1D. Remember the *query* is infusing the concept sets into the cohort logic based on which domain to search for codes in person healthcare records. 
+
+## Attributes
+
+The *query* is often contextualized by an attribute. For example in the cohort above, we are searching for metformin in the drug exposure table given it has occurred for the first time in the person history. The attribute is a object that modifies queries by filtering records based on the presence of another parameter. Attributes can be based on person information (such as gender, race, or age), time based (observation at a certain time window), domain based (presence of a code in a different column of the same domain), or event based (based on the observation of another event occurring). We will go into more details on different attributes in a different vignette. In `Capr` as many attributes can be attached within the query after providing the concept set. Example below:
+
+```{r attrInQuery}
+t1dConceptSet <- cs(descendants(195771), name = "T1D")
+
+maleT1D <- conditionOccurrence(t1dConceptSet, male())
+maleT1D18andOlder <- conditionOccurrence(t1dConceptSet, male(), age(gte(18)))
+maleT1D18andOlderFirstDx <- conditionOccurrence(t1dConceptSet, male(), age(gte(18)), firstOccurrence())
+```
+
+One special type of attribute is a nested query. This construct is more complex and requires understanding of the *criteria* and *group* objects. We will return to this idea later in this vignette. 
+
+# Criteria
+
+## Definition
+
+A *criteria* object is one that enumerates the presence or absence of an event within a window of observation relative to an index point. The index point may be the entry event of the cohort definition. It could also be a prior event if we are building a nested query. The purpose of this object is to count whether a person has experienced certain events that would either include or exclude them from the cohort. Its easiest to show a *criteria* using a figure. Say relative from index we want to see two exposures of a drug within 365 days and 30 days before index. Those that fit that criteria remain in the cohort, those that do not are excluded from the cohort. See the figure below as an example:
+
+![Example of Criteria](images/criteria_example.png)
+
+When building a *criteria* object the user needs: 1) a query, 2) an operator that specifies the number of times a query is observed (occurrences), and 3) a time window which we call the aperture. Using the figure as an example, think of the stars as the query, the number of stars as the occurrences, and the box as the aperture. We could orient this idea around the index event in a variety of different ways. 
+
+
+## Example
+
+With this definition in mind, let us build an example of a *criteria* object that reflects the image above. 
+
+```{r criteriaExampleA}
+atenololConceptSet <- cs(descendants(1314002), name - "atenolol")
+
+atenololCriteria <- atLeast(
+  x = 2, 
+  query = drugExposure(atenololConceptSet),
+  aperture = duringInterval(
+    startWindow = eventStarts(a = -365, b = -30, index = "startDate")
+  )
+)
+```
+
+This *criteria* specifies that we must observe at least 2 drug exposures of atenolol within 365 days and 30 days before the index start date. By itself, a *criteria* makes little sense. It must sit within the context of the entire cohort definition, where an index event has been specified. In `Capr` the *criteria* object is called in three ways: `atLeast`, `atMost` and `exactly`. The *criteria* object in `Capr` is contextualized by the number of occurrences of the query for its function call. If we wanted to have exactly 2 drug exposures of atenolol or at most 2 drug exposures they can be done as shown below. 
+
+```{r criteriaExampleB}
+atenololConceptSet <- cs(descendants(1314002), name - "atenolol")
+
+atenololCriteriaA <- exactly(
+  x = 2, 
+  query = drugExposure(atenololConceptSet),
+  aperture = duringInterval(
+    startWindow = eventStarts(a = -365, b = -30, index = "startDate")
+  )
+)
+
+atenololCriteriaB <- atMost(
+  x = 2, 
+  query = drugExposure(atenololConceptSet),
+  aperture = duringInterval(
+    startWindow = eventStarts(a = -365, b = -30, index = "startDate")
+  )
+)
+
+```
+
+## Aperture
+
+An important part of the *criteria* object is providing the temporal context to enumerating the occurrences of the query. In `Capr` we term this interval relative to index as the aperture. It is the opening in the patient timeline at which we are enumerating the event of interest. 
