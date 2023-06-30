@@ -3,7 +3,7 @@ test_that("cohort with additional criteria works", {
   # LEGEND stroke
   cd <- cohort(
     entry = entry(
-      condition(cs(372924, 376713, 441874, 439847,
+      conditionOccurrence(cs(372924, 376713, 441874, 439847,
                    432923, 43530727, 4148906,
                    descendants(443454), name = "stroke")),
       observationWindow = continuousObservation(0L, 0L),

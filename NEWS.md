@@ -1,3 +1,8 @@
+Capr 2.0.4
+==========
+- change query functions to match known syntax (i.e. drug => drugExposure, condition => conditionOccurrence)
+- require a name for `cs()`
+
 Capr 2.0.3
 ==========
 - add opAttribute super class

@@ -1,9 +1,9 @@
 test_that("Nesting Criteria works", {
 
-  query <- visit(cs(descendants(9201, 9203, 262)),
+  query <- visit(cs(descendants(9201, 9203, 262), name = "visit"),
     nestedWithAll(
       atLeast(1,
-        condition(cs(descendants(316139), name = "heart failure")),
+        conditionOccurrence(cs(descendants(316139), name = "heart failure")),
         duringInterval(startWindow = eventStarts(0, Inf),
                        endWindow = eventStarts(-Inf, 0, index = "endDate")
         )
@@ -24,10 +24,10 @@ test_that("Can build a cohort with nested attribute", {
   skip_if_not_installed("CirceR")
   cd <- cohort(
     entry = entry(
-      visit(cs(descendants(9201, 9203, 262)),
+      visit(cs(descendants(9201, 9203, 262), name = "visit"),
             nestedWithAll(
               atLeast(1,
-                      condition(cs(descendants(316139), name = "heart failure")),
+                      conditionOccurrence(cs(descendants(316139), name = "heart failure")),
                       duringInterval(startWindow = eventStarts(0, Inf),
                                      endWindow = eventStarts(-Inf, 0, index = "endDate")
                       )
@@ -95,20 +95,20 @@ test_that("Can build a cohort with nested attribute", {
 
 test_that("Can build a cohort with nested groups", {
   skip_if_not_installed("CirceR")
-  t2dDrug <- drug(cs(descendants(1502809,1502826,1503297,1510202,1515249,1516766,
+  t2dDrug <- drugExposure(cs(descendants(1502809,1502826,1503297,1510202,1515249,1516766,
                                  1525215,1529331,1530014,1547504,1559684,1560171,
-                                 1580747,1583722,1594973,1597756)))
+                                 1580747,1583722,1594973,1597756), name = "t2dDrug"))
 
-  t2d <- condition(cs(descendants(201826)))
+  t2d <- conditionOccurrence(cs(descendants(201826), name = "t2d"))
 
-  t1d <- condition(cs(descendants(201254)))
+  t1d <- conditionOccurrence(cs(descendants(201254), name = "t1d"))
 
 
-  t1dDrug <- drug(cs(descendants(1502905,1513876,1516976,1517998,
-                                 1531601,1544838,1550023,1567198)))
+  t1DrugCs <- cs(descendants(1502905,1513876,1516976,1517998,
+                             1531601,1544838,1550023,1567198), name = "t1Drug")
+  t1dDrug <- drugExposure(t1DrugCs)
 
-  t1dDrugWT2Drug <- drug(cs(descendants(1502905,1513876,1516976,1517998,
-                                        1531601,1544838,1550023,1567198)),
+  t1dDrugWT2Drug <- drugExposure(t1DrugCs,
                          nestedWithAll(
                            atLeast(1, t2dDrug,
                                    duringInterval(startWindow = eventStarts(-Inf, -1))
@@ -116,11 +116,11 @@ test_that("Can build a cohort with nested groups", {
                          )
   )
 
-  abLabFast <- measurement(cs(descendants(3037110)),
+  abLabFast <- measurement(cs(descendants(3037110), name = "abLabFast"),
                            valueAsNumber(gte(125)))
-  abLabHb <- measurement(cs(descendants(3003309,3004410,3005673,3007263)),
+  abLabHb <- measurement(cs(descendants(3003309,3004410,3005673,3007263), name = "abLabHb"),
                          valueAsNumber(gte(6)))
-  abLabRan <- measurement(cs(descendants(3000483,3004501)),
+  abLabRan <- measurement(cs(descendants(3000483,3004501), name = "abLabRan"),
                           valueAsNumber(gte(200)))
 
 
@@ -210,10 +210,10 @@ test_that("Can build a cohort with nested groups", {
 })
 
 test_that("listConceptSets works with nested Query", {
-  a <- visit(cs(descendants(9201, 9203, 262)),
+  a <- visit(cs(descendants(9201, 9203, 262), name = "visit"),
     nestedWithAll(
       atLeast(1,
-        condition(cs(descendants(316139), name = "heart failure"))
+        conditionOccurrence(cs(descendants(316139), name = "heart failure"))
       )
     )
   )
