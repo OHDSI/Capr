@@ -193,7 +193,7 @@ newConcept <- function(id,
 #' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9))
 #' cs(descendants(1, 2, 3),  exclude(descendants(8, 9)))
 #' }
-cs <- function(..., name = "", id = NULL) {
+cs <- function(..., name, id = NULL) {
   dots <- unlist(list(...), recursive = F)
 
   conceptList <- lapply(dots, function(x) {
