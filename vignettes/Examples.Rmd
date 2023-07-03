@@ -51,7 +51,7 @@ cs1 <- cs(descendants(443238, 201820, 442793),
           name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
 
 ch <- cohort(
-  entry = condition(cs1),
+  entry = conditionOccurrence(cs1),
   attrition = attrition(
     atLeast(1, 
             observationPeriod(), 
@@ -74,7 +74,7 @@ cs0 <- cs(descendants(443238, 201820, 442793),
 
 ch <- cohort(
   entry = entry(
-    condition(cs0),
+    conditionOccurrence(cs0),
     observationWindow = continuousObservation(priorDays = 365)
   ),
   exit = exit(
@@ -108,12 +108,12 @@ cs2 <- cs(descendants(195771),
 
 ch <- cohort(
   entry = entry(
-    condition(cs0),
+    conditionOccurrence(cs0),
     observationWindow = continuousObservation(priorDays = 365)
   ),
   attrition = attrition(
-    exactly(0, condition(cs1), duringInterval(eventStarts(-Inf, 0))),
-    exactly(0, condition(cs2), duringInterval(eventStarts(-Inf, 0)))
+    exactly(0, conditionOccurrence(cs1), duringInterval(eventStarts(-Inf, 0))),
+    exactly(0, conditionOccurrence(cs2), duringInterval(eventStarts(-Inf, 0)))
   ),
   exit = exit(
     endStrategy = observationExit()
@@ -153,18 +153,18 @@ cs4 <- cs(descendants(21600744),
 
 ch <- cohort(
   entry = entry(
-    condition(cs0),
-    drug(cs4),
+    conditionOccurrence(cs0),
+    drugExposure(cs4),
     measurement(cs3, valueAsNumber(bt(6.5, 30)), unit("%")),
     measurement(cs3, valueAsNumber(bt(48, 99)), unit("mmol/mol")),
     observationWindow = continuousObservation(priorDays = 365)
   ),
   attrition = attrition(
     'no T1D' = withAll(
-      exactly(0, condition(cs1), duringInterval(eventStarts(-Inf, 0)))
+      exactly(0, conditionOccurrence(cs1), duringInterval(eventStarts(-Inf, 0)))
       ),
     'no secondary diabettes' = withAll(
-      exactly(0, condition(cs2), duringInterval(eventStarts(-Inf, 0)))
+      exactly(0, conditionOccurrence(cs2), duringInterval(eventStarts(-Inf, 0)))
     )
   ),
   exit = exit(
@@ -190,7 +190,7 @@ cs0 <- cs(descendants(195771),
 
 ch <- cohort(
   entry = entry(
-    condition(cs0),
+    conditionOccurrence(cs0),
     observationWindow = continuousObservation(priorDays = 365)
   )
 )
@@ -220,12 +220,12 @@ cs2 <- cs(descendants(195771),
 
 ch <- cohort(
   entry = entry(
-    condition(cs1),
+    conditionOccurrence(cs1),
     observationWindow = continuousObservation(priorDays = 365)
   ),
   attrition = attrition(
-    "no prior T2DM" = exactly(0, condition(cs0), duringInterval(eventStarts(-Inf, 0))),
-    "no prior secondary T1DM" = exactly(0, condition(cs2), duringInterval(eventStarts(-Inf, 0)))
+    "no prior T2DM" = exactly(0, conditionOccurrence(cs0), duringInterval(eventStarts(-Inf, 0))),
+    "no prior secondary T1DM" = exactly(0, conditionOccurrence(cs2), duringInterval(eventStarts(-Inf, 0)))
   )
 )
 
@@ -247,7 +247,7 @@ https://atlas-phenotype.ohdsi.org/#/cohortdefinition/93
 cs0 <- cs(descendants(313217),
           name = "Atrial fibrillation")
 
-ch <- cohort(condition(cs0))
+ch <- cohort(conditionOccurrence(cs0))
 
 ```
 
@@ -273,13 +273,13 @@ op <- cs(descendants(9202, 9203),
 
 ch <- cohort(
   entry = entry(
-    condition(afib,
+    conditionOccurrence(afib,
       nestedWithAny(
         atLeast(1, visit(ip), duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf))),
         nestedWithAll(
           atLeast(1, visit(op, duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf)),
             nestedWithAll(
-              atLeast(1, condition(afib, duringInterval(eventStarts(7, 365)),
+              atLeast(1, conditionOccurrence(afib, duringInterval(eventStarts(7, 365)),
                 nestedWithAll(
                   atLeast(1, visit(op, duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf))))
                 )

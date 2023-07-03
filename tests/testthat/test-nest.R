@@ -167,7 +167,7 @@ test_that("Can build a cohort with nested groups", {
         withAll(
           atLeast(1, t2d, duringInterval(startWindow = eventStarts(-Inf, 0))),
           exactly(0, t1dDrug, duringInterval(startWindow = eventStarts(-Inf, 0))),
-          atLeast(0, t2dDrug, duringInterval(startWindow = eventStarts(-Inf, 0)))
+          atLeast(1, t2dDrug, duringInterval(startWindow = eventStarts(-Inf, 0)))
         ),
         #Path 4
         withAll(

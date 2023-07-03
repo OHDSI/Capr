@@ -10,12 +10,13 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
 
-```{r setup}
+```{r setup, echo=FALSE}
 library(Capr)
 ```
 
@@ -30,7 +31,7 @@ To build all these cohorts using a template, we can easily define the logic in C
 cvEvents <- function(conceptSet) {
   cd <- cohort(
     entry = entry(
-      condition(conceptSet),
+      conditionOccurrence(conceptSet),
       observationWindow = continuousObservation(365, 0)
     ),
     exit = exit(
@@ -71,7 +72,7 @@ cvEvents2 <- function(conceptSet) {
   #Capr template logic
   cd <- cohort(
     entry = entry(
-      condition(conceptSet),
+      conditionOccurrence(conceptSet),
       observationWindow = continuousObservation(365, 0)
     ),
     exit = exit(
@@ -105,7 +106,7 @@ cvEvents3 <- function(file) {
   #Capr template logic
   cd <- cohort(
     entry = entry(
-      condition(conceptSet),
+      conditionOccurrence(conceptSet),
       observationWindow = continuousObservation(365, 0)
     ),
     exit = exit(

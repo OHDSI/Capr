@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.4</span>
       </span>
     </div>
 
@@ -61,6 +61,9 @@
     </li>
     <li>
       <a href="../articles/capr_design.html">Capr Design Guide and Roadmap</a>
+    </li>
+    <li>
+      <a href="../articles/capr_objects.html">Capr Objects</a>
     </li>
     <li>
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
@@ -464,7 +467,7 @@ sub-groups as a single expression.</li>
 CDM. For example:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/visit.html">visit</a></span><span class="op">(</span><span class="va">conceptSet</span>, <span class="va">...</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="va">concept</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ohdsi.github.io/Capr/reference/condition.html" class="external-link">condition</a></span><span class="op">(</span><span class="va">concept</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <p>The conceptSet input takes on a a concept set built from the cs
 command. The dots argument is where the user can supply attributes that
 contextualize the query to a specific subpopulation.</p>
@@ -491,9 +494,9 @@ object</li>
 <p>An example of using an attribute within a query is shown in code
 snippet 4:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/attributes.html">male</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/age.html">age</a></span><span class="op">(</span><span class="fu"><a href="../reference/gte.html">gte</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ohdsi.github.io/Capr/reference/condition.html" class="external-link">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/attributes.html">male</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ohdsi.github.io/Capr/reference/condition.html" class="external-link">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/age.html">age</a></span><span class="op">(</span><span class="fu"><a href="../reference/gte.html">gte</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ohdsi.github.io/Capr/reference/condition.html" class="external-link">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu">first</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The first example in code snippet 4 utilizes a concept attribute. The
 <code><a href="../reference/attributes.html">male()</a></code> function automatically maps the concept to the male
 concept id. Other concept attribute functions will have mappers and
@@ -558,7 +561,7 @@ observe the specified criteria. Code snippet 5 shows an example of a
 criteria call:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, </span>
-<span>        query <span class="op">=</span> <span class="fu"><a href="../reference/condition.html">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        query <span class="op">=</span> <span class="fu"><a href="https://ohdsi.github.io/Capr/reference/condition.html" class="external-link">condition</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        aperture <span class="op">=</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
 <p>A note for the criteria is that its meaning is tethered to an event

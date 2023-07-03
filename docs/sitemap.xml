@@ -10,6 +10,9 @@
     <loc>/articles/capr_design.html</loc>
   </url>
   <url>
+    <loc>/articles/capr_objects.html</loc>
+  </url>
+  <url>
     <loc>/articles/capr_templates.html</loc>
   </url>
   <url>
@@ -185,6 +188,9 @@
   </url>
   <url>
     <loc>/reference/conditionEra.html</loc>
+  </url>
+  <url>
+    <loc>/reference/conditionOccurrence.html</loc>
   </url>
   <url>
     <loc>/reference/continuousObservation.html</loc>
@@ -542,6 +548,9 @@
   </url>
   <url>
     <loc>/reference/drugExit.html</loc>
+  </url>
+  <url>
+    <loc>/reference/drugExposure.html</loc>
   </url>
   <url>
     <loc>/reference/DrugExposureExit-class.html</loc>

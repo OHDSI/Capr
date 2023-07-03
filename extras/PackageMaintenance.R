@@ -64,11 +64,16 @@ unlink("extras/pdf_vignette/capr_templates.tex")
 
 
 # capr concept sets
-dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
+#dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
 rmarkdown::render("vignettes/Capr-conceptSets.Rmd", output_file = "../extras/pdf_vignette/Capr-conceptSets.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
 unlink("extras/pdf_vignette/Capr-conceptSets.tex")
 
+
+# capr components
+rmarkdown::render("vignettes/capr_objects.Rmd", output_file = "../extras/pdf_vignette/capr_objects.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
+unlink("extras/pdf_vignette/capr_objects.tex")
 
 # build site
 pkgdown::build_site()
