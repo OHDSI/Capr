@@ -57,7 +57,7 @@ unlink("extras/pdf_vignette/Using-Capr.tex")
 
 
 # capr templates
-dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
+#dir.create(path = "./extras/pdf_vignette/", showWarnings = FALSE)
 rmarkdown::render("vignettes/capr_templates.Rmd", output_file = "../extras/pdf_vignette/capr_templates.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
 unlink("extras/pdf_vignette/capr_templates.tex")
