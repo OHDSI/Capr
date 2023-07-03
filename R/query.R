@@ -27,6 +27,7 @@ setValidity("Query", function(object) {
   validDomains <- c("ConditionEra",
                     "ConditionOccurrence",
                     "Death",
+                    "ProcedureOccurrence",
                     "DeviceExposure",
                     "DoseEra",
                     "DrugExposure",
