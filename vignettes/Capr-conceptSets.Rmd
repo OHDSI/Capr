@@ -56,4 +56,20 @@ ace3
 ```
 
 
+## Fill in missing concept set details
+
+By default, `Capr` puts in minimal information for the concept set, the concept id. However it is often helpful to fill out the remaining information of the concept using the OMOP vocabularies. To fill out the remaining information, a user needs to connect to a OMOP CDM to access the vocabulary information for the concept in the concept set. First we show a regular concept set, and the json it renders. 
+
+```{r baseSet, eval=FALSE}
+diclofenac <- cs(descendants(1124300), name = "diclofenac")
+cat(as.json(diclofenac))
+```
+
+Now we add in the CDM connection to get the remaining information:
+
+```{r fillOut, eval=FALSE}
+con <- DatabaseConnector::connect(Eunomia::getEunomiaConnectionDetails())
+diclofenac <- getConceptSetDetails(diclofenac, con, vocabularyDatabaseSchema = "main")
+cat(as.json(diclofenac))
+```
 

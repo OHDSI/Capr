@@ -1,3 +1,10 @@
+Capr 2.0.5
+==========
+- change query functions to match known syntax (i.e. drug => drugExposure, condition => conditionOccurrence)
+- require a name for `cs()`
+- improve documentation (add vignette for query, count and group)
+
+
 Capr 2.0.4
 ==========
 - hot fix add procedure occurrence into query

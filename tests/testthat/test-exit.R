@@ -15,7 +15,7 @@ test_that("Drug Exit Works", {
 
   cd <- cohort(
     entry = entry(
-      drug(aceCS),
+      drugExposure(aceCS),
       observationWindow = continuousObservation(priorDays = 0L, postDays = 0L),
       primaryCriteriaLimit = "First"
     ),
@@ -45,7 +45,7 @@ test_that("Fixed Duration Exit Works", {
 
   cd <- cohort(
     entry = entry(
-      drug(aceCS),
+      drugExposure(aceCS),
       observationWindow = continuousObservation(priorDays = 0L, postDays = 0L),
       primaryCriteriaLimit = "First"
     ),

@@ -18,7 +18,7 @@ Add female attribute to a query"><meta property="og:image" content="/logo.png"><
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.5</span>
       </span>
     </div>
 
@@ -37,6 +37,9 @@ Add female attribute to a query"><meta property="og:image" content="/logo.png"><
     </li>
     <li>
       <a href="../articles/capr_design.html">Capr Design Guide and Roadmap</a>
+    </li>
+    <li>
+      <a href="../articles/capr_objects.html">Capr Objects</a>
     </li>
     <li>
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
@@ -106,12 +109,12 @@ Add female attribute to a query"><meta property="og:image" content="/logo.png"><
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># Create a cohort of males with Type 1 diabetes</span></span></span>
 <span class="r-in"><span><span class="va">t1dm</span> <span class="op">&lt;-</span> <span class="fu"><a href="cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="cs.html">descendants</a></span><span class="op">(</span><span class="fl">201254</span>, <span class="fl">435216</span>, <span class="fl">40484648</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">t1dm_males</span> <span class="op">&lt;-</span> <span class="fu"><a href="cohort.html">cohort</a></span><span class="op">(</span><span class="fu"><a href="condition.html">condition</a></span><span class="op">(</span><span class="va">t1dm</span>, <span class="fu">male</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">t1dm_males</span> <span class="op">&lt;-</span> <span class="fu"><a href="cohort.html">cohort</a></span><span class="op">(</span><span class="fu">condition</span><span class="op">(</span><span class="va">t1dm</span>, <span class="fu">male</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># Create a cohort of males with Type 1 diabetes</span></span></span>
 <span class="r-in"><span><span class="va">t1dm</span> <span class="op">&lt;-</span> <span class="fu"><a href="cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="cs.html">descendants</a></span><span class="op">(</span><span class="fl">201254</span>, <span class="fl">435216</span>, <span class="fl">40484648</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">t1dm_females</span> <span class="op">&lt;-</span> <span class="fu"><a href="cohort.html">cohort</a></span><span class="op">(</span><span class="fu"><a href="condition.html">condition</a></span><span class="op">(</span><span class="va">t1dm</span>, <span class="fu">female</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">t1dm_females</span> <span class="op">&lt;-</span> <span class="fu"><a href="cohort.html">cohort</a></span><span class="op">(</span><span class="fu">condition</span><span class="op">(</span><span class="va">t1dm</span>, <span class="fu">female</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
