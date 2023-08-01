@@ -1,3 +1,7 @@
+Capr 2.0.6
+==========
+- correct date attribute names (OccurrenceStartDate, OccurrenceEndDate)
+
 Capr 2.0.5
 ==========
 - change query functions to match known syntax (i.e. drug => drugExposure, condition => conditionOccurrence)
