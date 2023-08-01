@@ -487,7 +487,7 @@ startDate <- function(op) {
   }
 
   methods::new("opAttributeDate",
-               name = "StartDate",
+               name = "OccurrenceStartDate",
                op = op@op,
                value = op@value,
                extent = op@extent)
@@ -505,7 +505,7 @@ endDate <- function(op) {
   }
 
   methods::new("opAttributeDate",
-               name = "EndDate",
+               name = "OccurrenceEndDate",
                op = op@op,
                value = op@value,
                extent = op@extent)
