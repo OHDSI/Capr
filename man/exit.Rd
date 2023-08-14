@@ -11,6 +11,9 @@ exit(endStrategy, censor = NULL)
 
 \item{censor}{the censoring criteria to specify for the exit}
 }
+\value{
+A cohort exit object that can be used in a cohort definition
+}
 \description{
 Function that creates a cohort exit object
 }

@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -60,6 +60,12 @@
       <a href="../articles/Capr-conceptSets.html">Working with Concept Sets in Capr</a>
     </li>
     <li>
+      <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/Using-Capr.html">Using Capr</a>
+    </li>
+    <li>
       <a href="../articles/capr_design.html">Capr Design Guide and Roadmap</a>
     </li>
     <li>
@@ -67,12 +73,6 @@
     </li>
     <li>
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
-    </li>
-    <li>
-      <a href="../articles/Examples.html">Cohort Definition Examples</a>
-    </li>
-    <li>
-      <a href="../articles/Using-Capr.html">Using Capr</a>
     </li>
   </ul>
 </li>
@@ -82,7 +82,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://ohdsi.github.io/Hades" class="external-link"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link">hadesLogo</a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/Capr/" class="external-link">
@@ -290,8 +290,8 @@ relative from index we want to see two exposures of a drug within 365
 days and 30 days before index. Those that fit that criteria remain in
 the cohort, those that do not are excluded from the cohort. See the
 figure below as an example:</p>
-<div class="figure">
-<img src="images/criteria_example.png" alt=""><p class="caption">Example of Criteria</p>
+<div class="float">
+<img src="images/criteria_example.png" alt="Example of Criteria"><div class="figcaption">Example of Criteria</div>
 </div>
 <p>When building a <em>criteria</em> object the user needs: 1) a query,
 2) an operator that specifies the number of times a query is observed

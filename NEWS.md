@@ -1,3 +1,11 @@
+Capr 2.1.0
+==========
+- First CRAN release
+
+Capr 2.0.2
+==========
+- fix tests for CRAN
+
 Capr 2.0.6
 ==========
 - correct date attribute names (OccurrenceStartDate, OccurrenceEndDate)
