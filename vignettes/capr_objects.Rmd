@@ -124,7 +124,7 @@ When building a *criteria* object the user needs: 1) a query, 2) an operator tha
 With this definition in mind, let us build an example of a *criteria* object that reflects the image above. 
 
 ```{r criteriaExampleA, eval=FALSE}
-atenololConceptSet <- cs(descendants(1314002), name - "atenolol")
+atenololConceptSet <- cs(descendants(1314002), name = "atenolol")
 
 atenololCriteria <- atLeast(
   x = 2, 
@@ -138,7 +138,7 @@ atenololCriteria <- atLeast(
 This *criteria* specifies that we must observe at least 2 drug exposures of atenolol within 365 days and 30 days before the index start date. By itself, a *criteria* makes little sense. It must sit within the context of the entire cohort definition, where an index event has been specified. In `Capr` the *criteria* object is called in three ways: `atLeast`, `atMost` and `exactly`. The *criteria* object in `Capr` is contextualized by the number of occurrences of the query for its function call. If we wanted to have exactly 2 drug exposures of atenolol or at most 2 drug exposures they can be done as shown below. 
 
 ```{r criteriaExampleB, eval=FALSE}
-atenololConceptSet <- cs(descendants(1314002), name - "atenolol")
+atenololConceptSet <- cs(descendants(1314002), name = "atenolol")
 
 atenololCriteriaA <- exactly(
   x = 2, 
