@@ -190,7 +190,7 @@ test_that("user op date work", {
   dd <- lubridate::as_date("2010-01-01")
   t1 <- startDate(gte(dd))
   expect_s4_class(t1, "opAttributeDate")
-  expect_equal(t1@name, "StartDate")
+  expect_equal(t1@name, "OccurrenceStartDate")
   expect_equal(t1@op, "gte")
   expect_equal(t1@value, dd)
 
@@ -198,7 +198,7 @@ test_that("user op date work", {
   ee <- lubridate::as_date("2020-01-01")
   t2 <- endDate(lte(ee))
   expect_s4_class(t2, "opAttributeDate")
-  expect_equal(t2@name, "EndDate")
+  expect_equal(t2@name, "OccurrenceEndDate")
   expect_equal(t2@op, "lte")
   expect_equal(t2@value, ee)
 })
@@ -214,8 +214,8 @@ test_that("coersion works for op", {
   dd <- lubridate::as_date("2010-01-01")
   t1 <- startDate(gte(dd)) %>%
     listOpAttribute()
-  expect_named(t1, "StartDate")
-  expect_equal(t1$StartDate$Value, dd)
+  expect_named(t1, "OccurrenceStartDate")
+  expect_equal(t1$OccurrenceStartDate$Value, dd)
 
 })
 
