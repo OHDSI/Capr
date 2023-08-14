@@ -14,7 +14,7 @@ Description: Provides a programming language for defining cohort definitions in 
     and their computational implementation. 
 License: Apache License (>= 2)
 URL: https://ohdsi.github.io/Capr/, https://github.com/OHDSI/Capr/
-BugReports: https://github.com/OHDSI/Capr/issues
+BugReports: https://github.com/OHDSI/Capr/issues/
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Depends: 
