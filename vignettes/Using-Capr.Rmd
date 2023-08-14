@@ -46,7 +46,7 @@ The condition concept ID for Gastrointestinal hemorrhage is 192671. We can creat
 ```{r}
 library(Capr)
 
-GIBleed <- cs(descendants(192671))
+GIBleed <- cs(descendants(192671), name = "GIbleed")
 
 GIBleed
 ```
@@ -63,7 +63,7 @@ of many defaults that match the defaults in Atlas.
 ```{r}
 giBleedCohort <- cohort(
   entry = entry(
-    condition(GIBleed),
+    conditionOccurrence(GIBleed),
     observationWindow = continuousObservation(0L, 0L),
     primaryCriteriaLimit = "First"
   ),

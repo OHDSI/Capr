@@ -7,7 +7,7 @@
 \alias{descendants}
 \title{Create a concept set}
 \usage{
-cs(..., name = "", id = NULL)
+cs(..., name, id = NULL)
 
 exclude(...)
 

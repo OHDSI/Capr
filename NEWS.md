@@ -1,6 +1,32 @@
+
+Capr 2.1.0
+==========
+- First CRAN release
+
 Capr 2.0.2
 ==========
 - fix tests for CRAN
+
+Capr 2.0.5
+==========
+- change query functions to match known syntax (i.e. drug => drugExposure, condition => conditionOccurrence)
+- require a name for `cs()`
+- improve documentation (add vignette for query, count and group)
+
+
+Capr 2.0.4
+==========
+- hot fix add procedure occurrence into query
+
+
+Capr 2.0.3
+==========
+- add opAttribute super class
+- add version dependency for purrr v1.0.1 for list_flatten
+
+Capr 2.0.2
+==========
+- fix issue with first exposure
 
 Capr 2.0.1
 ==========

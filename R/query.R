@@ -27,6 +27,7 @@ setValidity("Query", function(object) {
   validDomains <- c("ConditionEra",
                     "ConditionOccurrence",
                     "Death",
+                    "ProcedureOccurrence",
                     "DeviceExposure",
                     "DoseEra",
                     "DrugExposure",
@@ -114,7 +115,7 @@ query <- function(domain, conceptSet = NULL, ...) {
 #'
 #' @return A Capr Query
 #' @export
-condition <- function(conceptSet, ...) {
+conditionOccurrence <- function(conceptSet, ...) {
 
   query(domain = "ConditionOccurrence",
         conceptSet = conceptSet,
@@ -128,7 +129,7 @@ condition <- function(conceptSet, ...) {
 #'
 #' @return A Capr Query
 #' @export
-drug <- function(conceptSet, ...) {
+drugExposure <- function(conceptSet, ...) {
 
   query(domain = "DrugExposure",
         conceptSet = conceptSet,

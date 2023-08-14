@@ -2,12 +2,12 @@ test_that("cohort entry works", {
   # ch <- cohort() # empty cohort is valid in circe but not Capr
   skip_if_not_installed("CirceR")
   # simplest possible cohort
-  simpleCohort <- cohort(condition(cs(1)))
+  simpleCohort <- cohort(conditionOccurrence(cs(1, name = "test")))
   expect_s4_class(simpleCohort, "Cohort")
 
   # shared concept set
-  cs1 <- cs(descendants(exclude(436665),440383,442306,4175329))
-  x <- cohort(entry(condition(cs1), drug(cs1)))
+  cs1 <- cs(descendants(exclude(436665),440383,442306,4175329), name = "test")
+  x <- cohort(entry(conditionOccurrence(cs1), drugExposure(cs1)))
   expect_s4_class(x, "Cohort")
   expect_type(as.list(x), "list") # TODO Do we keep as.list and as.json?
   expect_type(toCirce(x), "list")
@@ -19,9 +19,9 @@ test_that("cohort entry works", {
   expect_type(sql, "character")
 
   # different concept sets
-  cs1 <- cs(descendants(exclude(436665),440383,442306,4175329))
-  cs2 <- cs(descendants(exclude(436665),440383,442306))
-  x <- cohort(entry(condition(cs1), drug(cs2)))
+  cs1 <- cs(descendants(exclude(436665),440383,442306,4175329), name = "test")
+  cs2 <- cs(descendants(exclude(436665),440383,442306), name = "test")
+  x <- cohort(entry(conditionOccurrence(cs1), drugExposure(cs2)))
   expect_s4_class(x, "Cohort")
   expect_type(as.list(x), "list")
   expect_type(toCirce(x), "list")
@@ -35,7 +35,7 @@ test_that("cohort entry works", {
 
 test_that("getConceptSetDetails works on Eunomia", {
   skip_if_not_installed("Eunomia")
-  gibleed <- cs(descendants(192671))
+  gibleed <- cs(descendants(192671), name = "test")
   connectionDetails <- Eunomia::getEunomiaConnectionDetails()
   suppressMessages({
     con <- DatabaseConnector::connect(connectionDetails)
@@ -53,20 +53,20 @@ test_that("full cohort works", {
 
   cd <- cohort(
     entry = entry(
-      condition(cs(descendants(201826L)), male()),
+      conditionOccurrence(cs(descendants(201826L), name = "test"), male()),
       observationWindow = continuousObservation(365, 0)
     ),
     attrition = attrition(
       'no t1d' = withAll(
         exactly(0,
-          condition(cs(descendants(201254L))),
+          conditionOccurrence(cs(descendants(201254L), name = "test")),
           duringInterval(eventStarts(-Inf, -1))
         )
       ),
       'abnormal hba1c' = withAll(
         atLeast(1,
           measurement(
-            cs(descendants(4184637L)),
+            cs(descendants(4184637L), name = "test"),
             valueAsNumber(lt(13)),
             unit(8713L)
           ),
@@ -100,17 +100,17 @@ test_that("full cohort works without group", {
 
   cd <- cohort(
     entry = entry(
-      condition(cs(descendants(201826L)), male()),
+      conditionOccurrence(cs(descendants(201826L), name = "test"), male()),
       observationWindow = continuousObservation(365, 0)
     ),
     attrition = attrition(
       'no t1d' = exactly(0,
-          condition(cs(descendants(201254L))),
+          conditionOccurrence(cs(descendants(201254L), name = "test")),
           duringInterval(eventStarts(-Inf, -1))
       ),
       'abnormal hba1c' = atLeast(1,
           measurement(
-            cs(descendants(4184637L)),
+            cs(descendants(4184637L), name = "test"),
             valueAsNumber(lt(13)),
             unit(8713L)),
           duringInterval(eventStarts(-Inf, -1))
@@ -146,9 +146,14 @@ test_that("Capr cohort generates on synpuf", {
   # need simple cohort for synpuf
   cd <- cohort(
     entry = entry(
+<<<<<<< HEAD
       drug(cs(descendants(1118084), name = "celecoxib"), male()),
       observationWindow = continuousObservation(0, 0)
       # observationWindow = continuousObservation(1, 0) # TODO this line causes an error.
+=======
+      drugExposure(cs(descendants(1118084), name = "celecoxib"), male()),
+      observationWindow = continuousObservation(365, 0)
+>>>>>>> fa03ba051993380a3c69a3b5a6c23273a2cdc390
     )
   )
 
@@ -200,6 +205,6 @@ test_that("Capr cohort generates on synpuf", {
 })
 
 test_that("compile generic works", {
-  ch <- cohort(condition(cs(1,2)))
+  ch <- cohort(conditionOccurrence(cs(1,2, name = "test")))
   expect_gt(nchar(generics::compile(ch)), 10)
 })

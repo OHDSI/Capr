@@ -193,7 +193,7 @@ newConcept <- function(id,
 #' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9))
 #' cs(descendants(1, 2, 3),  exclude(descendants(8, 9)))
 #' }
-cs <- function(..., name = "", id = NULL) {
+cs <- function(..., name, id = NULL) {
   dots <- unlist(list(...), recursive = F)
 
   conceptList <- lapply(dots, function(x) {
@@ -353,6 +353,21 @@ setMethod("as.list", "ConceptSet", function(x){
                  'expression' = list('items' = lapply(x@Expression, as.list)))
 })
 
+#' Coerce Capr object to json
+#' @param x the capr object
+#' @param pretty a toggle to make the json look nice, part of jsonlite
+#' @param ... additional arguments passes to jsonlite::toJSON
+#' @export
+#' @docType methods
+setGeneric("as.json", function(x, pretty = TRUE, ...)  standardGeneric("as.json"))
+
+#' @rdname as.json
+#' @aliases as.json,ConceptSet-method
+setMethod("as.json", "ConceptSet", function(x, pretty = TRUE, ...){
+  items <- list(items = lapply(x@Expression, as.list))
+  jsonlite::toJSON(x = items, pretty = pretty, auto_unbox = TRUE, ...)
+})
+
 #' Save a concept set as a json file
 #'
 #' The resulting concept Set JSON file can be imported into Atlas.
@@ -507,7 +522,9 @@ readConceptSet <- function(path, name, id = NULL) {
 #'
 #' @param x A concept set created by `cs`
 #' @param con A connection to an OMOP CDM database
-#' @template VocabularyDatabaseSchema
+#' @param vocabularyDatabaseSchema   Schema name where your OMOP vocabulary format resides. Note that
+#'                                   for SQL Server, this should include both the database and schema
+#'                                   name, for example 'vocabulary.dbo'.
 #' @return A modified version of the input concept set with concept details filled in.
 #'
 #' @importFrom methods slot<-
