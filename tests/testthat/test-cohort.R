@@ -138,22 +138,15 @@ test_that("full cohort works without group", {
 })
 
 
-
-
 test_that("Capr cohort generates on synpuf", {
   skip_if_not_installed("CirceR")
   skip_if_not_installed("Eunomia")
   # need simple cohort for synpuf
   cd <- cohort(
     entry = entry(
-<<<<<<< HEAD
-      drug(cs(descendants(1118084), name = "celecoxib"), male()),
-      observationWindow = continuousObservation(0, 0)
       # observationWindow = continuousObservation(1, 0) # TODO this line causes an error.
-=======
       drugExposure(cs(descendants(1118084), name = "celecoxib"), male()),
       observationWindow = continuousObservation(365, 0)
->>>>>>> fa03ba051993380a3c69a3b5a6c23273a2cdc390
     )
   )
 
