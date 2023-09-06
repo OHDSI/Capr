@@ -411,7 +411,6 @@ generateCaprTemplate <- function(file, .capr) {
   .capr(conceptSet)
 }
 
-<<<<<<< HEAD
 # writeCohort <- function(x, path, ...) {
 #   checkmate::assertClass(x, "Cohort")
 #   checkmate::assertCharacter(path, len = 1, min.chars = 1, pattern = "\\.json$")
@@ -478,11 +477,3 @@ makeCohortSet <- function(...) {
 
 }
 
-
-
-
-
-
-
-=======
->>>>>>> 84dfd727b8ad3f113d9799bd759456750bbd5ec5
