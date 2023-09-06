@@ -152,6 +152,7 @@ exit <- function(endStrategy, censor = NULL){
 #' @param eraDays a numeric that specifies the number of days for the era padding
 #' @param studyStartDate a date string that specifies the starting date of registration
 #' @param studyEndDate a date string that specifies the end date of registration
+#' @return a S4 CohortEra class object defining the eras of the cohort definition
 #' @export
 era <- function(eraDays = 0L,
                       studyStartDate = NULL,
@@ -175,6 +176,7 @@ era <- function(eraDays = 0L,
 #' @param attrition rules that restrict the cohort further, developing attrition
 #' @param exit the event where the person exits the cohort
 #' @param era Cohort era (collapse) logic created with the `cohortEra` function
+#' @return an S4 Cohort class object describing the cohort definiton
 #' @export
 cohort <- function(entry,
                    attrition = NULL,
