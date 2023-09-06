@@ -376,6 +376,7 @@ setMethod("show", "Cohort", function(object) {
 #' @param x A Capr cohort
 #' @param path The name of the file to create
 #' @export
+#' @return Invisibly returns the path to the json file that was written
 #' @examples
 #' cs1 <- cs(descendants(exclude(436665),440383,442306,4175329))
 #' cs1 <- getConceptSetDetails(cs1)
@@ -392,10 +393,15 @@ writeCohort <- function(x, path) {
       auto_unbox = TRUE,
       pretty = TRUE
     )
+  invisible(path)
 }
 
 # Templates ------------
-
+# Generate a Capr cohort using a template
+# @param file the input file of a concept set
+# @param .capr a function that creates a capr cohort
+# @return A Capr cohort definition
+# @export
 # generateCaprTemplate <- function(file, .capr) {
 #
 #   # get file name
@@ -468,9 +474,6 @@ makeCohortSet <- function(...) {
     sql = ohdsiSql,
     json = cohortJson
   )
-
-
   return(df)
-
 }
 
