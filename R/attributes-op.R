@@ -328,6 +328,7 @@ setMethod("nbt", "Date", function(x, y) {
 #' Function to create age attribute
 #' @param op   an opAttribute object that is either numeric or integer that defines the logical
 #'             operation used to determine eligible patient age
+#' @return An age attribute that can be used in a cohort definition
 #' @export
 age <- function(op) {
 

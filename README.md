@@ -35,7 +35,7 @@ PDF versions of the documentation are also available:
 -   Vignette: [Using Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Using-Capr.pdf)
 -   Vignette: [Capr Examples](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Examples.pdf)
 -   Vignette: [Working with Concept Sets in Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Capr-conceptSets.pdf)
--   Vignette: [Capr for Templating Cohort Definitions](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_templatesr.pdf)
+-   Vignette: [Capr for Templating Cohort Definitions](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_templates.pdf)
 -   Vignette: [Capr components](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_objects.pdf)
 -   [Design Document](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_design.pdf)
 -   [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)

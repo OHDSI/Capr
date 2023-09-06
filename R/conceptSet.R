@@ -503,11 +503,9 @@ readConceptSet <- function(path, name, id = NULL) {
       conceptCode = df[["concept_code"]] %||%  df[["concept code"]] %||% "" %>% as.character(),
       domainId = df[["domain_id"]] %||%  df[["domain"]] %||% "" %>% as.character(),
       vocabularyId = df[["vocabulary_id"]] %||%  df[["vocabulary"]] %||% "" %>% as.character(),
-      conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()
-    ) %>%
-      dplyr::mutate(
-        dplyr::across(conceptName:conceptClassId, ~tidyr::replace_na(.x, "")) #convert na to ""
-      )
+      conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()) %>%
+      dplyr::mutate_if(is.character, ~tidyr::replace_na(.x, ""))
+    
     conceptList <- purrr::pmap(conceptDf, newConcept)
   }
 

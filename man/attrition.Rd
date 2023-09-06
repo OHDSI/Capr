@@ -11,6 +11,9 @@ attrition(..., expressionLimit = c("First", "All", "Last"))
 
 \item{expressionLimit}{how to limit initial events per person either First, All, or Last}
 }
+\value{
+A cohort attrition object that can be used in a cohort definition
+}
 \description{
 Create a cohort attrition object
 }

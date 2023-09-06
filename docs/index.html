@@ -18,13 +18,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Cohort Definition Application Programming">
-<meta property="og:description" content="Provides a programming language for defining OHDSI cohort definitions in R to use in studies for Observational 
+<meta property="og:description" content="Provides a programming language for defining cohort definitions in R to use in studies for Observational 
     Health Data Sciences and Informatics (OHDSI). The functions in Capr allow for the programmatic creation of 
-    OHDSI concept sets and cohorts that can be serialized to Atlas/CIRCE-BE compatible json files or to OHDSI-SQL. 
+    OHDSI concept sets and cohorts that can be serialized to OHDSI compatible json files or to OHDSI-SQL. 
     Capr functions can be used to create, save, and load component parts to a cohort definition allowing 
     R programmers to easily reuse cohort logic. Capr provides tools to create a large number of OHDSI cohorts 
-    programmatically while also helping bridge the gap between human readable descriptions of clinical phenotypes 
-    and their computational implmentation. ">
+    while also helping bridge the gap between human readable descriptions of clinical phenotypes
+    and their computational implementation. ">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -66,6 +66,12 @@
       <a href="articles/Capr-conceptSets.html">Working with Concept Sets in Capr</a>
     </li>
     <li>
+      <a href="articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="articles/Using-Capr.html">Using Capr</a>
+    </li>
+    <li>
       <a href="articles/capr_design.html">Capr Design Guide and Roadmap</a>
     </li>
     <li>
@@ -73,12 +79,6 @@
     </li>
     <li>
       <a href="articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
-    </li>
-    <li>
-      <a href="articles/Examples.html">Cohort Definition Examples</a>
-    </li>
-    <li>
-      <a href="articles/Using-Capr.html">Using Capr</a>
     </li>
   </ul>
 </li>
@@ -88,7 +88,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://ohdsi.github.io/Hades" class="external-link"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link">hadesLogo</a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/Capr/" class="external-link">
@@ -144,7 +144,7 @@
 </li>
 <li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Capr-conceptSets.pdf" class="external-link">Working with Concept Sets in Capr</a>
 </li>
-<li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_templatesr.pdf" class="external-link">Capr for Templating Cohort Definitions</a>
+<li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_templates.pdf" class="external-link">Capr for Templating Cohort Definitions</a>
 </li>
 <li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_objects.pdf" class="external-link">Capr components</a>
 </li>
@@ -192,7 +192,7 @@
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/OHDSI/Capr/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/OHDSI/Capr/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/OHDSI/Capr/issues/" class="external-link">Report a bug</a></li>
 <li><a href="http://forums.ohdsi.org" class="external-link">Ask a question</a></li>
 </ul>
 </div>
@@ -216,8 +216,8 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Martin Lavallee <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Adam Black <br><small class="roles"> Author </small>  </li>
+<li>Martin Lavallee <br><small class="roles"> Author </small>  </li>
+<li>Adam Black <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 

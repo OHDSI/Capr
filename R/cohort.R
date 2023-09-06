@@ -47,7 +47,6 @@ setClass("CohortExit",
 )
 
 ## CohortEra----
-
 setClass("CohortEra",
          slots = c(
            eraDays = "integer",
@@ -115,6 +114,7 @@ entry <- function(...,
 #'
 #' @param ... Capr groups
 #' @param expressionLimit how to limit initial events per person either First, All, or Last
+#' @return A cohort attrition object that can be used in a cohort definition
 #' @export
 attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
 
@@ -126,11 +126,10 @@ attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
 
 }
 
-
-
 #' Function that creates a cohort exit object
 #' @param endStrategy the endStrategy object to specify for the exit
 #' @param censor the censoring criteria to specify for the exit
+#' @return A cohort exit object that can be used in a cohort definition
 #' @export
 exit <- function(endStrategy, censor = NULL){
   if (is.null(censor)) {
@@ -318,50 +317,19 @@ toCirce <- function(cd) {
   return(cdCirce)
 }
 
+#' Compile a Capr object to json
+#'
+#' @param object A Capr object such as a cohort, list of cohorts, or concept set.
+#' @param ... Arguments passed on to jsonlite::toJSON.
+#' e.g. `pretty = TRUE` for nicely formatted json.
+#'
+#' @return The json representation of the Capr object
+#' @export
+setGeneric("compile", function(object, ...) { standardGeneric("compile") })
 
-# cs1 <- cs(descendants(exclude(436665),440383,442306,4175329))
-# cs2 <- cs(descendants(exclude(436665),440383,4175329))
-
-
-# #' @export
-# setMethod("as.list", "Cohort", function (x, ...) {
-#
-#   # entry events
-#   entryConceptSets <- purrr::map(x@entry@entryEvents, collectConceptSets)
-#
-#   # re-number concept sets
-#   allConceptSets <- entryConceptSets # need to add criteria concept sets
-#
-#   r <- dedupConceptSets(allConceptSets)
-#   lookup <- r$lookup
-#   uniqueConceptSets <- purrr::map(r$uniqueConceptSets, function(x) {
-#     x <- as.list(x)
-#     x$id <- unname(lookup[x$id])
-#     x
-#   })
-#
-#   cohortList <- list(
-#     ConceptSets = uniqueConceptSets,
-#     PrimaryCriteria = list(CriteriaList = purrr::map(x@entry@entryEvents, ~lst(!!.@domain := list(CodesetId = .@conceptSet@id))),
-#        ObservationWindow = list(priorDays = x@entry@observationWindow@priorDays, postDays = x@entry@observationWindow@postDays),
-#        PrimaryCriteriaLimit = list(Type = x@entry@primaryCriteriaLimit)
-#     ),
-#     QualifiedLimit = list(Type = x@entry@qualifiedLimit),
-#     ExpressionLimit = list(Type = x@attrition@expressionLimit),
-#     InclusionRules = x@attrition@rules, # TODO use map(rules, as.list)
-#     CensoringCriteria = x@exit@censor,
-#     CollapseSettings = list(collapseType = "ERA", EraPad = x@era@eraDays),
-#     CensorWindow = list() # TODO implement censor window
-#   )
-#
-#   cohortList$PrimaryCriteria$CriteriaList <- purrr::map(cohortList$PrimaryCriteria$CriteriaList,
-#                                                         function(criteria) {
-#                                                           criteria[[1]]$CodesetId <- unname(lookup[criteria[[1]]$CodesetId])
-#                                                           criteria
-#                                                         })
-#   cohortList
-# })
-
+compile.Cohort <- function(object, ...) {
+  as.character(jsonlite::toJSON(toCirce(object), auto_unbox = TRUE, ...))
+}
 
 #' Compile a Capr cohort to json
 #'
@@ -370,26 +338,32 @@ toCirce <- function(cd) {
 #' e.g. `pretty = TRUE` for nicely formatted json.
 #'
 #' @return The json representation of Capr cohorts
-#' @export
 #' @importFrom generics compile
 #' @exportS3Method compile Cohort
+#' @export
+#' @rdname compile-methods
 #' @examples
 #' \dontrun{
 #' ch <- cohort(condition(cs(1,2)))
 #' compile(ch)
 #' }
-compile.Cohort <- function(object, ...) {
-  as.character(jsonlite::toJSON(toCirce(object), auto_unbox = TRUE, ...))
-}
-
 setMethod("compile", "Cohort", compile.Cohort)
 
+compile.ConceptSet <- function(object, ...) {
+  x <- list(items = lapply(object@Expression, as.list))
+  as.character(jsonlite::toJSON(x, auto_unbox = TRUE, ...))
+}
 
-#' @rdname as.json
-#' @aliases as.json,Cohort-method
-setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
-  as.character(jsonlite::toJSON(toCirce(x), auto_unbox = TRUE, pretty = pretty, ...))
-})
+#' Compile a Capr Concept Set to json
+#'
+#' @export
+#' @rdname compile-methods
+#' @param object A Capr Concept Set created with `cs`
+#' @param ... Arguments passed on to jsonlite::toJSON.
+#' e.g. `pretty = TRUE` for nicely formatted json.
+#'
+#' @return The json representation of Capr cohorts
+setMethod("compile", "ConceptSet", compile.ConceptSet)
 
 setMethod("show", "Cohort", function(object) {
   # TODO make this pretty on the console
@@ -400,9 +374,7 @@ setMethod("show", "Cohort", function(object) {
 #'
 #' @param x A Capr cohort
 #' @param path The name of the file to create
-#'
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' cs1 <- cs(descendants(exclude(436665),440383,442306,4175329))
@@ -415,9 +387,6 @@ writeCohort <- function(x, path) {
   checkmate::assertClass(x, "Cohort")
   checkmate::assertCharacter(path, len = 1, min.chars = 1, pattern = "\\.json$")
 
-  # ParallelLogger::logInfo(
-  #   "Cohort written to", path
-  # )
   toCirce(x) %>%
     jsonlite::write_json(
       path = path,
@@ -440,9 +409,9 @@ generateCaprTemplate <- function(file, .capr) {
 
   #generate cohort from template
   .capr(conceptSet)
-
 }
 
+<<<<<<< HEAD
 # writeCohort <- function(x, path, ...) {
 #   checkmate::assertClass(x, "Cohort")
 #   checkmate::assertCharacter(path, len = 1, min.chars = 1, pattern = "\\.json$")
@@ -515,3 +484,5 @@ makeCohortSet <- function(...) {
 
 
 
+=======
+>>>>>>> 84dfd727b8ad3f113d9799bd759456750bbd5ec5

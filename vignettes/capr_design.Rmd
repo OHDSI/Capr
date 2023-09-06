@@ -62,7 +62,7 @@ Capr v2 will be gradually released in order to receive feedback from the OHDSI c
 | v2 alpha | 01/19/23     | Proof of concept demo on HADES call              |
 | v2 beta  | 02/13/23     | Soft release to specific developers for feedback |
 | v2 HADES | 03/15/23     | HADES release of v2 on OHDSI github              |
-| v2 CRAN  | 03/17/23     | Submission of Capr to Cran                       |
+| v2 CRAN  | 03/17/23     | Submission of Capr to CRAN                       |
 | v2.0.x   | 04/23 - 7/23 | Period of observation, do patches and bug fixes  |
 | v2.1     | \~08/23      | Complimentary functions to v2 (show, import etc) |
 
