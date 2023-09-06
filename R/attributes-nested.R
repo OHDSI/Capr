@@ -16,7 +16,7 @@ setClass("nestedAttribute",
 
 #' Function to construct a nested group where all criteria and groups must be satisfied
 #' @param ...   a set of criteria or groups
-#'
+#' @return an S4 group class specifying a bundle of criteria that all must be satisfied in context of the cohort definition
 #' @export
 nestedWithAll <- function(...) {
   items <- list(...)
@@ -28,6 +28,7 @@ nestedWithAll <- function(...) {
 
 #' Function to construct a nested group where any criteria and groups may be satisfied
 #' @param ...   a set of criteria or groups
+#' @return an S4 group class specifying a bundle of criteria that any may be satisfied in context of the cohort definition
 #' @export
 nestedWithAny <- function(...) {
   items <- list(...)
@@ -40,6 +41,7 @@ nestedWithAny <- function(...) {
 #' satisfied
 #' @param x     an integer specifying the number of criteria or groups that must be satisfied
 #' @param ...   a set of criteria or groups
+#' @return an S4 group class specifying a bundle of criteria that at least x be satisfied in context of the cohort definition
 #' @export
 nestedWithAtLeast <- function(x, ...) {
   items <- list(...)
@@ -51,6 +53,7 @@ nestedWithAtLeast <- function(x, ...) {
 #' Function to construct a nested group where at most some of the criteria or groups must be satisfied
 #' @param x     an integer specifying the number of criteria or groups that must be satisfied
 #' @param ...   a set of criteria or groups
+#' @return an S4 group class specifying a bundle of criteria that at most x be satisfied in context of the cohort definition
 #' @export
 nestedWithAtMost <- function(x, ...) {
   items <- list(...)
