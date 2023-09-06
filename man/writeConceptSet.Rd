@@ -19,9 +19,7 @@ writeConceptSet(x, path, format = "auto", ...)
 The resulting concept Set JSON file can be imported into Atlas.
 }
 \examples{
-\dontrun{
 anemia <- cs(descendants(439777,4013073,4013074))
 writeConceptSet(anemia, 'anemia.json')
 writeConceptSet(anemia, 'anemia.csv')
-}
 }

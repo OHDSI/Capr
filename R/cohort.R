@@ -343,10 +343,8 @@ compile.Cohort <- function(object, ...) {
 #' @export
 #' @rdname compile-methods
 #' @examples
-#' \dontrun{
 #' ch <- cohort(condition(cs(1,2)))
 #' compile(ch)
-#' }
 setMethod("compile", "Cohort", compile.Cohort)
 
 compile.ConceptSet <- function(object, ...) {
@@ -376,12 +374,10 @@ setMethod("show", "Cohort", function(object) {
 #' @param path The name of the file to create
 #' @export
 #' @examples
-#' \dontrun{
 #' cs1 <- cs(descendants(exclude(436665),440383,442306,4175329))
 #' cs1 <- getConceptSetDetails(cs1)
 #' x <- cohort(condition(cs1))
 #' writeCohort(x, "cohortDefinition.json")
-#' }
 writeCohort <- function(x, path) {
 
   checkmate::assertClass(x, "Cohort")
