@@ -80,9 +80,9 @@ setClass("EventAperture",
 #' A function to construct the observationWindow
 #' @param priorDays minimum number of observation days prior to the cohort index. Default 0 days
 #' @param postDays minimum number of observation days post cohort index. Default 0 days
+#' @return An observation window that can be used in a Capr cohort definition
 #' @export
-continuousObservation <- function(priorDays = 0L,
-                          postDays = 0L) {
+continuousObservation <- function(priorDays = 0L, postDays = 0L) {
 
   methods::new("ObservationWindow",
       priorDays = as.integer(priorDays),
@@ -127,6 +127,7 @@ continuousObservation <- function(priorDays = 0L,
 #' @param b the right side of the event window
 #' @param index specifying what part of the index we start looking for events
 #' either at the index start date or index enddate
+#' @return An event window that can be used in a Capr cohort definition
 #' @export
 eventStarts <- function(a, b, index = c("startDate", "endDate")){
 
@@ -151,6 +152,7 @@ eventStarts <- function(a, b, index = c("startDate", "endDate")){
 #' @param b the right side of the event window
 #' @param index specifying what part of the index we start looking for events
 #' either at the index start date or index enddate
+#' @return An event window that can be used in a Capr cohort definition
 #' @export
 eventEnds <- function(a, b, index = c("startDate", "endDate")) {
   index <- checkmate::matchArg(index, c("startDate", "endDate"))
@@ -179,6 +181,7 @@ eventEnds <- function(a, b, index = c("startDate", "endDate")) {
 #' @param restrictVisit a logical toggle specifying whether the event should occur on the same visit
 #' @param ignoreObservationPeriod a logical toggle specifying whether we can consider events outside the
 #' observation period
+#' @return An event aperature that can be used in a Capr cohort definition
 #' @export
 duringInterval <- function(startWindow,
                            endWindow = NULL,
