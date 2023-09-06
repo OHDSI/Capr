@@ -204,7 +204,7 @@ test_that("compile generic works", {
 
 
 test_that("makeCohortSet works", {
-
+  skip_if_not_installed("CirceR")
   #make concept set for celecoxib
   celecoxib <- cs(descendants(1118084), name = "celecoxib")
 
