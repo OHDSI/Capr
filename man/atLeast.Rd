@@ -15,7 +15,7 @@ atLeast(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
 relative to the index event}
 }
 \value{
-A criteria that can be used in a cohort definition
+A criteria that can be used in a cohort definition specifying satisfaction of at least x instances of a query
 }
 \description{
 Function to enumerate an minimal count of occurrences

@@ -9,6 +9,9 @@ nestedWithAny(...)
 \arguments{
 \item{...}{a set of criteria or groups}
 }
+\value{
+an S4 group class specifying a bundle of criteria that any may be satisfied in context of the cohort definition
+}
 \description{
 Function to construct a nested group where any criteria and groups may be satisfied
 }

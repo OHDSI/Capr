@@ -6,6 +6,9 @@
 \usage{
 observationExit()
 }
+\value{
+an S4 ObservationExit class which defines the cohort exit as the end of continuous observation
+}
 \description{
 Function to create an exit based on continuous observation
 }

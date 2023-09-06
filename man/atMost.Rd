@@ -15,7 +15,7 @@ atMost(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
 is to be observed relative to the index event}
 }
 \value{
-A criteria that can be used in a cohort definition
+A criteria that can be used in a cohort definition specifying satisfaction of at most x instances of a query
 }
 \description{
 Function to enumerate a maximum count of occurrences

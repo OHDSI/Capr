@@ -22,6 +22,9 @@ surveillance prior to cohort exit}
 
 \item{daysSupplyOverride}{force drug exposure days supply to a set number of days}
 }
+\value{
+an S4 DrugExposueExit class which defines the cohort exit by end of drug exposure
+}
 \description{
 Function to create an exit based on exit based on the end of a continuous drug exposure
 }

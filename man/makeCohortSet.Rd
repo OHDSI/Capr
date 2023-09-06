@@ -9,6 +9,9 @@ makeCohortSet(...)
 \arguments{
 \item{...}{multiple capr cohorts to bind into a dataframe}
 }
+\value{
+a tibble containing cohortId, name, sql and json to pipe into CohortGenerator.
+}
 \description{
 Make a cohort dataframe for cohort generator
 }

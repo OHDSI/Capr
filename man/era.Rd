@@ -13,6 +13,9 @@ era(eraDays = 0L, studyStartDate = NULL, studyEndDate = NULL)
 
 \item{studyEndDate}{a date string that specifies the end date of registration}
 }
+\value{
+a S4 CohortEra class object defining the eras of the cohort definition
+}
 \description{
 The Cohort Era depicts the time span of the cohort. The Censor Window includes
 the date window for which we register events. The Collapse Settings identify the era padding
