@@ -1,8 +1,13 @@
 ## R CMD check results
 
-This is a new release.
+This is a resubmission of an new cran package.
 
-One NOTE is expected.
+
+
+One NOTE is expected. One package that enhances Capr is not on CRAN.
+
+A couple examples are wrapped in \dontrun because they rely on an external data
+source to work correctly. 
 
 RCMD check passed on the following platforms with 0 errors, 0 warnings, and 0 notes 
 
