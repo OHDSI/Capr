@@ -11,9 +11,6 @@ nestedWithAtMost(x, ...)
 
 \item{...}{a set of criteria or groups}
 }
-\value{
-an S4 group class specifying a bundle of criteria that at most x be satisfied in context of the cohort definition
-}
 \description{
 Function to construct a nested group where at most some of the criteria or groups must be satisfied
 }

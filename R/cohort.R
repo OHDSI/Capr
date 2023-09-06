@@ -2,7 +2,7 @@
 
 ## CohortEntry ----
 
-# @include window.R query.R conceptSet.R criteria.R
+#' @include window.R query.R conceptSet.R criteria.R
 setClass("CohortEntry",
          slots = c(
            entryEvents = "list",
@@ -34,7 +34,7 @@ setClass("CohortAttrition",
 
 
 ## CohortExit ----
-# @include exit.R
+#' @include exit.R
 setClass("CohortExit",
          slots = c(
            endStrategy = "ANY",

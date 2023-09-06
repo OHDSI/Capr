@@ -5,7 +5,7 @@
 #' name the name of the attribute
 #' @slot
 #' conceptSet a list representing the concepts for the attribute
-# @include conceptSet.R
+#' @include conceptSet.R
 setClass("conceptAttribute",
          slots = c(name = "character",
                    conceptSet = "list"  # TODO why is this a list and not a concept set object?

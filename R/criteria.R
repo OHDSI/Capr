@@ -26,7 +26,7 @@ setClass("Occurrence",
 #' @slot query a query object that provides context to the clinical event of interest
 #' @slot aperture an eventAperture object that shows the temporal span where the event is to be observed
 #' relative to the index event
-# @include window.R query.R
+#' @include window.R query.R
 setClass("Criteria",
          slots = c(
            occurrence = 'Occurrence',

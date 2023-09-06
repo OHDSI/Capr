@@ -9,7 +9,7 @@
 #' @slot domain The domain to search (e.g. "Condition", "Drug", "Measurement", etc)
 #' @slot conceptSet The Concept set describing the observation to serach for
 #' @slot attributes a list of attributes that modify the query (e.g. `male()`, `female()`, `age(gte(65))`)
-# @include conceptSet.R
+#' @include conceptSet.R
 setClass("Query",
          slot = c(
            domain = "character",

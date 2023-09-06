@@ -11,6 +11,9 @@ writeCohort(x, path)
 
 \item{path}{The name of the file to create}
 }
+\value{
+Invisibly returns the path to the json file that was written
+}
 \description{
 Write Cohort json file
 }
