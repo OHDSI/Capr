@@ -300,6 +300,7 @@ setMethod("as.list", "Cohort", function(x) {
 })
 #' Function to coerce cohort to circe
 #' @param cd the Capr cohort class
+#' @return an s3 list representing the circe object to coerce to json
 #' @export
 toCirce <- function(cd) {
 
@@ -396,21 +397,21 @@ writeCohort <- function(x, path) {
 }
 
 # Templates ------------
-#' Generate a Capr cohort using a template
-#' @param file the input file of a concept set
-#' @param .capr a function that creates a capr cohort
-#' @return A Capr cohort definition
-#' @export
-generateCaprTemplate <- function(file, .capr) {
-
-  # get file name
-  name <- tools::file_path_sans_ext(basename(file))
-  #retreive concept set
-  conceptSet <- Capr::readConceptSet(path = file, name = name)
-
-  #generate cohort from template
-  .capr(conceptSet)
-}
+# Generate a Capr cohort using a template
+# @param file the input file of a concept set
+# @param .capr a function that creates a capr cohort
+# @return A Capr cohort definition
+# @export
+# generateCaprTemplate <- function(file, .capr) {
+#
+#   # get file name
+#   name <- tools::file_path_sans_ext(basename(file))
+#   #retreive concept set
+#   conceptSet <- Capr::readConceptSet(path = file, name = name)
+#
+#   #generate cohort from template
+#   .capr(conceptSet)
+# }
 
 # writeCohort <- function(x, path, ...) {
 #   checkmate::assertClass(x, "Cohort")
@@ -436,7 +437,7 @@ capr_to_circe <- function(cd) {
 
 #' Make a cohort dataframe for cohort generator
 #' @param ... multiple capr cohorts to bind into a dataframe
-#' @return A Capr Cohort Set dataframe
+#' @return a tibble containing cohortId, name, sql and json to pipe into CohortGenerator.
 #' @export
 makeCohortSet <- function(...) {
 
