@@ -425,15 +425,15 @@ writeCohort <- function(x, path) {
 # }
 
 
-capr_to_circe <- function(cd) {
-
-  circeJson <- toCirce(cd) %>%
-    jsonlite::toJSON(auto_unbox = TRUE, pretty = TRUE) %>%
-    as.character()
-
-  return(circeJson)
-
-}
+# capr_to_circe <- function(cd) {
+#
+#   circeJson <- toCirce(cd) %>%
+#     jsonlite::toJSON(auto_unbox = TRUE, pretty = TRUE) %>%
+#     as.character()
+#
+#   return(circeJson)
+#
+# }
 
 #' Make a cohort dataframe for cohort generator
 #' @param ... multiple capr cohorts to bind into a dataframe
@@ -456,7 +456,7 @@ makeCohortSet <- function(...) {
   cohortName <- names(cohortList)
 
   # get cohort json
-  cohortJson <- purrr::map_chr(cohortList, ~capr_to_circe(.x))
+  cohortJson <- purrr::map_chr(cohortList, ~compile(.x))
 
   # get ohdsi sql
   ohdsiSql <- purrr::map_chr(
