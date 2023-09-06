@@ -15,10 +15,8 @@ writeCohort(x, path)
 Write Cohort json file
 }
 \examples{
-\dontrun{
 cs1 <- cs(descendants(exclude(436665),440383,442306,4175329))
 cs1 <- getConceptSetDetails(cs1)
 x <- cohort(condition(cs1))
 writeCohort(x, "cohortDefinition.json")
-}
 }

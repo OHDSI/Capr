@@ -26,8 +26,6 @@ Compile a Capr cohort to json
 Compile a Capr Concept Set to json
 }
 \examples{
-\dontrun{
 ch <- cohort(condition(cs(1,2)))
 compile(ch)
-}
 }

@@ -16,9 +16,7 @@ An attribute that can be used in a query function
 Add unit attribute to a query
 }
 \examples{
-\dontrun{
 # create a unit attribute
 unit(8713L)
 unit("\%")
-}
 }

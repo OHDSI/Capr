@@ -18,8 +18,11 @@ Concept sets can be serialized to json or csv file formats. `readConceptSet`
 reads the files into R as Capr concepts sets.
 }
 \examples{
-\dontrun{
-anemia <- readConceptSet('anemia.json')
-anemia <- readConceptSet('anemia.csv')
-}
+library(Capr)
+path <- tempfile("concepts", fileext = ".json")
+concepts <- cs(1, 2, descendants(4, 5), exclude(descendants(6, 7)), name = "test")
+writeConceptSet(concepts, path = path)
+
+concepts <- readConceptSet(path)
+
 }

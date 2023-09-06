@@ -46,11 +46,9 @@ setMethod("show", "conceptAttribute", function(object) {
 #' attributes male demographic attribute
 #'
 #' @examples
-#' \dontrun{
 #' # Create a cohort of males with Type 1 diabetes
 #' t1dm <- cs(descendants(201254, 435216, 40484648))
 #' t1dm_males <- cohort(condition(t1dm, male()))
-#' }
 male <- function() {
 
   methods::new("conceptAttribute",
@@ -68,11 +66,9 @@ male <- function() {
 #' @describeIn
 #' attributes female demographic attribute
 #' @examples
-#' \dontrun{
 #' # Create a cohort of males with Type 1 diabetes
 #' t1dm <- cs(descendants(201254, 435216, 40484648))
 #' t1dm_females <- cohort(condition(t1dm, female()))
-#' }
 female <- function() {
 
   methods::new("conceptAttribute",
@@ -88,12 +84,12 @@ female <- function() {
 #' @return
 #' An attribute that can be used in a query function
 #' @export
+#'
+#'
 #' @examples
-#' \dontrun{
 #' # create a unit attribute
 #' unit(8713L)
 #' unit("%")
-#' }
 unit <- function(x) {
   if (missing(x)) {
     rlang::abort("Unit must be specified")
