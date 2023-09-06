@@ -53,9 +53,11 @@ cs1 <- cs(descendants(443238, 201820, 442793),
 ch <- cohort(
   entry = conditionOccurrence(cs1),
   attrition = attrition(
-    atLeast(1, 
-            observationPeriod(), 
+    withAll(
+          atLeast(1, 
+            observationPeriod(), #function not currently in Capr
             duringInterval(eventStarts(-Inf, -365, "startDate"))
+    )
     )
   ),
   exit = exit(
@@ -112,8 +114,12 @@ ch <- cohort(
     observationWindow = continuousObservation(priorDays = 365)
   ),
   attrition = attrition(
-    exactly(0, conditionOccurrence(cs1), duringInterval(eventStarts(-Inf, 0))),
+    't1d' = withAll(
+    exactly(0, conditionOccurrence(cs1), duringInterval(eventStarts(-Inf, 0)))
+    ),
+    'secondaryDiabetes' = withAll(
     exactly(0, conditionOccurrence(cs2), duringInterval(eventStarts(-Inf, 0)))
+    )
   ),
   exit = exit(
     endStrategy = observationExit()
@@ -224,8 +230,8 @@ ch <- cohort(
     observationWindow = continuousObservation(priorDays = 365)
   ),
   attrition = attrition(
-    "no prior T2DM" = exactly(0, conditionOccurrence(cs0), duringInterval(eventStarts(-Inf, 0))),
-    "no prior secondary T1DM" = exactly(0, conditionOccurrence(cs2), duringInterval(eventStarts(-Inf, 0)))
+    "no prior T2DM" = withAll(exactly(0, conditionOccurrence(cs0), duringInterval(eventStarts(-Inf, 0)))),
+    "no prior secondary T1DM" = withAll(exactly(0, conditionOccurrence(cs2), duringInterval(eventStarts(-Inf, 0))))
   )
 )
 
