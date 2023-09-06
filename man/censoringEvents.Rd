@@ -9,6 +9,9 @@ censoringEvents(...)
 \arguments{
 \item{...}{a list of Capr query objects that are used as censoring events}
 }
+\value{
+a censoring criteria S4 object used to define the censoring events of the cohort definition
+}
 \description{
 Constructor for a set of censoring events
 }

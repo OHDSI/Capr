@@ -24,6 +24,9 @@ eventStarts(a, b, index = c("startDate", "endDate"))
 \item{index}{specifying what part of the index we start looking for events
 either at the index start date or index enddate}
 }
+\value{
+An event window that can be used in a Capr cohort definition
+}
 \description{
 #' Function looking at all time before an event
 #' @export

@@ -10,6 +10,9 @@ drugQuantity(op)
 \item{op}{an opAttribute object that is either numeric or integer that defines the logical
 operation used to determine eligible quantity}
 }
+\value{
+An attribute that can be used in a cohort definition
+}
 \description{
 This function is used only for a drug query. quantity is a column in the drug exposure table of the
 cdm. This attribute allows a subquery to find drugs that satisfy certain values determined by the

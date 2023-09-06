@@ -22,6 +22,9 @@ duringInterval(
 \item{ignoreObservationPeriod}{a logical toggle specifying whether we can consider events outside the
 observation period}
 }
+\value{
+An event aperature that can be used in a Capr cohort definition
+}
 \description{
 Function that creates an eventAperture an opening where an event can occur
 relative to the index event

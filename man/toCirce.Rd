@@ -9,6 +9,9 @@ toCirce(cd)
 \arguments{
 \item{cd}{the Capr cohort class}
 }
+\value{
+an s3 list representing the circe object to coerce to json
+}
 \description{
 Function to coerce cohort to circe
 }

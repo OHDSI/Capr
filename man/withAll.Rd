@@ -9,6 +9,9 @@ withAll(...)
 \arguments{
 \item{...}{a set of criteria or groups}
 }
+\value{
+an S4 group class specifying a bundle of criteria that all must be satisfied in context of the cohort definition
+}
 \description{
 Function to construct a group where all criteria and groups must be satisfied
 }

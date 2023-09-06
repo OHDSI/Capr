@@ -10,6 +10,9 @@ startDate(op)
 \item{op}{an opAttribute object must be a date that defines the logical operation used to
 determine eligible start dates}
 }
+\value{
+An attribute that can be used in a cohort definition
+}
 \description{
 Function that creates a start date attribute
 }
