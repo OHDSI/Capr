@@ -1,7 +1,9 @@
+
 Capr 2.0.6
 ==========
 - correct date attribute names (OccurrenceStartDate, OccurrenceEndDate)
 - add `makeCohortSet()` function to pipe into `CohortGenerator`
+- fix tests for CRAN
 
 Capr 2.0.5
 ==========
