@@ -202,3 +202,39 @@ test_that("compile generic works", {
   ch <- cohort(conditionOccurrence(cs(1,2, name = "test")))
   expect_gt(nchar(generics::compile(ch)), 10)
 })
+
+
+test_that("makeCohortSet works", {
+
+  #make concept set for celecoxib
+  celecoxib <- cs(descendants(1118084), name = "celecoxib")
+
+  #make cohort for celecoxib
+  celecoxibCohort <- cohort(
+    entry = entry(
+      drugExposure(celecoxib)
+    ),
+    exit = exit(
+      observationExit()
+    )
+  )
+
+  #make concept set for diclofenac
+  diclofenac <- cs(descendants(1124300), name = "diclofenac")
+
+  #make cohort for diclofenac
+  diclofenacCohort <- cohort(
+    entry = entry(
+      drugExposure(diclofenac)
+    ),
+    exit = exit(
+      observationExit()
+    )
+  )
+
+
+  kk <- makeCohortSet(celecoxibCohort, diclofenacCohort)
+  expect_s3_class(kk, class = "data.frame")
+  expect_type(kk$sql, "character")
+
+})

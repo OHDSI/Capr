@@ -455,6 +455,59 @@ generateCaprTemplate <- function(file, .capr) {
 # }
 
 
+capr_to_circe <- function(cd) {
+
+  circeJson <- toCirce(cd) %>%
+    jsonlite::toJSON(auto_unbox = TRUE, pretty = TRUE) %>%
+    as.character()
+
+  return(circeJson)
+
+}
+
+#' Make a cohort dataframe for cohort generator
+#' @param ... multiple capr cohorts to bind into a dataframe
+#' @export
+makeCohortSet <- function(...) {
+
+  cohortList <- rlang::dots_list(..., .named = TRUE)
+
+  check <- purrr::map_chr(cohortList, ~methods::is(.x))
+
+  if(!all(check == "Cohort")) {
+    stop("all cohorts need to be a Capr Cohort class")
+  }
+
+  # get cohort Id
+  cohortId <- seq_along(cohortList)
+
+  # get cohort names
+  cohortName <- names(cohortList)
+
+  # get cohort json
+  cohortJson <- purrr::map_chr(cohortList, ~capr_to_circe(.x))
+
+  # get ohdsi sql
+  ohdsiSql <- purrr::map_chr(
+    cohortJson,
+    ~CirceR::buildCohortQuery(
+      expression = .x,
+      options = CirceR::createGenerateOptions(generateStats = TRUE)
+    )
+  )
+
+  # make tibble for cohort generator
+  df <- tibble::tibble(
+    cohortId = cohortId,
+    cohortName = cohortName,
+    sql = ohdsiSql,
+    json = cohortJson
+  )
+
+
+  return(df)
+
+}
 
 
 
