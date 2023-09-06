@@ -90,39 +90,11 @@ continuousObservation <- function(priorDays = 0L, postDays = 0L) {
 
 }
 
-#Depreciated Endpoint functions
-#' #' A function to offset the number of days relative to index
-#' #' @param days a number specifying the number of days to offset from index where
-#' #' an event may be observed. In this function a negative number means days before index
-#' #' and a postive number means days after index.
-#' #' @export
-#' offset <- function(days) {
-#'   coeff <- dplyr::if_else(sign(days) == 1, "after", "before", "before")
-#'   new("Endpoint",
-#'       days = as.integer(abs(days)),
-#'       coeff = coeff)
-#' }
-#'
-#' #' Function looking at all time before an event
-#' #' @export
-#' allDaysBefore <- function() {
-#'   new("Endpoint",
-#'       days = "all",
-#'       coeff = "before")
-#' }
-#'
-#' #' Function looking at all time after an event
-#' #' @export
-#' allDaysAfter <- function() {
-#'   new("Endpoint",
-#'       days = "all",
-#'       coeff = "after")
-#' }
-
 
 ## EventWindow ---------------------
 
 #' Function creates an event window where the event starts
+#'
 #' @param a the left side of the event window
 #' @param b the right side of the event window
 #' @param index specifying what part of the index we start looking for events
