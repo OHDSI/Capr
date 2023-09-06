@@ -51,11 +51,11 @@ cs is used to create concept set expressions.
 
 }}
 \examples{
-cs(1, 2)
-cs(1, c(1, 10, 2))
-cs(1, seq(2, 10, 2))
-cs(1, 2, 3, exclude(4, 5))
-cs(1, 2, 3, exclude(4, 5), mapped(6, 7))
-cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9))
-cs(descendants(1, 2, 3),  exclude(descendants(8, 9)))
+cs(1, 2, name = "concepts")
+cs(1, c(10, 11, 2), name = "concepts")
+cs(1, seq(2, 10, 2), name = "concepts")
+cs(1, 2, 3, exclude(4, 5), name = "concepts")
+cs(1, 2, 3, exclude(4, 5), mapped(6, 7), name = "concepts")
+cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9), name = "concepts")
+cs(descendants(1, 2, 3),  exclude(descendants(8, 9)), name = "concepts")
 }

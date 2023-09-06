@@ -39,14 +39,16 @@ Imports:
     DBI,
     DatabaseConnector,
     SqlRender,
-    generics,
-    curl
+    generics
 Suggests:
-  testthat (>= 3.0.0),
-  knitr,
-  rmarkdown
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Enhances:
+    CirceR
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Additional_repositories: https://OHDSI.github.io/drat
 Collate: 
     'Capr.R'
     'conceptSet.R'

@@ -184,13 +184,13 @@ newConcept <- function(id,
 #' @export
 #'
 #' @examples
-#' cs(1, 2)
-#' cs(1, c(1, 10, 2))
-#' cs(1, seq(2, 10, 2))
-#' cs(1, 2, 3, exclude(4, 5))
-#' cs(1, 2, 3, exclude(4, 5), mapped(6, 7))
-#' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9))
-#' cs(descendants(1, 2, 3),  exclude(descendants(8, 9)))
+#' cs(1, 2, name = "concepts")
+#' cs(1, c(10, 11, 2), name = "concepts")
+#' cs(1, seq(2, 10, 2), name = "concepts")
+#' cs(1, 2, 3, exclude(4, 5), name = "concepts")
+#' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), name = "concepts")
+#' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9), name = "concepts")
+#' cs(descendants(1, 2, 3),  exclude(descendants(8, 9)), name = "concepts")
 cs <- function(..., name, id = NULL) {
   dots <- unlist(list(...), recursive = F)
 
@@ -378,9 +378,9 @@ setMethod("as.json", "ConceptSet", function(x, pretty = TRUE, ...){
 #' @export
 #'
 #' @examples
-#' anemia <- cs(descendants(439777,4013073,4013074))
-#' writeConceptSet(anemia, 'anemia.json')
-#' writeConceptSet(anemia, 'anemia.csv')
+#' anemia <- cs(descendants(439777,4013073,4013074), name = "anemia")
+#' writeConceptSet(anemia, file.path(tempdir(), 'anemia.json'))
+#' writeConceptSet(anemia, file.path(tempdir(), 'anemia.csv'))
 writeConceptSet <- function(x, path, format = "auto", ...) {
   checkmate::assertChoice(format, choices = c("auto", "json", "csv"))
   if (format == "auto") {
@@ -533,11 +533,11 @@ readConceptSet <- function(path, name, id = NULL) {
 #' \dontrun{
 #' # create a concept set
 #' vocabularyDatabaseSchema = "cdm5"
-#' anemia <- cs(descendants(439777,4013073,4013074))
+#' anemia <- cs(descendants(439777,4013073,4013074), name = "anemia")
 #'
 #' # fill in the details from an OMOP CDM
 #' library(DatabaseConnector)
-#' con <- connect(dbms = "postgresql", user = "postgres", password = "", server = "localhost/covid")
+#' con <- connect(dbms = "postgresql", user = "postgres", password = "", server = "localhost/cdm")
 #' anemia <- getConceptSetDetails(condition_anemia, con, vocabularyDatabaseSchema = "cdm5")
 #' }
 getConceptSetDetails <- function(x,

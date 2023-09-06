@@ -346,7 +346,7 @@ compile.Cohort <- function(object, ...) {
 #' @export
 #' @rdname compile-methods
 #' @examples
-#' ch <- cohort(condition(cs(1,2)))
+#' ch <- cohort(conditionOccurrence(cs(1,2, name = "concepts")))
 #' compile(ch)
 setMethod("compile", "Cohort", compile.Cohort)
 
@@ -378,10 +378,15 @@ setMethod("show", "Cohort", function(object) {
 #' @export
 #' @return Invisibly returns the path to the json file that was written
 #' @examples
-#' cs1 <- cs(descendants(exclude(436665),440383,442306,4175329))
-#' cs1 <- getConceptSetDetails(cs1)
-#' x <- cohort(condition(cs1))
+#' \dontrun{
+#' cs1 <- cs(descendants(exclude(436665),440383,442306,4175329), name = "concepts")
+#' # optional step to fill in concept set details. Requires database connection.
+#' con <- {A CDM datbase connection}
+#' cs1 <- getConceptSetDetails(cs1, con)
+#'
+#' x <- cohort(conditionOccurrence(cs1))
 #' writeCohort(x, "cohortDefinition.json")
+#' }
 writeCohort <- function(x, path) {
 
   checkmate::assertClass(x, "Cohort")
@@ -440,6 +445,9 @@ writeCohort <- function(x, path) {
 #' @return a tibble containing cohortId, name, sql and json to pipe into CohortGenerator.
 #' @export
 makeCohortSet <- function(...) {
+  if (!rlang::is_installed("CirceR")) {
+    stop("CirceR is required but not installed. Install it with `devtools::install_github('OHDSI/CirceR')`")
+  }
 
   cohortList <- rlang::dots_list(..., .named = TRUE)
 
