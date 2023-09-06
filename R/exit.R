@@ -93,6 +93,7 @@ setClass("CensoringCriteria",
 # Constructors -----
 
 #' Function to create an exit based on continuous observation
+#' @return an S4 ObservationExit class which defines the cohort exit as the end of continuous observation
 #' @export
 observationExit <- function() {
   methods::new("ObservationExit")
@@ -105,6 +106,7 @@ observationExit <- function() {
 #' @param surveillanceWindow add days to the end of the era of persistence exposure as an additional period of
 #' surveillance prior to cohort exit
 #' @param daysSupplyOverride force drug exposure days supply to a set number of days
+#' @return an S4 DrugExposueExit class which defines the cohort exit by end of drug exposure
 #' @export
 drugExit <- function(conceptSet,
                      persistenceWindow = 0L,
@@ -140,6 +142,7 @@ drugExit <- function(conceptSet,
 #' Function to create an exit based on exit based on the end of a continuous drug exposure
 #' @param index specification of event date to offset. Can be either startDate or endDate
 #' @param offsetDays an integer specifying the number of days to offset from the event date
+#' @return a fixed Duration exit S4 object used to define the cohort exit as the end of a specified time
 #' @export
 fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
 
@@ -178,6 +181,7 @@ fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
 
 #' Constructor for a set of censoring events
 #' @param ... a list of Capr query objects that are used as censoring events
+#' @return a censoring criteria S4 object used to define the censoring events of the cohort definition
 #' @export
 censoringEvents <- function(...) {
   dots <- list(...)

@@ -76,6 +76,7 @@ is.Group <- function(x) {
 #' @param query a query object that provides context to the clinical event of interest
 #' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
 #' relative to the index event
+#' @return A criteria that can be used in a cohort definition specifying satisfaction of exactly x instances of a query
 #' @export
 exactly <- function(x,
                     query,
@@ -102,7 +103,7 @@ exactly <- function(x,
 #' @param query a query object that provides context to the clinical event of interest
 #' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
 #' relative to the index event
-#' @return A criteria that can be used in a cohort definition
+#' @return A criteria that can be used in a cohort definition specifying satisfaction of at least x instances of a query
 #' @export
 atLeast <- function(x,
                     query,
@@ -128,7 +129,7 @@ atLeast <- function(x,
 #' @param query a query object that provides context to the clinical event of interest
 #' @param aperture an eventAperture object that shows the temporal span where the event
 #' is to be observed relative to the index event
-#' @return A criteria that can be used in a cohort definition
+#' @return A criteria that can be used in a cohort definition specifying satisfaction of at most x instances of a query
 #' @export
 atMost <- function(x,
                    query,
@@ -153,6 +154,7 @@ atMost <- function(x,
 
 #' Function to construct a group where all criteria and groups must be satisfied
 #' @param ... a set of criteria or groups
+#' @return an S4 group class specifying a bundle of criteria that all must be satisfied in context of the cohort definition
 #' @export
 withAll <- function(...){
   items <- list(...)
@@ -166,6 +168,7 @@ withAll <- function(...){
 
 #' Function to construct a group where any criteria and groups may be satisfied
 #' @param ... a set of criteria or groups
+#' @return an S4 group class specifying a bundle of criteria that any may be satisfied in context of the cohort definition
 #' @export
 withAny <- function(...){
   items <- list(...)
@@ -180,6 +183,7 @@ withAny <- function(...){
 #' Function to construct a group where at least some of the criteria or groups must be satisfied
 #' @param x an integer specifying the number of criteria or groups that must be satisfied
 #' @param ... a set of criteria or groups
+#' @return an S4 group class specifying a bundle of criteria that at least x be satisfied in context of the cohort definition
 #' @export
 withAtLeast <- function(x, ...){
   items <- list(...)
@@ -193,6 +197,7 @@ withAtLeast <- function(x, ...){
 #' Function to construct a group where at most some of the criteria or groups must be satisfied
 #' @param x an integer specifying the number of criteria or groups that must be satisfied
 #' @param ... a set of criteria or groups
+#' @return an S4 group class specifying a bundle of criteria that at most x be satisfied in context of the cohort definition
 #' @export
 withAtMost <- function(x, ...){
   items <- list(...)
