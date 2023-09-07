@@ -11,6 +11,9 @@ fixedExit(index = c("startDate", "endDate"), offsetDays)
 
 \item{offsetDays}{an integer specifying the number of days to offset from the event date}
 }
+\value{
+a fixed Duration exit S4 object used to define the cohort exit as the end of a specified time
+}
 \description{
 Function to create an exit based on exit based on the end of a continuous drug exposure
 }

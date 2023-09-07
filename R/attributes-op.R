@@ -328,6 +328,7 @@ setMethod("nbt", "Date", function(x, y) {
 #' Function to create age attribute
 #' @param op   an opAttribute object that is either numeric or integer that defines the logical
 #'             operation used to determine eligible patient age
+#' @return An age attribute that can be used in a cohort definition
 #' @export
 age <- function(op) {
 
@@ -349,6 +350,7 @@ age <- function(op) {
 #' the op logic.
 #' @param op   an opAttribute object that is either numeric or integer that defines the logical
 #'             operation used to determine eligible number of days of supply
+#' @return An attribute that can be used in a cohort definition
 #' @export
 daysOfSupply <- function(op) {
 
@@ -368,6 +370,7 @@ daysOfSupply <- function(op) {
 #' op logic.
 #' @param op   an opAttribute object that is either numeric or integer that defines the logical
 #'             operation used to determine eligible number of refills
+#' @return An attribute that can be used in a cohort definition
 #' @export
 drugRefills <- function(op) {
 
@@ -391,6 +394,7 @@ drugRefills <- function(op) {
 #' determined by the op logic.
 #' @param op   an opAttribute object that is either numeric or integer that defines the logical
 #'             operation used to determine eligible patient age
+#' @return An attribute that can be used in a cohort definition
 #' @export
 valueAsNumber <- function(op) {
 
@@ -412,6 +416,7 @@ valueAsNumber <- function(op) {
 #' determined by the op logic.
 #' @param op   an opAttribute object that is either numeric or integer that defines the logical
 #'             operation used to determine eligible range high
+#' @return An attribute that can be used in a cohort definition
 #' @export
 rangeHigh <- function(op) {
 
@@ -433,6 +438,7 @@ rangeHigh <- function(op) {
 #' determined by the op logic.
 #' @param op   an opAttribute object that is either numeric or integer that defines the logical
 #'             operation used to determine eligible range low
+#' @return An attribute that can be used in a cohort definition
 #' @export
 rangeLow <- function(op) {
 
@@ -456,6 +462,7 @@ rangeLow <- function(op) {
 #' op logic.
 #' @param op   an opAttribute object that is either numeric or integer that defines the logical
 #'             operation used to determine eligible quantity
+#' @return An attribute that can be used in a cohort definition
 #' @export
 drugQuantity <- function(op) {
 
@@ -478,6 +485,7 @@ drugQuantity <- function(op) {
 #' Function that creates a start date attribute
 #' @param op   an opAttribute object must be a date that defines the logical operation used to
 #'             determine eligible start dates
+#' @return An attribute that can be used in a cohort definition
 #' @export
 startDate <- function(op) {
 
@@ -487,7 +495,7 @@ startDate <- function(op) {
   }
 
   methods::new("opAttributeDate",
-               name = "StartDate",
+               name = "OccurrenceStartDate",
                op = op@op,
                value = op@value,
                extent = op@extent)
@@ -496,6 +504,7 @@ startDate <- function(op) {
 #' Function that creates a end date attribute
 #' @param op   an opAttribute object must be a date that defines the logical operation used to
 #'             determine eligible end dates
+#' @return An attribute that can be used in a cohort definition
 #' @export
 endDate <- function(op) {
 
@@ -505,7 +514,7 @@ endDate <- function(op) {
   }
 
   methods::new("opAttributeDate",
-               name = "EndDate",
+               name = "OccurrenceEndDate",
                op = op@op,
                value = op@value,
                extent = op@extent)

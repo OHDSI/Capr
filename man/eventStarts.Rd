@@ -2,17 +2,7 @@
 % Please edit documentation in R/window.R
 \name{eventStarts}
 \alias{eventStarts}
-\title{#' A function to offset the number of days relative to index
-#' @param days a number specifying the number of days to offset from index where
-#' an event may be observed. In this function a negative number means days before index
-#' and a postive number means days after index.
-#' @export
-offset <- function(days) {
-  coeff <- dplyr::if_else(sign(days) == 1, "after", "before", "before")
-  new("Endpoint",
-      days = as.integer(abs(days)),
-      coeff = coeff)
-}}
+\title{Function creates an event window where the event starts}
 \usage{
 eventStarts(a, b, index = c("startDate", "endDate"))
 }
@@ -24,22 +14,9 @@ eventStarts(a, b, index = c("startDate", "endDate"))
 \item{index}{specifying what part of the index we start looking for events
 either at the index start date or index enddate}
 }
+\value{
+An event window that can be used in a Capr cohort definition
+}
 \description{
-#' Function looking at all time before an event
-#' @export
-allDaysBefore <- function() {
-  new("Endpoint",
-      days = "all",
-      coeff = "before")
-}
-}
-\details{
-#' Function looking at all time after an event
-#' @export
-allDaysAfter <- function() {
-  new("Endpoint",
-      days = "all",
-      coeff = "after")
-}
 Function creates an event window where the event starts
 }

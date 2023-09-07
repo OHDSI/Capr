@@ -1,20 +1,20 @@
 Package: Capr
 Title: Cohort Definition Application Programming
-Version: 2.0.5
+Version: 2.0.6
 Authors@R: c(
-    person("Martin", "Lavallee", , "mdlavallee92@gmail.com", role = c("aut", "cre")),
-    person("Adam", "Black", , "black@ohdsi.org", role = "aut")
+    person("Martin", "Lavallee", , "martin.lavallee@odysseusinc.com", role = c("aut")),
+    person("Adam", "Black", , "black@ohdsi.org", role = c("aut", "cre"))
   )
-Description: Provides a programming language for defining OHDSI cohort definitions in R to use in studies for Observational 
+Description: Provides a programming language for defining cohort definitions in R to use in studies for Observational 
     Health Data Sciences and Informatics (OHDSI). The functions in 'Capr' allow for the programmatic creation of 
-    OHDSI concept sets and cohorts that can be serialized to 'Atlas/CIRCE-BE' compatible 'json' files or to 'OHDSI-SQL'. 
+    OHDSI concept sets and cohorts that can be serialized to 'OHDSI' compatible 'json' files or to 'OHDSI-SQL'. 
     'Capr' functions can be used to create, save, and load component parts to a cohort definition allowing 
     R programmers to easily reuse cohort logic. 'Capr' provides tools to create a large number of OHDSI cohorts 
-    programmatically while also helping bridge the gap between human readable descriptions of clinical phenotypes 
-    and their computational implmentation. 
+    while also helping bridge the gap between human readable descriptions of clinical phenotypes
+    and their computational implementation. 
 License: Apache License (>= 2)
-URL: https://ohdsi.github.io/Capr, https://github.com/OHDSI/Capr
-BugReports: https://github.com/OHDSI/Capr/issues
+URL: https://ohdsi.github.io/Capr/, https://github.com/OHDSI/Capr/
+BugReports: https://github.com/OHDSI/Capr/issues/
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Depends: 
@@ -41,22 +41,26 @@ Imports:
     SqlRender,
     generics
 Suggests:
-  testthat (>= 3.0.0),
-  knitr,
-  rmarkdown
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Enhances:
+    CirceR
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Additional_repositories: https://OHDSI.github.io/drat
 Collate: 
     'Capr.R'
     'conceptSet.R'
+    'attributes-concept.R'
+    'attributes-dateAdjustment.R'
+    'attributes-logic.R'
     'query.R'
     'window.R'
     'criteria.R'
-    'exit.R'
-    'cohort.R'
-    'attributes-concept.R'
-    'attributes-logic.R'
     'attributes-nested.R'
     'attributes-op.R'
+    'exit.R'
+    'cohort.R'
     'collectCodesetId.R'
     'utils.R'

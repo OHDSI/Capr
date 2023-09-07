@@ -1,3 +1,11 @@
+
+Capr 2.0.6
+==========
+- correct date attribute names (OccurrenceStartDate, OccurrenceEndDate)
+- add `makeCohortSet()` function to pipe into `CohortGenerator` (from Issue #79)
+- add `dateAdjustment()` function to deploy new circe attribute to a query (from Issue #77)
+- prepare for CRAN release
+
 Capr 2.0.5
 ==========
 - change query functions to match known syntax (i.e. drug => drugExposure, condition => conditionOccurrence)

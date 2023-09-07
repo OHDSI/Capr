@@ -2,7 +2,7 @@
 % Please edit documentation in R/attributes-nested.R
 \name{nestedWithAll}
 \alias{nestedWithAll}
-\title{Function to construct a nested group where all criteria and groups must be satisfied}
+\title{Construct a nested group where all criteria and groups must be satisfied}
 \usage{
 nestedWithAll(...)
 }
@@ -10,5 +10,5 @@ nestedWithAll(...)
 \item{...}{a set of criteria or groups}
 }
 \description{
-Function to construct a nested group where all criteria and groups must be satisfied
+Construct a nested group where all criteria and groups must be satisfied
 }

@@ -5,7 +5,8 @@
 #' name the name of the attribute
 #' @slot
 #' conceptSet a list representing the concepts for the attribute
-# @include criteria.R
+#'
+#' @include criteria.R
 setClass("nestedAttribute",
          slots = c(name = "character", group = "Group"),
          prototype = list(name = "CorrelatedCriteria",
@@ -14,16 +15,17 @@ setClass("nestedAttribute",
 
 # Constructor -------------------
 
-#' Function to construct a nested group where all criteria and groups must be satisfied
+#' Construct a nested group where all criteria and groups must be satisfied
 #' @param ...   a set of criteria or groups
 #'
 #' @export
 nestedWithAll <- function(...) {
   items <- list(...)
   methods::new("nestedAttribute",
-               group = methods::new("Group", occurrence = methods::new("Occurrence",
-    type = "all"), criteria = purrr::discard(items, is.Group), group = purrr::keep(items, is.Group)))
-
+               group = methods::new("Group",
+                                    occurrence = methods::new("Occurrence", type = "all"),
+                                    criteria = purrr::discard(items, is.Group),
+                                    group = purrr::keep(items, is.Group)))
 }
 
 #' Function to construct a nested group where any criteria and groups may be satisfied
@@ -32,8 +34,10 @@ nestedWithAll <- function(...) {
 nestedWithAny <- function(...) {
   items <- list(...)
   methods::new("nestedAttribute",
-               group = methods::new("Group", occurrence = methods::new("Occurrence",
-    type = "any"), criteria = purrr::discard(items, is.Group), group = purrr::keep(items, is.Group)))
+               group = methods::new("Group",
+                                    occurrence = methods::new("Occurrence", type = "any"),
+                                    criteria = purrr::discard(items, is.Group),
+                                    group = purrr::keep(items, is.Group)))
 }
 
 #' Function to construct a nested group where at least some of the criteria or groups must be

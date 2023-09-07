@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.6</span>
       </span>
     </div>
 
@@ -290,8 +290,8 @@ relative from index we want to see two exposures of a drug within 365
 days and 30 days before index. Those that fit that criteria remain in
 the cohort, those that do not are excluded from the cohort. See the
 figure below as an example:</p>
-<div class="figure">
-<img src="images/criteria_example.png" alt=""><p class="caption">Example of Criteria</p>
+<div class="float">
+<img src="images/criteria_example.png" alt="Example of Criteria"><div class="figcaption">Example of Criteria</div>
 </div>
 <p>When building a <em>criteria</em> object the user needs: 1) a query,
 2) an operator that specifies the number of times a query is observed
@@ -306,7 +306,7 @@ this idea around the index event in a variety of different ways.</p>
 <p>With this definition in mind, let us build an example of a
 <em>criteria</em> object that reflects the image above.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">atenololConceptSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1314002</span><span class="op">)</span>, <span class="va">name</span> <span class="op">-</span> <span class="st">"atenolol"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">atenololConceptSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1314002</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"atenolol"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">atenololCriteria</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="fl">2</span>, </span>
@@ -326,7 +326,7 @@ is contextualized by the number of occurrences of the query for its
 function call. If we wanted to have exactly 2 drug exposures of atenolol
 or at most 2 drug exposures they can be done as shown below.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">atenololConceptSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1314002</span><span class="op">)</span>, <span class="va">name</span> <span class="op">-</span> <span class="st">"atenolol"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">atenololConceptSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1314002</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"atenolol"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">atenololCriteriaA</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="fl">2</span>, </span>

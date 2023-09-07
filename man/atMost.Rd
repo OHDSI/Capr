@@ -11,8 +11,11 @@ atMost(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
 
 \item{query}{a query object that provides context to the clinical event of interest}
 
-\item{aperture}{an eventAperture object that shows the temporal span where the event is to be observed
-relative to the index event}
+\item{aperture}{an eventAperture object that shows the temporal span where the event
+is to be observed relative to the index event}
+}
+\value{
+A criteria that can be used in a cohort definition specifying satisfaction of at most x instances of a query
 }
 \description{
 Function to enumerate a maximum count of occurrences

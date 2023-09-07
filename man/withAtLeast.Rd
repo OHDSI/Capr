@@ -11,6 +11,9 @@ withAtLeast(x, ...)
 
 \item{...}{a set of criteria or groups}
 }
+\value{
+an S4 group class specifying a bundle of criteria that at least x be satisfied in context of the cohort definition
+}
 \description{
 Function to construct a group where at least some of the criteria or groups must be satisfied
 }

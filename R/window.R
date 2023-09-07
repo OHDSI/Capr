@@ -34,7 +34,7 @@ setClass("Endpoint",
 ## EventWindow -----------------------
 #' An S4 class for a Window
 #'
-#' A window class provides details on the end points of the timeline
+#' @description A window class provides details on the end points of the timeline
 #'
 #' @slot event a character string either start or end. Identifies the point of reference for the window
 #' @slot start an endpoint object containing the days and coefficient for the start of the window
@@ -56,7 +56,8 @@ setClass("EventWindow",
 
 #' An S4 class for Aperture
 #'
-#'The aperture class provides context to when the criteria must be observed in a person timeline to pretain to the expression
+#' @description The aperture class provides context to when the criteria must be
+#' observed in a person timeline to pretain to the expression
 #'
 #' @slot startWindow a EventWindow class object identifying the start window
 #' @slot endWindow a EventWindow class object ifentifying the end window (optional)
@@ -78,11 +79,12 @@ setClass("EventAperture",
 
 ## ObservationWindow ---------------------
 #' A function to construct the observationWindow
+#'
 #' @param priorDays minimum number of observation days prior to the cohort index. Default 0 days
 #' @param postDays minimum number of observation days post cohort index. Default 0 days
+#' @return An observation window that can be used in a Capr cohort definition
 #' @export
-continuousObservation <- function(priorDays = 0L,
-                          postDays = 0L) {
+continuousObservation <- function(priorDays = 0L, postDays = 0L) {
 
   methods::new("ObservationWindow",
       priorDays = as.integer(priorDays),
@@ -91,42 +93,44 @@ continuousObservation <- function(priorDays = 0L,
 }
 
 #Depreciated Endpoint functions
-#' #' A function to offset the number of days relative to index
-#' #' @param days a number specifying the number of days to offset from index where
-#' #' an event may be observed. In this function a negative number means days before index
-#' #' and a postive number means days after index.
-#' #' @export
-#' offset <- function(days) {
-#'   coeff <- dplyr::if_else(sign(days) == 1, "after", "before", "before")
-#'   new("Endpoint",
-#'       days = as.integer(abs(days)),
-#'       coeff = coeff)
-#' }
-#'
-#' #' Function looking at all time before an event
-#' #' @export
-#' allDaysBefore <- function() {
-#'   new("Endpoint",
-#'       days = "all",
-#'       coeff = "before")
-#' }
-#'
-#' #' Function looking at all time after an event
-#' #' @export
-#' allDaysAfter <- function() {
-#'   new("Endpoint",
-#'       days = "all",
-#'       coeff = "after")
-#' }
+# #' A function to offset the number of days relative to index
+# #' @param days a number specifying the number of days to offset from index where
+# #' an event may be observed. In this function a negative number means days before index
+# #' and a postive number means days after index.
+# #' @export
+# offset <- function(days) {
+#   coeff <- dplyr::if_else(sign(days) == 1, "after", "before", "before")
+#   new("Endpoint",
+#       days = as.integer(abs(days)),
+#       coeff = coeff)
+# }
+#
+# #' Function looking at all time before an event
+# #' @export
+# allDaysBefore <- function() {
+#   new("Endpoint",
+#       days = "all",
+#       coeff = "before")
+# }
+#
+# #' Function looking at all time after an event
+# #' @export
+# allDaysAfter <- function() {
+#   new("Endpoint",
+#       days = "all",
+#       coeff = "after")
+# }
 
 
 ## EventWindow ---------------------
 
 #' Function creates an event window where the event starts
+#'
 #' @param a the left side of the event window
 #' @param b the right side of the event window
 #' @param index specifying what part of the index we start looking for events
 #' either at the index start date or index enddate
+#' @return An event window that can be used in a Capr cohort definition
 #' @export
 eventStarts <- function(a, b, index = c("startDate", "endDate")){
 
@@ -147,10 +151,12 @@ eventStarts <- function(a, b, index = c("startDate", "endDate")){
 }
 
 #' Function creates an event window where the event ends
+#'
 #' @param a the left side of the event window
 #' @param b the right side of the event window
 #' @param index specifying what part of the index we start looking for events
 #' either at the index start date or index enddate
+#' @return An event window that can be used in a Capr cohort definition
 #' @export
 eventEnds <- function(a, b, index = c("startDate", "endDate")) {
   index <- checkmate::matchArg(index, c("startDate", "endDate"))
@@ -179,6 +185,7 @@ eventEnds <- function(a, b, index = c("startDate", "endDate")) {
 #' @param restrictVisit a logical toggle specifying whether the event should occur on the same visit
 #' @param ignoreObservationPeriod a logical toggle specifying whether we can consider events outside the
 #' observation period
+#' @return An event aperture that can be used in a Capr cohort definition
 #' @export
 duringInterval <- function(startWindow,
                            endWindow = NULL,

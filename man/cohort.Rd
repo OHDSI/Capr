@@ -15,6 +15,9 @@ cohort(entry, attrition = NULL, exit = NULL, era = NULL)
 
 \item{era}{Cohort era (collapse) logic created with the `cohortEra` function}
 }
+\value{
+an S4 Cohort class object describing the cohort definiton
+}
 \description{
 Function that creates a cohort object
 }

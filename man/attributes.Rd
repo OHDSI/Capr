@@ -27,14 +27,10 @@ Add female attribute to a query
 
 }}
 \examples{
-\dontrun{
 # Create a cohort of males with Type 1 diabetes
-t1dm <- cs(descendants(201254, 435216, 40484648))
-t1dm_males <- cohort(condition(t1dm, male()))
-}
-\dontrun{
+t1dm <- cs(descendants(201254, 435216, 40484648), name = "type 1 diabetes")
+t1dm_males <- cohort(conditionOccurrence(t1dm, male()))
 # Create a cohort of males with Type 1 diabetes
-t1dm <- cs(descendants(201254, 435216, 40484648))
-t1dm_females <- cohort(condition(t1dm, female()))
-}
+t1dm <- cs(descendants(201254, 435216, 40484648), name = "type 1 diabetes")
+t1dm_females <- cohort(conditionOccurrence(t1dm, female()))
 }

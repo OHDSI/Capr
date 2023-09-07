@@ -11,6 +11,9 @@ continuousObservation(priorDays = 0L, postDays = 0L)
 
 \item{postDays}{minimum number of observation days post cohort index. Default 0 days}
 }
+\value{
+An observation window that can be used in a Capr cohort definition
+}
 \description{
 A function to construct the observationWindow
 }

@@ -11,14 +11,20 @@ writeCohort(x, path)
 
 \item{path}{The name of the file to create}
 }
+\value{
+Invisibly returns the path to the json file that was written
+}
 \description{
 Write Cohort json file
 }
 \examples{
 \dontrun{
-cs1 <- cs(descendants(exclude(436665),440383,442306,4175329))
-cs1 <- getConceptSetDetails(cs1)
-x <- cohort(condition(cs1))
+cs1 <- cs(descendants(exclude(436665),440383,442306,4175329), name = "concepts")
+# optional step to fill in concept set details. Requires database connection.
+con <- {A CDM datbase connection}
+cs1 <- getConceptSetDetails(cs1, con)
+
+x <- cohort(conditionOccurrence(cs1))
 writeCohort(x, "cohortDefinition.json")
 }
 }

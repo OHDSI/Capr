@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.6</span>
       </span>
     </div>
 
@@ -123,9 +123,13 @@
         </td>
         <td><p>Function that creates a cohort object</p></td>
       </tr><tr><td>
-          <p><code><a href="compile.Cohort.html">compile.Cohort()</a></code> </p>
+          <p><code><a href="compile-methods.html">compile(<i>&lt;Cohort&gt;</i>)</a></code> <code><a href="compile-methods.html">compile(<i>&lt;ConceptSet&gt;</i>)</a></code> </p>
         </td>
         <td><p>Compile a Capr cohort to json</p></td>
+      </tr><tr><td>
+          <p><code><a href="compile.html">compile()</a></code> </p>
+        </td>
+        <td><p>Compile a Capr object to json</p></td>
       </tr><tr><td>
           <p><code><a href="Concept-class.html">Concept-class</a></code> </p>
         </td>
@@ -162,6 +166,14 @@
           <p><code><a href="cs.html">cs()</a></code> <code><a href="cs.html">exclude()</a></code> <code><a href="cs.html">mapped()</a></code> <code><a href="cs.html">descendants()</a></code> </p>
         </td>
         <td><p>Create a concept set</p></td>
+      </tr><tr><td>
+          <p><code><a href="dateAdjustment.html">dateAdjustment()</a></code> </p>
+        </td>
+        <td><p>Function to create age attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="dateAdjustmentAttribute-class.html">dateAdjustmentAttribute-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for a date adjustment attribute</p></td>
       </tr><tr><td>
           <p><code><a href="daysOfSupply.html">daysOfSupply()</a></code> </p>
         </td>
@@ -234,16 +246,7 @@ relative to the index event</p></td>
       </tr><tr><td>
           <p><code><a href="eventStarts.html">eventStarts()</a></code> </p>
         </td>
-        <td><p>#' A function to offset the number of days relative to index
-#' @param days a number specifying the number of days to offset from index where
-#' an event may be observed. In this function a negative number means days before index
-#' and a postive number means days after index.
-#' @export
-offset &lt;- function(days) 
-  coeff &lt;- dplyr::if_else(sign(days) == 1, "after", "before", "before")
-  new("Endpoint",
-      days = as.integer(abs(days)),
-      coeff = coeff)</p></td>
+        <td><p>Function creates an event window where the event starts</p></td>
       </tr><tr><td>
           <p><code><a href="EventWindow-class.html">EventWindow-class</a></code> </p>
         </td>
@@ -268,10 +271,6 @@ offset &lt;- function(days)
           <p><code><a href="fixedExit.html">fixedExit()</a></code> </p>
         </td>
         <td><p>Function to create an exit based on exit based on the end of a continuous drug exposure</p></td>
-      </tr><tr><td>
-          <p><code><a href="generateCaprTemplate.html">generateCaprTemplate()</a></code> </p>
-        </td>
-        <td><p>Generate a Capr cohort using a template</p></td>
       </tr><tr><td>
           <p><code><a href="getConceptSetCall.html">getConceptSetCall()</a></code> </p>
         </td>
@@ -305,6 +304,10 @@ offset &lt;- function(days)
         </td>
         <td><p>Less than or equal to operator</p></td>
       </tr><tr><td>
+          <p><code><a href="makeCohortSet.html">makeCohortSet()</a></code> </p>
+        </td>
+        <td><p>Make a cohort dataframe for cohort generator</p></td>
+      </tr><tr><td>
           <p><code><a href="measurement.html">measurement()</a></code> </p>
         </td>
         <td><p>Query the measurement domain</p></td>
@@ -319,7 +322,7 @@ offset &lt;- function(days)
       </tr><tr><td>
           <p><code><a href="nestedWithAll.html">nestedWithAll()</a></code> </p>
         </td>
-        <td><p>Function to construct a nested group where all criteria and groups must be satisfied</p></td>
+        <td><p>Construct a nested group where all criteria and groups must be satisfied</p></td>
       </tr><tr><td>
           <p><code><a href="nestedWithAny.html">nestedWithAny()</a></code> </p>
         </td>

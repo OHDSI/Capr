@@ -27,11 +27,11 @@ these details can be filled in by the the `getConceptSetDetails` function.
 \dontrun{
 # create a concept set
 vocabularyDatabaseSchema = "cdm5"
-anemia <- cs(descendants(439777,4013073,4013074))
+anemia <- cs(descendants(439777,4013073,4013074), name = "anemia")
 
 # fill in the details from an OMOP CDM
 library(DatabaseConnector)
-con <- connect(dbms = "postgresql", user = "postgres", password = "", server = "localhost/covid")
+con <- connect(dbms = "postgresql", user = "postgres", password = "", server = "localhost/cdm")
 anemia <- getConceptSetDetails(condition_anemia, con, vocabularyDatabaseSchema = "cdm5")
 }
 }

@@ -5,7 +5,7 @@
 \alias{Query-class}
 \title{An S4 class for a Circe Query}
 \description{
-A query is a medical concept that can be extracted from a database through a 'where' clause in a SQL statement.
+A query is a medical concept that can be extracted from a database through a 'where' clause in a 'SQL' statement.
 This includes concepts.
 }
 \section{Slots}{

@@ -5,7 +5,8 @@
 \alias{EventAperture-class}
 \title{An S4 class for Aperture}
 \description{
-The aperture class provides context to when the criteria must be observed in a person timeline to pretain to the expression
+The aperture class provides context to when the criteria must be
+observed in a person timeline to pretain to the expression
 }
 \section{Slots}{
 

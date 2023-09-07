@@ -184,15 +184,13 @@ newConcept <- function(id,
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' cs(1, 2)
-#' cs(1, c(1, 10, 2))
-#' cs(1, seq(2, 10, 2))
-#' cs(1, 2, 3, exclude(4, 5))
-#' cs(1, 2, 3, exclude(4, 5), mapped(6, 7))
-#' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9))
-#' cs(descendants(1, 2, 3),  exclude(descendants(8, 9)))
-#' }
+#' cs(1, 2, name = "concepts")
+#' cs(1, c(10, 11, 2), name = "concepts")
+#' cs(1, seq(2, 10, 2), name = "concepts")
+#' cs(1, 2, 3, exclude(4, 5), name = "concepts")
+#' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), name = "concepts")
+#' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9), name = "concepts")
+#' cs(descendants(1, 2, 3),  exclude(descendants(8, 9)), name = "concepts")
 cs <- function(..., name, id = NULL) {
   dots <- unlist(list(...), recursive = F)
 
@@ -380,11 +378,9 @@ setMethod("as.json", "ConceptSet", function(x, pretty = TRUE, ...){
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' anemia <- cs(descendants(439777,4013073,4013074))
-#' writeConceptSet(anemia, 'anemia.json')
-#' writeConceptSet(anemia, 'anemia.csv')
-#' }
+#' anemia <- cs(descendants(439777,4013073,4013074), name = "anemia")
+#' writeConceptSet(anemia, file.path(tempdir(), 'anemia.json'))
+#' writeConceptSet(anemia, file.path(tempdir(), 'anemia.csv'))
 writeConceptSet <- function(x, path, format = "auto", ...) {
   checkmate::assertChoice(format, choices = c("auto", "json", "csv"))
   if (format == "auto") {
@@ -431,14 +427,17 @@ writeConceptSet <- function(x, path, format = "auto", ...) {
 #' @param path Name of concept set file to read in csv or json format. (e.g. "concepts.json")
 #' @param name the name of the concept set
 #' @param id the id for the concept set (keep?)
-#' @export
 #' @importFrom rlang %||%
 #'
 #' @examples
-#' \dontrun{
-#' anemia <- readConceptSet('anemia.json')
-#' anemia <- readConceptSet('anemia.csv')
-#' }
+#' library(Capr)
+#' path <- tempfile("concepts", fileext = ".json")
+#' concepts <- cs(1, 2, descendants(4, 5), exclude(descendants(6, 7)), name = "test")
+#' writeConceptSet(concepts, path = path)
+#'
+#' concepts <- readConceptSet(path)
+#'
+#' @export
 readConceptSet <- function(path, name, id = NULL) {
 
   checkmate::assertFileExists(path)
@@ -503,11 +502,9 @@ readConceptSet <- function(path, name, id = NULL) {
       conceptCode = df[["concept_code"]] %||%  df[["concept code"]] %||% "" %>% as.character(),
       domainId = df[["domain_id"]] %||%  df[["domain"]] %||% "" %>% as.character(),
       vocabularyId = df[["vocabulary_id"]] %||%  df[["vocabulary"]] %||% "" %>% as.character(),
-      conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()
-    ) %>%
-      dplyr::mutate(
-        dplyr::across(.data$conceptName:.data$conceptClassId, ~tidyr::replace_na(.x, "")) #convert na to ""
-      )
+      conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()) %>%
+      dplyr::mutate_if(is.character, ~tidyr::replace_na(.x, ""))
+
     conceptList <- purrr::pmap(conceptDf, newConcept)
   }
 
@@ -536,11 +533,11 @@ readConceptSet <- function(path, name, id = NULL) {
 #' \dontrun{
 #' # create a concept set
 #' vocabularyDatabaseSchema = "cdm5"
-#' anemia <- cs(descendants(439777,4013073,4013074))
+#' anemia <- cs(descendants(439777,4013073,4013074), name = "anemia")
 #'
 #' # fill in the details from an OMOP CDM
 #' library(DatabaseConnector)
-#' con <- connect(dbms = "postgresql", user = "postgres", password = "", server = "localhost/covid")
+#' con <- connect(dbms = "postgresql", user = "postgres", password = "", server = "localhost/cdm")
 #' anemia <- getConceptSetDetails(condition_anemia, con, vocabularyDatabaseSchema = "cdm5")
 #' }
 getConceptSetDetails <- function(x,
