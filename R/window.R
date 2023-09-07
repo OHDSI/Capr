@@ -185,7 +185,7 @@ eventEnds <- function(a, b, index = c("startDate", "endDate")) {
 #' @param restrictVisit a logical toggle specifying whether the event should occur on the same visit
 #' @param ignoreObservationPeriod a logical toggle specifying whether we can consider events outside the
 #' observation period
-#' @return An event aperature that can be used in a Capr cohort definition
+#' @return An event aperture that can be used in a Capr cohort definition
 #' @export
 duringInterval <- function(startWindow,
                            endWindow = NULL,
