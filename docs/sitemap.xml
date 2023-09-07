@@ -4,16 +4,7 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
     <loc>/articles/Capr-conceptSets.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Examples.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Using-Capr.html</loc>
   </url>
   <url>
     <loc>/articles/capr_design.html</loc>
@@ -25,7 +16,13 @@
     <loc>/articles/capr_templates.html</loc>
   </url>
   <url>
+    <loc>/articles/Examples.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/Using-Capr.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -34,55 +31,10 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Capr-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/CensoringCriteria-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Concept-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ConceptSet-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ConceptSetItem-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Criteria-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DrugExposureExit-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Endpoint-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/EventAperture-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/EventWindow-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FixedDurationExit-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Group-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ObservationExit-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ObservationWindow-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Occurrence-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Query-class.html</loc>
   </url>
   <url>
     <loc>/reference/age.html</loc>
@@ -109,6 +61,12 @@
     <loc>/reference/bt.html</loc>
   </url>
   <url>
+    <loc>/reference/Capr-package.html</loc>
+  </url>
+  <url>
+    <loc>/reference/CensoringCriteria-class.html</loc>
+  </url>
+  <url>
     <loc>/reference/censoringEvents.html</loc>
   </url>
   <url>
@@ -121,7 +79,16 @@
     <loc>/reference/compile.html</loc>
   </url>
   <url>
+    <loc>/reference/Concept-class.html</loc>
+  </url>
+  <url>
     <loc>/reference/conceptAttribute-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ConceptSet-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ConceptSetItem-class.html</loc>
   </url>
   <url>
     <loc>/reference/conditionEra.html</loc>
@@ -133,7 +100,16 @@
     <loc>/reference/continuousObservation.html</loc>
   </url>
   <url>
+    <loc>/reference/Criteria-class.html</loc>
+  </url>
+  <url>
     <loc>/reference/cs.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dateAdjustment.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dateAdjustmentAttribute-class.html</loc>
   </url>
   <url>
     <loc>/reference/daysOfSupply.html</loc>
@@ -151,6 +127,9 @@
     <loc>/reference/drugExposure.html</loc>
   </url>
   <url>
+    <loc>/reference/DrugExposureExit-class.html</loc>
+  </url>
+  <url>
     <loc>/reference/drugQuantity.html</loc>
   </url>
   <url>
@@ -161,6 +140,9 @@
   </url>
   <url>
     <loc>/reference/endDate.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Endpoint-class.html</loc>
   </url>
   <url>
     <loc>/reference/entry.html</loc>
@@ -175,10 +157,16 @@
     <loc>/reference/era.html</loc>
   </url>
   <url>
+    <loc>/reference/EventAperture-class.html</loc>
+  </url>
+  <url>
     <loc>/reference/eventEnds.html</loc>
   </url>
   <url>
     <loc>/reference/eventStarts.html</loc>
+  </url>
+  <url>
+    <loc>/reference/EventWindow-class.html</loc>
   </url>
   <url>
     <loc>/reference/exactly.html</loc>
@@ -188,6 +176,9 @@
   </url>
   <url>
     <loc>/reference/firstOccurrence.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FixedDurationExit-class.html</loc>
   </url>
   <url>
     <loc>/reference/fixedExit.html</loc>
@@ -200,6 +191,9 @@
   </url>
   <url>
     <loc>/reference/getConceptSetDetails.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Group-class.html</loc>
   </url>
   <url>
     <loc>/reference/gt.html</loc>
@@ -218,6 +212,9 @@
   </url>
   <url>
     <loc>/reference/lte.html</loc>
+  </url>
+  <url>
+    <loc>/reference/makeCohortSet.html</loc>
   </url>
   <url>
     <loc>/reference/measurement.html</loc>
@@ -244,7 +241,16 @@
     <loc>/reference/observation.html</loc>
   </url>
   <url>
+    <loc>/reference/ObservationExit-class.html</loc>
+  </url>
+  <url>
     <loc>/reference/observationExit.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ObservationWindow-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Occurrence-class.html</loc>
   </url>
   <url>
     <loc>/reference/opAttributeDate-class.html</loc>
@@ -263,6 +269,9 @@
   </url>
   <url>
     <loc>/reference/procedure.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Query-class.html</loc>
   </url>
   <url>
     <loc>/reference/rangeHigh.html</loc>

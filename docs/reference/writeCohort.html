@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.6</span>
       </span>
     </div>
 
@@ -35,12 +35,6 @@
       <a href="../articles/Capr-conceptSets.html">Working with Concept Sets in Capr</a>
     </li>
     <li>
-      <a href="../articles/Examples.html">Cohort Definition Examples</a>
-    </li>
-    <li>
-      <a href="../articles/Using-Capr.html">Using Capr</a>
-    </li>
-    <li>
       <a href="../articles/capr_design.html">Capr Design Guide and Roadmap</a>
     </li>
     <li>
@@ -49,12 +43,18 @@
     <li>
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
+    <li>
+      <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/Using-Capr.html">Using Capr</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://ohdsi.github.io/Hades" class="external-link">hadesLogo</a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/Capr/" class="external-link">
@@ -94,16 +94,16 @@
 <dd><p>The name of the file to create</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>Invisibly returns the path to the json file that was written</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">cs1</span> <span class="op">&lt;-</span> <span class="fu"><a href="cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="cs.html">descendants</a></span><span class="op">(</span><span class="fu"><a href="cs.html">exclude</a></span><span class="op">(</span><span class="fl">436665</span><span class="op">)</span>,<span class="fl">440383</span>,<span class="fl">442306</span>,<span class="fl">4175329</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">cs1</span> <span class="op">&lt;-</span> <span class="fu"><a href="getConceptSetDetails.html">getConceptSetDetails</a></span><span class="op">(</span><span class="va">cs1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="cohort.html">cohort</a></span><span class="op">(</span><span class="fu">condition</span><span class="op">(</span><span class="va">cs1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">writeCohort</span><span class="op">(</span><span class="va">x</span>, <span class="st">"cohortDefinition.json"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-</code></pre></div>
+    
     </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

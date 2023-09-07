@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.6</span>
       </span>
     </div>
 
@@ -35,12 +35,6 @@
       <a href="../articles/Capr-conceptSets.html">Working with Concept Sets in Capr</a>
     </li>
     <li>
-      <a href="../articles/Examples.html">Cohort Definition Examples</a>
-    </li>
-    <li>
-      <a href="../articles/Using-Capr.html">Using Capr</a>
-    </li>
-    <li>
       <a href="../articles/capr_design.html">Capr Design Guide and Roadmap</a>
     </li>
     <li>
@@ -49,12 +43,18 @@
     <li>
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
+    <li>
+      <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/Using-Capr.html">Using Capr</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://ohdsi.github.io/Hades" class="external-link">hadesLogo</a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/Capr/" class="external-link">
@@ -79,66 +79,6 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="CensoringCriteria-class.html">CensoringCriteria-class</a></code> </p>
-        </td>
-        <td><p>An S4 class identifying a censoring criteria for the cohort</p></td>
-      </tr><tr><td>
-          <p><code><a href="Concept-class.html">Concept-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for a single OMOP Concept</p></td>
-      </tr><tr><td>
-          <p><code><a href="ConceptSet-class.html">ConceptSet-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for ConceptSetExpresion</p></td>
-      </tr><tr><td>
-          <p><code><a href="ConceptSetItem-class.html">ConceptSetItem-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for ConceptSetItem</p></td>
-      </tr><tr><td>
-          <p><code><a href="Criteria-class.html">Criteria-class</a></code> </p>
-        </td>
-        <td><p>An S4 for a criteria</p></td>
-      </tr><tr><td>
-          <p><code><a href="DrugExposureExit-class.html">DrugExposureExit-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for a cohort exit based on continuous exposure persistence.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Endpoint-class.html">Endpoint-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for an Endpoint</p></td>
-      </tr><tr><td>
-          <p><code><a href="EventAperture-class.html">EventAperture-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for Aperture</p></td>
-      </tr><tr><td>
-          <p><code><a href="EventWindow-class.html">EventWindow-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for a Window</p></td>
-      </tr><tr><td>
-          <p><code><a href="FixedDurationExit-class.html">FixedDurationExit-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for a cohort exit based on fixed duration persistence.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Group-class.html">Group-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for a group</p></td>
-      </tr><tr><td>
-          <p><code><a href="ObservationExit-class.html">ObservationExit-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for a cohort exit based on end of continuous observation.</p></td>
-      </tr><tr><td>
-          <p><code><a href="ObservationWindow-class.html">ObservationWindow-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for an ObservationWindow</p></td>
-      </tr><tr><td>
-          <p><code><a href="Occurrence-class.html">Occurrence-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for an occurrence.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Query-class.html">Query-class</a></code> </p>
-        </td>
-        <td><p>An S4 class for a Circe Query</p></td>
-      </tr><tr><td>
           <p><code><a href="age.html">age()</a></code> </p>
         </td>
         <td><p>Function to create age attribute</p></td>
@@ -171,6 +111,10 @@
         </td>
         <td><p>Between operator</p></td>
       </tr><tr><td>
+          <p><code><a href="CensoringCriteria-class.html">CensoringCriteria-class</a></code> </p>
+        </td>
+        <td><p>An S4 class identifying a censoring criteria for the cohort</p></td>
+      </tr><tr><td>
           <p><code><a href="censoringEvents.html">censoringEvents()</a></code> </p>
         </td>
         <td><p>Constructor for a set of censoring events</p></td>
@@ -187,9 +131,21 @@
         </td>
         <td><p>Compile a Capr object to json</p></td>
       </tr><tr><td>
+          <p><code><a href="Concept-class.html">Concept-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for a single OMOP Concept</p></td>
+      </tr><tr><td>
           <p><code><a href="conceptAttribute-class.html">conceptAttribute-class</a></code> </p>
         </td>
         <td><p>An S4 class for a concept attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="ConceptSet-class.html">ConceptSet-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for ConceptSetExpresion</p></td>
+      </tr><tr><td>
+          <p><code><a href="ConceptSetItem-class.html">ConceptSetItem-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for ConceptSetItem</p></td>
       </tr><tr><td>
           <p><code><a href="conditionEra.html">conditionEra()</a></code> </p>
         </td>
@@ -203,9 +159,21 @@
         </td>
         <td><p>A function to construct the observationWindow</p></td>
       </tr><tr><td>
+          <p><code><a href="Criteria-class.html">Criteria-class</a></code> </p>
+        </td>
+        <td><p>An S4 for a criteria</p></td>
+      </tr><tr><td>
           <p><code><a href="cs.html">cs()</a></code> <code><a href="cs.html">exclude()</a></code> <code><a href="cs.html">mapped()</a></code> <code><a href="cs.html">descendants()</a></code> </p>
         </td>
         <td><p>Create a concept set</p></td>
+      </tr><tr><td>
+          <p><code><a href="dateAdjustment.html">dateAdjustment()</a></code> </p>
+        </td>
+        <td><p>Function to create age attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="dateAdjustmentAttribute-class.html">dateAdjustmentAttribute-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for a date adjustment attribute</p></td>
       </tr><tr><td>
           <p><code><a href="daysOfSupply.html">daysOfSupply()</a></code> </p>
         </td>
@@ -227,6 +195,10 @@
         </td>
         <td><p>Query the drug domain</p></td>
       </tr><tr><td>
+          <p><code><a href="DrugExposureExit-class.html">DrugExposureExit-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for a cohort exit based on continuous exposure persistence.</p></td>
+      </tr><tr><td>
           <p><code><a href="drugQuantity.html">drugQuantity()</a></code> </p>
         </td>
         <td><p>Function to create quantity attribute</p></td>
@@ -244,6 +216,10 @@ relative to the index event</p></td>
         </td>
         <td><p>Function that creates a end date attribute</p></td>
       </tr><tr><td>
+          <p><code><a href="Endpoint-class.html">Endpoint-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for an Endpoint</p></td>
+      </tr><tr><td>
           <p><code><a href="entry.html">entry()</a></code> </p>
         </td>
         <td><p>Create a cohort entry criteria</p></td>
@@ -260,22 +236,21 @@ relative to the index event</p></td>
         </td>
         <td><p>Create a Cohort Era class object</p></td>
       </tr><tr><td>
+          <p><code><a href="EventAperture-class.html">EventAperture-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for Aperture</p></td>
+      </tr><tr><td>
           <p><code><a href="eventEnds.html">eventEnds()</a></code> </p>
         </td>
         <td><p>Function creates an event window where the event ends</p></td>
       </tr><tr><td>
           <p><code><a href="eventStarts.html">eventStarts()</a></code> </p>
         </td>
-        <td><p>#' A function to offset the number of days relative to index
-#' @param days a number specifying the number of days to offset from index where
-#' an event may be observed. In this function a negative number means days before index
-#' and a postive number means days after index.
-#' @export
-offset &lt;- function(days) 
-  coeff &lt;- dplyr::if_else(sign(days) == 1, "after", "before", "before")
-  new("Endpoint",
-      days = as.integer(abs(days)),
-      coeff = coeff)</p></td>
+        <td><p>Function creates an event window where the event starts</p></td>
+      </tr><tr><td>
+          <p><code><a href="EventWindow-class.html">EventWindow-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for a Window</p></td>
       </tr><tr><td>
           <p><code><a href="exactly.html">exactly()</a></code> </p>
         </td>
@@ -289,13 +264,13 @@ offset &lt;- function(days)
         </td>
         <td><p>Add first occurrence attribute</p></td>
       </tr><tr><td>
+          <p><code><a href="FixedDurationExit-class.html">FixedDurationExit-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for a cohort exit based on fixed duration persistence.</p></td>
+      </tr><tr><td>
           <p><code><a href="fixedExit.html">fixedExit()</a></code> </p>
         </td>
         <td><p>Function to create an exit based on exit based on the end of a continuous drug exposure</p></td>
-      </tr><tr><td>
-          <p><code><a href="generateCaprTemplate.html">generateCaprTemplate()</a></code> </p>
-        </td>
-        <td><p>Generate a Capr cohort using a template</p></td>
       </tr><tr><td>
           <p><code><a href="getConceptSetCall.html">getConceptSetCall()</a></code> </p>
         </td>
@@ -304,6 +279,10 @@ offset &lt;- function(days)
           <p><code><a href="getConceptSetDetails.html">getConceptSetDetails()</a></code> </p>
         </td>
         <td><p>Fill in Concept Set details using a vocab</p></td>
+      </tr><tr><td>
+          <p><code><a href="Group-class.html">Group-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for a group</p></td>
       </tr><tr><td>
           <p><code><a href="gt.html">gt()</a></code> </p>
         </td>
@@ -325,6 +304,10 @@ offset &lt;- function(days)
         </td>
         <td><p>Less than or equal to operator</p></td>
       </tr><tr><td>
+          <p><code><a href="makeCohortSet.html">makeCohortSet()</a></code> </p>
+        </td>
+        <td><p>Make a cohort dataframe for cohort generator</p></td>
+      </tr><tr><td>
           <p><code><a href="measurement.html">measurement()</a></code> </p>
         </td>
         <td><p>Query the measurement domain</p></td>
@@ -339,7 +322,7 @@ offset &lt;- function(days)
       </tr><tr><td>
           <p><code><a href="nestedWithAll.html">nestedWithAll()</a></code> </p>
         </td>
-        <td><p>Function to construct a nested group where all criteria and groups must be satisfied</p></td>
+        <td><p>Construct a nested group where all criteria and groups must be satisfied</p></td>
       </tr><tr><td>
           <p><code><a href="nestedWithAny.html">nestedWithAny()</a></code> </p>
         </td>
@@ -358,9 +341,21 @@ satisfied</p></td>
         </td>
         <td><p>Query the observation domain</p></td>
       </tr><tr><td>
+          <p><code><a href="ObservationExit-class.html">ObservationExit-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for a cohort exit based on end of continuous observation.</p></td>
+      </tr><tr><td>
           <p><code><a href="observationExit.html">observationExit()</a></code> </p>
         </td>
         <td><p>Function to create an exit based on continuous observation</p></td>
+      </tr><tr><td>
+          <p><code><a href="ObservationWindow-class.html">ObservationWindow-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for an ObservationWindow</p></td>
+      </tr><tr><td>
+          <p><code><a href="Occurrence-class.html">Occurrence-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for an occurrence.</p></td>
       </tr><tr><td>
           <p><code><a href="opAttributeDate-class.html">opAttributeDate-class</a></code> </p>
         </td>
@@ -381,6 +376,10 @@ satisfied</p></td>
           <p><code><a href="procedure.html">procedure()</a></code> </p>
         </td>
         <td><p>Query the procedure domain</p></td>
+      </tr><tr><td>
+          <p><code><a href="Query-class.html">Query-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for a Circe Query</p></td>
       </tr><tr><td>
           <p><code><a href="rangeHigh.html">rangeHigh()</a></code> </p>
         </td>

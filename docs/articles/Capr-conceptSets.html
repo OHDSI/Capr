@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.6</span>
       </span>
     </div>
 
@@ -60,12 +60,6 @@
       <a href="../articles/Capr-conceptSets.html">Working with Concept Sets in Capr</a>
     </li>
     <li>
-      <a href="../articles/Examples.html">Cohort Definition Examples</a>
-    </li>
-    <li>
-      <a href="../articles/Using-Capr.html">Using Capr</a>
-    </li>
-    <li>
       <a href="../articles/capr_design.html">Capr Design Guide and Roadmap</a>
     </li>
     <li>
@@ -73,6 +67,12 @@
     </li>
     <li>
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
+    </li>
+    <li>
+      <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/Using-Capr.html">Using Capr</a>
     </li>
   </ul>
 </li>
@@ -82,7 +82,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://ohdsi.github.io/Hades" class="external-link">hadesLogo</a>
+  <a href="https://ohdsi.github.io/Hades" class="external-link"><img src='https://ohdsi.github.io/Hades/images/hadesMini.png' width=80 height=17 style='vertical-align: top;'></a>
 </li>
 <li>
   <a href="https://github.com/OHDSI/Capr/" class="external-link">
@@ -138,8 +138,8 @@ OMOP concept ids into a set as follows:</p>
 <span>           <span class="fl">1363749</span>,  <span class="co">#fosinopril</span></span>
 <span>           name <span class="op">=</span> <span class="st">"aceInhibitors"</span><span class="op">)</span></span>
 <span><span class="va">ace1</span></span>
-<span><span class="co">#&gt; ── &lt;Capr Concept Set&gt; aceInhibitors ────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 9</span></span></span>
+<span><span class="co">#&gt; -- &lt;Capr Concept Set&gt; aceInhibitors --------------------------------------------</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 x 9</span></span></span>
 <span><span class="co">#&gt;   conceptId conceptCode conceptName domainId vocabularyId standardConcept</span></span>
 <span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>   1<span style="text-decoration: underline;">335</span>471 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
@@ -147,7 +147,7 @@ OMOP concept ids into a set as follows:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>   1<span style="text-decoration: underline;">341</span>927 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>   1<span style="text-decoration: underline;">308</span>216 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>   1<span style="text-decoration: underline;">363</span>749 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: includeDescendants &lt;lgl&gt;, isExcluded &lt;lgl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># i 3 more variables: includeDescendants &lt;lgl&gt;, isExcluded &lt;lgl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   includeMapped &lt;lgl&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -166,8 +166,8 @@ can easily add this logic using the <code>descendants</code> command</p>
 <code class="sourceCode R"><span><span class="va">ace2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1335471</span>, <span class="fl">1340128</span>, <span class="fl">1341927</span>, <span class="fl">1363749</span>, <span class="fl">1308216</span><span class="op">)</span>,</span>
 <span>           name <span class="op">=</span> <span class="st">"aceInhibitors"</span><span class="op">)</span></span>
 <span><span class="va">ace2</span></span>
-<span><span class="co">#&gt; ── &lt;Capr Concept Set&gt; aceInhibitors ────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 9</span></span></span>
+<span><span class="co">#&gt; -- &lt;Capr Concept Set&gt; aceInhibitors --------------------------------------------</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 x 9</span></span></span>
 <span><span class="co">#&gt;   conceptId conceptCode conceptName domainId vocabularyId standardConcept</span></span>
 <span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>   1<span style="text-decoration: underline;">335</span>471 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
@@ -175,7 +175,7 @@ can easily add this logic using the <code>descendants</code> command</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>   1<span style="text-decoration: underline;">341</span>927 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>   1<span style="text-decoration: underline;">363</span>749 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>   1<span style="text-decoration: underline;">308</span>216 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: includeDescendants &lt;lgl&gt;, isExcluded &lt;lgl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># i 3 more variables: includeDescendants &lt;lgl&gt;, isExcluded &lt;lgl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   includeMapped &lt;lgl&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -188,8 +188,8 @@ function, as shown below</p>
 <code class="sourceCode R"><span><span class="va">ace3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1335471</span>, <span class="fl">1340128</span>, <span class="fl">1341927</span>, <span class="fl">1363749</span><span class="op">)</span>, <span class="fu"><a href="../reference/cs.html">exclude</a></span><span class="op">(</span><span class="fl">1308216</span><span class="op">)</span>,</span>
 <span>           name <span class="op">=</span> <span class="st">"aceInhibitors"</span><span class="op">)</span></span>
 <span><span class="va">ace3</span></span>
-<span><span class="co">#&gt; ── &lt;Capr Concept Set&gt; aceInhibitors ────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 9</span></span></span>
+<span><span class="co">#&gt; -- &lt;Capr Concept Set&gt; aceInhibitors --------------------------------------------</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 x 9</span></span></span>
 <span><span class="co">#&gt;   conceptId conceptCode conceptName domainId vocabularyId standardConcept</span></span>
 <span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>   1<span style="text-decoration: underline;">335</span>471 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
@@ -197,7 +197,7 @@ function, as shown below</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>   1<span style="text-decoration: underline;">341</span>927 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>   1<span style="text-decoration: underline;">363</span>749 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>   1<span style="text-decoration: underline;">308</span>216 <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>          <span style="color: #949494;">""</span>       <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>             </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: includeDescendants &lt;lgl&gt;, isExcluded &lt;lgl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># i 3 more variables: includeDescendants &lt;lgl&gt;, isExcluded &lt;lgl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   includeMapped &lt;lgl&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
