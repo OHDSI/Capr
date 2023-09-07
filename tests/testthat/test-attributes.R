@@ -255,3 +255,21 @@ test_that("logical attributes build", {
   expect_named(t2, "First")
   expect_equal(t2$First, TRUE)
 })
+
+
+
+test_that("dateAdjustment attributes build", {
+
+  t1 <- dateAdjustment(startWith = "START_DATE",
+                       startOffset = 30L,
+                       endWith = "END_DATE",
+                       endOffset = 30L)
+  expect_s4_class(t1, "dateAdjustmentAttribute")
+  expect_equal(t1@name, "DateAdjustment")
+  expect_equal(t1@startOffset, 30L)
+
+
+  t2 <- as.list(t1)
+  expect_named(t2, "DateAdjustment")
+  expect_equal(t2$DateAdjustment$StartOffset, 30L)
+})
