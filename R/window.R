@@ -92,7 +92,6 @@ continuousObservation <- function(priorDays = 0L, postDays = 0L) {
 
 }
 
-<<<<<<< HEAD
 #Depreciated Endpoint functions
 # #' A function to offset the number of days relative to index
 # #' @param days a number specifying the number of days to offset from index where
@@ -122,8 +121,6 @@ continuousObservation <- function(priorDays = 0L, postDays = 0L) {
 #       coeff = "after")
 # }
 
-=======
->>>>>>> 31a4286d79c78e2385a137ff974113247f06b699
 
 ## EventWindow ---------------------
 

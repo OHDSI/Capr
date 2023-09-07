@@ -53,6 +53,7 @@ Collate:
     'Capr.R'
     'conceptSet.R'
     'attributes-concept.R'
+    'attributes-dateAdjustment.R'
     'attributes-logic.R'
     'query.R'
     'window.R'
