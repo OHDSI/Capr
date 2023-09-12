@@ -1,6 +1,6 @@
 Package: Capr
 Title: Cohort Definition Application Programming
-Version: 2.0.6
+Version: 2.0.7
 Authors@R: c(
     person("Martin", "Lavallee", , "martin.lavallee@odysseusinc.com", role = c("aut")),
     person("Adam", "Black", , "black@ohdsi.org", role = c("aut", "cre"))
@@ -44,8 +44,8 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown
-Enhances:
-    CirceR
+Remotes:
+    ohdsi/CirceR
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Additional_repositories: https://OHDSI.github.io/drat
