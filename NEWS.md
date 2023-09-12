@@ -1,3 +1,6 @@
+Capr 2.0.7
+==========
+- add CirceR in REMOTES section
 
 Capr 2.0.6
 ==========

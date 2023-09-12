@@ -23,7 +23,7 @@ duringInterval(
 observation period}
 }
 \value{
-An event aperature that can be used in a Capr cohort definition
+An event aperture that can be used in a Capr cohort definition
 }
 \description{
 Function that creates an eventAperture an opening where an event can occur
