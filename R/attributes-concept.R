@@ -103,7 +103,7 @@ buildConceptAttribute <- function(ids, attributeName, connection, vocabularyData
 
   attr_concept <- methods::new("conceptAttribute",
                                name = attributeName,
-                               conceptSet = list(conceptsForAttributes))
+                               conceptSet = conceptsForAttributes)
   return(attr_concept)
 }
 
@@ -165,7 +165,7 @@ unit <- function(x) {
 
   # conceptSet <- as.list(as.data.frame(conceptSet)$conceptId) conceptSet <- as.list(conceptSet)
 
-  res <- methods::new("conceptAttribute", name = "unit", conceptSet = conceptSet)
+  res <- methods::new("conceptAttribute", name = "Unit", conceptSet = conceptSet)
   return(res)
 }
 
@@ -174,7 +174,7 @@ unit <- function(x) {
 setMethod("as.list", "conceptAttribute", function(x) {
 
   concepts <- purrr::map(x@conceptSet, ~as.list(.x))
-  nm <- stringr::str_to_title(x@name)
+  nm <- x@name
 
   tibble::lst(`:=`(!!nm, concepts))
 })
