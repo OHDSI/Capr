@@ -79,6 +79,50 @@ female <- function() {
 }
 
 
+findConceptInVocabulary <- function(id, connection, vocabularyDatabaseSchema) {
+
+  detailedConceptSet <- cs(id, name = glue::glue("{id}")) |>
+    getConceptSetDetails(con = connection,
+                         vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+  return(detailedConceptSet)
+}
+
+pullConceptClass <- function(detailedConceptSet) {
+  conceptClass <- detailedConceptSet@Expression[[1]]@Concept
+  return(conceptClass)
+}
+
+buildConceptAttribute <- function(ids, attributeName, connection, vocabularyDatabaseSchema) {
+
+  # get concepts from vocabulary table
+  conceptsForAttributes <- purrr::map(
+    ids,
+    ~findConceptInVocabulary(id = .x, connection = connection, vocabularyDatabaseSchema = vocabularyDatabaseSchema) |>
+      pullConceptClass()
+  )
+
+  attr_concept <- methods::new("conceptAttribute",
+                               name = attributeName,
+                               conceptSet = list(conceptsForAttributes))
+  return(attr_concept)
+}
+
+#' Add a drug type attribute
+#' @param ids the concept ids for the attribute
+#' @param connection a connection to an OMOP dbms to get vocab info about the concept
+#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+drugType <- function(ids, connection, vocabularyDatabaseSchema) {
+  res <- buildConceptAttribute(ids = ids, attributeName = "DrugType",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+  return(res)
+}
+
+
 #' Add unit attribute to a query
 #' @param x   A single character idetifier for a unit or a concept set that identifies units
 #' @return
