@@ -136,6 +136,21 @@ drugExposure <- function(conceptSet, ...) {
         ...)
 }
 
+
+#' Query the drug domain
+#'
+#' @param conceptSet A drug concept set
+#' @param ... optional attributes
+#'
+#' @return A Capr Query
+#' @export
+deviceExposure <- function(conceptSet, ...) {
+
+  query(domain = "DeviceExposure",
+        conceptSet = conceptSet,
+        ...)
+}
+
 #' Query the measurement domain
 #'
 #' @param conceptSet A measurement concept set
