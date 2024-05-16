@@ -97,6 +97,9 @@
     <loc>/reference/conditionOccurrence.html</loc>
   </url>
   <url>
+    <loc>/reference/conditionType.html</loc>
+  </url>
+  <url>
     <loc>/reference/continuousObservation.html</loc>
   </url>
   <url>
@@ -134,6 +137,9 @@
   </url>
   <url>
     <loc>/reference/drugRefills.html</loc>
+  </url>
+  <url>
+    <loc>/reference/drugType.html</loc>
   </url>
   <url>
     <loc>/reference/duringInterval.html</loc>
@@ -220,6 +226,9 @@
     <loc>/reference/measurement.html</loc>
   </url>
   <url>
+    <loc>/reference/measurementType.html</loc>
+  </url>
+  <url>
     <loc>/reference/nbt.html</loc>
   </url>
   <url>
@@ -247,6 +256,9 @@
     <loc>/reference/observationExit.html</loc>
   </url>
   <url>
+    <loc>/reference/observationType.html</loc>
+  </url>
+  <url>
     <loc>/reference/ObservationWindow-class.html</loc>
   </url>
   <url>
@@ -269,6 +281,9 @@
   </url>
   <url>
     <loc>/reference/procedure.html</loc>
+  </url>
+  <url>
+    <loc>/reference/procedureType.html</loc>
   </url>
   <url>
     <loc>/reference/Query-class.html</loc>
@@ -296,6 +311,9 @@
   </url>
   <url>
     <loc>/reference/visit.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visitType.html</loc>
   </url>
   <url>
     <loc>/reference/withAll.html</loc>
