@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Martin Lavallee \email{martin.lavallee@odysseusinc.com}
+\strong{Maintainer}: Martin Lavallee \email{martin.lavallee@boehringer-ingelheim.com}
 
 Authors:
 \itemize{

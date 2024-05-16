@@ -2,8 +2,8 @@ Package: Capr
 Title: Cohort Definition Application Programming
 Version: 2.0.7
 Authors@R: c(
-    person("Martin", "Lavallee", , "martin.lavallee@odysseusinc.com", role = c("aut")),
-    person("Adam", "Black", , "black@ohdsi.org", role = c("aut", "cre"))
+    person("Martin", "Lavallee", , "martin.lavallee@boehringer-ingelheim.com", role = c("aut", "cre")),
+    person("Adam", "Black", , "black@ohdsi.org", role = c("aut"))
   )
 Description: Provides a programming language for defining cohort definitions in R to use in studies for Observational 
     Health Data Sciences and Informatics (OHDSI). The functions in 'Capr' allow for the programmatic creation of 
@@ -16,7 +16,7 @@ License: Apache License (>= 2)
 URL: https://ohdsi.github.io/Capr/, https://github.com/OHDSI/Capr/
 BugReports: https://github.com/OHDSI/Capr/issues/
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Depends: 
   R (>= 3.5.0),
   CirceR (>= 1.3.1)
