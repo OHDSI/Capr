@@ -18,8 +18,7 @@ BugReports: https://github.com/OHDSI/Capr/issues/
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 Depends: 
-  R (>= 3.5.0),
-  CirceR (>= 1.3.1)
+  R (>= 3.5.0)
 Imports: 
     magrittr (>= 1.5.0),
     jsonlite,
@@ -40,12 +39,12 @@ Imports:
     DBI,
     DatabaseConnector,
     SqlRender,
-    generics
+    generics,
+    CirceR
 Suggests:
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown,
-    Eunomia
+    rmarkdown
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
