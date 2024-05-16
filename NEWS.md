@@ -1,3 +1,10 @@
+Capr 2.0.8
+==========
+- add conceptTypes to determine data provenance #93
+- allow numeric as offsetDays #90
+- add deviceExposure #86
+- other minor edits
+
 Capr 2.0.7
 ==========
 - add CirceR in REMOTES section

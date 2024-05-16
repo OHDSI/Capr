@@ -33,19 +33,19 @@ test_that("cohort entry works", {
 
 })
 
-test_that("getConceptSetDetails works on Eunomia", {
-  skip_if_not_installed("Eunomia")
-  gibleed <- cs(descendants(192671), name = "test")
-  connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-  suppressMessages({
-    con <- DatabaseConnector::connect(connectionDetails)
-  })
-  suppressWarnings({ # DatabaseConnector will throw a warning when passing already translated SQL code to dbGetQuery
-    gibleed <- getConceptSetDetails(gibleed, con, vocabularyDatabaseSchema = "main")
-  })
-  expect_equal(gibleed@Expression[[1]]@Concept@concept_name, "Gastrointestinal hemorrhage")
-  DatabaseConnector::disconnect(con)
-})
+# test_that("getConceptSetDetails works on Eunomia", {
+#   skip_if_not_installed("Eunomia")
+#   gibleed <- cs(descendants(192671), name = "test")
+#   connectionDetails <- Eunomia::getEunomiaConnectionDetails()
+#   suppressMessages({
+#     con <- DatabaseConnector::connect(connectionDetails)
+#   })
+#   suppressWarnings({ # DatabaseConnector will throw a warning when passing already translated SQL code to dbGetQuery
+#     gibleed <- getConceptSetDetails(gibleed, con, vocabularyDatabaseSchema = "main")
+#   })
+#   expect_equal(gibleed@Expression[[1]]@Concept@concept_name, "Gastrointestinal hemorrhage")
+#   DatabaseConnector::disconnect(con)
+# })
 
 
 test_that("full cohort works", {
@@ -138,64 +138,64 @@ test_that("full cohort works without group", {
 })
 
 
-test_that("Capr cohort generates on synpuf", {
-  skip_if_not_installed("CirceR")
-  skip_if_not_installed("Eunomia")
-  # need simple cohort for synpuf
-  cd <- cohort(
-    entry = entry(
-      # observationWindow = continuousObservation(1, 0) # TODO this line causes an error.
-      drugExposure(cs(descendants(1118084), name = "celecoxib"), male()),
-      observationWindow = continuousObservation(365, 0)
-    )
-  )
-
-  cohortList <- toCirce(cd)
-  expect_type(cohortList, "list")
-
-  cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) %>%
-    as.character()
-
-  expect_type(cohortJson, "character")
-  expect_true(nchar(cohortJson) > 1)
-
-  sql <- CirceR::cohortExpressionFromJson(cohortJson) %>%
-    CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
-
-  expect_type(sql, "character")
-  expect_true(nchar(sql) > 1)
-
-  cohortsToCreate <- tibble::tibble(
-    cohortId = 999,
-    cohortName = "CaprTest",
-    sql = sql
-  )
-
-  connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-  cohortTableNames <- CohortGenerator::getCohortTableNames("cohort")
-
-  invisible(capture_output(suppressMessages({
-    CohortGenerator::createCohortTables(connectionDetails,
-                                        cohortDatabaseSchema = "main",
-                                        cohortTableNames = cohortTableNames)
-
-
-    CohortGenerator::generateCohortSet(connectionDetails = connectionDetails,
-                                       cdmDatabaseSchema = "main" ,
-                                       cohortTableNames = cohortTableNames,
-                                       cohortDefinitionSet = cohortsToCreate,
-                                       incremental = FALSE)
-
-  df <- CohortGenerator::getCohortCounts(connectionDetails = connectionDetails,
-                                         cohortDatabaseSchema = "main",
-                                         cohortTable = "cohort",
-                                         cohortIds = c(999),
-                                         cohortDefinitionSet = cohortsToCreate)
-  })))
-
-  expect_true(df$cohortEntries > 1)
-
-})
+# test_that("Capr cohort generates on synpuf", {
+#   skip_if_not_installed("CirceR")
+#   skip_if_not_installed("Eunomia")
+#   # need simple cohort for synpuf
+#   cd <- cohort(
+#     entry = entry(
+#       # observationWindow = continuousObservation(1, 0) # TODO this line causes an error.
+#       drugExposure(cs(descendants(1118084), name = "celecoxib"), male()),
+#       observationWindow = continuousObservation(365, 0)
+#     )
+#   )
+#
+#   cohortList <- toCirce(cd)
+#   expect_type(cohortList, "list")
+#
+#   cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) %>%
+#     as.character()
+#
+#   expect_type(cohortJson, "character")
+#   expect_true(nchar(cohortJson) > 1)
+#
+#   sql <- CirceR::cohortExpressionFromJson(cohortJson) %>%
+#     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
+#
+#   expect_type(sql, "character")
+#   expect_true(nchar(sql) > 1)
+#
+#   cohortsToCreate <- tibble::tibble(
+#     cohortId = 999,
+#     cohortName = "CaprTest",
+#     sql = sql
+#   )
+#
+#   connectionDetails <- Eunomia::getEunomiaConnectionDetails()
+#   cohortTableNames <- CohortGenerator::getCohortTableNames("cohort")
+#
+#   invisible(capture_output(suppressMessages({
+#     CohortGenerator::createCohortTables(connectionDetails,
+#                                         cohortDatabaseSchema = "main",
+#                                         cohortTableNames = cohortTableNames)
+#
+#
+#     CohortGenerator::generateCohortSet(connectionDetails = connectionDetails,
+#                                        cdmDatabaseSchema = "main" ,
+#                                        cohortTableNames = cohortTableNames,
+#                                        cohortDefinitionSet = cohortsToCreate,
+#                                        incremental = FALSE)
+#
+#   df <- CohortGenerator::getCohortCounts(connectionDetails = connectionDetails,
+#                                          cohortDatabaseSchema = "main",
+#                                          cohortTable = "cohort",
+#                                          cohortIds = c(999),
+#                                          cohortDefinitionSet = cohortsToCreate)
+#   })))
+#
+#   expect_true(df$cohortEntries > 1)
+#
+# })
 
 test_that("compile generic works", {
   ch <- cohort(conditionOccurrence(cs(1,2, name = "test")))

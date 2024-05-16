@@ -141,7 +141,7 @@ drugExit <- function(conceptSet,
 
 #' Function to create an exit based on exit based on the end of a continuous drug exposure
 #' @param index specification of event date to offset. Can be either startDate or endDate
-#' @param offsetDays an integer specifying the number of days to offset from the event date
+#' @param offsetDays an number specifying the days to offset from the event date. Will coerce to an integer
 #' @return a fixed Duration exit S4 object used to define the cohort exit as the end of a specified time
 #' @export
 fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
@@ -150,7 +150,7 @@ fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
 
   ee <- methods::new("FixedDurationExit",
       index = index,
-      offsetDays = offsetDays)
+      offsetDays = as.integer(offsetDays))
   return(ee)
 }
 

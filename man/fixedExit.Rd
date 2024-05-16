@@ -9,7 +9,7 @@ fixedExit(index = c("startDate", "endDate"), offsetDays)
 \arguments{
 \item{index}{specification of event date to offset. Can be either startDate or endDate}
 
-\item{offsetDays}{an integer specifying the number of days to offset from the event date}
+\item{offsetDays}{an number specifying the days to offset from the event date. Will coerce to an integer}
 }
 \value{
 a fixed Duration exit S4 object used to define the cohort exit as the end of a specified time

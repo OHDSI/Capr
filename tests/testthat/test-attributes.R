@@ -235,12 +235,12 @@ test_that("concept attributes build", {
   #test units
   tt <- unit(8713L) #gram per deciliter
   expect_s4_class(tt, "conceptAttribute")
-  expect_equal(tt@name, "unit")
+  expect_equal(tt@name, "Unit")
   expect_equal(tt@conceptSet[[1]]@concept_id, 8713L)
 
   tt <- unit("%") #gram per deciliter
   expect_s4_class(tt, "conceptAttribute")
-  expect_equal(tt@name, "unit")
+  expect_equal(tt@name, "Unit")
   expect_equal(tt@conceptSet[[1]]@concept_id, 8554L)
   expect_equal(tt@conceptSet[[1]]@concept_name, "%")
 })
