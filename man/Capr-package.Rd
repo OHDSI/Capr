@@ -20,11 +20,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Adam Black \email{black@ohdsi.org}
+\strong{Maintainer}: Martin Lavallee \email{martin.lavallee@odysseusinc.com}
 
 Authors:
 \itemize{
-  \item Martin Lavallee \email{martin.lavallee@odysseusinc.com}
+  \item Adam Black \email{black@ohdsi.org}
 }
 
 }

@@ -107,7 +107,7 @@ buildConceptAttribute <- function(ids, attributeName, connection, vocabularyData
   return(attr_concept)
 }
 
-#' Add a drug type attribute
+#' Add a drug type attribute to determine the provenance of the record
 #' @param ids the concept ids for the attribute
 #' @param connection a connection to an OMOP dbms to get vocab info about the concept
 #' @param vocabularyDatabaseSchema the database schema for the vocabularies
@@ -122,6 +122,84 @@ drugType <- function(ids, connection, vocabularyDatabaseSchema) {
   return(res)
 }
 
+#' Add a condition type attribute to determine the provenance of the record
+#' @param ids the concept ids for the attribute
+#' @param connection a connection to an OMOP dbms to get vocab info about the concept
+#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+conditionType <- function(ids, connection, vocabularyDatabaseSchema) {
+  res <- buildConceptAttribute(ids = ids, attributeName = "ConditionType",
+                               connection = connection,
+                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+  return(res)
+}
+
+
+
+#' Add a visit type attribute to determine the provenance of the record
+#' @param ids the concept ids for the attribute
+#' @param connection a connection to an OMOP dbms to get vocab info about the concept
+#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+visitType <- function(ids, connection, vocabularyDatabaseSchema) {
+  res <- buildConceptAttribute(ids = ids, attributeName = "VisitType",
+                               connection = connection,
+                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+  return(res)
+}
+
+
+#' Add a measurement type attribute to determine the provenance of the record
+#' @param ids the concept ids for the attribute
+#' @param connection a connection to an OMOP dbms to get vocab info about the concept
+#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+measurementType <- function(ids, connection, vocabularyDatabaseSchema) {
+  res <- buildConceptAttribute(ids = ids, attributeName = "measurementType",
+                               connection = connection,
+                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+  return(res)
+}
+
+#' Add a observation type attribute to determine the provenance of the record
+#' @param ids the concept ids for the attribute
+#' @param connection a connection to an OMOP dbms to get vocab info about the concept
+#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+observationType <- function(ids, connection, vocabularyDatabaseSchema) {
+  res <- buildConceptAttribute(ids = ids, attributeName = "observationType",
+                               connection = connection,
+                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+  return(res)
+}
+
+
+#' Add a procedure type attribute to determine the provenance of the record
+#' @param ids the concept ids for the attribute
+#' @param connection a connection to an OMOP dbms to get vocab info about the concept
+#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+procedureType <- function(ids, connection, vocabularyDatabaseSchema) {
+  res <- buildConceptAttribute(ids = ids, attributeName = "procedureType",
+                               connection = connection,
+                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+  return(res)
+}
 
 #' Add unit attribute to a query
 #' @param x   A single character idetifier for a unit or a concept set that identifies units
