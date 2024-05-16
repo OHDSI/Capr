@@ -44,12 +44,10 @@ Imports:
 Suggests:
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown
-Remotes:
-    ohdsi/CirceR
+    rmarkdown,
+    Eunomia
 VignetteBuilder: knitr
 Config/testthat/edition: 3
-Additional_repositories: https://OHDSI.github.io/drat
 Collate: 
     'Capr.R'
     'conceptSet.R'
