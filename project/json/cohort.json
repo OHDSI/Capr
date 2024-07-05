@@ -2,7 +2,7 @@
   "ConceptSets": [
     {
       "id": 0,
-      "name": "lab_tests",
+      "name": "labTests",
       "expression": {
         "items": [
           {
@@ -520,7 +520,7 @@
     },
     {
       "id": 1,
-      "name": "cardiac_complications",
+      "name": "cardiacComplications",
       "expression": {
         "items": [
           {
@@ -596,7 +596,7 @@
     },
     {
       "id": 2,
-      "name": "cardiac_procedures",
+      "name": "cardiacProcedures",
       "expression": {
         "items": [
           {
