@@ -18,7 +18,7 @@ if (!require(renv)) {
   install.packages("renv@v1.0.7")
 }
 # Get project path
-path <- getwd()
+path <- dirname(dirname(rstudioapi::getSourceEditorContext()$path))
 if (!("renv" %in% list.files(path))) {
   stop("Working directory is not set correctly. Make sure the working directory is set to the project directory.")
 }
@@ -63,7 +63,7 @@ if (!(file.exists(dbFile))) {
   # Get cdm structure
   source("./R/cdm.R")
   
-  # Read data files and rite to sqlite DB
+  # Read data files and write to sqlite DB
   for (csvFile in csvFiles) {
     tableName <- gsub(csvDir, "", tools::file_path_sans_ext(basename(csvFile)))
     df <- readr::read_tsv(csvFile, col_names = cdm[[tableName]])
@@ -111,18 +111,13 @@ writeLines(tables, sep = "\n  ")
 Define a measurement concept set using Capr and include all descendants
 ```{r concept sets, echo=TRUE}
 ## Concept sets
-source("./R/conceptSets.R")
+source("./conceptSets.R")
+# source("./connectVocabularies.R")
 
 # Establish connection
 con <- connect(connectionDetails)
 
-# Create list of concept sets with descendants
-conceptSets <- list(
-  labTests = cs(descendants(labTests), name = "lab_tests"),
-  intubation = cs(descendants(intubation), name="intubation"),
-  cardiacProcedures = cs(descendants(cardiacProcedures), name="cardiac_procedures"),
-  cardiacComplications = cs(descendants(cardiacComplications), name="cardiac_complications")
-) %>%
+conceptSets$conceptSets <- conceptSets$conceptSets %>%
   # Add details for all concepts (excl. descendants)
   lapply(FUN = getConceptSetDetails, con = con, vocabularyDatabaseSchema = "main")
 
@@ -135,29 +130,29 @@ Retrieve concepts that have been included/excluded (does not capture descendants
 ```{r count occurences, echo=TRUE}
 ## Count occurrences of each concept in data
 # Get countOccurrences function
-source("./R/countOccurrences.R")
+source("./countOccurrences.R")
 
 # Get links between tables and fields as input
-source("./R/table_linked_to_concept_field.R")
+source("./table_linked_to_concept_field.R")
 
-# count occurrences of each concept 'x' and print results
-labTestsCounts <- 
-  countOccurrences(
-    labTests, "measurement", lDataFramesPre, links
-  ) %>% print()
-intubationCounts <- 
-  countOccurrences(
-    intubation, "procedure_occurrence", lDataFramesPre, links
-  ) %>% print()
+# count occurrences of each concept 'x' and print results; cardiac complications as example
 cardiacComplicationsCounts <- 
   countOccurrences(
-    cardiacComplications, c("condition_occurrence", "procedure_occurrence"), 
+    conceptSets$concepts$cardiacComplications, c("condition_occurrence", "procedure_occurrence"), 
     lDataFramesPre, links
   ) %>% print()
-cardiacProceduresCounts <-
+labTestsCounts <- 
   countOccurrences(
-    cardiacProcedures, "procedure_occurrence", lDataFramesPre, links
+    conceptSets$concepts$labTests, c("measurement"), 
+    lDataFramesPre, links
   ) %>% print()
+```
+
+## Standard and non-standard concepts
+```{r Standard non-standard check}
+source('./isStandard.R')
+standard <- isStandard(conceptSets$conceptSets, lDataFramesPre$concept)
+print(standard)
 ```
 
 ## Initial event cohort
@@ -170,7 +165,7 @@ limit to first/earliest occurrence of any of the above measurements (+descendant
 ch <- cohort(
   entry = entry(
     # enter patients < 80 years old who have had a lab test
-    measurement(conceptSets$labTests, age(lt(80))),
+    measurement(conceptSets$conceptSets$labTests, age(lt(80))),
     observationWindow = continuousObservation(0, 0),
     primaryCriteriaLimit = "All"
   ),
@@ -180,19 +175,19 @@ ch <- cohort(
       atLeast(
         x = 1,
         # include all cardiac complications represented by condition concepts
-        query = conditionOccurrence(conceptSets$cardiacComplications)
+        query = conditionOccurrence(conceptSets$conceptSets$cardiacComplications)
       ),
       atLeast(
         x = 1,
         # include all cardiac complications represented by procedure concepts
-        query = procedure(conceptSets$cardiacComplications)
+        query = procedure(conceptSets$conceptSets$cardiacComplications)
       )
     ),
     withAny(
       atLeast(
         x = 1,
         # include all cardiac surgeries
-        query = procedure(conceptSets$cardiacProcedures)
+        query = procedure(conceptSets$conceptSets$cardiacProcedures)
       )
     )
   ),
@@ -200,7 +195,7 @@ ch <- cohort(
     endStrategy = observationExit(),
     censor = censoringEvents(
       # exit if intubation has taken place
-      procedure(conceptSets$intubation)
+      procedure(conceptSets$conceptSets$intubation)
     )
   )
 )
@@ -225,10 +220,10 @@ sql <- CirceR::buildCohortQuery(
 Save the cohort and concept set jsons; these can be imported into ATLAS
 ```{r Save cohort and concept set json}
 write(chJson, paste(path, "./json/cohort.json", sep=""))
-for (cs in names(conceptSets)) {
+for (cs in names(conceptSets$conceptSets)) {
   writeConceptSet(
-    x = conceptSets[[cs]],
-    path = paste("./json/", cs, "_cs.json", sep="")
+    x = conceptSets$conceptSets[[cs]],
+    path = paste("../json/", cs, "_cs.json", sep="")
   )
 }
 ```
@@ -340,7 +335,7 @@ for (table in names(lDataFramesPost)) {
 
 ```{r Knit to R document, include=FALSE}
 knitr::purl(
-  input = './R/cohortCapr_md.Rmd',
-  output = './R/cohortCapr.R'
+  input = './cohortCapr_md.Rmd',
+  output = './cohortCapr.R'
 )
 ```
