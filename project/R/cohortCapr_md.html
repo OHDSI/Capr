@@ -357,31 +357,38 @@ display: none;
 </div>
 
 
-<div id="set-up" class="section level2">
-<h2>Set-up</h2>
-<p>Set up the required libraries, working directory, and connection
-details</p>
-<pre><code>## Loading required package: devtools</code></pre>
+<div id="set-up-knitr" class="section level2">
+<h2>Set-up knitr</h2>
+</div>
+<div id="activate-renv" class="section level2">
+<h2>Activate renv</h2>
+</div>
+<div id="set-up-libraries" class="section level2">
+<h2>Set-up libraries</h2>
+<p>Set up the required libraries, and working directory</p>
 <pre><code>## Warning: package &#39;devtools&#39; was built under R version 4.4.1</code></pre>
 <pre><code>## Loading required package: usethis</code></pre>
 <pre><code>## Warning: package &#39;usethis&#39; was built under R version 4.4.1</code></pre>
-<pre><code>## Loading required package: RSQLite</code></pre>
+<pre><code>## 
+## Attaching package: &#39;devtools&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:renv&#39;:
+## 
+##     install</code></pre>
 <pre><code>## Warning: package &#39;RSQLite&#39; was built under R version 4.4.1</code></pre>
-<pre><code>## Loading required package: tibble</code></pre>
-<pre><code>## Loading required package: CohortGenerator</code></pre>
-<pre><code>## Loading required package: DatabaseConnector</code></pre>
 <pre><code>## Loading required package: R6</code></pre>
-<pre><code>## Loading required package: CirceR</code></pre>
-<pre><code>## Loading required package: Capr</code></pre>
+<p>##Connect to database</p>
+<pre class="r"><code>## Eunomia GI bleed data set
+connectionDetails &lt;- Eunomia::getEunomiaConnectionDetails()</code></pre>
 <pre><code>## attempting to download GiBleed</code></pre>
-<pre><code>## attempting to extract and load: C:\Users\guusw\AppData\Local\Temp\RtmpmaCI5V/GiBleed_5.3.zip to: C:\Users\guusw\AppData\Local\Temp\RtmpmaCI5V/GiBleed_5.3.sqlite</code></pre>
+<pre><code>## attempting to extract and load: C:\Users\guusw\AppData\Local\Temp\RtmpiYt1Dq/GiBleed_5.3.zip to: C:\Users\guusw\AppData\Local\Temp\RtmpiYt1Dq/GiBleed_5.3.sqlite</code></pre>
 </div>
-<div id="load-eunomia-gi-bleed-dataset" class="section level2">
-<h2>Load Eunomia GI bleed dataset</h2>
-<p>Use dbConnector library to connect to Eunomia DB and retrieve the GI
-bleed (default) dataset. Load this data into a dataframe as well for
+<div id="load-data-set" class="section level2">
+<h2>Load data set</h2>
+<p>Use dbConnector library to specified DB and retrieve the GI bleed
+(default) dataset. Load this data into a dataframe as well for
 inspection</p>
-<pre class="r"><code># Connect to Eunomia GI bleed dataset
+<pre class="r"><code>## Load data
+# Connect to database
 con &lt;- connect(connectionDetails)</code></pre>
 <pre><code>## Connecting using SQLite driver</code></pre>
 <pre class="r"><code># List all tables
@@ -452,50 +459,17 @@ cat(&quot;\n\nTABLES:\n  &quot;)</code></pre>
 <h2>Concept sets</h2>
 <p>Define a measurement concept set using Capr and include all
 descendants</p>
-<pre class="r"><code># Establish connection
+<pre class="r"><code>## Concept sets
+source(&quot;./conceptSets.R&quot;)</code></pre>
+<pre><code>## Sourced concept sets</code></pre>
+<pre class="r"><code># source(&quot;./connectVocabularies.R&quot;)
+
+# Establish connection
 con &lt;- connect(connectionDetails)</code></pre>
 <pre><code>## Connecting using SQLite driver</code></pre>
-<pre class="r"><code># Define list of concepts to use for concept sets
-labTestsNamed &lt;- c(
-  &quot;Immature WBC Count&quot; = 4298431,  # White blood cell count
-  &quot;Neutrophil Count concept1&quot; = 37393856,  # Neutrophil count
-  &quot;Neutrophil Count concept2&quot; = 3007670,  # Neutrophil Ab [Units/volume] in Serum
-  Hemoglobin = 40762351,  # Hemoglobin [Moles/volume] in Blood
-  &quot;Platelet Count&quot; = 37393863,  # Platelet count
-  Hematocrit = 3009542,  # Hematocrit [Volume Fraction] of Blood
-  &quot;INR Prothrombin Time&quot; = 3034426,  # Prothrombin time (PT)
-  Lactate = 3047181,  # Lactate [Moles/volume] in Blood
-  Creatinine = 3051825,  # Creatinine [Mass/volume] in Blood
-  Albumin = 3024561,  # Albumin [Mass/volume] in Serum or Plasma
-  &quot;Blood urea nitrogen&quot; = 40762621,  # Urea nitrogen [Moles/volume] in Serum or Plasma
-  Glucose = 3013826,  # Glucose [Moles/volume] in Serum or Plasma
-  Bilirubin = 3006140,  # Bilirubin.total [Moles/volume] in Serum or Plasma
-  Sodium = 3019550,  # Sodium [Moles/volume] in Serum or Plasma
-  Potassium = 3005456,  # Potassium [Moles/volume] in Blood
-  Magnesium = 3033836,  # Magnesium [Moles/volume] in Blood
-  Chloride = 3018572,  # Chloride [Moles/volume] in Blood
-  Calcium = 3015377,  # Calcium [Moles/volume] in Serum or Plasma
-  Phosphate = 3003458,  # Phosphate [Moles/volume] in Serum or Plasma
-  CRP = 3020460,  # C reactive protein [Mass/volume] in Serum or Plasma
-  ALT = 3006923,  # Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma 
-  AST = 3013721,  # Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma 
-  &quot;pH (venous)&quot; = 37392672,  # Blood venous pH
-  &quot;pH (arterial)&quot; = 37399161,  # Blood arterial pH
-  &quot;pCO2 (venous)&quot; = 3021447,  # Carbon dioxide [Partial pressure] in Venous blood
-  &quot;pCO2 (arterial)&quot; = 3027946,  # Carbon dioxide [Partial pressure] in Arterial blood
-  &quot;pO2 (venous)&quot; = 3024354,  # Oxygen [Partial pressure] in Venous blood
-  &quot;pO2 (arterial)&quot; = 3027801,  # Oxygen [Partial pressure] in Arterial blood
-  &quot;Bicarbonate (venous)&quot; = 3027273,  # Bicarbonate [Moles/volume] in Venous blood
-  &quot;Bicarbonate (arterial)&quot; = 3008152  # Bicarbonate [Moles/volume] in Arterial blood
-)
-
-labTestsUnnamed &lt;- unname(labTestsNamed) # Sql query breaks when using named vector to create concept set
-
-# Create concept set of lab tests including all descendants of every concept
-conceptSet &lt;- cs(descendants(labTestsUnnamed), name = &quot;Lab_Tests&quot;)
-
-# Load more details for INCLUDED concepts
-conceptSet &lt;- getConceptSetDetails(conceptSet, con, &quot;main&quot;)</code></pre>
+<pre class="r"><code>conceptSets$conceptSets &lt;- conceptSets$conceptSets %&gt;%
+  # Add details for all concepts (excl. descendants)
+  lapply(FUN = getConceptSetDetails, con = con, vocabularyDatabaseSchema = &quot;main&quot;)</code></pre>
 <pre><code>## Warning: Input SQL has already been translated, so not translating again
 ## This warning is displayed once every 8 hours.</code></pre>
 <pre class="r"><code># Disconnect
@@ -505,85 +479,161 @@ disconnect(con)</code></pre>
 <h2>Included and excluded concepts</h2>
 <p>Retrieve concepts that have been included/excluded (does not capture
 descendants)</p>
-<pre class="r"><code># Get countOccurrences function
-source(paste(path, &quot;/R/countOccurrences.R&quot;, sep=&quot;&quot;))
+<pre class="r"><code>## Count occurrences of each concept in data
+# Get countOccurrences function
+source(&quot;./countOccurrences.R&quot;)
 
-# Link table names to concept_id field
-table_linked_to_concept_field &lt;- list(
-  condition_occurrence = &quot;condition_concept_id&quot;,
-  death = &quot;cause_concept_id&quot;,
-  device_exposure = &quot;device_concept_id&quot;,
-  drug_exposure = &quot;drug_concept_id&quot;,
-  measurement = &quot;measurement_concept_id&quot;,
-  observation = &quot;observation_concept_id&quot;,
-  procedure_occurrence = &quot;procedure_occurrence_concept_id&quot;,
-  specimen = &quot;specimen_concept_id&quot;,
-  visit_occurrence = &quot;visit_concept_id&quot;
-)
+# Get links between tables and fields as input
+source(&quot;./table_linked_to_concept_field.R&quot;)</code></pre>
+<pre><code>## Sourced links object</code></pre>
+<pre class="r"><code># count occurrences of each concept &#39;x&#39; and print results; cardiac complications as example
+cardiacComplicationsCounts &lt;- 
+  countOccurrences(
+    conceptSets$concepts$cardiacComplications, c(&quot;condition_occurrence&quot;, &quot;procedure_occurrence&quot;), 
+    lDataFramesPre, links
+  ) %&gt;% print()</code></pre>
+<pre><code>## # A tibble: 4 × 6
+##   concept_id count_persons count_records descendant_count_person
+##        &lt;dbl&gt;         &lt;int&gt;         &lt;dbl&gt;                   &lt;int&gt;
+## 1     321042           138           138                     138
+## 2    4324124             0             0                       0
+## 3    4051330             0             0                       0
+## 4    4185565             0             0                       0
+## # ℹ 2 more variables: descendant_count_record &lt;dbl&gt;, included &lt;lgl&gt;</code></pre>
+<pre class="r"><code>labTestsCounts &lt;- 
+  countOccurrences(
+    conceptSets$concepts$labTests, c(&quot;measurement&quot;), 
+    lDataFramesPre, links
+  ) %&gt;% print()</code></pre>
+<pre><code>## # A tibble: 29 × 6
+##    concept_id count_persons count_records descendant_count_person
+##         &lt;dbl&gt;         &lt;int&gt;         &lt;dbl&gt;                   &lt;int&gt;
+##  1    3009542           136           137                     136
+##  2    3024561            35            35                      35
+##  3    3019550            35            35                      35
+##  4    3006923            35            35                      35
+##  5    3013721            35            35                      35
+##  6    4298431             0             0                       0
+##  7    3007670             0             0                       0
+##  8   40762351             0             0                       0
+##  9   37393863             0             0                       0
+## 10    3034426             0             0                       0
+## # ℹ 19 more rows
+## # ℹ 2 more variables: descendant_count_record &lt;dbl&gt;, included &lt;lgl&gt;</code></pre>
+</div>
+<div id="standard-and-non-standard-concepts" class="section level2">
+<h2>Standard and non-standard concepts</h2>
+<pre class="r"><code>source(&#39;./isStandard.R&#39;)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>nonStandard &lt;- isStandard(
+  concept_table_path = &quot;./project/data/vocabs_14-May-2024/CONCEPT.csv&quot;,
+  data_concepts_path = &quot;./project/data/phems_variable_list/&quot;
+  # save_path = &quot;./project/data/phems_variable_list/is_standard_r/&quot;,
+  )
 
-# count occurrences of each concept
-res &lt;- countOccurrences(labTestsNamed, &quot;measurement&quot;, lDataFramesPre, table_linked_to_concept_field)
-
-res</code></pre>
-<pre><code>## # A tibble: 30 × 4
-##    concept_name              concept_id counts included
-##    &lt;chr&gt;                          &lt;dbl&gt;  &lt;dbl&gt; &lt;lgl&gt;   
-##  1 Hematocrit                   3009542    136 TRUE    
-##  2 Albumin                      3024561     35 TRUE    
-##  3 Sodium                       3019550     35 TRUE    
-##  4 ALT                          3006923     35 TRUE    
-##  5 AST                          3013721     35 TRUE    
-##  6 Immature WBC Count           4298431      0 FALSE   
-##  7 Neutrophil Count concept1   37393856      0 FALSE   
-##  8 Neutrophil Count concept2    3007670      0 FALSE   
-##  9 Hemoglobin                  40762351      0 FALSE   
-## 10 Platelet Count              37393863      0 FALSE   
-## # ℹ 20 more rows</code></pre>
+nonStandard</code></pre>
+<pre><code>## # A tibble: 11 × 4
+##    concept_id concept_name             source_code                  source_table
+##    &lt;chr&gt;      &lt;chr&gt;                    &lt;chr&gt;                        &lt;list&gt;      
+##  1 4152194    Systolic blood pressure  SBP (Systolic Blood Pressur… &lt;chr [1]&gt;   
+##  2 4154790    Diastolic blood pressure DBP (Dyastolic Blood Pressu… &lt;chr [1]&gt;   
+##  3 4239408    Heart rate               Age-dependent HR             &lt;chr [1]&gt;   
+##  4 4313591    Respiratory rate         Age-dependent RR             &lt;chr [1]&gt;   
+##  5 0          No matching concept      Extracardiac anomalies - di… &lt;chr [1]&gt;   
+##  6 607590     Body height              Height                       &lt;chr [1]&gt;   
+##  7 0          No matching concept      Aristotle&#39;s score of surgery &lt;chr [1]&gt;   
+##  8 0          No matching concept      ventilation                  &lt;chr [1]&gt;   
+##  9 0          No matching concept      Type of vasoactive infusion  &lt;chr [1]&gt;   
+## 10 0          No matching concept      VIS score of vasoactive inf… &lt;chr [1]&gt;   
+## 11 0          No matching concept      Total ventilation start dat… &lt;chr [1]&gt;</code></pre>
 </div>
 <div id="initial-event-cohort" class="section level2">
 <h2>Initial event cohort</h2>
-<p>People having any of the following: any of the above measurements
-with continuous observation of 9999 days prior and 9999 days after event
-index data, limit to first/earliest occurrence of any of the above
-measurements (+descendants) per person</p>
-<pre class="r"><code># Create cohort definition; include any patients who have had a lab test
-labTestCohort &lt;- cohort(
+<p>People having any of the following: any of the lab test measurements
+limit to first/earliest occurrence of any of the above measurements
+(+descendants) per person</p>
+<pre class="r"><code>## Cohort definition
+# Create cohort definition
+ch &lt;- cohort(
   entry = entry(
-    measurement(conceptSet, firstOccurrence()),
-    # observationWindow = continuousObservation(-9999, 9999),
+    # enter patients &lt; 80 years old who have had a lab test
+    measurement(conceptSets$conceptSets$labTests, age(lt(80))),
+    observationWindow = continuousObservation(0, 0),
     primaryCriteriaLimit = &quot;All&quot;
   ),
+  attrition = attrition(
+    withAny(
+      # include all cardiac complications
+      atLeast(
+        x = 1,
+        # include all cardiac complications represented by condition concepts
+        query = conditionOccurrence(conceptSets$conceptSets$cardiacComplications)
+      ),
+      atLeast(
+        x = 1,
+        # include all cardiac complications represented by procedure concepts
+        query = procedure(conceptSets$conceptSets$cardiacComplications)
+      )
+    ),
+    withAny(
+      atLeast(
+        x = 1,
+        # include all cardiac surgeries
+        query = procedure(conceptSets$conceptSets$cardiacProcedures)
+      )
+    )
+  ),
   exit = exit(
-    endStrategy = observationExit()
+    endStrategy = observationExit(),
+    censor = censoringEvents(
+      # exit if intubation has taken place
+      procedure(conceptSets$conceptSets$intubation)
+    )
   )
 )</code></pre>
-<pre class="r"><code># Generate json for cohort
-labTestCohortJson &lt;- labTestCohort %&gt;%
+</div>
+<div id="write-json-expressions-and-sql-queries" class="section level2">
+<h2>Write json expressions and sql queries</h2>
+<pre class="r"><code>## Cohort json and sql
+# Generate json for cohort
+chJson &lt;- ch %&gt;%
   toCirce() %&gt;%
   jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE) %&gt;%
   as.character()
 
-ch &lt;- jsonlite::fromJSON(labTestCohortJson)
-all_concept_ids &lt;- unique(unlist(lapply(ch$ConceptSets$expression$items, function(item) item$concept$CONCEPT_ID)))
-
 # Generate cohort sql query
 sql &lt;- CirceR::buildCohortQuery(
-  expression = CirceR::cohortExpressionFromJson(labTestCohortJson),
+  expression = CirceR::cohortExpressionFromJson(chJson),
   options = CirceR::createGenerateOptions(generateStats = FALSE)
 )</code></pre>
-<pre class="r"><code>write(labTestCohortJson, paste(path, &quot;/lab_test_cohort.json&quot;, sep=&quot;&quot;))</code></pre>
+<p>Save the cohort and concept set jsons; these can be imported into
+ATLAS</p>
+<pre class="r"><code>write(chJson, paste(path, &quot;./json/cohort.json&quot;, sep=&quot;&quot;))
+for (cs in names(conceptSets$conceptSets)) {
+  writeConceptSet(
+    x = conceptSets$conceptSets[[cs]],
+    path = paste(&quot;../json/&quot;, cs, &quot;_cs.json&quot;, sep=&quot;&quot;)
+  )
+}</code></pre>
 <pre class="r"><code># Establish connection
 con &lt;- connect(connectionDetails)</code></pre>
 <pre><code>## Connecting using SQLite driver</code></pre>
 <pre class="r"><code># Cohorts to create
 cohortsToCreate &lt;- tibble::tibble(
   cohortId = 9876,
-  cohortName = &quot;Lab_test_Cohort&quot;,
+  cohortName = &quot;cardiac_arrest&quot;,
   sql = sql
 )
 
 # Cohort tables
-cohortTableNames &lt;- CohortGenerator::getCohortTableNames(cohortTable = &quot;Lab_test_cohort&quot;)
+cohortTableNames &lt;- CohortGenerator::getCohortTableNames(cohortTable = &quot;cardiac_arrest&quot;)
 CohortGenerator::createCohortTables(
   connectionDetails = connectionDetails,
   cohortDatabaseSchema = &quot;main&quot;,
@@ -591,14 +641,14 @@ CohortGenerator::createCohortTables(
 )</code></pre>
 <pre><code>## Connecting using SQLite driver</code></pre>
 <pre><code>## Creating cohort tables
-## - Created table main.Lab_test_cohort
-## - Created table main.Lab_test_cohort
-## - Created table main.Lab_test_cohort_inclusion
-## - Created table main.Lab_test_cohort_inclusion_result
-## - Created table main.Lab_test_cohort_inclusion_stats
-## - Created table main.Lab_test_cohort_summary_stats
-## - Created table main.Lab_test_cohort_censor_stats
-## Creating cohort tables took 0.44secs</code></pre>
+## - Created table main.cardiac_arrest
+## - Created table main.cardiac_arrest
+## - Created table main.cardiac_arrest_inclusion
+## - Created table main.cardiac_arrest_inclusion_result
+## - Created table main.cardiac_arrest_inclusion_stats
+## - Created table main.cardiac_arrest_summary_stats
+## - Created table main.cardiac_arrest_censor_stats
+## Creating cohort tables took 0.06secs</code></pre>
 <pre class="r"><code># Generate the cohorts
 cohortsGenerated &lt;- CohortGenerator::generateCohortSet(
   connectionDetails = connectionDetails,
@@ -609,10 +659,10 @@ cohortsGenerated &lt;- CohortGenerator::generateCohortSet(
 )</code></pre>
 <pre><code>## Connecting using SQLite driver</code></pre>
 <pre><code>## Initiating cluster consisting only of main thread
-## 1/1- Generating cohort: Lab_test_Cohort (id = 9876)
-##   |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   4%  |                                                                              |=====                                                                 |   8%  |                                                                              |========                                                              |  12%  |                                                                              |===========                                                           |  15%  |                                                                              |=============                                                         |  19%  |                                                                              |================                                                      |  23%  |                                                                              |===================                                                   |  27%  |                                                                              |======================                                                |  31%  |                                                                              |========================                                              |  35%  |                                                                              |===========================                                           |  38%  |                                                                              |==============================                                        |  42%  |                                                                              |================================                                      |  46%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  58%  |                                                                              |===========================================                           |  62%  |                                                                              |==============================================                        |  65%  |                                                                              |================================================                      |  69%  |                                                                              |===================================================                   |  73%  |                                                                              |======================================================                |  77%  |                                                                              |=========================================================             |  81%  |                                                                              |===========================================================           |  85%  |                                                                              |==============================================================        |  88%  |                                                                              |=================================================================     |  92%  |                                                                              |===================================================================   |  96%  |                                                                              |======================================================================| 100%</code></pre>
-<pre><code>## Executing SQL took 0.17 secs</code></pre>
-<pre><code>## Generating cohort set took 0.48 secs</code></pre>
+## 1/1- Generating cohort: cardiac_arrest (id = 9876)
+##   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   3%  |                                                                              |====                                                                  |   6%  |                                                                              |======                                                                |   9%  |                                                                              |========                                                              |  11%  |                                                                              |==========                                                            |  14%  |                                                                              |============                                                          |  17%  |                                                                              |==============                                                        |  20%  |                                                                              |================                                                      |  23%  |                                                                              |==================                                                    |  26%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  31%  |                                                                              |========================                                              |  34%  |                                                                              |==========================                                            |  37%  |                                                                              |============================                                          |  40%  |                                                                              |==============================                                        |  43%  |                                                                              |================================                                      |  46%  |                                                                              |==================================                                    |  49%  |                                                                              |====================================                                  |  51%  |                                                                              |======================================                                |  54%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  60%  |                                                                              |============================================                          |  63%  |                                                                              |==============================================                        |  66%  |                                                                              |================================================                      |  69%  |                                                                              |==================================================                    |  71%  |                                                                              |====================================================                  |  74%  |                                                                              |======================================================                |  77%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |============================================================          |  86%  |                                                                              |==============================================================        |  89%  |                                                                              |================================================================      |  91%  |                                                                              |==================================================================    |  94%  |                                                                              |====================================================================  |  97%  |                                                                              |======================================================================| 100%</code></pre>
+<pre><code>## Executing SQL took 0.0956 secs</code></pre>
+<pre><code>## Generating cohort set took 0.22 secs</code></pre>
 <pre class="r"><code># Get cohort counts
 cohortCounts &lt;- CohortGenerator::getCohortCounts(
   connectionDetails = connectionDetails,
@@ -620,14 +670,14 @@ cohortCounts &lt;- CohortGenerator::getCohortCounts(
   cohortTable = cohortTableNames$cohortTable
 )</code></pre>
 <pre><code>## Connecting using SQLite driver</code></pre>
-<pre><code>## Counting cohorts took 0.101 secs</code></pre>
+<pre><code>## Counting cohorts took 0.0272 secs</code></pre>
 <pre class="r"><code># Disconnect
 disconnect(con)
 
 
 cohortCounts</code></pre>
-<pre><code>##   cohortId cohortEntries cohortSubjects
-## 1     9876           134            134</code></pre>
+<pre><code>## [1] cohortId       cohortEntries  cohortSubjects
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
 </div>
 <div id="get-updated-db-after-querying-cohorts" class="section level2">
 <h2>Get updated DB after querying cohorts</h2>
@@ -653,9 +703,23 @@ disconnect(con)
 
 
 cat(&quot;Number of persons in dataset: &quot;, length(unique(lDataFramesPost$person$person_id)), 
-    &quot;\nNumber of persons in cohort:  &quot;, length(unique(lDataFramesPost$lab_test_cohort$subject_id)))</code></pre>
+    &quot;\nNumber of persons in cohort:  &quot;, length(unique(lDataFramesPost$cardiac_arrest$subject_id)))</code></pre>
 <pre><code>## Number of persons in dataset:  2694 
-## Number of persons in cohort:   134</code></pre>
+## Number of persons in cohort:   0</code></pre>
+</div>
+<div id="filter-loaded-database-for-cohort" class="section level2">
+<h2>Filter loaded database for cohort</h2>
+<pre class="r"><code>cohort_df &lt;- list()
+cohort_person_ids &lt;- lDataFramesPost$cardiac_arrest$subject_id
+for (table in names(lDataFramesPost)) {
+  if (&quot;person_id&quot; %in% names(lDataFramesPost[[table]])) {
+    cohort_df[[table]] &lt;- 
+      lDataFramesPost[[table]] %&gt;%
+      dplyr::filter(person_id %in% cohort_person_ids)
+  } else {
+    cohort_df[[table]] &lt;- lDataFramesPost[[table]]
+  }
+}</code></pre>
 </div>
 
 
