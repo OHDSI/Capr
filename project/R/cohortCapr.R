@@ -1,6 +1,10 @@
-## ----setup, include=FALSE---------------------------------------------------------------
-## knitr
+## ----knitr, include=FALSE---------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
+
+knitr::purl(
+  input = './cohortCapr_md.Rmd',
+  output = './cohortCapr.R'
+)
 
 
 ## ----activate renv, include=FALSE-------------------------------------------------------
@@ -34,37 +38,6 @@ library(Capr)
 ## ----connection details Eunomia, eval=TRUE, include=TRUE--------------------------------
 ## Eunomia GI bleed data set
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-
-
-## ----connection details Synpuf 5%, eval=FALSE, include=FALSE----------------------------
-## ## SYNPUF 5% (local)
-## # Create a new SQLite database
-## dbFile <- "./data/synpuf5pct.sqlite"
-## 
-## # Create SQLite DB if it does not exist
-## if (!(file.exists(dbFile))) {
-##   con <- DBI::dbConnect(RSQLite::SQLite(), dbname = dbFile)
-## 
-##   # Read CSV files and write to SQLite database
-##   csvDir <- "./data/synpuf5pct_20180710/"
-##   csvFiles <- list.files(path = csvDir, pattern = "\\.csv$", full.names = TRUE)
-## 
-##   # Get cdm structure
-##   source("./R/cdm.R")
-## 
-##   # Read data files and write to sqlite DB
-##   for (csvFile in csvFiles) {
-##     tableName <- gsub(csvDir, "", tools::file_path_sans_ext(basename(csvFile)))
-##     df <- readr::read_tsv(csvFile, col_names = cdm[[tableName]])
-##     DBI::dbWriteTable(con, tableName, df, overwrite = TRUE, row.names = FALSE)
-##   }
-## 
-##   # Close the database connection
-##   dbDisconnect(con)
-## } else {
-##   connectionDetails <-
-##     createConnectionDetails(dbms = "sqlite", server = dbFile)
-## }
 
 
 ## ----load data, messages=FALSE, echo=TRUE-----------------------------------------------
@@ -132,8 +105,13 @@ labTestsCounts <-
 
 ## ----Standard non-standard check--------------------------------------------------------
 source('./isStandard.R')
-standard <- isStandard(conceptSets$conceptSets, lDataFramesPre$concept)
-print(standard)
+nonStandard <- isStandard(
+  concept_table_path = "./project/data/vocabs_14-May-2024/CONCEPT.csv",
+  data_concepts_path = "./project/data/phems_variable_list/"
+  # save_path = "./project/data/phems_variable_list/is_standard/"
+  )
+
+nonStandard
 
 
 ## ----Cohort definition------------------------------------------------------------------
@@ -304,11 +282,4 @@ for (table in names(lDataFramesPost)) {
 ##     new_data[[table]] <- lDataFramesPost[[table]]
 ##   }
 ## }
-
-
-## ----Knit to R document, include=FALSE--------------------------------------------------
-knitr::purl(
-  input = './cohortCapr_md.Rmd',
-  output = './cohortCapr.R'
-)
 
