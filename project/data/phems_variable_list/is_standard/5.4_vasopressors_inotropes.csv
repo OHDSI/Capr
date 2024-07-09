@@ -1,12 +1,12 @@
-,sourceCode,concept_id,standard_concept
-0,Vasopressin ,1507835,S
-1,Dobutamine ,1337720,S
-2,Dopamine ,1337860,S
-3,Ephedrine ,1143374,S
-4,Epinephrine ,1343916,S
-5,Milrinone ,1368671,S
-6,Terlipressin ,19119253,S
-7,Isoproterenol   ,1183554,S
-8,Levosimendan ,40173184,S
-9,Norepinephrine,1321341,S
-10,Phenylephrine  ,1135766,S
+sourceCode,concept_id,standard_concept
+Vasopressin ,1507835,S
+Dobutamine ,1337720,S
+Dopamine ,1337860,S
+Ephedrine ,1143374,S
+Epinephrine ,1343916,S
+Milrinone ,1368671,S
+Terlipressin ,19119253,S
+Isoproterenol   ,1183554,S
+Levosimendan ,40173184,S
+Norepinephrine,1321341,S
+Phenylephrine  ,1135766,S

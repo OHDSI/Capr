@@ -1,11 +1,11 @@
-,sourceCode,concept_id,standard_concept
-0,Vancomycin-resistant ,1707687,S
-1,Clindamycin-resistant ,997881,S
-2,Erythromycin-resistant ,1746940,S
-3,MRSA ,4019195,S
-4,ESBL ,4257547,S
-5,Drug-resistant ,37017134,S
-6,Multidrug-resistant ,37017134,S
-7,Clindamycin-resistant ,37017134,S
-8,Vancomycin-resistant ,37017134,S
-9,Erythromycin-resistant ,37017134,S
+sourceCode,concept_id,standard_concept
+Vancomycin-resistant ,1707687,S
+Clindamycin-resistant ,997881,S
+Erythromycin-resistant ,1746940,S
+MRSA ,4019195,S
+ESBL ,4257547,S
+Drug-resistant ,37017134,S
+Multidrug-resistant ,37017134,S
+Clindamycin-resistant ,37017134,S
+Vancomycin-resistant ,37017134,S
+Erythromycin-resistant ,37017134,S

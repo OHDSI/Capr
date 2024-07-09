@@ -1,19 +1,19 @@
-,sourceCode,concept_id,standard_concept
-0,,437312,S
-1,,4052536,S
-2,LCOS - renal support (CVVH/ PD) ,4051330,S
-3,ICU ward stay ,4123933,S
-4,,4324124,S
-5,Surgical injury - Reexplore for bleeding ,4295705,S
-6,Neurological injury - seizure ,377091,S
-7,,442019,S
-8,Neurological injury - intracranial haemmhorage/ intracranial bleeding ,439847,S
-9,Surgical injury - Blood Loss ,4308537,S
-10,LCOS - Cardiac arrest ,321042,S
-11,Neurological injury - infarction ,443454,S
-12,Low cardiac output state (LCOS) - ECMO ,4185565,S
-13,,4185565,S
-14,,4185565,S
-15,LCOS - NEC requiring treatment ,4185565,S
-16,CVL infections ,42537043,S
-17,Surgical injury - Chylothorax ,4306136,S
+sourceCode,concept_id,standard_concept
+,437312,S
+,4052536,S
+LCOS - renal support (CVVH/ PD) ,4051330,S
+ICU ward stay ,4123933,S
+,4324124,S
+Surgical injury - Reexplore for bleeding ,4295705,S
+Neurological injury - seizure ,377091,S
+,442019,S
+Neurological injury - intracranial haemmhorage/ intracranial bleeding ,439847,S
+Surgical injury - Blood Loss ,4308537,S
+LCOS - Cardiac arrest ,321042,S
+Neurological injury - infarction ,443454,S
+Low cardiac output state (LCOS) - ECMO ,4185565,S
+,4185565,S
+,4185565,S
+LCOS - NEC requiring treatment ,4185565,S
+CVL infections ,42537043,S
+Surgical injury - Chylothorax ,4306136,S

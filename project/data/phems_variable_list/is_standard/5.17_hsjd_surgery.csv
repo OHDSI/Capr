@@ -1,9 +1,9 @@
-,sourceCode,concept_id,standard_concept
-0,Aristotle's score of surgery ,0,
-1,"Deep hypothermic circulatory arrest start datetime, end datetime ",44790138,S
-2,"Cardiac bypass start datetime, end datetime ",4336464,S
-3,Extubation event ,4150627,S
-4,"Cross-clamping start datetime, end datetime ",4201547,S
-5,"Surgery start datetime, end datetime ",4301351,S
-6,STAT/EACTS score of surgery ,40490494,S
-7,"Antegrade Cerebral Perfusion start datetime, end datetime ",4272324,S
+sourceCode,concept_id,standard_concept
+Aristotle's score of surgery ,0,
+"Deep hypothermic circulatory arrest start datetime, end datetime ",44790138,S
+"Cardiac bypass start datetime, end datetime ",4336464,S
+Extubation event ,4150627,S
+"Cross-clamping start datetime, end datetime ",4201547,S
+"Surgery start datetime, end datetime ",4301351,S
+STAT/EACTS score of surgery ,40490494,S
+"Antegrade Cerebral Perfusion start datetime, end datetime ",4272324,S

@@ -1,51 +1,51 @@
-,sourceCode,concept_id,standard_concept
-0,Monoclonal Antibodies ,21603754,C
-1,Trimethoprim-Sulfamethoxazole ,1836430,S
-2,Tetracycline ,1836948,S
-3,Tobramycin ,902722,S
-4,Trimethoprim-Sulfamethoxazole ,1705674,S
-5,Vancomycin ,1707687,S
-6,Fusidic acid ,19010400,S
-7,Gentamicin ,45892419,S
-8,Ceftolozane-Tazovactam ,45892599,S
-9,Ceftazidime-Avibactam ,46221507,S
-10,Azithromycin ,1734104,S
-11,Linezolid ,1736887,S
-12,Cefepime ,1748975,S
-13,Clarithromycin ,1750500,S
-14,Cefadroxil ,1769535,S
-15,Cefazolin ,1771162,S
-16,Cefotaxime ,1774470,S
-17,Ceftazidime ,1776684,S
-18,Ceftazidime-Avibactam ,1776684,S
-19,Cefuroxime ,1778162,S
-20,Daptomycin ,1786617,S
-21,Ciprofloxacin ,1797513,S
-22,Clindamycin ,997881,S
-23,Colistin ,901845,S
-24,Meropenem ,1709170,S
-25,Ertapenem ,1717963,S
-26,Dexamethasone ,1518254,S
-27,Piperacillin-Tazobactam ,1741122,S
-28,Ceftolozane-Tazovactam ,1741122,S
-29,Erythromycin ,1746940,S
-30,Mupirocin ,951511,S
-31,Fosfomycin ,956653,S
-32,Amoxicillin clavulanate ,1759842,S
-33,Hydrocortisone ,975125,S
-34,Imipenem ,1778262,S
-35,Teicoplanin ,19078399,S
-36,Amikacin ,1790868,S
-37,Methylprednisolone ,1506270,S
-38,Amoxicillin clavulanate ,1713332,S
-39,Amoxicillin ,1713332,S
-40,Ampicillin ,1717327,S
-41,Nitrofurantoin ,920293,S
-42,Norfloxacin ,1721543,S
-43,Oxacillin ,1724703,S
-44,Penicillin ,1728416,S
-45,Levofloxacin ,1742253,S
-46,Piperacillin-Tazobactam ,1746114,S
-47,Prednisolone ,1550557,S
-48,Rifampicin ,1763204,S
-49,Chemotherapy ,4273629,S
+sourceCode,concept_id,standard_concept
+Monoclonal Antibodies ,21603754,C
+Trimethoprim-Sulfamethoxazole ,1836430,S
+Tetracycline ,1836948,S
+Tobramycin ,902722,S
+Trimethoprim-Sulfamethoxazole ,1705674,S
+Vancomycin ,1707687,S
+Fusidic acid ,19010400,S
+Gentamicin ,45892419,S
+Ceftolozane-Tazovactam ,45892599,S
+Ceftazidime-Avibactam ,46221507,S
+Azithromycin ,1734104,S
+Linezolid ,1736887,S
+Cefepime ,1748975,S
+Clarithromycin ,1750500,S
+Cefadroxil ,1769535,S
+Cefazolin ,1771162,S
+Cefotaxime ,1774470,S
+Ceftazidime ,1776684,S
+Ceftazidime-Avibactam ,1776684,S
+Cefuroxime ,1778162,S
+Daptomycin ,1786617,S
+Ciprofloxacin ,1797513,S
+Clindamycin ,997881,S
+Colistin ,901845,S
+Meropenem ,1709170,S
+Ertapenem ,1717963,S
+Dexamethasone ,1518254,S
+Piperacillin-Tazobactam ,1741122,S
+Ceftolozane-Tazovactam ,1741122,S
+Erythromycin ,1746940,S
+Mupirocin ,951511,S
+Fosfomycin ,956653,S
+Amoxicillin clavulanate ,1759842,S
+Hydrocortisone ,975125,S
+Imipenem ,1778262,S
+Teicoplanin ,19078399,S
+Amikacin ,1790868,S
+Methylprednisolone ,1506270,S
+Amoxicillin clavulanate ,1713332,S
+Amoxicillin ,1713332,S
+Ampicillin ,1717327,S
+Nitrofurantoin ,920293,S
+Norfloxacin ,1721543,S
+Oxacillin ,1724703,S
+Penicillin ,1728416,S
+Levofloxacin ,1742253,S
+Piperacillin-Tazobactam ,1746114,S
+Prednisolone ,1550557,S
+Rifampicin ,1763204,S
+Chemotherapy ,4273629,S

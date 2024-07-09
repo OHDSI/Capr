@@ -1,36 +1,36 @@
-,sourceCode,concept_id,standard_concept
-0,Outpatient appointment type (telephone/ clinic visit etc.) ,5083,S
-1,FiO2 ,42869590,S
-2,PaCO2 ,3027946,S
-3,Systolic blood pressure ,3004249,S
-4,"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",4124462,S
-5,Base Excess ,4095105,S
-6,Elective ICU admission ,4123933,S
-7,Diagnoses ,4234469,S
-8,Mechanical ventilation ,40493026,S
-9,"Reason for ICU admission: (Main reason for ICU admission is not recovery from surgery or a procedure, Recovery from a bypass cardiac procedure, recovery from a non-bypass cardiac procedure, recovery from non-cardiac procedure) ",44803020,S
-10,Pupillary reaction ,4209008,S
-11,"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",260134,S
-12,"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",432571,S
-13,"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",4029498,S
-14,"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",317009,S
-15,"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",201957,S
-16,"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",43530727,S
-17,"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",29783,S
-18,"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",321042,S
-19,"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",4165112,S
-20,"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",443727,S
-21,"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",314383,S
-22,"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",4245975,S
-23,"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",440207,S
-24,"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",42537745,S
-25,"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",442588,S
-26,"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",4213310,S
-27,"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",321319,S
-28,"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",317510,S
-29,FiO2 ,8554,S
-30,PaCO2 ,44777602,S
-31,Systolic blood pressure ,8876,S
-32,PaCO2 ,8876,S
-33,Base Excess ,8753,S
-34,"Outpatient appointments start datetime, end datetime ",9202,S
+sourceCode,concept_id,standard_concept
+Outpatient appointment type (telephone/ clinic visit etc.) ,5083,S
+FiO2 ,42869590,S
+PaCO2 ,3027946,S
+Systolic blood pressure ,3004249,S
+"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",4124462,S
+Base Excess ,4095105,S
+Elective ICU admission ,4123933,S
+Diagnoses ,4234469,S
+Mechanical ventilation ,40493026,S
+"Reason for ICU admission: (Main reason for ICU admission is not recovery from surgery or a procedure, Recovery from a bypass cardiac procedure, recovery from a non-bypass cardiac procedure, recovery from non-cardiac procedure) ",44803020,S
+Pupillary reaction ,4209008,S
+"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",260134,S
+"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",432571,S
+"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",4029498,S
+"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",317009,S
+"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",201957,S
+"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",43530727,S
+"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",29783,S
+"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",321042,S
+"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",4165112,S
+"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",443727,S
+"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",314383,S
+"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",4245975,S
+"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",440207,S
+"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",42537745,S
+"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",442588,S
+"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",4213310,S
+"High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",321319,S
+"Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",317510,S
+FiO2 ,8554,S
+PaCO2 ,44777602,S
+Systolic blood pressure ,8876,S
+PaCO2 ,8876,S
+Base Excess ,8753,S
+"Outpatient appointments start datetime, end datetime ",9202,S
