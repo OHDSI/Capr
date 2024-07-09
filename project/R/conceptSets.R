@@ -2,13 +2,13 @@ library(Capr)
 
 ## Define list of concepts to use for concept sets
 # include all descendant concepts
-# laboratory tests
 conceptSets <- list(
   concepts = list(
-    labTests = c(
+    
+    # laboratory tests
+    labTests = c(  # 5.13
       4298431,  # source: Immature WBC Count /// concept: White blood cell count
-      37393856,  # source: Neutrophil Count concept1 /// concept: Neutrophil count
-      3007670,  # source: Neutrophil Count concept2 /// concept: Neutrophil Ab [Units/volume] in Serum
+      3007670,  # source: Neutrophil Count /// concept: Neutrophil Ab [Units/volume] in Serum
       40762351,  # source: Hemoglobin /// concept: Hemoglobin [Moles/volume] in Blood
       37393863,  # source: Platelet Count /// concept: Platelet count
       3009542,  # source: Hematocrit /// concept: Hematocrit [Volume Fraction] of Blood
