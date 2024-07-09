@@ -1,0 +1,61 @@
+,sourceCode,concept_id,standard_concept
+0,Potassium ,3005456,S
+1,Chloride ,3018572,S
+2,Creatinine ,3051825,S
+3,Bicarbonate (venous) ,3027273,S
+4,Bilirubin ,3006140,S
+5,Glucose ,3013826,S
+6,Phosphate ,3003458,S
+7,Blood urea nitrogen ,3024641,S
+8,ALT ,3006923,S
+9,Albumin ,3024561,S
+10,AST ,3013721,S
+11,Bicarbonate (arterial) ,3008152,S
+12,CRP ,3020460,S
+13,Calcium ,3015377,S
+14,pCO2 (arterial) ,3027946,S
+15,pCO2 (venous) ,3021447,S
+16,Hematocrit ,3009542,S
+17,Magnesium ,3033836,S
+18,pO2 (arterial) ,3027801,S
+19,pO2 (venous) ,3024354,S
+20,Sodium ,3019550,S
+21,Lactate ,3047181,S
+22,Neutrophil count ,3007670,S
+23,INR prothrombin time ,3034426,S
+24,Hemoglobin ,40762351,S
+25,pH (arterial) ,37399161,S
+26,pH (venous) ,37392672,S
+27,Platelet count ,4267147,S
+28,Immature WBC count ,4298431,S
+29,Hematocrit ,8554,S
+30,Hemoglobin ,8713,S
+31,Albumin ,8713,S
+32,Hemoglobin ,8636,S
+33,Albumin ,8636,S
+34,pCO2 (venous) ,44777602,S
+35,Creatinine ,8840,S
+36,CRP ,8751,S
+37,pCO2 (venous) ,8876,S
+38,pCO2 (arterial) ,8876,S
+39,pO2 (venous) ,8876,S
+40,pO2 (arterial) ,8876,S
+41,Lactate ,8753,S
+42,Blood urea nitrogen ,8753,S
+43,Glucose ,8753,S
+44,Sodium ,8753,S
+45,Potassium ,8753,S
+46,Magnesium ,8753,S
+47,Chloride ,8753,S
+48,Calcium ,8753,S
+49,Phosphate ,8753,S
+50,Bicarbonate (venous) ,8753,S
+51,Bicarbonate (arterial) ,8753,S
+52,INR prothrombin time ,8555,S
+53,Immature WBC count ,8647,S
+54,Neutrophil count ,8647,S
+55,Platelet count ,8647,S
+56,ALT ,8645,S
+57,AST ,8645,S
+58,Creatinine ,8749,S
+59,Bilirubin ,8749,S

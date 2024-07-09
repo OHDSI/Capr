@@ -1,0 +1,11 @@
+,sourceCode,concept_id,standard_concept
+0,SpO2 ,4096101,S
+1,SBP (Systolic Blood Pressure) ,4152194,
+2,DBP (Dyastolic Blood Pressure) ,4154790,
+3,Age-dependent HR ,4239408,
+4,Age-dependent RR ,4313591,
+5,SpO2 ,8554,S
+6,Age-dependent HR ,8483,S
+7,Age-dependent RR ,8483,S
+8,SBP (Systolic Blood Pressure) ,8876,S
+9,DBP (Dyastolic Blood Pressure) ,8876,S

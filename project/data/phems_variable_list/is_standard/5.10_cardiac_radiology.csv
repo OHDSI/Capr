@@ -1,0 +1,43 @@
+,sourceCode,concept_id,standard_concept
+0,US transoesophageal echocardiogram (toe) ,4019824,S
+1,IR bronchoscopy ,4032404,S
+2,Exercise test (non-CPET) ,4065416,S
+3,FL video swallow ,4345925,S
+4,US cranial contents ,4083106,S
+5,US neck ,4083108,S
+6,MRI head ,4082979,S
+7,US thorax and pleural cavity ,4093436,S
+8,CT head ,4125350,S
+9,US urinary tract ,4125530,S
+10,MRI cardiac complex congenital ,44802640,S
+11,XR chest ,4163872,S
+12,US doppler groin both ,4167029,S
+13,US doppler renal both ,4167052,S
+14,US abdomen and pelvis/ US abdomen ,4305221,S
+15,US diaphragmatic region ,4303522,S
+16,CT heart with contrast/ CT cardiac angiogram coronary/ CT cardiac gated with contrast ,4306317,S
+17,XR chest and abdomen ,4169275,S
+18,IR PICC line insertion ,4322380,S
+19,24h holter monitor ,4140473,S
+20,US thorax and pleural cavity ,4329508,S
+21,US doppler lower limb veins both ,4335392,S
+22,Epicardial echocardiogram ,4203365,S
+23,US transthoracic echocardiogram/ us transthoracic echocardiogram (pre- admission)/ US transthoracic echocardiogram (sedated) ,4335825,S
+24,IR tunnelled central venous line insertion ,40482732,S
+25,US doppler jugular vein both ,40489841,S
+26,Cardiopulmonary exercise test (CPET) ,40492338,S
+27,Pacemaker/ICD interrogation (in clinic)/ pacemaker/ICD interrogation (other) ,40488431,S
+28,IR tunnelled central venous line removal ,42873079,S
+29,US abdomen and pelvis/ US abdomen ,4261497,S
+30,EEG routine portable ,4205144,S
+31,EEG routine ,4181917,S
+32,XR abdomen ,4264477,S
+33,24h holter monitor ,45764527,S
+34,Event monitor ,45765560,S
+35,CT thorax with contrast ,4327032,S
+36,US doppler groin both ,35622931,S
+37,US doppler ,35622931,S
+38,US vocal cord ,44813863,S
+39,IR bronchogram ,4312208,S
+40,Pacemaker/ICD device check - remote patient initiated ,4235141,S
+41,Pacemaker/ICD device check - remote device initiated ,4235141,S
