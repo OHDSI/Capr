@@ -1,11 +1,11 @@
-sourceCode,concept_id,standard_concept
-ventilation ,0,
-Type of vasoactive infusion ,0,
-VIS score of vasoactive infusion ,0,
-"Total ventilation start datetime, end datetime ",0,
-Dose of vasoactive infusion (rate - mcg/kg/hr) ,794078,S
-Invasive Mechanical Ventilation LOS ,37158404,S
-Non-Invasive Mechanical Ventilation LOS ,4177224,S
-Admission reason ,44803020,S
-"Postop central venous catheter in/start datetime, out/ end datetime ",4179206,S
-"Vasoactive infusion start datetime, end datetime ",42539650,S
+concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
+0,No matching concept,Metadata,None,Undefined,NA,No matching concept,19700101,20991231,NA,ventilation
+0,No matching concept,Metadata,None,Undefined,NA,No matching concept,19700101,20991231,NA,Type of vasoactive infusion
+0,No matching concept,Metadata,None,Undefined,NA,No matching concept,19700101,20991231,NA,VIS score of vasoactive infusion
+0,No matching concept,Metadata,None,Undefined,NA,No matching concept,19700101,20991231,NA,"Total ventilation start datetime, end datetime"
+794078,vasoactive intestinal peptide,Drug,RxNorm,Ingredient,S,1942960,20180205,20991231,NA,Dose of vasoactive infusion (rate - mcg/kg/hr)
+37158404,Invasive mechanical ventilation,Procedure,SNOMED,Procedure,S,1258985005,20221130,20991231,NA,Invasive Mechanical Ventilation LOS
+4177224,Non-invasive ventilation,Procedure,SNOMED,Procedure,S,428311008,20080131,20991231,NA,Non-Invasive Mechanical Ventilation LOS
+44803020,Primary reason for admission,Observation,SNOMED,Observable Entity,S,507151000000102,20091001,20991231,NA,Admission reason
+4179206,Central venous catheter,Device,SNOMED,Physical Object,S,52124006,20020131,20991231,NA,"Postop central venous catheter in/start datetime, out/ end datetime"
+42539650,Administration of intravenous vasoactive drug,Procedure,SNOMED,Procedure,S,736765002,20180131,20991231,NA,"Vasoactive infusion start datetime, end datetime"

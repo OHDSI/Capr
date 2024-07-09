@@ -1,8 +1,7 @@
-sourceCode,concept_id,standard_concept
-vasopressin ,1507835,S
-dobutamine ,1337720,S
-dopamine ,1337860,S
-epinephrine ,1343916,S
-milrinone ,1368671,S
-norepinephrin  ,1321341,S
-,9688,S
+concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
+1507835,vasopressin (USP),Drug,RxNorm,Ingredient,S,11149,19700101,20991231,NA,vasopressin
+1337720,dobutamine,Drug,RxNorm,Ingredient,S,3616,19700101,20991231,NA,dobutamine
+1337860,dopamine,Drug,RxNorm,Ingredient,S,3628,19700101,20991231,NA,dopamine
+1343916,epinephrine,Drug,RxNorm,Ingredient,S,3992,19700101,20991231,NA,epinephrine
+1368671,milrinone,Drug,RxNorm,Ingredient,S,52769,19700101,20991231,NA,milrinone
+1321341,norepinephrine,Drug,RxNorm,Ingredient,S,7512,19700101,20991231,NA,norepinephrin

@@ -1,21 +1,21 @@
-sourceCode,concept_id,standard_concept
-"Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide) ",46234437,S
-"Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide) ",1354860,S
-"Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide) ",1309944,S
-Sternum reopening (procedure undertaken) ,4044892,S
-Vocal Cord Dysfunction ,4046868,S
-"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing) ",4049398,S
-"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing) ",4051940,S
-"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing) ",4353741,S
-"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing) ",4117045,S
-Pneumothorax ,253796,S
-Listed for heart transplantation ,609312,S
-intubation ,4202832,S
-"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.) ",315643,S
-Cardiac surgeries (interventions) ,4275564,S
-Tracheostomy ,44783799,S
-"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.) ",44784217,S
-"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.) ",4068155,S
-"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.) ",4228448,S
-"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.) ",4185572,S
-Diaphragmatic Paralysis ,4275136,S
+concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
+46234437,ivabradine,Drug,RxNorm,Ingredient,S,1649480,20150706,20991231,NA,"Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide)"
+1354860,flecainide,Drug,RxNorm,Ingredient,S,4441,19700101,20991231,NA,"Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide)"
+1309944,amiodarone,Drug,RxNorm,Ingredient,S,703,19700101,20991231,NA,"Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide)"
+4044892,Procedure on sternum,Procedure,SNOMED,Procedure,S,129198003,20020131,20991231,NA,Sternum reopening (procedure undertaken)
+4046868,Vocal cord dysfunction,Condition,SNOMED,Clinical Finding,S,134290008,20020131,20991231,NA,Vocal Cord Dysfunction
+4049398,Temporary cardiac pacemaker procedure,Procedure,SNOMED,Procedure,S,233175008,20020131,20991231,NA,"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing)"
+4051940,Permanent cardiac pacemaker procedure,Procedure,SNOMED,Procedure,S,233182007,20020131,20991231,NA,"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing)"
+4353741,Cardioversion,Procedure,SNOMED,Procedure,S,250980009,20020131,20991231,NA,"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing)"
+4117045,Atrial overdrive pacing,Procedure,SNOMED,Procedure,S,287696002,20020131,20991231,NA,"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing)"
+253796,Pneumothorax,Condition,SNOMED,Disorder,S,36118008,20020131,20991231,NA,Pneumothorax
+609312,Awaiting transplantation of heart,Observation,SNOMED,Context-dependent,S,374847481000119108,20210131,20991231,NA,Listed for heart transplantation
+4202832,Intubation,Procedure,SNOMED,Procedure,S,52765003,20020131,20991231,NA,intubation
+315643,Tachyarrhythmia,Condition,SNOMED,Disorder,S,6285003,20020131,20991231,NA,"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.)"
+4275564,Operation on heart,Procedure,SNOMED,Procedure,S,64915003,20020131,20991231,NA,Cardiac surgeries (interventions)
+44783799,Exteriorization of trachea,Procedure,SNOMED,Procedure,S,697984004,20140131,20991231,NA,Tracheostomy
+44784217,Cardiac arrhythmia,Condition,SNOMED,Disorder,S,698247007,20140131,20991231,NA,"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.)"
+4068155,Atrial arrhythmia,Condition,SNOMED,Disorder,S,17366009,20020131,20991231,NA,"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.)"
+4228448,Bradyarrhythmia,Condition,SNOMED,Disorder,S,421869004,20060731,20991231,NA,"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.)"
+4185572,Ventricular arrhythmia,Condition,SNOMED,Disorder,S,44103008,20020131,20991231,NA,"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.)"
+4275136,Paralysis of diaphragm,Condition,SNOMED,Disorder,S,64228003,20020131,20991231,NA,Diaphragmatic Paralysis

@@ -1,11 +1,11 @@
-sourceCode,concept_id,standard_concept
-Vancomycin-resistant ,1707687,S
-Clindamycin-resistant ,997881,S
-Erythromycin-resistant ,1746940,S
-MRSA ,4019195,S
-ESBL ,4257547,S
-Drug-resistant ,37017134,S
-Multidrug-resistant ,37017134,S
-Clindamycin-resistant ,37017134,S
-Vancomycin-resistant ,37017134,S
-Erythromycin-resistant ,37017134,S
+concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
+1707687,vancomycin,Drug,RxNorm,Ingredient,S,11124,19700101,20991231,NA,Vancomycin-resistant
+997881,clindamycin,Drug,RxNorm,Ingredient,S,2582,19700101,20991231,NA,Clindamycin-resistant
+1746940,erythromycin,Drug,RxNorm,Ingredient,S,4053,19700101,20991231,NA,Erythromycin-resistant
+4019195,Methicillin resistant Staphylococcus aureus,Observation,SNOMED,Organism,S,115329001,20020131,20991231,NA,MRSA
+4257547,Extended spectrum beta-lactamase producing bacteria,Observation,SNOMED,Organism,S,409799006,20040731,20991231,NA,ESBL
+37017134,Multidrug-resistant bacteria,Observation,SNOMED,Organism,S,713351000,20160131,20991231,NA,Drug-resistant
+37017134,Multidrug-resistant bacteria,Observation,SNOMED,Organism,S,713351000,20160131,20991231,NA,Multidrug-resistant
+37017134,Multidrug-resistant bacteria,Observation,SNOMED,Organism,S,713351000,20160131,20991231,NA,Clindamycin-resistant
+37017134,Multidrug-resistant bacteria,Observation,SNOMED,Organism,S,713351000,20160131,20991231,NA,Vancomycin-resistant
+37017134,Multidrug-resistant bacteria,Observation,SNOMED,Organism,S,713351000,20160131,20991231,NA,Erythromycin-resistant

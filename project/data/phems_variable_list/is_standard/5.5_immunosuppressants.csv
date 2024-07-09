@@ -1,7 +1,7 @@
-sourceCode,concept_id,standard_concept
-Monoclonal Antibodies ,21603754,C
-Dexamethasone ,1518254,S
-Hydrocortisone ,975125,S
-Methylprednisolone ,1506270,S
-Prednisolone ,1550557,S
-Chemotherapy ,4273629,S
+concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
+21603754,Monoclonal antibodies,Drug,ATC,ATC 4th,C,L01XC,19700101,20991231,NA,Monoclonal Antibodies
+1518254,dexamethasone,Drug,RxNorm,Ingredient,S,3264,19700101,20991231,NA,Dexamethasone
+975125,hydrocortisone,Drug,RxNorm,Ingredient,S,5492,19700101,20991231,NA,Hydrocortisone
+1506270,methylprednisolone,Drug,RxNorm,Ingredient,S,6902,19700101,20991231,NA,Methylprednisolone
+1550557,prednisolone,Drug,RxNorm,Ingredient,S,8638,19700101,20991231,NA,Prednisolone
+4273629,Chemotherapy,Procedure,SNOMED,Procedure,S,367336001,20020131,20991231,NA,Chemotherapy
