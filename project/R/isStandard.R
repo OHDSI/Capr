@@ -1,12 +1,44 @@
 library(readr)
 library(dplyr)
 
-isStandard <- function(concept_table_path, data_concepts_path, save_path, write_tables = FALSE) {
-  # Set working directory
+isStandard <- function(concept_table_path, data_concepts_path, save_path = NULL) {
+
+# Filters CONCEPT.csv from Athena vocabulary download for included concepts per
+# a table of source codes and provided concepts. The accepted format is CSV files with
+# at least fields 'sourceCode' to store source codes or source terms and 'concept_id'
+# to store concept_ids.
+# These tables are read from data_concepts_path.
+# 
+# If a save_path is provided, results are written as filtered versions of the CONCEPT
+# table to the directory save_path points to; with one table for each provided table 
+# of concepts. It is recommended to provide one table of concepts per source table.
+# If no save_path is provided, results are not saved.
+# 
+# The function will always return a tibble of non-standard concepts
+# that can be inspected in the R environment or directly printed to the console.
+# 
+# Arguments:
+#   concept_table_path:
+#     path to CONCEPT.csv from Athena vocabulary download
+#     
+#   data_concepts_path:
+#     path to directory of CSVs with fields sourceCode and concept_id
+#     see ./project/data/phems_variable/list/*.csv for examples
+#     
+#   save_path:
+#     path to directory to save filtered concept table with only included concepts
+#     ! Can be null if write_tables = FALSE
+#     
+#   write_tables:
+#     Boolean toggle for whether to save the results
+
+  
+  #  Set working directory
   path <- rstudioapi::getSourceEditorContext()$path %>%
     dirname() %>%
     dirname() %>%
     dirname()
+  original_wd <- getwd()
   setwd(path)
 
   # Read concept table
@@ -41,7 +73,7 @@ isStandard <- function(concept_table_path, data_concepts_path, save_path, write_
     # Join tables
     joined <- inner_join(concept_table, tb, by = "concept_id")
 
-    # Add non-standard concepts to vector
+    # Add non-standard concept info to vectors
     ind <- which(!(joined$standard_concept %in% c('S', 'C')))
     nonStandard <- append(nonStandard, joined$concept_id[ind])
     conceptNameNonStandard <- append(conceptNameNonStandard, joined$concept_name[ind])
@@ -50,11 +82,12 @@ isStandard <- function(concept_table_path, data_concepts_path, save_path, write_
                                      replicate(length(ind), table_name, simplify="vector"))
 
     # Save if not empty
-    if (write_tables == TRUE) {
+    if (!(is.null(save_path))) {
       if(nrow(joined) > 0) {
+        message(paste("saving file: ", table_name))
         write_csv(joined, paste0(save_path, table_name))
       } else {
-        cat("No matches found for table:", table_name, "\n")
+        message(paste("No matches found for table:", table_name, "\n"))
       }
     }
   }
@@ -65,5 +98,8 @@ isStandard <- function(concept_table_path, data_concepts_path, save_path, write_
     source_code = sourceCodeNonStandard,
     source_table = sourceTableNonStandard
   )
+  
+  # reset working directory
+  setwd(original_wd)
   return(res)
 }
