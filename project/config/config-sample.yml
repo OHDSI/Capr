@@ -1,0 +1,14 @@
+---
+##  Connection details
+# Used as input to DatabaseConnector::createConnectionDetails()
+# see the function documentation for more information
+# Please check carefully which details are required for your dbms
+# as not all of these details may be required.
+connectionDetails:
+  dbms: 'postgresql'
+  user: 'postgres'
+  password: 'postgres'
+  server: 'host/database'
+  port: 5432
+  oracleDriver: null
+  pathToDriver: './drivers/jdbc/'
