@@ -1,0 +1,9 @@
+concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
+3025315,Body weight,Measurement,LOINC,Clinical Observation,S,29463-7,19700101,20991231,NA,Weight
+0,No matching concept,Metadata,None,Undefined,NA,No matching concept,19700101,20991231,NA,Extracardiac anomalies - diagnoses
+607590,Body height,Measurement,SNOMED,Observable Entity,NA,1153637007,20210731,20991231,NA,Height
+4201235,Body surface area,Measurement,SNOMED,Observable Entity,S,301898006,20020131,20991231,NA,Body Surface Area (BSA) - Combination of weight and height
+4275564,Operation on heart,Procedure,SNOMED,Procedure,S,64915003,20020131,20991231,NA,Cardiac surgeries (Interventions)
+8582,centimeter,Unit,UCUM,Unit,S,cm,19700101,20991231,NA,Height
+9529,kilogram,Unit,UCUM,Unit,S,kg,19700101,20991231,NA,Weight
+8617,square meter,Unit,UCUM,Unit,S,m2,19700101,20991231,NA,Body Surface Area (BSA) - Combination of weight and height

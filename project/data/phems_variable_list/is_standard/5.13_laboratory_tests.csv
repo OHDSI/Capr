@@ -1,0 +1,61 @@
+concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
+3005456,Potassium [Moles/volume] in Blood,Measurement,LOINC,Lab Test,S,6298-4,19700101,20991231,NA,Potassium
+3018572,Chloride [Moles/volume] in Blood,Measurement,LOINC,Lab Test,S,2069-3,19700101,20991231,NA,Chloride
+3051825,Creatinine [Mass/volume] in Blood,Measurement,LOINC,Lab Test,S,38483-4,20041020,20991231,NA,Creatinine
+3027273,Bicarbonate [Moles/volume] in Venous blood,Measurement,LOINC,Lab Test,S,14627-4,19980116,20991231,NA,Bicarbonate (venous)
+3006140,Bilirubin.total [Moles/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,S,14631-6,19700101,20991231,NA,Bilirubin
+3013826,Glucose [Moles/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,S,14749-6,19980116,20991231,NA,Glucose
+3003458,Phosphate [Moles/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,S,14879-1,19980116,20991231,NA,Phosphate
+3024641,Urea nitrogen [Moles/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,S,14937-7,19980116,20991231,NA,Blood urea nitrogen
+3006923,Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,S,1742-6,19700101,20991231,NA,ALT
+3024561,Albumin [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,S,1751-7,19700101,20991231,NA,Albumin
+3013721,Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,S,1920-8,19700101,20991231,NA,AST
+3008152,Bicarbonate [Moles/volume] in Arterial blood,Measurement,LOINC,Lab Test,S,1960-4,19700101,20991231,NA,Bicarbonate (arterial)
+3020460,C reactive protein [Mass/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,S,1988-5,19700101,20991231,NA,CRP
+3015377,Calcium [Moles/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,S,2000-8,19700101,20991231,NA,Calcium
+3027946,Carbon dioxide [Partial pressure] in Arterial blood,Measurement,LOINC,Lab Test,S,2019-8,19700101,20991231,NA,pCO2 (arterial)
+3021447,Carbon dioxide [Partial pressure] in Venous blood,Measurement,LOINC,Lab Test,S,2021-4,19700101,20991231,NA,pCO2 (venous)
+3009542,Hematocrit [Volume Fraction] of Blood,Measurement,LOINC,Lab Test,S,20570-8,19700101,20991231,NA,Hematocrit
+3033836,Magnesium [Moles/volume] in Blood,Measurement,LOINC,Lab Test,S,2593-2,19700101,20991231,NA,Magnesium
+3027801,Oxygen [Partial pressure] in Arterial blood,Measurement,LOINC,Lab Test,S,2703-7,19700101,20991231,NA,pO2 (arterial)
+3024354,Oxygen [Partial pressure] in Venous blood,Measurement,LOINC,Lab Test,S,2705-2,19700101,20991231,NA,pO2 (venous)
+3019550,Sodium [Moles/volume] in Serum or Plasma,Measurement,LOINC,Lab Test,S,2951-2,19700101,20991231,NA,Sodium
+3047181,Lactate [Moles/volume] in Blood,Measurement,LOINC,Lab Test,S,32693-4,20021014,20991231,NA,Lactate
+3007670,Neutrophil Ab [Units/volume] in Serum,Measurement,LOINC,Lab Test,S,5171-4,19700101,20991231,NA,Neutrophil count
+3034426,Prothrombin time (PT),Measurement,LOINC,Lab Test,S,5902-2,19700101,20991231,NA,INR prothrombin time
+40762351,Hemoglobin [Moles/volume] in Blood,Measurement,LOINC,Lab Test,S,59260-0,20100329,20991231,NA,Hemoglobin
+37399161,Blood arterial pH,Measurement,SNOMED,Observable Entity,S,1007061000000103,20160401,20991231,NA,pH (arterial)
+37392672,Blood venous pH,Measurement,SNOMED,Observable Entity,S,1007071000000105,20160401,20991231,NA,pH (venous)
+4267147,Platelet count,Measurement,SNOMED,Procedure,S,61928009,20020131,20991231,NA,Platelet count
+4298431,White blood cell count,Measurement,SNOMED,Procedure,S,767002,20020131,20991231,NA,Immature WBC count
+8554,percent,Unit,UCUM,Unit,S,%,19700101,20991231,NA,Hematocrit
+8713,gram per deciliter,Unit,UCUM,Unit,S,g/dL,19700101,20991231,NA,Hemoglobin
+8713,gram per deciliter,Unit,UCUM,Unit,S,g/dL,19700101,20991231,NA,Albumin
+8636,gram per liter,Unit,UCUM,Unit,S,g/L,19700101,20991231,NA,Hemoglobin
+8636,gram per liter,Unit,UCUM,Unit,S,g/L,19700101,20991231,NA,Albumin
+44777602,kilopascal,Unit,UCUM,Unit,S,kPa,19700101,20991231,NA,pCO2 (venous)
+8840,milligram per deciliter,Unit,UCUM,Unit,S,mg/dL,19700101,20991231,NA,Creatinine
+8751,milligram per liter,Unit,UCUM,Unit,S,mg/L,19700101,20991231,NA,CRP
+8876,millimeter mercury column,Unit,UCUM,Unit,S,mm[Hg],19700101,20991231,NA,pCO2 (venous)
+8876,millimeter mercury column,Unit,UCUM,Unit,S,mm[Hg],19700101,20991231,NA,pCO2 (arterial)
+8876,millimeter mercury column,Unit,UCUM,Unit,S,mm[Hg],19700101,20991231,NA,pO2 (venous)
+8876,millimeter mercury column,Unit,UCUM,Unit,S,mm[Hg],19700101,20991231,NA,pO2 (arterial)
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Lactate
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Blood urea nitrogen
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Glucose
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Sodium
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Potassium
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Magnesium
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Chloride
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Calcium
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Phosphate
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Bicarbonate (venous)
+8753,millimole per liter,Unit,UCUM,Unit,S,mmol/L,19700101,20991231,NA,Bicarbonate (arterial)
+8555,second,Unit,UCUM,Unit,S,s,19700101,20991231,NA,INR prothrombin time
+8647,per microliter,Unit,UCUM,Unit,S,/uL,19700101,20991231,NA,Immature WBC count
+8647,per microliter,Unit,UCUM,Unit,S,/uL,19700101,20991231,NA,Neutrophil count
+8647,per microliter,Unit,UCUM,Unit,S,/uL,19700101,20991231,NA,Platelet count
+8645,unit per liter,Unit,UCUM,Unit,S,[U]/L,19700101,20991231,NA,ALT
+8645,unit per liter,Unit,UCUM,Unit,S,[U]/L,19700101,20991231,NA,AST
+8749,micromole per liter,Unit,UCUM,Unit,S,umol/L,19700101,20991231,NA,Creatinine
+8749,micromole per liter,Unit,UCUM,Unit,S,umol/L,19700101,20991231,NA,Bilirubin

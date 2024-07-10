@@ -1,0 +1,11 @@
+concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
+4096101,Measurement of oxygen saturation at periphery,Measurement,SNOMED,Procedure,S,250554003,20020131,20991231,NA,SpO2
+4152194,Systolic blood pressure,Measurement,SNOMED,Observable Entity,NA,271649006,20020131,20991231,NA,SBP (Systolic Blood Pressure)
+4154790,Diastolic blood pressure,Measurement,SNOMED,Observable Entity,NA,271650006,20020131,20991231,NA,DBP (Dyastolic Blood Pressure)
+4239408,Heart rate,Measurement,SNOMED,Observable Entity,NA,364075005,20020131,20991231,NA,Age-dependent HR
+4313591,Respiratory rate,Measurement,SNOMED,Observable Entity,NA,86290005,20020131,20991231,NA,Age-dependent RR
+8554,percent,Unit,UCUM,Unit,S,%,19700101,20991231,NA,SpO2
+8483,counts per minute,Unit,UCUM,Unit,S,{counts}/min,19700101,20991231,NA,Age-dependent HR
+8483,counts per minute,Unit,UCUM,Unit,S,{counts}/min,19700101,20991231,NA,Age-dependent RR
+8876,millimeter mercury column,Unit,UCUM,Unit,S,mm[Hg],19700101,20991231,NA,SBP (Systolic Blood Pressure)
+8876,millimeter mercury column,Unit,UCUM,Unit,S,mm[Hg],19700101,20991231,NA,DBP (Dyastolic Blood Pressure)
