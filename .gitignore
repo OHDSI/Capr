@@ -1,3 +1,6 @@
+!.gitignore
+
+# Capr
 .Rhistory
 .Rproj.user
 .DS_Store
@@ -7,3 +10,8 @@ errorReportSql.txt
 work/*
 scratch/
 inst/doc
+
+# project-specific
+project/config/*
+!project/config/config-sample.yml
+project/vocabularies/
