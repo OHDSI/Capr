@@ -1,6 +1,6 @@
 concept_id,concept_name,standard_concept,sourceCode
-37393863,Platelet count,NA,platelet count
 4175016,"Partial thromboplastin time, activated",S,activated partial thromboplastin time (APTT)
+4267147,Platelet count,S,platelet count
 8636,gram per liter,S,fibrinogen
 44777604,liter per liter,S,hematocrit
 8554,percent,S,factor VIII activity measurement

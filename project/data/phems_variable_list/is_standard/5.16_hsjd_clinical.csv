@@ -1,9 +1,9 @@
 concept_id,concept_name,standard_concept,sourceCode
-607590,Body height,NA,Height
 4201235,Body surface area,S,Body Surface Area (BSA) - Combination of weight and height
 4275564,Operation on heart,S,Cardiac surgeries (Interventions)
 8582,centimeter,S,Height
 9529,kilogram,S,Weight
 8617,square meter,S,Body Surface Area (BSA) - Combination of weight and height
 3025315,Body weight,S,Weight
+3036277,Body height,S,Height
 0,No matching concept,NA,Extracardiac anomalies - diagnoses
