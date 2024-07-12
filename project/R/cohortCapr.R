@@ -1,120 +1,95 @@
-## ----knitr, include=FALSE---------------------------------------------------------------
+## ----knitr, include=FALSE------------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 
 knitr::purl(
-  input = './cohortCapr_md.Rmd',
-  output = './cohortCapr.R'
+  input = './R/cohortCapr_md.Rmd',
+  output = './R/cohortCapr.R'
 )
 
 
-## ----activate renv, include=FALSE-------------------------------------------------------
-## R environment activation
-# Get renv library
-if (!require(renv)) {
-  install.packages("renv@v1.0.7")
-}
-# Get project path
-path <- dirname(dirname(rstudioapi::getSourceEditorContext()$path))
-if (!("renv" %in% list.files(path))) {
-  stop("Working directory is not set correctly. Make sure the working directory is set to the project directory.")
-}
-
-## Activate renv
-# renv::activate(path)
+## ----Get project configurations------------------------------------------------------------------
+connectionConfig <- config::get(config = 'config', file = './config/connection_config.yml')
+isStandardConfig <- config::get(config = 'config', file = './config/is_standard_config.yml')
 
 
-## ----housekeeping, echo=FALSE-----------------------------------------------------------
-## housekeeping
-# libraries
-library(devtools)
-library(RSQLite)
-library(tibble)
-library(DatabaseConnector)
-library(CohortGenerator)
-library(CirceR)
-library(Capr)
+## ----connect to database, eval=TRUE, include=TRUE------------------------------------------------
+#  Use connection details from configuration
+connectionDetails <- createConnectionDetails(
+  dbms = connectionConfig$dbms,
+  user = connectionConfig$user,
+  password = connectionConfig$password,
+  server = connectionConfig$server,
+  port = connectionConfig$port,
+  oracleDriver = connectionConfig$oracleDriver,
+  pathToDriver = connectionConfig$pathToDriver
+)
 
 
-## ----connection details Eunomia, eval=TRUE, include=TRUE--------------------------------
-## Eunomia GI bleed data set
-connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-
-
-## ----load data, messages=FALSE, echo=TRUE-----------------------------------------------
-## Load data
-# Connect to database
-con <- connect(connectionDetails)
-
-# List all tables
-tables <- dbListTables(con)
-
-# Exclude sqlite_sequence (contains table information)
-tables <- tables[tables != "sqlite_sequence"]
-
-lDataFramesPre <- vector("list", length=length(tables))
-names(lDataFramesPre) <- tables
-
-# Create a data.frame for each table
-for (i in seq(along=tables)) {
-  lDataFramesPre[[i]] <- dbGetQuery(conn=con, statement=paste("SELECT * FROM '", tables[[i]], "'", sep=""))
-}
-
-# Disconnect
-disconnect(con)
-
-cat("\n\nTABLES:\n  ")
-writeLines(tables, sep = "\n  ")
-
-
-## ----concept sets, echo=TRUE------------------------------------------------------------
+## ----concept sets, echo=TRUE---------------------------------------------------------------------
 ## Concept sets
-source("./conceptSets.R")
-# source("./connectVocabularies.R")
+source("./R/conceptSets.R")
 
 # Establish connection
 con <- connect(connectionDetails)
 
 conceptSets$conceptSets <- conceptSets$conceptSets %>%
   # Add details for all concepts (excl. descendants)
-  lapply(FUN = getConceptSetDetails, con = con, vocabularyDatabaseSchema = "main")
+  lapply(FUN = getConceptSetDetails,
+         con = con,
+         vocabularyDatabaseSchema = connectionConfig$vocabulary_schema)
 
 # Disconnect
 disconnect(con)
 
 
-## ----count occurences, echo=TRUE--------------------------------------------------------
+## ----count occurences, echo=TRUE-----------------------------------------------------------------
 ## Count occurrences of each concept in data
+
+# Establish connection
+con <- connect(connectionDetails)
+
 # Get countOccurrences function
-source("./countOccurrences.R")
+source("./R/countOccurrences.R")
 
 # Get links between tables and fields as input
-source("./table_linked_to_concept_field.R")
+source("./R/table_linked_to_concept_field.R")
 
 # count occurrences of each concept 'x' and print results; cardiac complications as example
-cardiacComplicationsCounts <- 
-  countOccurrences(
-    conceptSets$concepts$cardiacComplications, c("condition_occurrence", "procedure_occurrence"), 
-    lDataFramesPre, links
-  ) %>% print()
-labTestsCounts <- 
-  countOccurrences(
-    conceptSets$concepts$labTests, c("measurement"), 
-    lDataFramesPre, links
-  ) %>% print()
+# cardiacComplicationsCounts <- 
+#   countOccurrences(
+#     conceptSets$concepts$cardiacComplications, c("condition_occurrence", "procedure_occurrence"), links, con, connectionConfig$cdm_schema
+#   ) %>% print()
+# labTestsCounts <- 
+#   countOccurrences(
+#     conceptSets$concepts$labTests, c("measurement"), links, con, connectionConfig$cdm_schema
+#   ) %>% print()
+
+# Disconnect
+disconnect(con)
 
 
-## ----Standard non-standard check--------------------------------------------------------
-source('./isStandard.R')
+## ----Standard non-standard check-----------------------------------------------------------------
+source('./R/isStandard.R')
+
+# Connect to DB
+con <- connect(connectionDetails)
+
+# Return table of non-standard concepts
 nonStandard <- isStandard(
-  concept_table_path = "./project/data/vocabs_14-May-2024/CONCEPT.csv",
-  data_concepts_path = "./project/data/phems_variable_list/"
-  # save_path = "./project/data/phems_variable_list/is_standard/"
+  db_connection = con,
+  data_concepts_path = isStandardConfig$concepts_path,
+  # (optional) Save the results (with standard and non-standard concepts)
+  # save_path = isStandardConfig$save_path
   )
 
+# Disconnect
+disconnect(con)
+
+# Print all non-standard concepts
 nonStandard
 
 
-## ----Cohort definition------------------------------------------------------------------
+## ----Cohort definition---------------------------------------------------------------------------
 ## Cohort definition
 # Create cohort definition
 ch <- cohort(
@@ -156,7 +131,7 @@ ch <- cohort(
 )
 
 
-## ----json and sql-----------------------------------------------------------------------
+## ----json and sql--------------------------------------------------------------------------------
 ## Cohort json and sql
 # Generate json for cohort
 chJson <- ch %>%
@@ -171,40 +146,40 @@ sql <- CirceR::buildCohortQuery(
 )
 
 
-## ----Save cohort and concept set json---------------------------------------------------
-write(chJson, paste(path, "./json/cohort.json", sep=""))
+## ----Save cohort and concept set json------------------------------------------------------------
+write(chJson, "./json/cohort.json")
 for (cs in names(conceptSets$conceptSets)) {
   writeConceptSet(
     x = conceptSets$conceptSets[[cs]],
-    path = paste("../json/", cs, "_cs.json", sep="")
+    path = paste("./json/", cs, "_cs.json", sep="")
   )
 }
 
 
-## ----Create and generate cohorts--------------------------------------------------------
+## ----Create and generate cohorts-----------------------------------------------------------------
 # Establish connection
 con <- connect(connectionDetails)
 
 # Cohorts to create
 cohortsToCreate <- tibble::tibble(
   cohortId = 9876,
-  cohortName = "cardiac_arrest",
+  cohortName = "cohort",
   sql = sql
 )
 
 # Cohort tables
-cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = "cardiac_arrest")
+cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = "cohort")
 CohortGenerator::createCohortTables(
   connectionDetails = connectionDetails,
-  cohortDatabaseSchema = "main",
+  cohortDatabaseSchema = "cohort",
   cohortTableNames = cohortTableNames,
 )
 
 # Generate the cohorts
 cohortsGenerated <- CohortGenerator::generateCohortSet(
   connectionDetails = connectionDetails,
-  cdmDatabaseSchema = "main",
-  cohortDatabaseSchema = "main",
+  cdmDatabaseSchema = "cdm",
+  cohortDatabaseSchema = "cohort",
   cohortTableNames = cohortTableNames,
   cohortDefinitionSet = cohortsToCreate
 )
@@ -212,7 +187,7 @@ cohortsGenerated <- CohortGenerator::generateCohortSet(
 # Get cohort counts
 cohortCounts <- CohortGenerator::getCohortCounts(
   connectionDetails = connectionDetails,
-  cohortDatabaseSchema = "main",
+  cohortDatabaseSchema = "cohort",
   cohortTable = cohortTableNames$cohortTable
 )
 
@@ -223,63 +198,26 @@ disconnect(con)
 cohortCounts
 
 
-## ----retrieve updated DB----------------------------------------------------------------
+## ----retrieve updated DB-------------------------------------------------------------------------
 # Establish connection
 con <- connect(connectionDetails)
 
-# List all tables
-tables <- dbListTables(con)
+# Count unique person_id in the person table
+query_person <- 
+  paste0("SELECT COUNT(DISTINCT person_id) AS num_persons FROM ", connectionConfig$cdm_schema, ".person")
+result_person <- dbGetQuery(con, query_person)$num_persons
 
-# Exclude sqlite_sequence (contains table information)
-tables <- tables[tables != "sqlite_sequence"]
+# Count unique subject_id in the cardiac_arrest table
+query_cohort <-   
+  paste0("SELECT COUNT(DISTINCT subject_id) AS num_persons FROM ", connectionConfig$cohort_schema, ".cohort")
 
-lDataFramesPost <- vector("list", length=length(tables))
-names(lDataFramesPost) <- tables
+result_cohort <- dbGetQuery(con, query_cohort)$num_persons
 
-# Create a data.frame for each table
-for (i in seq(along=tables)) {
-  lDataFramesPost[[i]] <- dbGetQuery(conn=con, statement=paste("SELECT * FROM '", tables[[i]], "'", sep=""))
-}
+# Print results
+cat("Number of persons in dataset: ", result_person, "\n")
+cat("Number of persons in cohort: ", result_cohort, "\n")
+
 
 # Disconnect
 disconnect(con)
-
-
-cat("Number of persons in dataset: ", length(unique(lDataFramesPost$person$person_id)), 
-    "\nNumber of persons in cohort:  ", length(unique(lDataFramesPost$cardiac_arrest$subject_id)))
-
-
-## ----cohort filter----------------------------------------------------------------------
-cohort_df <- list()
-cohort_person_ids <- lDataFramesPost$cardiac_arrest$subject_id
-for (table in names(lDataFramesPost)) {
-  if ("person_id" %in% names(lDataFramesPost[[table]])) {
-    cohort_df[[table]] <- 
-      lDataFramesPost[[table]] %>%
-      dplyr::filter(person_id %in% cohort_person_ids)
-  } else {
-    cohort_df[[table]] <- lDataFramesPost[[table]]
-  }
-}
-
-
-## ----Create new dataset with 1k samples, eval=FALSE, include=FALSE----------------------
-## new_data <- list()
-## cohort_person_ids_plus <- append(cohort_person_ids,
-##   # draw a random sample to make 1000 people including the cohort subjects
-##   sample(
-##     unique(lDataFramesPost$person$person_id),
-##     # sample size = 1k
-##     size = 1000 - length(cohort_person_ids)
-##   )
-## )
-## for (table in names(lDataFramesPost)) {
-##   if ("person_id" %in% names(lDataFramesPost[[table]])) {
-##     new_data[[table]] <-
-##       lDataFramesPost[[table]] %>%
-##       dplyr::filter(person_id %in% cohort_person_ids_plus)
-##   } else {
-##     new_data[[table]] <- lDataFramesPost[[table]]
-##   }
-## }
 
