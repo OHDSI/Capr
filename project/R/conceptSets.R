@@ -78,6 +78,113 @@ conceptSets <- list(
       4020812, # source: Plastic repair of aorta and end to end anastomosis of aorta /// concept: Plastic repair of aorta and end-to-end anastomosis of aorta
       4019026, # source: Other specified: plastic repair of aorta /// concept: Plastic repair of aorta
       44510968  # source: Other specified other operations on ventricles of heart /// concept: Other specified other operations on ventricles of heart
+    ),
+    
+    vitalSigns = c(
+      3027018, # source: Age-dependent HR /// concept: Heart rate
+      3024171, # source: Age-dependent RR /// concept: Respiratory rate
+      3004249, # source: SBP (Systolic Blood Pressure) /// concept: Systolic blood pressure
+      3012888, # source: DBP (Dyastolic Blood Pressure) /// concept: Diastolic blood pressure
+      4096101 # source: SpO2 /// concept: Measurement of oxygen saturation at periphery
+    ),
+    
+    HSJDClinical = c(
+      3025315, # source: Weight /// concept: Body weight
+      3036277, # source: Height /// concept: Body height
+      4201235, # source: Body Surface Area (BSA) - Combination of weight and height /// concept: body surface area
+      4275564 # source: Cardiac surgeries (Interventions) /// concept: Operation on heart
+    ), 
+    
+    HSJDSurgery = c(
+      40490494, # source: STAT/EACTS score of surgery /// concept: Society of Thoracic Surgeons risk calculator
+      4301351, # source: Surgery start datetime, end datetime /// concept: Surgical procedure
+      4336464, # source: Cardiac bypass start datetime, end datetime /// concept: Coronary artery bypass graft
+      4201547, # source: Cross-clamping start datetime, end datetime /// concept: Placement of arterial cross clamp
+      44790138, # source: Deep hypothermic circulatory arrest start datetime, end datetime /// concept: Induced circulatory arrest
+      4272324, # source: Antegrade Cerebral Perfusion start datetime, end datetime /// concept: Cardiopulmonary bypass operation
+      4150627 # source: Extubation event /// concept: Removal of endotracheal tube
+    ),
+    
+    HSJDHospitalisation = c(
+      44803020, # source: Admission reason /// concept: Primary reason for admission
+      42539650, # source: Vasoactive infusion start datetime, end datetime /// concept: Administration of intravenous vasoactive drug
+      794078, # source: Dose of vasoactive infusion (rate - mcg/kg/hr) /// concept: vasoactive intestinal peptide
+      4179206, # source: Postop central venous catheter in/start datetime, out/end datetime /// concept: Central venous catheter
+      37158404, # source: Invasive Mechanical Ventilation LOS /// concept: Invasive mechanical ventilation
+      4177224 # source: Non-Invasive Mechanical Ventilation LOS /// concept: Non-invasive ventilation
+    ),
+    
+    HSJDcomlications = c(
+      4202832, # source: intubation /// concept: Intubation
+      4275564, # source: Cardiac surgeries (interventions) /// concept: Operation on heart
+      4044892, # source: Sternum reopening (procedure undertaken) /// concept: Procedure on sternum
+      4046868, # source: Vocal Cord Dysfunction /// concept: Vocal cord dysfunction
+      4275136, # source: Diaphragmatic Paralysis /// concept: Paralysis of diaphragm
+      253796, # source: Pneumothorax /// concept: Pneumothorax
+      44783799, # source: Tracheostomy /// concept: Exteriorization of trachea
+      44784217, # source: Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.) /// concept: Cardiac arrhythmia
+      315643, # source: Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.) /// concept: Tachyarrhythmia
+      4228448, # source: Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.) /// concept: Bradyarrhythmia
+      4068155, # source: Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.) /// concept: Atrial arrhythmia
+      4185572, # source: Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.) /// concept: Ventricular arrhythmia
+      46234437, # source: Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide) /// concept: ivabradine
+      1309944, # source: Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide) /// concept: amiodarone
+      1354860, # source: Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide) /// concept: flecainide
+      4353741, # source: Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing /// concept: Cardioversion
+      4117045, # source: Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing /// concept: Atrial overdrive pacing
+      4049398, # source: Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing /// concept: Temporary cardiac pacemaker procedure
+      4051940, # source: Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing /// concept: Permanent cardiac pacemaker procedure
+      609312 # source: Listed for heart transplantation /// concept: Awaiting transplantation of heart
+      ),
+    
+    UC3PateintCharacteristics = c(
+      434007, # source: hemophilia A diagnosis /// concept: hereditary factor VIII deficiency disease
+      4094223, # source: hemophilia A subtype/ severity /// concept: mild hereditary factor VIII deficiency disease
+      4140661, # source: hemophilia A subtype/ severity /// concept: moderate hereditary factor VIII deficiency disease
+      4056830, # source: hemophilia A subtype/ severity /// concept: severe hereditary factor VIII deficiency disease
+      3003694, # source: blood group /// concept: ABO and Rh group [Type] in Blood
+      37393608, # source: factor VIII inhibitor status /// concept: factor VIII inhibitor activity
+      4126681, # source: factor VIII inhibitor status /// concept: detected
+      9190 # source: factor VIII inhibitor status /// concept: not detected
+    ),
+    
+    UC3LabMeasurements = c(
+      3024942, # source: factor VIII inhibitor titer /// concept: coagulation factor VIII inhibitor [Units/volume] in platelet poor plasma by coagulation assay
+      3022520, # source: factor VIII activity measurement /// concept: coagulation factor VIII activated [Units/volume] in platelet poor plasma by coagulation assay
+      3011832, # source: factor VIII activity measurement /// concept: coagulation factor VIII activity [Units/volume] in platelet poor plasma by Chromogenic assay
+      43534000, # source: Von Willebrand factor activity measurement /// concept: von Willebrand factor (vWf) activity [Units/volume] in platelet poor plasma by Immunoassay
+      3002124, # source: Von Willebrand factor antigen measurement /// concept: von Willebrand factor (vWf) Ag [Units/volume] in platelet poor plasma by Immunoassay
+      3023693, # source: Von Willebrand factor propeptide measurement /// concept: von Willebrand factor (vWf) multimers in platelet poor plasma by Immunoblot
+      3042349, # source: Von Willebrand factor propeptide measurement /// concept: von Willebrand factor (vWf) cleaving protease inhibitor [Units/volume] in platelet poor plasma
+      4175016, # source: activated partial thromboplastin time (APTT) /// concept: partial thromboplastin time, activated
+      3034426, # source: Prothrombin time (PT) /// concept: prothrombin time (PT)
+      37393863, # source: platelet count /// concept: platelet count
+      3009542, # source: hematocrit /// concept: Hematocrit [Volume Fraction] of Blood
+      3016407, # source: fibrinogen /// concept: fibrinogen [mass/volume] in platelet poor plasma by coagulation assay
+      3006923, # source: ALT /// concept: alanine aminotransferase [enzymatic activity/volume] in serum or plasma
+      3013721 # source: AST /// concept: aspartate aminotransferase [enzymatic activity/volume] in serum or plasma
+    ),
+    
+    UC3Treatments = c(
+      35766745, # source: factor VIII /// concept: factor VIII 250 UNT Injection [Advate]
+      21154209, # source: factor VIII /// concept: factor VIII 250 UNT Injection [Kogenate Bayer]
+      35831239, # source: factor VIII /// concept: factor VIII 250 UNT Injection [Eloctate]
+      40745282, # source: factor VIII /// concept: emicizumab 150 MG/ML Injectable Solution [Hemlibra]
+      40492862, # source: factor VIII dose is continuous infusion or bolus dose /// concept: mode of drug administration
+      4129275, # source: factor VIII dose is continuous infusion or bolus dose /// concept: continuous infusion
+      4265597, # source: factor VIII dose is continuous infusion or bolus dose /// concept: by bolus infusions
+      1517070 # source: desmopressin /// concept: desmopressin
+      # TODO FIGURE OUT IF DESCENDENTS WORK WITH THESE CONCEPTS 
+      # TODO MAP REMAINING DRUG BRANDS 
+    ),
+    
+    UC3Surgery = c(
+      45888085, # source: Medical/ surgical procedure /// concept: medical procedure
+      967823, # source: NaCl administration during surgery /// concept: sodium chloride
+      4028665, # source: plasma administration during surgery /// concept: plasma transfusion
+      45888867, # source: datetime start anesthesia /// concept: anesthesia
+      4308716, # source: blood loss during surgery /// concept: intraoperative hemorrhage
+      37017589 # source: blood transfusion during surgery /// concept: bleeding during medical procedure requiring transfusion
     )
   )
 )
