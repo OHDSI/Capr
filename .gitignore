@@ -1,6 +1,7 @@
 !.gitignore
 
 # Capr
+.Rprofile
 .Rhistory
 .Rproj.user
 .DS_Store
@@ -13,5 +14,7 @@ inst/doc
 
 # project-specific
 project/config/*
-!project/config/config-sample.yml
-project/vocabularies/
+!project/config/*-sample.yml
+project/vocabularies/*
+project/data/*
+!project/data/phems_variable_list
