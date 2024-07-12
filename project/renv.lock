@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.4.0",
+    "Version": "4.4.1",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -92,23 +92,6 @@
       ],
       "Hash": "1ba1b2d91607742e1d53676af13f506f"
     },
-    "CommonDataModel": {
-      "Package": "CommonDataModel",
-      "Version": "0.2.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "DBI",
-        "DatabaseConnector",
-        "SqlRender",
-        "dplyr",
-        "rJava",
-        "readr",
-        "rmarkdown",
-        "stringr"
-      ],
-      "Hash": "d009324efba4c142b431202580eb09d1"
-    },
     "DBI": {
       "Package": "DBI",
       "Version": "1.2.3",
@@ -142,26 +125,6 @@
         "utils"
       ],
       "Hash": "1ef65614602c6534a6c666e872c3b647"
-    },
-    "Eunomia": {
-      "Package": "Eunomia",
-      "Version": "2.0.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "Eunomia",
-      "RemoteUsername": "ohdsi",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "79c89443c8fe424e9dc19ea10e80c1d8d36efa0c",
-      "Requirements": [
-        "CommonDataModel",
-        "DBI",
-        "RSQLite",
-        "arrow",
-        "readr",
-        "rlang"
-      ],
-      "Hash": "a4cd8b6a4182cc97a6aef3e9b0ab358e"
     },
     "ParallelLogger": {
       "Package": "ParallelLogger",
@@ -240,28 +203,6 @@
       ],
       "Hash": "e1762de0f08b14658d74989c10e2f265"
     },
-    "arrow": {
-      "Package": "arrow",
-      "Version": "16.1.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "R6",
-        "assertthat",
-        "bit64",
-        "cpp11",
-        "glue",
-        "methods",
-        "purrr",
-        "rlang",
-        "stats",
-        "tidyselect",
-        "utils",
-        "vctrs"
-      ],
-      "Hash": "d9cb18a8fc53895548150650cadde3a6"
-    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.2.0",
@@ -271,16 +212,6 @@
         "sys"
       ],
       "Hash": "cad6cf7f1d5f6e906700b9d3e718c796"
-    },
-    "assertthat": {
-      "Package": "assertthat",
-      "Version": "0.2.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "tools"
-      ],
-      "Hash": "50c838a310445e954bc13f26f26a6ecf"
     },
     "backports": {
       "Package": "backports",
@@ -440,6 +371,16 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "5d8225445acb167abf7797de48b2ee3c"
+    },
+    "config": {
+      "Package": "config",
+      "Version": "0.3.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "yaml"
+      ],
+      "Hash": "8b7222e9d9eb5178eea545c0c4d33fc2"
     },
     "cpp11": {
       "Package": "cpp11",
