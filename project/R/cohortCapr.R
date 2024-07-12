@@ -1,18 +1,18 @@
-## ----knitr, include=FALSE------------------------------------------------------------------------
+## ----knitr, include=FALSE-------------------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 
-knitr::purl(
-  input = './R/cohortCapr_md.Rmd',
-  output = './R/cohortCapr.R'
-)
+# knitr::purl(
+#   input = './R/cohortCapr_md.Rmd',
+#   output = './R/cohortCapr.R'
+# )
 
 
-## ----Get project configurations------------------------------------------------------------------
+## ----Get project configurations-------------------------------------------------------------------------
 connectionConfig <- config::get(config = 'config', file = './config/connection_config.yml')
 isStandardConfig <- config::get(config = 'config', file = './config/is_standard_config.yml')
 
 
-## ----connect to database, eval=TRUE, include=TRUE------------------------------------------------
+## ----connect to database, eval=TRUE, include=TRUE-------------------------------------------------------
 #  Use connection details from configuration
 connectionDetails <- createConnectionDetails(
   dbms = connectionConfig$dbms,
@@ -25,7 +25,7 @@ connectionDetails <- createConnectionDetails(
 )
 
 
-## ----concept sets, echo=TRUE---------------------------------------------------------------------
+## ----concept sets, echo=TRUE----------------------------------------------------------------------------
 ## Concept sets
 source("./R/conceptSets.R")
 
@@ -42,7 +42,7 @@ conceptSets$conceptSets <- conceptSets$conceptSets %>%
 disconnect(con)
 
 
-## ----count occurences, echo=TRUE-----------------------------------------------------------------
+## ----count occurences, echo=TRUE------------------------------------------------------------------------
 ## Count occurrences of each concept in data
 
 # Establish connection
@@ -68,7 +68,7 @@ source("./R/table_linked_to_concept_field.R")
 disconnect(con)
 
 
-## ----Standard non-standard check-----------------------------------------------------------------
+## ----Standard non-standard check------------------------------------------------------------------------
 source('./R/isStandard.R')
 
 # Connect to DB
@@ -89,7 +89,7 @@ disconnect(con)
 nonStandard
 
 
-## ----Cohort definition---------------------------------------------------------------------------
+## ----Cohort definition----------------------------------------------------------------------------------
 ## Cohort definition
 # Create cohort definition
 ch <- cohort(
@@ -131,7 +131,7 @@ ch <- cohort(
 )
 
 
-## ----json and sql--------------------------------------------------------------------------------
+## ----json and sql---------------------------------------------------------------------------------------
 ## Cohort json and sql
 # Generate json for cohort
 chJson <- ch %>%
@@ -146,7 +146,7 @@ sql <- CirceR::buildCohortQuery(
 )
 
 
-## ----Save cohort and concept set json------------------------------------------------------------
+## ----Save cohort and concept set json-------------------------------------------------------------------
 write(chJson, "./json/cohort.json")
 for (cs in names(conceptSets$conceptSets)) {
   writeConceptSet(
@@ -156,7 +156,7 @@ for (cs in names(conceptSets$conceptSets)) {
 }
 
 
-## ----Create and generate cohorts-----------------------------------------------------------------
+## ----Create and generate cohorts------------------------------------------------------------------------
 # Establish connection
 con <- connect(connectionDetails)
 
@@ -198,7 +198,7 @@ disconnect(con)
 cohortCounts
 
 
-## ----retrieve updated DB-------------------------------------------------------------------------
+## ----retrieve updated DB--------------------------------------------------------------------------------
 # Establish connection
 con <- connect(connectionDetails)
 
