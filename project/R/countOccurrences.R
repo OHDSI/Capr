@@ -1,66 +1,56 @@
-countOccurrences <- function(v, tables, list_of_df, links) {
+library(DBI)
+library(dplyr)
+library(tibble)
+
+countOccurrences <- function(v, tables, links, db_connection, schema) {
   stopifnot(is.vector(v))
   stopifnot(is.character(tables) & is.vector(tables))
-  stopifnot(is.list(list_of_df))
   stopifnot(is.list(links))
+  stopifnot(is.character(schema))
   
-  if (!any(tables %in% names(links))) {
-    stop("Table is not one of the tables listed underneath with linked concept_id fields, \nPlease provide a different table or update the table -- concept_id links. \nTerminating")
-  }
-  
-  unique_person_ids <- vector("list", length(v))
-  records <- numeric(length(v))
-  records_descendant <- numeric(length(v))  
-  unique_person_ids_descendant <- vector("list", length(v))
+  # Placeholder for results
+  results <- list()
   
   for (table in tables) {
-    df <- list_of_df[[table]]
     concept_id_field <- links[[table]]
-    if (!all(c("person_id", concept_id_field) %in% names(df))) {
-      stop("Data frame does not contain expected columns.")
-    }
-    anc <- list_of_df$concept_ancestor$ancestor_concept_id
-    desc <- list_of_df$concept_ancestor$descendant_concept_id
-    
-    if (!all(c("ancestor_concept_id", "descendant_concept_id") %in% names(list_of_df$concept_ancestor))) {
-      stop("Concept ancestor data frame does not contain expected columns.")
-    }
     
     for (i in seq_along(v)) {
       val <- v[i]
-      direct_df <- df[df[, concept_id_field] == val, ]
-      desc_val <- c(anc[which(desc == val)], desc[which(anc == val)]) %>% unique()
-      descendant_df <- df[df[, concept_id_field] %in% desc_val, ]
       
-      # Counting total records directly
-      if (nrow(direct_df) > 0) {
-        unique_person_ids[[i]] <- unique(c(unique_person_ids[[i]], direct_df$person_id))
-        records[i] <- records[i] + nrow(direct_df)
-      }
+      # Direct counts SQL query
+      direct_sql <- 
+        sprintf(
+          "SELECT COUNT(DISTINCT person_id) AS count_persons, COUNT(*) AS count_records FROM %s WHERE %s = %d",
+          paste0(schema, ".", table),
+          concept_id_field,
+          val
+        )
+      direct_res <- dbGetQuery(db_connection, direct_sql)
       
-      # Counting total records for descendants
-      if (nrow(descendant_df) > 0) {
-        unique_person_ids_descendant[[i]] <- unique(c(unique_person_ids_descendant[[i]], descendant_df$person_id))
-        records_descendant[i] <- records_descendant[i] + nrow(descendant_df)
-      }
+      # Descendant counts SQL query
+      descendant_sql <- sprintf(
+        "SELECT COUNT(DISTINCT a.person_id) AS descendant_count_person, COUNT(*) AS descendant_count_record FROM %s a JOIN %s.concept_ancestor b ON a.%s = b.descendant_concept_id WHERE b.ancestor_concept_id = %d",
+        paste0(schema, ".", table), # Reference the target table within the schema
+        schema, # Explicitly reference the schema for the concept_ancestor table
+        concept_id_field,
+        val)
+      descendant_res <- dbGetQuery(db_connection, descendant_sql)
+      
+      # Combine results
+      results[[i]] <- tibble(
+        concept_id = val,
+        count_persons = direct_res$count_persons,
+        count_records = direct_res$count_records,
+        descendant_count_person = descendant_res$descendant_count_person,
+        descendant_count_record = descendant_res$descendant_count_record
+      )
     }
   }
   
-  count_persons <- sapply(unique_person_ids, length)
-  count_records <- records
-  descendant_count_person <- sapply(unique_person_ids_descendant, length)
-  descendant_count_record <- records_descendant
+  # Combine all results into a single data frame
+  final_res <- bind_rows(results) %>%
+    mutate(concept_name = names(v)) %>%
+    arrange(desc(count_records + descendant_count_record))
   
-  res <- tibble::tibble(
-    concept_name = names(v),
-    concept_id = v,
-    count_persons = count_persons,
-    count_records = count_records,
-    descendant_count_person = descendant_count_person,
-    descendant_count_record = descendant_count_record,
-    included = (count_records + descendant_count_record) > 0
-  ) %>%
-    dplyr::arrange(dplyr::desc(count_records + descendant_count_record))
-  
-  return(res)
+  return(final_res)
 }
