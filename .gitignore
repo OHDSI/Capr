@@ -18,3 +18,4 @@ project/config/*
 project/vocabularies/*
 project/data/*
 !project/data/phems_variable_list
+project/json/*
