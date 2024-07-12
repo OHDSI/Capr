@@ -1,12 +1,12 @@
-concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
-1507835,vasopressin (USP),Drug,RxNorm,Ingredient,S,11149,19700101,20991231,NA,Vasopressin
-1337720,dobutamine,Drug,RxNorm,Ingredient,S,3616,19700101,20991231,NA,Dobutamine
-1337860,dopamine,Drug,RxNorm,Ingredient,S,3628,19700101,20991231,NA,Dopamine
-1143374,ephedrine,Drug,RxNorm,Ingredient,S,3966,19700101,20991231,NA,Ephedrine
-1343916,epinephrine,Drug,RxNorm,Ingredient,S,3992,19700101,20991231,NA,Epinephrine
-1368671,milrinone,Drug,RxNorm,Ingredient,S,52769,19700101,20991231,NA,Milrinone
-19119253,terlipressin,Drug,RxNorm,Ingredient,S,57048,19700101,20991231,NA,Terlipressin
-1183554,isoproterenol,Drug,RxNorm,Ingredient,S,6054,19700101,20991231,NA,Isoproterenol
-40173184,levosimendan,Drug,RxNorm,Ingredient,S,73107,20100228,20991231,NA,Levosimendan
-1321341,norepinephrine,Drug,RxNorm,Ingredient,S,7512,19700101,20991231,NA,Norepinephrine
-1135766,phenylephrine,Drug,RxNorm,Ingredient,S,8163,19700101,20991231,NA,Phenylephrine
+concept_id,concept_name,standard_concept,sourceCode
+1507835,vasopressin (USP),S,Vasopressin
+1337720,dobutamine,S,Dobutamine
+1337860,dopamine,S,Dopamine
+1143374,ephedrine,S,Ephedrine
+1343916,epinephrine,S,Epinephrine
+1368671,milrinone,S,Milrinone
+19119253,terlipressin,S,Terlipressin
+1183554,isoproterenol,S,Isoproterenol
+40173184,levosimendan,S,Levosimendan
+1321341,norepinephrine,S,Norepinephrine
+1135766,phenylephrine,S,Phenylephrine

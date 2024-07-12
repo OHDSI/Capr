@@ -1,0 +1,21 @@
+concept_id,concept_name,standard_concept,sourceCode
+4096101,Measurement of oxygen saturation at periphery,S,SpO2
+8483,counts per minute,S,HR
+8483,counts per minute,S,RR
+9529,kilogram,S,Weight
+8554,percent,S,SpO2
+586323,degree Celsius,S,Body temperature
+8504,gram,S,Weight
+8587,milliliter,S,Urine output
+44777613,milliliter per hour,S,Urine output
+33014,milliliter per kilogram per 24 hours,S,Urine output
+8876,millimeter mercury column,S,SBP (Systolic Blood Pressure)
+8876,millimeter mercury column,S,DBP (Diastolic blood pressure)
+3025315,Body weight,S,Weight
+3020891,Body temperature,S,Body temperature
+3012888,Diastolic blood pressure,S,DBP (Diastolic blood pressure)
+3004249,Systolic blood pressure,S,SBP (Systolic Blood Pressure)
+3014315,Urine output,S,Urine output
+3024171,Respiratory rate,S,RR
+1004025,Heart rate,C,HR
+0,No matching concept,NA,Urine output

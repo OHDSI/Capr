@@ -1,9 +1,9 @@
-concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
-0,No matching concept,Metadata,None,Undefined,NA,No matching concept,19700101,20991231,NA,Aristotle's score of surgery
-44790138,Induced circulatory arrest,Procedure,SNOMED,Procedure,S,232211000000108,20061002,20991231,NA,"Deep hypothermic circulatory arrest start datetime, end datetime"
-4336464,Coronary artery bypass graft,Procedure,SNOMED,Procedure,S,232717009,20020131,20991231,NA,"Cardiac bypass start datetime, end datetime"
-4150627,Removal of endotracheal tube,Procedure,SNOMED,Procedure,S,271280005,20020131,20991231,NA,Extubation event
-4201547,Placement of arterial cross clamp,Procedure,SNOMED,Procedure,S,301880007,20020131,20991231,NA,"Cross-clamping start datetime, end datetime"
-4301351,Surgical procedure,Procedure,SNOMED,Procedure,S,387713003,20030131,20991231,NA,"Surgery start datetime, end datetime"
-40490494,Society of Thoracic Surgeons risk calculator,Measurement,SNOMED,Staging / Scales,S,448586003,20110731,20991231,NA,STAT/EACTS score of surgery
-4272324,Cardiopulmonary bypass operation,Procedure,SNOMED,Procedure,S,63697000,20020131,20991231,NA,"Antegrade Cerebral Perfusion start datetime, end datetime"
+concept_id,concept_name,standard_concept,sourceCode
+44790138,Induced circulatory arrest,S,"Deep hypothermic circulatory arrest start datetime, end datetime"
+4336464,Coronary artery bypass graft,S,"Cardiac bypass start datetime, end datetime"
+4150627,Removal of endotracheal tube,S,Extubation event
+4201547,Placement of arterial cross clamp,S,"Cross-clamping start datetime, end datetime"
+4301351,Surgical procedure,S,"Surgery start datetime, end datetime"
+40490494,Society of Thoracic Surgeons risk calculator,S,STAT/EACTS score of surgery
+4272324,Cardiopulmonary bypass operation,S,"Antegrade Cerebral Perfusion start datetime, end datetime"
+0,No matching concept,NA,Aristotle's score of surgery

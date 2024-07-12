@@ -1,5 +1,5 @@
-concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
-4123933,Admission to pediatric intensive care unit,Observation,SNOMED,Procedure,S,305353001,20020131,20991231,NA,ICU admission (start datetime and end datetime)
-8715,Hospital admission,Observation,SNOMED,Procedure,S,32485007,20020131,20991231,NA,Total hospital admission (start datetime and end datetime)
-4161811,Admission to high dependency unit,Observation,SNOMED,Procedure,S,398162007,20030731,20991231,NA,HDU admission (start datetime and end datetime)
-36675203,Admission to pediatric cardiology department,Observation,SNOMED,Procedure,S,771550009,20190131,20991231,NA,Cardiology ward admission (start datetime and end datetime)
+concept_id,concept_name,standard_concept,sourceCode
+4123933,Admission to pediatric intensive care unit,S,ICU admission (start datetime and end datetime)
+8715,Hospital admission,S,Total hospital admission (start datetime and end datetime)
+4161811,Admission to high dependency unit,S,HDU admission (start datetime and end datetime)
+36675203,Admission to pediatric cardiology department,S,Cardiology ward admission (start datetime and end datetime)

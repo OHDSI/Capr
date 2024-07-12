@@ -1,0 +1,17 @@
+concept_id,concept_name,standard_concept,sourceCode
+44777602,kilopascal,S,pCO2
+44777602,kilopascal,S,PaO2
+8876,millimeter mercury column,S,pCO2
+8876,millimeter mercury column,S,PaO2
+8753,millimole per liter,S,HCO3
+8753,millimole per liter,S,Base excess
+3009343,pH of Capillary blood,S,pH
+3027273,Bicarbonate [Moles/volume] in Venous blood,S,HCO3
+3003129,Base excess in Capillary blood by calculation,S,Base excess
+3002032,Base excess in Venous blood by calculation,S,Base excess
+3015235,Bicarbonate [Moles/volume] in Capillary blood,S,HCO3
+3023024,Carbon dioxide [Partial pressure] in Capillary blood,S,pCO2
+3021447,Carbon dioxide [Partial pressure] in Venous blood,S,pCO2
+3028626,Oxygen [Partial pressure] in Capillary blood,S,PaO2
+3024354,Oxygen [Partial pressure] in Venous blood,S,PaO2
+3012544,pH of Venous blood,S,pH

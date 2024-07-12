@@ -1,0 +1,37 @@
+concept_id,concept_name,standard_concept,sourceCode
+37393863,Platelet count,NA,platelet count
+4175016,"Partial thromboplastin time, activated",S,activated partial thromboplastin time (APTT)
+8636,gram per liter,S,fibrinogen
+44777604,liter per liter,S,hematocrit
+8554,percent,S,factor VIII activity measurement
+8554,percent,S,Von Willebrand factor activity measurement
+8554,percent,S,Von Willebrand factor antigen measurement
+8554,percent,S,Prothrombin time (PT)
+8554,percent,S,hematocrit
+44777588,billion cells per liter,S,platelet count
+44777562,Bethesda unit per milliliter,S,factor VIII inhibitor titer
+9332,international unit per deciliter,S,factor VIII activity measurement
+9332,international unit per deciliter,S,Von Willebrand factor activity measurement
+9332,international unit per deciliter,S,Von Willebrand factor antigen measurement
+8985,international unit per milliliter,S,factor VIII activity measurement
+8985,international unit per milliliter,S,Von Willebrand factor activity measurement
+8985,international unit per milliliter,S,Von Willebrand factor antigen measurement
+8523,ratio,S,activated partial thromboplastin time (APTT)
+8523,ratio,S,Prothrombin time (PT)
+8555,second,S,activated partial thromboplastin time (APTT)
+8555,second,S,Prothrombin time (PT)
+8645,unit per liter,S,ALT
+8645,unit per liter,S,AST
+8763,unit per milliliter,S,Von Willebrand factor propeptide measurement
+3024942,Coagulation factor VIII inhibitor [Units/volume] in Platelet poor plasma by Coagulation assay,S,factor VIII inhibitor titer
+3011832,Coagulation factor VIII activity [Units/volume] in Platelet poor plasma by Chromogenic method,S,factor VIII activity measurement
+3006923,Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma,S,ALT
+3013721,Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma,S,AST
+3009542,Hematocrit [Volume Fraction] of Blood,S,hematocrit
+3022520,Coagulation factor VIII activated [Units/volume] in Platelet poor plasma by Coagulation assay,S,factor VIII activity measurement
+3016407,Fibrinogen [Mass/volume] in Platelet poor plasma by Coagulation assay,S,fibrinogen
+3042349,von Willebrand factor (vWf) cleaving protease inhibitor [Units/volume] in Platelet poor plasma,S,Von Willebrand factor propeptide measurement
+3034426,Prothrombin time (PT),S,Prothrombin time (PT)
+3002124,von Willebrand factor (vWf) Ag [Units/volume] in Platelet poor plasma by Immunoassay,S,Von Willebrand factor antigen measurement
+3023693,von Willebrand factor (vWf) multimers in Platelet poor plasma by Immunoblot,S,Von Willebrand factor propeptide measurement
+43534000,von Willebrand factor (vWf).activity [Units/volume] in Platelet poor plasma by Immunoassay,S,Von Willebrand factor activity measurement

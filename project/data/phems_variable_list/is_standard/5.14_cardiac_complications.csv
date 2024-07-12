@@ -1,13 +1,13 @@
-concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,sourceCode
-4051330,Continuous venovenous hemofiltration,Procedure,SNOMED,Procedure,S,233585000,20020131,20991231,NA,LCOS - renal support (CVVH/ PD)
-4123933,Admission to pediatric intensive care unit,Observation,SNOMED,Procedure,S,305353001,20020131,20991231,NA,ICU ward stay
-4295705,Exploratory incision,Procedure,SNOMED,Procedure,S,76145000,20020131,20991231,NA,Surgical injury - Reexplore for bleeding
-377091,Seizure,Condition,SNOMED,Clinical Finding,S,91175000,20020131,20991231,NA,Neurological injury - seizure
-439847,Intracranial hemorrhage,Condition,SNOMED,Disorder,S,1386000,20020131,20991231,NA,Neurological injury - intracranial haemmhorage/ intracranial bleeding
-4308537,Injury to blood vessel during surgery,Condition,SNOMED,Disorder,S,213266005,20020131,20991231,NA,Surgical injury - Blood Loss
-321042,Cardiac arrest,Condition,SNOMED,Disorder,S,410429000,20040731,20991231,NA,LCOS - Cardiac arrest
-443454,Cerebral infarction,Condition,SNOMED,Disorder,S,432504007,20080731,20991231,NA,Neurological injury - infarction
-4185565,Low cardiac output syndrome,Condition,SNOMED,Disorder,S,44088000,20020131,20991231,NA,Low cardiac output state (LCOS) - ECMO
-4185565,Low cardiac output syndrome,Condition,SNOMED,Disorder,S,44088000,20020131,20991231,NA,LCOS - NEC requiring treatment
-42537043,CLABSI - central line associated bloodstream infection,Condition,SNOMED,Disorder,S,736152001,20180131,20991231,NA,CVL infections
-4306136,Chylothorax,Condition,SNOMED,Disorder,S,83035003,20020131,20991231,NA,Surgical injury - Chylothorax
+concept_id,concept_name,standard_concept,sourceCode
+4051330,Continuous venovenous hemofiltration,S,LCOS - renal support (CVVH/ PD)
+4123933,Admission to pediatric intensive care unit,S,ICU ward stay
+4295705,Exploratory incision,S,Surgical injury - Reexplore for bleeding
+377091,Seizure,S,Neurological injury - seizure
+439847,Intracranial hemorrhage,S,Neurological injury - intracranial haemmhorage/ intracranial bleeding
+4308537,Injury to blood vessel during surgery,S,Surgical injury - Blood Loss
+321042,Cardiac arrest,S,LCOS - Cardiac arrest
+443454,Cerebral infarction,S,Neurological injury - infarction
+4185565,Low cardiac output syndrome,S,Low cardiac output state (LCOS) - ECMO
+4185565,Low cardiac output syndrome,S,LCOS - NEC requiring treatment
+42537043,CLABSI - central line associated bloodstream infection,S,CVL infections
+4306136,Chylothorax,S,Surgical injury - Chylothorax
