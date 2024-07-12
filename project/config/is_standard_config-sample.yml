@@ -1,0 +1,6 @@
+---
+default:
+  conceptsPath: null
+
+config:
+  conceptsPath: '<path>'

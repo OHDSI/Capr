@@ -1,0 +1,27 @@
+---
+## Default configuration values
+#    Necessary for config library, not used in R file
+#    No need to change these values
+default:
+  dbms: null
+  user: null
+  password: null
+  server: null
+  port: null
+  oracleDriver: null
+  pathToDriver: null
+
+## Connection details
+#    Replace with your connection details
+#    Used as input to DatabaseConnector::createConnectionDetails()
+#    see the function documentation for more information
+#    Please check carefully which details are required for your dbms
+#    as not all of these details may be required.
+connectionDetails:
+  dbms: 'postgresql'
+  user: 'postgres'
+  password: 'postgres'
+  server: 'host/database'
+  port: 5432
+  oracleDriver: null
+  pathToDriver: './drivers/jdbc/'
