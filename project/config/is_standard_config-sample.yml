@@ -1,6 +1,8 @@
 ---
 default:
   conceptsPath: null
+  savePath: null  # (optional) if saving standard concept check results
 
 config:
   conceptsPath: '<path>'
+  savaPath: '<OPTIONAL path>'
