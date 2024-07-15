@@ -71,36 +71,59 @@ source("./R/table_linked_to_concept_field.R")
 #   countOccurrences(
 #     conceptSets$concepts$cardiacComplications, c("condition_occurrence", "procedure_occurrence"), links, con, connectionConfig$cdm_schema
 #   ) %>% print()
-# labTestsCounts <- 
-#   countOccurrences(
-#     conceptSets$concepts$labTests, c("measurement"), links, con, connectionConfig$cdm_schema
-#   ) %>% print()
+labTestsCounts <-
+  countOccurrences(
+    conceptSets$concepts$labTests, c("measurement"), links, con, connectionConfig$cdm_schema
+  ) %>% print()
 
 # Disconnect
 disconnect(con)
 ```
 
-## Standard and non-standard concepts
+## Standard and non-standard concepts given a list of concept IDs
 ```{r Standard non-standard check}
-source('./R/isStandard.R')
-
 # Connect to DB
 con <- connect(connectionDetails)
 
 # Return table of non-standard concepts
+source('./R/isStandard.R')
 nonStandard <- isStandard(
   db_connection = con,
   data_concepts_path = isStandardConfig$concepts_path,
   # (optional) Save the results (with standard and non-standard concepts)
-  # save_path = isStandardConfig$save_path
-  )
+  save_path = isStandardConfig$save_path
+)
 
 # Disconnect
 disconnect(con)
 
 # Print all non-standard concepts
 nonStandard
+nonStandardCS
 ```
+## Standard and non-standard concepts given a concept set
+```{r Standard non-standard check concept set}
+# connect to DB
+con <- connect(connectionDetails)
+
+# run for labTests conceptSet
+labTests <- conceptSets$conceptSets$labTests
+
+# check standardness across concept set
+source('./R/isStandardCS.R')
+nonStandardCS <- isStandardCS(
+  db_connection = con,
+  conceptSet = conceptSets$conceptSets$labTests,
+  save_path = isStandardConfig$save_path
+)
+
+# Disconnect
+disconnect(con)
+
+# print results (non-standard)
+nonStandardCS
+```
+
 
 ## Initial event cohort
 People having any of the following:
