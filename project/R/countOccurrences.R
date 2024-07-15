@@ -1,8 +1,34 @@
-library(DBI)
-library(dplyr)
-library(tibble)
-
+#' Count Occurrences of Values in Database Tables
+#'
+#' This function counts the occurrences of specified concept ids within specified tables in a OMOP database, 
+#' including direct occurrences and occurrences through descendants, based on a provided schema and links.
+#' It returns a tibble summarizing the counts across persons and across records.
+#'
+#' @param v A vector of concept_ids to count occurrences for.
+#' @param tables A character vector of CDM table names to search within.
+#' @param links A list linking each table to its respective concept_id field.
+#' @param db_connection A database connection object through which queries will be executed.
+#' @param schema The database schema in which the tables are located.
+#'
+#' @return A tibble with columns for the number of times any concept from 'v' occurs: direct count of persons, 
+#'         direct count of records, descendant count of persons, and descendant count of records. 
+#'         The tibble also includes the concept names derived from `v` and is arranged by the total 
+#'         record count (direct + descendant).
+#'
+#' @examples
+#' # Assuming `db_connection` is a valid database connection, `schema` is set to "public",
+#' # `tables` contains the names of the tables to search, `links` defines the relevant fields,
+#' # and `v` contains the values to search for:
+#' results <- countOccurrences(v = c(1, 2), tables = c("observation", "condition_occurrence"), 
+#'                             links = list(observation = "observation_concept_id", condition_occurrence = "condition_concept_id", ...), 
+#'                             db_connection = db_connection, schema = "public")
+#'
+#' @export
 countOccurrences <- function(v, tables, links, db_connection, schema) {
+  library(DBI)
+  library(dplyr)
+  library(tibble)
+
   stopifnot(is.vector(v))
   stopifnot(is.character(tables) & is.vector(tables))
   stopifnot(is.list(links))
