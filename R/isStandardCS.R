@@ -13,28 +13,28 @@
 #' @examples
 #' # Assuming you have a concept set `conceptSet`:
 #' non_standard_concepts <- isStandardCS(db_conn, conceptSet, "path/to/save_standard_AND_non_standard/")
-#' 
+#'
 #' @export
 isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
   library(readr)
   library(dplyr)
   library(DBI)
-  
+
   # Initialize vectors for non-standard concepts
   nonStandard <- c()
   conceptNameNonStandard <- c()
   sourceCodeNonStandard <- c()
   sourceTableNonStandard <- c()
-  
+
   # Get concept set details
   cs <- conceptSet@Expression
-  
+
   # initialize vectors
   concept_name = c()
   concept_id = c()
   concept_set = c()
   standard = c()
-  
+
   for (concept in cs) {
     concept_name <- append(concept_name, concept@Concept@concept_name)
     concept_id <- append(concept_id, concept@Concept@concept_id)
@@ -42,7 +42,7 @@ isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
   }
   cs_name <- conceptSet@Name
   concept_set <- rep.int(cs_name, length(concept_id))
-  
+
   # Filter out standard and classification concepts; keep non-standard and NA
   df <- data.frame(
     concept_name,
@@ -50,24 +50,24 @@ isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
     concept_set,
     standard
   )
-  
+
   # Save if not empty and save_path is provided
   if (!is.null(save_path) && nrow(df) > 0) {
-    message(paste("saving file: CONCEPTSET_", cs_name))
+    message(paste0("saving file: CONCEPTSET_", cs_name))
     write_csv(df, paste0(save_path, "/CONCEPTSET_", cs_name, ".csv"))
   } else if (is.null(save_path)) {
     message("No save path specified; returning non-standard concepts\n")
   } else {
-    message(paste("No matches found for table:", table_name, "\n"))
+    message(paste0("No matches found for concept set: ", table_name, "\n"))
   }
-  
-  
+
+
   # NonStandard concepts
   res <- df %>% filter(standard != "S" & standard != "C" | is.na(standard)) %>% tibble::tibble()
   if (nrow(res) == 0) {
-    message("No non-standard concepts found in concept set ", cs_name)
+    message("No non-standard concepts found in concept set: ", cs_name)
   } else {
-    message(paste("Found ", nrow(res), " non-standard concepts in concept set ", cs_name))
+    message(paste0("Found ", nrow(res), " non-standard concepts in concept set: ", cs_name))
   }
   return(res)
 }

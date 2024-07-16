@@ -15,16 +15,16 @@
 #' @examples
 #' # Assuming you have a valid DBI connection `db_conn` and your tables are located in "path/to/data_concepts":
 #' non_standard_concepts <- isStandard(db_conn, "path/to/data_concepts", "path/to/save_non_standard/")
-#' 
+#'
 #' @importFrom readr read_csv write_csv
 #' @importFrom dplyr mutate across filter select inner_join
 #' @importFrom DBI dbGetQuery
 #' @export
-isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {  
+isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {
   library(readr)
   library(dplyr)
   library(DBI)
-  
+
   # Read concept table from SQL database
   concept_table_query <- "SELECT concept_id, concept_name, standard_concept FROM cdm.concept"
   concept_table <- dbGetQuery(db_connection, concept_table_query) %>%
@@ -36,20 +36,20 @@ isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {
   conceptNameNonStandard <- c()
   sourceCodeNonStandard <- c()
   sourceTableNonStandard <- c()
-  
+
   # Get tables from data_concepts_path
   tables <- list.files(path = data_concepts_path, pattern = "\\.csv$", full.names = TRUE)
-  
+
   # Stop if path does not point towards dir of CSVs
   if (length(tables) == 0) {
     stop("No CSV files found in the specified directory.")
   }
-  
+
   for (table_path in tables) {
     table_name <- basename(table_path)
-    
+
     # Read and prepare table
-    tb <- 
+    tb <-
       readr::read_csv(table_path, col_types = cols(sourceCode = col_character(), concept_id = col_character())) %>%
       mutate(across(c(sourceCode, concept_id), ~gsub("\u00A0", " ", .))) %>%
       mutate(across(c(sourceCode, concept_id), ~trimws(.))) %>%
@@ -57,7 +57,7 @@ isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {
       mutate(concept_id = tolower(concept_id),
              concept_id = as.character(concept_id)) %>%
       select(sourceCode, concept_id)
-    
+
     # Join tables
     joined <- inner_join(concept_table, tb, by = "concept_id")
 
@@ -66,12 +66,18 @@ isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {
     nonStandard <- append(nonStandard, joined$concept_id[ind])
     conceptNameNonStandard <- append(conceptNameNonStandard, joined$concept_name[ind])
     sourceCodeNonStandard <- append(sourceCodeNonStandard, joined$sourceCode[ind])
-    sourceTableNonStandard <- append(sourceTableNonStandard, 
+    sourceTableNonStandard <- append(sourceTableNonStandard,
                                      replicate(length(ind), table_name, simplify="vector"))
-    
+
+    if (length(ind) == 0) {
+      message("No non-standard concepts found in list of concepts: ", table_name)
+    } else {
+      message(paste("Found ", length(ind), " non-standard concepts in list of concepts: ", table_name))
+    }
+
     # Save if not empty and save_path is provided
     if (!is.null(save_path) && nrow(joined) > 0) {
-      message(paste("saving file: ", table_name))
+      message(paste0("saving file: ", table_name))
       readr::write_csv(joined, paste0(save_path, "/", table_name))
     } else if (is.null(save_path)) {
       next
@@ -79,7 +85,7 @@ isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {
       message(paste("No matches found for concept set.\n"))
     }
   }
-  
+
   # Create table of non-standard concepts
   res <- tibble::tibble(
     concept_id = nonStandard,
@@ -87,6 +93,7 @@ isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {
     source_code = sourceCodeNonStandard,
     source_table = unlist(sourceTableNonStandard)
   )
-  
+  message(paste0("Finished checking for non-standard concepts.\n", nrow(res), " non-standard concepts found across tables."))
+
   return(res)
 }

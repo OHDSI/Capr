@@ -15,8 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r Get project configurations}
-connectionConfig <- config::get(config = 'config', file = './config/connection_config.yml')
-isStandardConfig <- config::get(config = 'config', file = './config/is_standard_config.yml')
+connectionConfig <- config::get(config = 'config', file = './inst/config/connection_config.yml')
+config_oth <- config::get(config = 'config', file = './inst/config/config.yml')
 ```
 
 ## Connect to DB
@@ -54,7 +54,7 @@ disconnect(con)
 
 ## Concept counts
 Retrieve counts for a concept set
-```{r count occurences, echo=TRUE}
+```{r count occurences}
 ## Count occurrences of each concept in data
 
 # Establish connection
@@ -89,9 +89,9 @@ con <- connect(connectionDetails)
 source('./R/isStandard.R')
 nonStandard <- isStandard(
   db_connection = con,
-  data_concepts_path = isStandardConfig$concepts_path,
+  data_concepts_path = config_oth$concepts_path,
   # (optional) Save the results (with standard and non-standard concepts)
-  save_path = isStandardConfig$save_path
+  save_path = config_oth$save_path_isStandard
 )
 
 # Disconnect
@@ -99,7 +99,6 @@ disconnect(con)
 
 # Print all non-standard concepts
 nonStandard
-nonStandardCS
 ```
 ## Standard and non-standard concepts given a concept set
 ```{r Standard non-standard check concept set}
@@ -114,7 +113,7 @@ source('./R/isStandardCS.R')
 nonStandardCS <- isStandardCS(
   db_connection = con,
   conceptSet = conceptSets$conceptSets$labTests,
-  save_path = isStandardConfig$save_path
+  save_path = config_oth$save_path_isStandard
 )
 
 # Disconnect
@@ -134,8 +133,8 @@ limit to first/earliest occurrence of any of the above measurements (+descendant
 # Create cohort definition
 ch <- cohort(
   entry = entry(
-    # enter patients < 80 years old who have had a lab test
-    measurement(conceptSets$conceptSets$labTests, age(lt(80))),
+    # enter patients who have had a lab test
+    measurement(conceptSets$conceptSets$labTests),
     observationWindow = continuousObservation(0, 0),
     primaryCriteriaLimit = "All"
   ),
@@ -189,11 +188,11 @@ sql <- CirceR::buildCohortQuery(
 
 Save the cohort and concept set jsons; these can be imported into ATLAS
 ```{r Save cohort and concept set json}
-write(chJson, "./json/cohort.json")
+write(chJson, paste0(config_oth$save_path_json, "/cohort.json"))
 for (cs in names(conceptSets$conceptSets)) {
   writeConceptSet(
     x = conceptSets$conceptSets[[cs]],
-    path = paste("./json/", cs, "_cs.json", sep="")
+    path = paste(config_oth$save_path_json, "/", cs, "_cs.json", sep="")
   )
 }
 ```
@@ -240,8 +239,8 @@ disconnect(con)
 cohortCounts
 ```
 
-## Get updated DB after querying cohorts
-```{r retrieve updated DB}
+## Number of people in db
+```{r Number of people in DB}
 # Establish connection
 con <- connect(connectionDetails)
 
