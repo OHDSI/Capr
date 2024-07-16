@@ -1,0 +1,7 @@
+source("renv/activate.R")
+library(RSQLite)
+library(tibble)
+library(DatabaseConnector)
+library(CohortGenerator)
+library(CirceR)
+library(Capr)
