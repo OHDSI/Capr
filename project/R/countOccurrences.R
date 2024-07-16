@@ -34,48 +34,49 @@ countOccurrences <- function(v, tables, links, db_connection, schema) {
   stopifnot(is.list(links))
   stopifnot(is.character(schema))
   
-  # Placeholder for results
   results <- list()
   
   for (table in tables) {
     concept_id_field <- links[[table]]
     
-    for (i in seq_along(v)) {
-      val <- v[i]
-      
-      # Direct counts SQL query
-      direct_sql <- 
-        sprintf(
-          "SELECT COUNT(DISTINCT person_id) AS count_persons, COUNT(*) AS count_records FROM %s WHERE %s = %d",
-          paste0(schema, ".", table),
-          concept_id_field,
-          val
-        )
-      direct_res <- dbGetQuery(db_connection, direct_sql)
-      
-      # Descendant counts SQL query
-      descendant_sql <- sprintf(
-        "SELECT COUNT(DISTINCT a.person_id) AS descendant_count_person, COUNT(*) AS descendant_count_record FROM %s a JOIN %s.concept_ancestor b ON a.%s = b.descendant_concept_id WHERE b.ancestor_concept_id = %d",
-        paste0(schema, ".", table), # Reference the target table within the schema
-        schema, # Explicitly reference the schema for the concept_ancestor table
-        concept_id_field,
-        val)
-      descendant_res <- dbGetQuery(db_connection, descendant_sql)
-      
-      # Combine results
-      results[[i]] <- tibble(
-        concept_id = val,
-        count_persons = direct_res$count_persons,
-        count_records = direct_res$count_records,
-        descendant_count_person = descendant_res$descendant_count_person,
-        descendant_count_record = descendant_res$descendant_count_record
+    # Combined SQL query for direct and descendant counts
+    combined_sql <- sprintf(
+      "WITH direct_counts AS (
+        SELECT %s AS concept_id, COUNT(DISTINCT person_id) AS count_persons, COUNT(*) AS count_records
+        FROM %s.%s
+        WHERE %s IN (%s)
+        GROUP BY %s
+      ), descendant_counts AS (
+        SELECT b.ancestor_concept_id AS concept_id, COUNT(DISTINCT a.person_id) AS descendant_count_person, COUNT(*) AS descendant_count_record
+        FROM %s.%s a
+        JOIN %s.concept_ancestor b ON a.%s = b.descendant_concept_id
+        WHERE b.ancestor_concept_id IN (%s)
+        GROUP BY b.ancestor_concept_id
       )
-    }
+      SELECT coalesce(d.concept_id, dc.concept_id) AS concept_id, coalesce(count_persons, 0) AS count_persons, coalesce(count_records, 0) AS count_records, coalesce(descendant_count_person, 0) AS descendant_count_person, coalesce(descendant_count_record, 0) AS descendant_count_record
+      FROM direct_counts d
+      FULL OUTER JOIN descendant_counts dc ON d.concept_id = dc.concept_id",
+      concept_id_field, schema, table, concept_id_field, paste(v, collapse = ","), concept_id_field,
+      schema, table, schema, concept_id_field, paste(v, collapse = ",")
+    )
+    
+    combined_res <- dbGetQuery(db_connection, combined_sql)
+    
+    # Append results
+    results[[table]] <- combined_res
   }
   
-  # Combine all results into a single data frame
+  # Combine all results into a single data frame and transform
   final_res <- bind_rows(results) %>%
-    mutate(concept_name = names(v)) %>%
+    group_by(concept_id) %>%
+    summarise(
+      count_persons = sum(count_persons),
+      count_records = sum(count_records),
+      descendant_count_person = sum(descendant_count_person),
+      descendant_count_record = sum(descendant_count_record)
+    ) %>%
+    ungroup() %>%
+    mutate(concept_name = names(v)[match(concept_id, v)]) %>%
     arrange(desc(count_records + descendant_count_record))
   
   return(final_res)
