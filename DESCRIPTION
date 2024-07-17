@@ -44,7 +44,9 @@ Imports:
     generics,
     CirceR,
     codetools,
-    CohortGenerator,
+    readr,
+    dplyr,
+    DBI
 Suggests:
     testthat (>= 3.0.0),
     knitr,

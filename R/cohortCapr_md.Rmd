@@ -1,7 +1,7 @@
 ---
 title: "cohortCapr markdown"
 author: "Guus @TheHyve"
-date: "2024-07-01"
+date: "2024-07-17"
 output: html_document
 ---
 ## Set-up knitr
@@ -14,9 +14,20 @@ knitr::opts_chunk$set(echo = TRUE)
 # )
 ```
 
+## Set-up config
 ```{r Get project configurations}
 connectionConfig <- config::get(config = 'config', file = './inst/config/connection_config.yml')
 config_oth <- config::get(config = 'config', file = './inst/config/config.yml')
+```
+
+## Load libraries
+```{r Load libraries}
+library(RSQLite)
+library(tibble)
+library(DatabaseConnector)
+library(CohortGenerator)
+library(CirceR)
+library(Capr)
 ```
 
 ## Connect to DB
