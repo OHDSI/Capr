@@ -9,6 +9,42 @@
     ]
   },
   "Packages": {
+    "Capr": {
+      "Package": "Capr",
+      "Version": "2.0.8",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "Capr",
+      "RemoteUsername": "OHDSI",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "c25f7365476b05af79497201e165d33acd1f110a",
+      "Requirements": [
+        "CirceR",
+        "DBI",
+        "DatabaseConnector",
+        "R",
+        "SqlRender",
+        "checkmate",
+        "cli",
+        "digest",
+        "dplyr",
+        "fs",
+        "generics",
+        "glue",
+        "jsonlite",
+        "lubridate",
+        "magrittr",
+        "methods",
+        "purrr",
+        "readr",
+        "rlang",
+        "stringr",
+        "tibble",
+        "tidyr"
+      ],
+      "Hash": "9f6109f92821d1799da4b15fc73d0066"
+    },
     "CirceR": {
       "Package": "CirceR",
       "Version": "1.3.3",
@@ -108,9 +144,9 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
+      "RemoteUsername": "ohdsi",
       "RemoteRepo": "Eunomia",
-      "RemoteUsername": "OHDSI",
-      "RemoteRef": "HEAD",
+      "RemoteRef": "main",
       "RemoteSha": "79c89443c8fe424e9dc19ea10e80c1d8d36efa0c",
       "Requirements": [
         "CommonDataModel",
@@ -120,7 +156,7 @@
         "readr",
         "rlang"
       ],
-      "Hash": "4a1136a2e60c727a9eddd9baef8216d6"
+      "Hash": "03b2865190a4b57457ba228e231e86c3"
     },
     "OhdsiRTools": {
       "Package": "OhdsiRTools",
