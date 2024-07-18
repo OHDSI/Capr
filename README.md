@@ -12,6 +12,8 @@ Capr is part of [HADES](https://ohdsi.github.io/Hades/)
 
 The goal of Capr, pronounced 'kay-pr' like the edible flower, is to provide a language for expressing OHDSI Cohort definitions in R code. OHDSI defines a cohort as "a set of persons who satisfy one or more inclusion criteria for a duration of time" and provides a standardized approach for defining them (Circe-be). Capr exposes the standardized approach to cohort building through a programmatic interface in R which is particularly helpful when creating a large number of similar cohorts. Capr version 2 introduces a new user interface designed for readability with the goal that Capr code being a human readable description of a cohort while also being executable on an OMOP Common Data Model.
 
+This package has been extended under the name Capr-PHEMS for the PHEMS consortium to facilitate the cohort building process via a template script and specific configurations, as well as providing extra functionality to enable querying the frequency of concept sets on a person and record level and to enable checking the standardness of concepts in a set or list of concepts, thereby making identification of non-standard concepts much more straightforward.
+
 Learn more about the OHDSI approach to cohort building in the [cohorts chapter of the Book of OHDSI.](https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html)
 
 # Installation
@@ -24,6 +26,7 @@ Users can install the current development version of Capr from [GitHub](https://
 devtools::install_github("ohdsi/Capr")
 ```
 
+For Capr-PHEMS, it is recommended to clone the repo and work from the template script cohortCapr.R, whilst using the Capr-PHEMS.Rproj as the project.
 
 # User Documentation
 
@@ -56,8 +59,10 @@ Capr is licensed under Apache License 2.0
 # Development
 
 Capr is being developed in R Studio.
+Capr-PHEMS is beind developed in R Studio.
 
 # Acknowledgements
 
--   This package is maintained by Martin Lavallee and Adam Black
+-   The original Capr package is maintained by Martin Lavallee and Adam Black
 -   Guidance and support for the original development of Capr came from Lee Evans and LTS Computing LLC
+-   Additional scripts and templates specific to Capr-PHEMS are maintained by Guus Wilmink
