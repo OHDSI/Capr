@@ -165,16 +165,12 @@ conceptSets <- list(
     ),
     
     UC3Treatments = c(
-      35766745, # source: factor VIII /// concept: factor VIII 250 UNT Injection [Advate]
-      21154209, # source: factor VIII /// concept: factor VIII 250 UNT Injection [Kogenate Bayer]
-      35831239, # source: factor VIII /// concept: factor VIII 250 UNT Injection [Eloctate]
-      40745282, # source: factor VIII /// concept: emicizumab 150 MG/ML Injectable Solution [Hemlibra]
+      1352213, # source: factor VIII /// concept: factor VIII (umbrella term)
+      793042, # source: factor VIII /// concept: emicizumab (umbrella term)
       40492862, # source: factor VIII dose is continuous infusion or bolus dose /// concept: mode of drug administration
       4129275, # source: factor VIII dose is continuous infusion or bolus dose /// concept: continuous infusion
       4265597, # source: factor VIII dose is continuous infusion or bolus dose /// concept: by bolus infusions
       1517070 # source: desmopressin /// concept: desmopressin
-      # TODO FIGURE OUT IF DESCENDENTS WORK WITH THESE CONCEPTS 
-      # TODO MAP REMAINING DRUG BRANDS 
     ),
     
     UC3Surgery = c(
