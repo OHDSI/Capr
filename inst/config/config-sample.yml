@@ -1,8 +1,10 @@
 ---
 default:
-  conceptsPath: null
-  savePath: null  # (optional) if saving standard concept check results
+  concepts_path: null  # required for isStandard() function; specifies path to concept list directory with sourceCode and concept_id
+  save_path_isStandard: null  # (optional) if saving standard concept check results
+  save_path_json: null  # (optional) if saving cohort and/or concept set as json)
 
 config:
-  conceptsPath: '<path>'
-  savaPath: '<OPTIONAL path>'
+  concepts_path: '<PATH>'
+  save_path_isStandard: '<PATH>'
+  save_path_json: '<PATH>'
