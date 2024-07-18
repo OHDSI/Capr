@@ -85,7 +85,7 @@ conceptSets <- list(
       3024171, # source: Age-dependent RR /// concept: Respiratory rate
       3004249, # source: SBP (Systolic Blood Pressure) /// concept: Systolic blood pressure
       3012888, # source: DBP (Dyastolic Blood Pressure) /// concept: Diastolic blood pressure
-      4096101 # source: SpO2 /// concept: Measurement of oxygen saturation at periphery
+      4020553 # source: SpO2 /// concept: Oxygen saturation measurement
     ),
     
     HSJDClinical = c(
@@ -100,7 +100,7 @@ conceptSets <- list(
       4301351, # source: Surgery start datetime, end datetime /// concept: Surgical procedure
       4336464, # source: Cardiac bypass start datetime, end datetime /// concept: Coronary artery bypass graft
       4201547, # source: Cross-clamping start datetime, end datetime /// concept: Placement of arterial cross clamp
-      44790138, # source: Deep hypothermic circulatory arrest start datetime, end datetime /// concept: Induced circulatory arrest
+      37152781, # source: Deep hypothermic circulatory arrest start datetime, end datetime /// concept: Hypothermic circulatory arrest
       4272324, # source: Antegrade Cerebral Perfusion start datetime, end datetime /// concept: Cardiopulmonary bypass operation
       4150627 # source: Extubation event /// concept: Removal of endotracheal tube
     ),
@@ -108,13 +108,12 @@ conceptSets <- list(
     HSJDHospitalisation = c(
       44803020, # source: Admission reason /// concept: Primary reason for admission
       42539650, # source: Vasoactive infusion start datetime, end datetime /// concept: Administration of intravenous vasoactive drug
-      794078, # source: Dose of vasoactive infusion (rate - mcg/kg/hr) /// concept: vasoactive intestinal peptide
       4179206, # source: Postop central venous catheter in/start datetime, out/end datetime /// concept: Central venous catheter
       37158404, # source: Invasive Mechanical Ventilation LOS /// concept: Invasive mechanical ventilation
       4177224 # source: Non-Invasive Mechanical Ventilation LOS /// concept: Non-invasive ventilation
     ),
     
-    HSJDcomlications = c(
+    HSJDcomplications = c(
       4202832, # source: intubation /// concept: Intubation
       4275564, # source: Cardiac surgeries (interventions) /// concept: Operation on heart
       4044892, # source: Sternum reopening (procedure undertaken) /// concept: Procedure on sternum
@@ -158,7 +157,7 @@ conceptSets <- list(
       3042349, # source: Von Willebrand factor propeptide measurement /// concept: von Willebrand factor (vWf) cleaving protease inhibitor [Units/volume] in platelet poor plasma
       4175016, # source: activated partial thromboplastin time (APTT) /// concept: partial thromboplastin time, activated
       3034426, # source: Prothrombin time (PT) /// concept: prothrombin time (PT)
-      37393863, # source: platelet count /// concept: platelet count
+      4267147, # source: platelet count /// concept: platelet count
       3009542, # source: hematocrit /// concept: Hematocrit [Volume Fraction] of Blood
       3016407, # source: fibrinogen /// concept: fibrinogen [mass/volume] in platelet poor plasma by coagulation assay
       3006923, # source: ALT /// concept: alanine aminotransferase [enzymatic activity/volume] in serum or plasma
@@ -179,12 +178,12 @@ conceptSets <- list(
     ),
     
     UC3Surgery = c(
-      45888085, # source: Medical/ surgical procedure /// concept: medical procedure
+      4172515, # source: Medical/ surgical procedure /// concept: Therapeutic procedure
       967823, # source: NaCl administration during surgery /// concept: sodium chloride
       4028665, # source: plasma administration during surgery /// concept: plasma transfusion
-      45888867, # source: datetime start anesthesia /// concept: anesthesia
+      4160439, # source: datetime start anesthesia /// concept: Administration of anesthesia
       4308716, # source: blood loss during surgery /// concept: intraoperative hemorrhage
-      37017589 # source: blood transfusion during surgery /// concept: bleeding during medical procedure requiring transfusion
+      37017589 # source: blood transfusion during surgery /// concept: Bleeding during surgery requiring transfusion
     )
   )
 )
