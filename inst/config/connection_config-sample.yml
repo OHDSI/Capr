@@ -10,6 +10,9 @@ default:
   port: null
   oracleDriver: null
   pathToDriver: null
+  cdm_schema: null
+  vocabulary_schema: null
+  cohort_schema: null
 
 ## Connection details
 #    Replace with your connection details
@@ -17,11 +20,16 @@ default:
 #    see the function documentation for more information
 #    Please check carefully which details are required for your dbms
 #    as not all of these details may be required.
-connectionDetails:
-  dbms: 'postgresql'
-  user: 'postgres'
-  password: 'postgres'
-  server: 'host/database'
+#    cdm_schema should point to the OMOP CDM schema
+#    vocabulary_schema should point to the schema where the vocabulary tables are stored
+config:
+  dbms: ''
+  user: ''
+  password: ''
+  server: ''
   port: 5432
   oracleDriver: null
-  pathToDriver: './drivers/jdbc/'
+  pathToDriver: ''
+  cdm_schema: ''
+  vocabulary_schema: ''
+  cohort_schema: ''
