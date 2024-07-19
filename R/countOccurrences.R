@@ -9,6 +9,7 @@
 #' @param links A list linking each table to its respective concept_id field.
 #' @param db_connection A database connection object through which queries will be executed.
 #' @param cdm_schema The database cdm_schema in which the tables are located.
+#' @param vocab_schema The database vocab_schema in which the concept tables are located.
 #'
 #' @return A tibble with columns for the number of times any concept from 'v' occurs: direct count of persons, 
 #'         direct count of records, descendant count of persons, and descendant count of records. 

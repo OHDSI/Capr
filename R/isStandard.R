@@ -5,6 +5,7 @@
 #' @param db_connection A DBI database connection object to the SQL database containing the standard concepts table.
 #' @param data_concepts_path The file path to the directory containing CSV files of tables to be checked against the standard concepts table. Each CSV file should contain at least the columns `sourceCode` and `concept_id`.
 #' @param save_path (Optional) The file path where the joined tables containing non-standard concepts should be saved. If not provided, the tables will not be saved but will still be checked for non-standard concepts.
+#' @param vocab_schema The schema name of the vocabulary database containing the standard concepts table.
 #'
 #' @return A tibble containing the columns `concept_id`, `concept_name`, `source_code`, and `source_table`, which represent the concept ID, concept name, source code, and source table name for each non-standard concept found.
 #'
@@ -29,7 +30,6 @@ isStandard <- function(db_connection, data_concepts_path, vocab_schema, save_pat
   concept_table_query <- paste0(
     "SELECT concept_id, concept_name, standard_concept FROM ", vocab_schema, ".concept"
     )
-  print(concept_table_query)
   concept_table <- dbGetQuery(db_connection, concept_table_query) %>%
     mutate(concept_id = as.character(concept_id)) %>%
     mutate(concept_id = tolower(trimws(concept_id)))

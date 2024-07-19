@@ -14,12 +14,13 @@ inst/doc
 # project-specific
 inst/config/*
 !inst/config/*-sample.yml
-
-inst/extdata/*
+# Adjusted to not ignore .gitkeep files
+inst/extdata/**/*  # Ignore all files within inst/extdata
 !inst/extdata/phems_variable_list
-!inst/extdata/json
-inst/extdata/json/*  # Ignore everything inside the json directory
+!inst/extdata/json/.gitkeep  # Ensure this is not ignored
+inst/extdata/json/*.json
 !inst/extdata/vocabularies
 inst/extdata/vocabularies/*
+!inst/extdata/**/*.gitkeep  # Explicitly include .gitkeep files in inst/extdata
 
 renv

@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Capr Provides a programming language for defining cohort definitions in R to use in studies for Observational Health Data Sciences and Informatics (OHDSI). The functions in 'Capr' allow for the programmatic creation of OHDSI concept sets and cohorts that can be serialized to 'OHDSI' compatible 'json' files or to 'OHDSI-SQL'. 'Capr' functions can be used to create, save, and load component parts to a cohort definition allowing R programmers to easily reuse cohort logic. 'Capr' provides tools to create a large number of OHDSI cohorts while also helping bridge the gap between human readable descriptions of clinical phenotypes and their computational implementation. For PHEMS this package has been extended with additional functions to support PHEMS cohort creation under the name Capr-PHEMS.
+Provides a programming language for defining cohort definitions in R to use in studies for Observational Health Data Sciences and Informatics (OHDSI). The functions in 'Capr' allow for the programmatic creation of OHDSI concept sets and cohorts that can be serialized to 'OHDSI' compatible 'json' files or to 'OHDSI-SQL'. 'Capr' functions can be used to create, save, and load component parts to a cohort definition allowing R programmers to easily reuse cohort logic. 'Capr' provides tools to create a large number of OHDSI cohorts while also helping bridge the gap between human readable descriptions of clinical phenotypes and their computational implementation. For PHEMS this package has been extended with additional functions to support PHEMS cohort creation.
 }
 \seealso{
 Useful links:
@@ -16,14 +16,11 @@ Useful links:
   \item \url{https://ohdsi.github.io/Capr/}
   \item \url{https://github.com/OHDSI/Capr/}
   \item Report bugs at \url{https://github.com/OHDSI/Capr/issues/}
-  \item \url{https://thehyve.github.io/Capr-PHEMS/}
 }
 
 }
 \author{
-\strong{Maintainer}: Martin Lavallee (Capr) \email{martin.lavallee@boehringer-ingelheim.com}
-\strong{Maintainer}: Guus Wilmink (Capr-PHEMS) \email{guus@thehyve.nl}
-}
+\strong{Maintainer}: Martin Lavallee \email{martin.lavallee@boehringer-ingelheim.com}
 
 Authors:
 \itemize{
@@ -31,4 +28,5 @@ Authors:
   \item Guus Wilmink \email{guus@thehyve.nl}
 }
 
+}
 \keyword{internal}

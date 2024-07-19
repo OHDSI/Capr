@@ -4,12 +4,14 @@
 \alias{isStandard}
 \title{Check for Non-Standard Concepts in Database Tables}
 \usage{
-isStandard(db_connection, data_concepts_path, save_path = NULL)
+isStandard(db_connection, data_concepts_path, vocab_schema, save_path = NULL)
 }
 \arguments{
 \item{db_connection}{A DBI database connection object to the SQL database containing the standard concepts table.}
 
 \item{data_concepts_path}{The file path to the directory containing CSV files of tables to be checked against the standard concepts table. Each CSV file should contain at least the columns `sourceCode` and `concept_id`.}
+
+\item{vocab_schema}{The schema name of the vocabulary database containing the standard concepts table.}
 
 \item{save_path}{(Optional) The file path where the joined tables containing non-standard concepts should be saved. If not provided, the tables will not be saved but will still be checked for non-standard concepts.}
 }

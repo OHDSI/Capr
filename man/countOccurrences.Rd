@@ -4,7 +4,7 @@
 \alias{countOccurrences}
 \title{Count Occurrences of Values in Database Tables}
 \usage{
-countOccurrences(v, tables, links, db_connection, schema)
+countOccurrences(v, tables, links, db_connection, cdm_schema, vocab_schema)
 }
 \arguments{
 \item{v}{A vector of concept_ids to count occurrences for.}
@@ -15,7 +15,9 @@ countOccurrences(v, tables, links, db_connection, schema)
 
 \item{db_connection}{A database connection object through which queries will be executed.}
 
-\item{schema}{The database schema in which the tables are located.}
+\item{cdm_schema}{The database cdm_schema in which the tables are located.}
+
+\item{vocab_schema}{The database vocab_schema in which the concept tables are located.}
 }
 \value{
 A tibble with columns for the number of times any concept from 'v' occurs: direct count of persons, 
@@ -25,15 +27,15 @@ A tibble with columns for the number of times any concept from 'v' occurs: direc
 }
 \description{
 This function counts the occurrences of specified concept ids within specified tables in a OMOP database, 
-including direct occurrences and occurrences through descendants, based on a provided schema and links.
+including direct occurrences and occurrences through descendants, based on a provided cdm_schema and links.
 It returns a tibble summarizing the counts across persons and across records.
 }
 \examples{
-# Assuming `db_connection` is a valid database connection, `schema` is set to "public",
+# Assuming `db_connection` is a valid database connection, `cdm_schema` is set to "public",
 # `tables` contains the names of the tables to search, `links` defines the relevant fields,
 # and `v` contains the values to search for:
 results <- countOccurrences(v = c(1, 2), tables = c("observation", "condition_occurrence"), 
                             links = list(observation = "observation_concept_id", condition_occurrence = "condition_concept_id", ...), 
-                            db_connection = db_connection, schema = "public")
+                            db_connection = db_connection, cdm_schema = "public")
 
 }
