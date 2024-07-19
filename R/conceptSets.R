@@ -1,5 +1,7 @@
-#' Medical Concept Sets Definition and Expansion
+#' @name conceptSets
+#' @title Medical Concept Sets Definition and Expansion
 #'
+#' @description
 #' This script defines and expands various concept sets related to medical data. It utilizes the Capr library to fetch all descendant concepts
 #' for each defined concept set, ensuring comprehensive coverage of related medical concepts.
 #'
@@ -8,6 +10,7 @@
 #' the `conceptSets` object. Finally, the script outputs a confirmation message indicating successful sourcing and expansion of concept sets.
 #'
 #' @note This script requires the Capr library to be installed and loaded for proper execution.
+#' @export
 
 library(Capr)
 
@@ -98,4 +101,4 @@ for (cs in names(conceptSets$concepts)) {
   conceptSets$conceptSets[[cs]] <- cs(descendants(conceptSets$concepts[[cs]]), name = cs)
 }
 
-cat("Sourced concept sets")
+cat("\nSourced concept sets\n")

@@ -36,6 +36,7 @@ isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {
   conceptNameNonStandard <- c()
   sourceCodeNonStandard <- c()
   sourceTableNonStandard <- c()
+  standardness <- c()
 
   # Get tables from data_concepts_path
   tables <- list.files(path = data_concepts_path, pattern = "\\.csv$", full.names = TRUE)
@@ -62,12 +63,13 @@ isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {
     joined <- inner_join(concept_table, tb, by = "concept_id")
 
     # Add non-standard concept info to vectors
-    ind <- which(!(joined$standard_concept %in% c('S', 'C')))
+    ind <- which(!(joined$standard_concept %in% c('S')))
     nonStandard <- append(nonStandard, joined$concept_id[ind])
     conceptNameNonStandard <- append(conceptNameNonStandard, joined$concept_name[ind])
     sourceCodeNonStandard <- append(sourceCodeNonStandard, joined$sourceCode[ind])
     sourceTableNonStandard <- append(sourceTableNonStandard,
                                      replicate(length(ind), table_name, simplify="vector"))
+    standardness <- append(standardness, joined$standard_concept[ind])
 
     if (length(ind) == 0) {
       message("No non-standard concepts found in list of concepts: ", table_name)
@@ -85,13 +87,16 @@ isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {
       message(paste("No matches found for concept set.\n"))
     }
   }
-
+  
+  # NA == non-standard
+  standardness[is.na(standardness)] <- "Non-standard"
   # Create table of non-standard concepts
   res <- tibble::tibble(
     concept_id = nonStandard,
     concept_name = conceptNameNonStandard,
     source_code = sourceCodeNonStandard,
-    source_table = unlist(sourceTableNonStandard)
+    source_table = unlist(sourceTableNonStandard),
+    standardness = standardness
   )
   message(paste0("Finished checking for non-standard concepts.\n", nrow(res), " non-standard concepts found across tables."))
 
