@@ -27,6 +27,7 @@ inst/extdata/standard_concepts/*
 
 !inst/extdata/vocabularies
 inst/extdata/vocabularies/*
-!inst/extdata/**/*.gitkeep  # Explicitly include .gitkeep files in inst/extdata
+
+!*.gitkeep
 
 renv
