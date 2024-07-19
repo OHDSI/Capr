@@ -1,8 +1,9 @@
 sourceCode,concept_id
 Admission reason ,44803020 
-Dose of vasoactive infusion (rate - mcg/kg/hr) ,794078 
-Invasive Mechanical Ventilation LOS ,37158404 
-Non-Invasive Mechanical Ventilation LOS ,4177224 
+ventilation ,0 
+"Vasoactive infusion start datetime, end datetime ",42539650 
+Type of vasoactive infusion ,0 
+VIS score of vasoactive infusion ,0 
 "Postop central venous catheter in/start datetime, out/ end datetime ",4179206 
 "Total ventilation start datetime, end datetime ",0 
 Type of vasoactive infusion ,0 
