@@ -134,16 +134,13 @@ nonStandard
 ```
 
 ## Initial event cohort
-People having any of the following:
-any of the lab test measurements
-limit to first/earliest occurrence of any of the above measurements (+descendants) per person
-```{r Cohort definition}
+```{r Cohort definition, eval=FALSE}
 ## Cohort definition
 # Create cohort definition
 ch <- cohort(
   entry = entry(
-    # enter patients < 80 years old who have had a lab test
-    measurement(conceptSets$conceptSets$labTests, age(lt(80))),
+    # enter patients < 70 years old who have had a lab test
+    procedure(conceptSets$conceptSets$cardiacSurgery, age(lt(70))),
     observationWindow = continuousObservation(0, 0),
     primaryCriteriaLimit = "All"
   ),
@@ -164,17 +161,20 @@ ch <- cohort(
     withAny(
       atLeast(
         x = 1,
-        # include all cardiac surgeries
-        query = procedure(conceptSets$conceptSets$cardiacProcedures)
+        # include patients who have had cardiac surgery
+        query = procedure(conceptSets$conceptSets$cardiacSurgery)
+      )
+    ),
+    withAny(
+      atLeast(
+        x = 1,
+        # include patients who have had laboratory measurements
+        query = measurement(conceptSets$conceptSets$labTests)
       )
     )
   ),
   exit = exit(
-    endStrategy = observationExit(),
-    censor = censoringEvents(
-      # exit if intubation has taken place
-      procedure(conceptSets$conceptSets$intubation)
-    )
+    endStrategy = observationExit()
   )
 )
 ```

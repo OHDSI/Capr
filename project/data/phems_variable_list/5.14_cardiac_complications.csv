@@ -1,62 +1,18 @@
-﻿sourceCode,concept_id
-ICU ward stay ,4123933 
+sourceCode,concept_id
 CVL infections ,42537043 
-Low cardiac output state (LCOS) - ECMO ,4185565 
-,4052536 
-LCOS - renal support (CVVH/ PD) ,4051330 
-,4324124 
-,4185565 
+Extracorporeal membrane oxygenation,4052536 
+ICU ward stay ,4123933 
 LCOS - Cardiac arrest ,321042 
-,4185565 
 LCOS - NEC requiring treatment ,4185565 
+LCOS - renal support (CVVH/ PD),4324124 
+LCOS - renal support (CVVH/ PD) ,4051330 
+Low cardiac output state (LCOS) - ECMO,4185565
+Low cardiac output state (LCOS) - ECMO ,4185565 
+Neurological injury - intracranial haemmhorage/ intracranial bleeding ,439847 
 Neurological injury - infarction ,443454 
 Neurological injury - seizure ,377091 
-Neurological injury - intracranial haemmhorage/ intracranial bleeding ,439847 
 Surgical injury - Blood Loss ,4308537 
 Surgical injury - Chylothorax ,4306136 
+Surgical injury - Reexplore for bleeding,437312 
+Surgical injury - Reexplore for bleeding,442019 
 Surgical injury - Reexplore for bleeding ,4295705 
-,437312 
-,442019 
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
