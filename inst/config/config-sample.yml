@@ -1,10 +1,15 @@
 ---
+## Default configuration values
+#    Default values are necessary for the `config` CRAN library, not used in package otherwise
+#    No need to change these values
 default:
-  concepts_path: null  # required for isStandard() function; specifies path to concept list directory with sourceCode and concept_id
-  save_path_isStandard: null  # (optional) if saving standard concept check results
-  save_path_json: null  # (optional) if saving cohort and/or concept set as json)
+  concepts_path: 'inst/extdata/phems_variable_list'  # required for isStandard() function; specifies path to concept list directory with sourceCode and concept_id
+  save_path_isStandard: 'inst/extdata/phems_variable_list/is_standard'  # (optional) if saving standard concept check results. Point to existing directory.
+  save_path_json: 'inst/extdata/json'  # (optional) if saving cohort and/or concept set as json). Point to existing directory
 
+## Paths for CSVs of concepts and saves
+#    Replace with your paths
 config:
-  concepts_path: '<PATH>'
-  save_path_isStandard: '<PATH>'
-  save_path_json: '<PATH>'
+  concepts_path: ''
+  save_path_isStandard: ''
+  save_path_json: ''

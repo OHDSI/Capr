@@ -1,22 +1,22 @@
 ---
 ## Default configuration values
-#    Necessary for config library, not used in R file
-#    No need to change these values
+#    Default values are necessary for the `config` CRAN library, not used in package otherwise
+#    No need to change these values; they are unused
 default:
-  dbms: null
-  user: null
+  dbms: 'postgres'
+  user: 'postgres'
   password: null
-  server: null
-  port: null
+  server: localhost/omop_db
+  port: 5432
   oracleDriver: null
-  pathToDriver: null
-  cdm_schema: null
-  vocabulary_schema: null
-  cohort_schema: null
+  pathToDriver: '~/jdbc'
+  cdm_schema: 'cdm'
+  vocabulary_schema: 'vocab'
+  cohort_schema: 'cohort'
 
 ## Connection details
 #    Replace with your connection details
-#    Used as input to DatabaseConnector::createConnectionDetails()
+#    Used primarily as input to DatabaseConnector::createConnectionDetails()
 #    see the function documentation for more information
 #    Please check carefully which details are required for your dbms
 #    as not all of these details may be required.
