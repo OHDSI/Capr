@@ -6,53 +6,54 @@ conceptSets <- list(
   concepts = list(
     # 5.3 VIS score medications
     visScoreMedications = c(
-      1507835, # source: vasopressin /// concept: vasopressin (USP)
       1337720, # source: dobutamine /// concept: dobutamine
       1337860, # source: dopamine /// concept: dopamine
       1343916, # source: epinephrine /// concept: epinephrine
       1368671, # source: milrinone /// concept: milrinone
-      1321341  # source: norepinephrin /// concept: norepinephrine
+      1321341, # source: norepinephrin /// concept: norepinephrine
+      1507835  # source: vasopressin /// concept: vasopressin (USP)
     ),
     
     # 5.4 vasopressors and inotropes
     vasopressors_inotropes = c(
-      1507835, # source: Vasopressin /// concept: vasopressin (USP)
       1337720, # source: Dobutamine /// concept: dobutamine
       1337860, # source: Dopamine /// concept: dopamine
       1143374, # source: Ephedrine /// concept: ephedrine
       1343916, # source: Epinephrine /// concept: epinephrine
-      1368671, # source: Milrinone /// concept: milrinone
-      19119253, # source: Terlipressin /// concept: terlipressin
       1183554, # source: Isoproterenol /// concept: isoproterenol
       40173184, # source: Levosimendan /// concept: levosimendan
+      1368671, # source: Milrinone /// concept: milrinone
       1321341, # source: Norepinephrine /// concept: norepinephrine
-      1135766  # source: Phenylephrine /// concept: phenylephrine
+      1135766, # source: Phenylephrine /// concept: phenylephrine
+      19119253, # source: Terlipressin /// concept: terlipressin
+      1507835  # source: Vasopressin /// concept: vasopressin (USP)
     ),
     
     # 5.5 immunosuppressants
     immunosuppressants = c(
       4273629, # source: Chemotherapy /// concept: Chemotherapy
-      21603754, # source: Monoclonal Antibodies /// concept: Monoclonal antibodies
       1518254, # source: Dexamethasone /// concept: dexamethasone
       975125, # source: Hydrocortisone /// concept: hydrocortisone
       1506270, # source: Methylprednisolone /// concept: methylprednisolone
+      21603754, # source: Monoclonal Antibodies /// concept: Monoclonal antibodies
       1550557 # source: Prednisolone /// concept: prednisolone
     ),
     
     # 5.6 antibiotic medications
     antibiotics = c(
-      4273629, # source: Chemotherapy /// concept: Chemotherapy
-      21603754, # source: Monoclonal Antibodies /// concept: Monoclonal antibodies
+      1713332, # source: Amoxicillin /// concept: amoxicillin
+      1759842, # source: Amoxicillin clavulanate /// concept: clavulanate
+      1717327, # source: Ampicillin /// concept: ampicillin
+      1734104, # source: Azithromycin /// concept: azithromycin
       1836430, # source: Trimethoprim-Sulfamethoxazole /// concept: sulfamethoxazole
+      1705674, # source: Trimethoprim-Sulfamethoxazole /// concept: trimethoprim
       1836948, # source: Tetracycline /// concept: tetracycline
       902722, # source: Tobramycin /// concept: tobramycin
-      1705674, # source: Trimethoprim-Sulfamethoxazole /// concept: trimethoprim
       1707687, # source: Vancomycin /// concept: vancomycin
       19010400, # source: Fusidic acid /// concept: fusidate
       45892419, # source: Gentamicin /// concept: gentamicin
       45892599, # source: Ceftolozane-Tazovactam /// concept: ceftolozane
       46221507, # source: Ceftazidime-Avibactam /// concept: avibactam
-      1734104, # source: Azithromycin /// concept: azithromycin
       1736887, # source: Linezolid /// concept: linezolid
       1748975, # source: Cefepime /// concept: cefepime
       1750500, # source: Clarithromycin /// concept: clarithromycin
@@ -69,23 +70,20 @@ conceptSets <- list(
       1717963, # source: Ertapenem /// concept: ertapenem
       1518254, # source: Dexamethasone /// concept: dexamethasone
       1741122, # source: Piperacillin-Tazobactam /// concept: tazobactam
+      1746114, # source: Piperacillin-Tazobactam /// concept: piperacillin
       1746940, # source: Erythromycin /// concept: erythromycin
       951511, # source: Mupirocin /// concept: mupirocin
       956653, # source: Fosfomycin /// concept: fosfomycin
-      1759842, # source: Amoxicillin clavulanate /// concept: clavulanate
       975125, # source: Hydrocortisone /// concept: hydrocortisone
       1778262, # source: Imipenem /// concept: imipenem
       19078399, # source: Teicoplanin /// concept: teicoplanin
       1790868, # source: Amikacin /// concept: amikacin
       1506270, # source: Methylprednisolone /// concept: methylprednisolone
-      1713332, # source: Amoxicillin /// concept: amoxicillin
-      1717327, # source: Ampicillin /// concept: ampicillin
       920293, # source: Nitrofurantoin /// concept: nitrofurantoin
       1721543, # source: Norfloxacin /// concept: norfloxacin
       1724703, # source: Oxacillin /// concept: oxacillin
       1728416, # source: Penicillin /// concept: penicillin G
       1742253, # source: Levofloxacin /// concept: levofloxacin
-      1746114, # source: Piperacillin-Tazobactam /// concept: piperacillin
       1550557, # source: Prednisolone /// concept: prednisolone
       1763204 # source: Rifampicin /// concept: rifampin
     ),
@@ -208,7 +206,6 @@ conceptSets <- list(
     
     # 5.12 additional variables
     additional = c(
-      4124462, # source: Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure /// concept: None
       4095105, # source: Base Excess /// concept: Base deficit measurement
       4123933, # source: Elective ICU admission /// concept: Admission to pediatric intensive care unit
       4234469, # source: Diagnoses /// concept: Diagnosis
@@ -362,13 +359,6 @@ conceptSets <- list(
       433968,  # source: candidiasis /// concept: Candidiasis
       44807226,  # source: necrotizing enterocolitis /// concept: Necrotising enterocolitis
       132797,  # source: Previous diagnosis of sepsis measure /// concept: Sepsis
-      44777590,  # source: Mean Airway Pressure (MAP) /// concept: centimeter watercolumn
-      44777602,  # source: Mean Airway Pressure (MAP) /// concept: kilopascal
-      8510,  # source: FiO2 /// concept: unit
-      8554,  # source: FiO2 /// concept: percent
-      720868,  # source: FiO2 /// concept: fraction
-      8529,  # source: Oxygenation index /// concept: index
-      8876,  # source: Mean Airway Pressure (MAP) /// concept: millimeter mercury column
       21602722,  # source: Corticoids /// concept: CORTICOSTEROIDS FOR SYSTEMIC USE
       42869590,  # source: FiO2 /// concept: Oxygen/Gas total [Pure volume fraction] Inhaled gas
       42527086,  # source: Mean Airway Pressure (MAP) /// concept: Mean airway pressure
@@ -384,7 +374,7 @@ conceptSets <- list(
       3004249, # source: SBP (Systolic Blood Pressure) /// concept: Systolic blood pressure
       3014315, # source: Urine output /// concept: Urine output
       3024171, # source: RR /// concept: Respiratory rate
-      1004025 # source: HR /// concept: Heart rate
+      3027018 # source: HR /// concept: Heart rate
     ),
     
     # 5.23 physical examination signs

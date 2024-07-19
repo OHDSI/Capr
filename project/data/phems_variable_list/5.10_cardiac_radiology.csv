@@ -1,46 +1,46 @@
-﻿sourceCode,concept_id
-US transthoracic echocardiogram/ us transthoracic echocardiogram (pre- admission)/ US transthoracic echocardiogram (sedated) ,4335825 
-XR chest ,4163872 
-US transoesophageal echocardiogram (toe) ,4019824 
-XR abdomen ,4264477 
-US cranial contents ,4083106 
+sourceCode,concept_id
 24h holter monitor ,45764527 
 24h holter monitor ,4140473 
-US abdomen and pelvis/ US abdomen ,4305221 
-US abdomen and pelvis/ US abdomen ,4261497 
-MRI cardiac complex congenital ,44802640 
+CT head ,4125350 
+CT heart with contrast/ CT cardiac angiogram coronary/ CT cardiac gated with contrast ,4306317 
+CT thorax with contrast ,4327032 
+Cardiopulmonary exercise test (CPET) ,40492338 
+EEG routine ,4181917 
 EEG routine portable ,4205144 
 Epicardial echocardiogram ,4203365 
-CT thorax with contrast ,4327032 
-IR PICC line insertion ,4322380 
 Event monitor ,45765560 
-CT heart with contrast/ CT cardiac angiogram coronary/ CT cardiac gated with contrast ,4306317 
+Exercise test (non-CPET) ,4065416 
+FL video swallow ,4345925 
+IR PICC line insertion ,4322380 
+IR bronchogram ,4312208 
+IR bronchoscopy ,4032404 
 IR tunnelled central venous line insertion ,40482732 
-Cardiopulmonary exercise test (CPET) ,40492338 
-US thorax and pleural cavity ,4093436 
-US thorax and pleural cavity ,4329508 
+IR tunnelled central venous line removal ,42873079 
+MRI cardiac complex congenital ,44802640 
 MRI head ,4082979 
-CT head ,4125350 
-US urinary tract ,4125530 
-Pacemaker/ICD interrogation (in clinic)/ pacemaker/ICD interrogation (other) ,40488431 
-US vocal cord ,44813863 
 Pacemaker/ICD device check - remote patient initiated ,4235141 
 Pacemaker/ICD device check - remote device initiated ,4235141 
-IR bronchoscopy ,4032404 
-FL video swallow ,4345925 
-IR bronchogram ,4312208 
-XR chest and abdomen ,4169275 
-Exercise test (non-CPET) ,4065416 
-US doppler renal both ,4167052 
-US neck ,4083108 
-US doppler jugular vein both ,40489841 
-EEG routine ,4181917 
+Pacemaker/ICD interrogation (in clinic)/ pacemaker/ICD interrogation (other) ,40488431 
+US abdomen and pelvis/ US abdomen ,4261497 
+US abdomen and pelvis/ US abdomen ,4305221 
+US cranial contents ,4083106 
 US diaphragmatic region ,4303522 
+US doppler ,35622931 
 US doppler groin both ,35622931 
 US doppler groin both ,4167029 
-IR tunnelled central venous line removal ,42873079 
-US doppler ,35622931 
+US doppler jugular vein both ,40489841 
 US doppler lower limb veins both ,4335392 
+US doppler renal both ,4167052 
+US neck ,4083108 
+US thorax and pleural cavity ,4329508 
+US thorax and pleural cavity ,4093436 
+US transoesophageal echocardiogram (toe) ,4019824 
+US transthoracic echocardiogram/ us transthoracic echocardiogram (pre- admission)/ US transthoracic echocardiogram (sedated) ,4335825 
+US urinary tract ,4125530 
+US vocal cord ,44813863 
+XR abdomen ,4264477 
+XR chest ,4163872 
+XR chest and abdomen ,4169275 
 ,
 ,
 ,

@@ -1,62 +1,85 @@
-﻿sourceCode,concept_id
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
+sourceCode,concept_id
+Abcess,444202
+Antibiotics,4085730
+Antineoplastics,4181511
+Antivirals,4140762
+Arterial blood pressure catheter,45758028
+Cancer,443392
+Central venous catheter,4179206
+"Chest opening, chest drainage",4074689
+Corticoids,21602722
+Crohn's disease,201606
+Cushing's disease,195212
+Diagnosis of SIRS,434821
+Diagnosis of acute infection having the potential for progression to sepsis1+2,37174269
+Diagnosis of acute infection having the potential for progression to sepsis1+2,4271450
+Diagnosis of chronic condition,443783
+Diagnosis of chronic condition,312723
+Diagnosis of chronic condition,201820
+Diagnosis of chronic condition,255573
+Diagnosis of condition producing immunodeficiency,4140977
+Diagnosis of organ system dysfunction,4080011
+Dialysis,4051330
+Dialysis,4032243
+Down's syndrome,439125
+ECMO,4052536
+ECMO type,37206601
+ECMO type,37206603
+Endotracheal tube,4097216
+FiO2,720868
+FiO2,42869590
+FiO2,8510
+FiO2,8554
+Immunosuppressors,4314777
+Invasive ventilation,44790095
+Mean Airway Pressure (MAP),8876
+Mean Airway Pressure (MAP),44777590
+Mean Airway Pressure (MAP),42527086
+Mean Airway Pressure (MAP),44777602
+Meningo-encephalitis,4322814
+Nasogastric/orogastric tube,42538045
+Non-invasive ventilation,4177224
+Origin (external),44790567
+Origin (internal),4294886
+Oxygenation index,8529
+Oxygenation index,4193843
+Peripheral IV cannulas,4177205
+Peritoneal dialysis,4324124
+Previous diagnosis of sepsis measure,132797
+Previous diagnosis of sepsis measure,1340204
+Reason for admission,44803020
+Surgical admission (non-urgent),4084670
+Surgical admission (urgent),4123946
+Tracheostomy,44783799
+UTI,4331815
+Urinary catheter,4070667
+Ventricular assist device (VAD),4235043
+acute kidney injury,197320
+appendicitis,440448
+asplenia,45768671
+bacteremia,132736
+candidiasis,433968
+cardiac arrest,321042
+cellulitis,435613
+cerebral palsy,4134120
+endocarditis,441589
+hepatitis,4243475
+immunodeficiency,433740
+injury with open wound,444187
+meningitis,435785
+miocarditis,314383
+mitochondrial disease,81539
+necrotizing enterocolitis,44807226
+nephrotic syndrome,195314
+neutropenia,604243
+organ transplant,4208341
+peritonitis,196152
+pneumonia,255848
+renal insufficiency,36716945
+rheumatoid arthritis,80809
+sickle cell disease,22281
+surgery previous to prediction time point,4301351
+surgical site inflammation,4300243
+tuberculosis,4103588
+ulcerative colitis,81893
+viremia,133327
