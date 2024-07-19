@@ -18,7 +18,7 @@ inst/config/*
 inst/extdata/*
 !inst/extdata/phems_variable_list
 !inst/extdata/json
-inst/extdata/json/*
+inst/extdata/json/*  # Ignore everything inside the json directory
 !inst/extdata/vocabularies
 inst/extdata/vocabularies/*
 
