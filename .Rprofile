@@ -1,5 +1,3 @@
-message("Sourcing .Rprofile...")
-
 # Force compile packages from source before installing
 options(
   repos = c(CRAN = "https://cran.rstudio.com"),
@@ -7,4 +5,10 @@ options(
   pkgType = "source"
 )
 
-source("renv/activate.R")
+if (any(list.files() == "renv")) {
+  source("renv/activate.R")
+} else {
+  message("No renv initialized, calling renv::init()")
+  message("Please select to use only the DESCRIPTION file for dependency discovery if prompted, and next select 'Restore the project from the lockfile'")
+  renv::init()
+}
