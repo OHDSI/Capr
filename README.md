@@ -29,6 +29,12 @@ devtools::install_github("ohdsi/Capr")
 For Capr-PHEMS, it is recommended to clone the repo and work from the template script cohortCapr.R, whilst using the Capr-PHEMS.Rproj as the project.
 
 # Getting started with Capr-PHEMS
+**Prerequisites**
+Please make sure you have the following:
+-   R version >= 4.4.0
+-   RStudio >= 2024.04.2
+-   (CRAN library) renv >= 1.0.7
+
 1.  Clone the repo:
 ```
 git clone https://github.com/thehyve/Capr-PHEMS.git
@@ -46,8 +52,8 @@ cp connection_config-sample.yml connection_config.yml
 ``` 
 and fill in your configuration details.
 
-4.  Open the R project: Capr-PHEMS.Rproj. Please make sure the "renv" library is installed globally BEFORE opening the project.
-Upon opening the project, .Rprofile will be sourced. For the first run, the environment needs to be initialized. renv::init() is called to initialize the R environment and install all required packages. When prompted for use of a description file for dependency discovery, select 1: Use only the DESCRIPTION file. When prompted "This project already has a lockfile", select 1: Restore the project from the lockfile. Required libraries will be installed and the renv will be activated.
+4a.  Open RStudio and verify renv >= 1.0.7 is installed by calling packageVersion("renv"). If not installed, call install.packages("renv)
+4b.  
 
 5.  A template script is provided under ./inst/templates/ as both an R script and .Rmd file. The code between these files is identical. It is recommended to use the .Rmd file, so chunks of code can easily be run at will. These chunks of code are self-explanatory.
 
