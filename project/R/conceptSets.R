@@ -79,7 +79,8 @@ conceptSets <- list(
       4019026, # source: Other specified: plastic repair of aorta /// concept: Plastic repair of aorta
       44510968  # source: Other specified other operations on ventricles of heart /// concept: Other specified other operations on ventricles of heart
     ),
-    
+
+    # 
     vitalSigns = c(
       3027018, # source: Age-dependent HR /// concept: Heart rate
       3024171, # source: Age-dependent RR /// concept: Respiratory rate
@@ -87,7 +88,8 @@ conceptSets <- list(
       3012888, # source: DBP (Dyastolic Blood Pressure) /// concept: Diastolic blood pressure
       4020553 # source: SpO2 /// concept: Oxygen saturation measurement
     ),
-    
+
+    # 5.16 HSJD clinical
     HSJDClinical = c(
       3025315, # source: Weight /// concept: Body weight
       3036277, # source: Height /// concept: Body height
@@ -95,6 +97,7 @@ conceptSets <- list(
       4275564 # source: Cardiac surgeries (Interventions) /// concept: Operation on heart
     ), 
     
+    # 5.17 HSJD Surgery
     HSJDSurgery = c(
       40490494, # source: STAT/EACTS score of surgery /// concept: Society of Thoracic Surgeons risk calculator
       4301351, # source: Surgery start datetime, end datetime /// concept: Surgical procedure
@@ -104,7 +107,8 @@ conceptSets <- list(
       4272324, # source: Antegrade Cerebral Perfusion start datetime, end datetime /// concept: Cardiopulmonary bypass operation
       4150627 # source: Extubation event /// concept: Removal of endotracheal tube
     ),
-    
+
+    # 5.18 HSJD Hospitalisations 
     HSJDHospitalisation = c(
       44803020, # source: Admission reason /// concept: Primary reason for admission
       42539650, # source: Vasoactive infusion start datetime, end datetime /// concept: Administration of intravenous vasoactive drug
@@ -112,7 +116,8 @@ conceptSets <- list(
       37158404, # source: Invasive Mechanical Ventilation LOS /// concept: Invasive mechanical ventilation
       4177224 # source: Non-Invasive Mechanical Ventilation LOS /// concept: Non-invasive ventilation
     ),
-    
+
+    # 5.19 HSJD Complications
     HSJDcomplications = c(
       4202832, # source: intubation /// concept: Intubation
       4275564, # source: Cardiac surgeries (interventions) /// concept: Operation on heart
@@ -135,7 +140,8 @@ conceptSets <- list(
       4051940, # source: Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing /// concept: Permanent cardiac pacemaker procedure
       609312 # source: Listed for heart transplantation /// concept: Awaiting transplantation of heart
       ),
-    
+
+    # 5.28 Patient characteristics 
     UC3PateintCharacteristics = c(
       434007, # source: hemophilia A diagnosis /// concept: hereditary factor VIII deficiency disease
       4094223, # source: hemophilia A subtype/ severity /// concept: mild hereditary factor VIII deficiency disease
@@ -146,7 +152,8 @@ conceptSets <- list(
       4126681, # source: factor VIII inhibitor status /// concept: detected
       9190 # source: factor VIII inhibitor status /// concept: not detected
     ),
-    
+
+    # 5.29 Lab Measurements
     UC3LabMeasurements = c(
       3024942, # source: factor VIII inhibitor titer /// concept: coagulation factor VIII inhibitor [Units/volume] in platelet poor plasma by coagulation assay
       3022520, # source: factor VIII activity measurement /// concept: coagulation factor VIII activated [Units/volume] in platelet poor plasma by coagulation assay
@@ -163,7 +170,8 @@ conceptSets <- list(
       3006923, # source: ALT /// concept: alanine aminotransferase [enzymatic activity/volume] in serum or plasma
       3013721 # source: AST /// concept: aspartate aminotransferase [enzymatic activity/volume] in serum or plasma
     ),
-    
+
+    # 5.30 Treatments 
     UC3Treatments = c(
       1352213, # source: factor VIII /// concept: factor VIII (umbrella term)
       793042, # source: factor VIII /// concept: emicizumab (umbrella term)
@@ -172,7 +180,8 @@ conceptSets <- list(
       4265597, # source: factor VIII dose is continuous infusion or bolus dose /// concept: by bolus infusions
       1517070 # source: desmopressin /// concept: desmopressin
     ),
-    
+
+    # 5.31 Surgery-specific parameters
     UC3Surgery = c(
       4172515, # source: Medical/ surgical procedure /// concept: Therapeutic procedure
       967823, # source: NaCl administration during surgery /// concept: sodium chloride
