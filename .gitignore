@@ -14,11 +14,17 @@ inst/doc
 # project-specific
 inst/config/*
 !inst/config/*-sample.yml
-# Adjusted to not ignore .gitkeep files
-inst/extdata/**/*  # Ignore all files within inst/extdata
+
+inst/extdata/**/*
+
 !inst/extdata/phems_variable_list
-!inst/extdata/json/.gitkeep  # Ensure this is not ignored
-inst/extdata/json/*.json
+
+!inst/extdata/json
+inst/extdata/json/*
+
+!inst/extdata/standard_concepts
+inst/extdata/standard_concepts/*
+
 !inst/extdata/vocabularies
 inst/extdata/vocabularies/*
 !inst/extdata/**/*.gitkeep  # Explicitly include .gitkeep files in inst/extdata
