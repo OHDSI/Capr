@@ -86,7 +86,7 @@ source("./R/table_linked_to_concept_field.R")
 #   ) %>% print()
 labTestsCounts <-
   countOccurrences(
-    conceptSets$concepts$labTests, c("measurement"), links, con, connectionConfig$cdm_schema
+    conceptSets$concepts$labTests, c("measurement"), links, con, connectionConfig$cdm_schema, connectionConfig$vocabulary_schema
   ) %>% print()
 
 # Disconnect
@@ -106,6 +106,7 @@ source('./R/isStandard.R')
 nonStandard <- isStandard(
   db_connection = con,
   data_concepts_path = config_oth$concepts_path,
+  vocab_schema = connectionConfig$vocabulary_schema,
   # (optional) Save the results (with standard and non-standard concepts)
   save_path = config_oth$save_path_isStandard
 )

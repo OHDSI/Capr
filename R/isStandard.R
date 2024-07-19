@@ -20,13 +20,16 @@
 #' @importFrom dplyr mutate across filter select inner_join
 #' @importFrom DBI dbGetQuery
 #' @export
-isStandard <- function(db_connection, data_concepts_path, save_path = NULL) {
+isStandard <- function(db_connection, data_concepts_path, vocab_schema, save_path = NULL) {
   library(readr)
   library(dplyr)
   library(DBI)
 
   # Read concept table from SQL database
-  concept_table_query <- "SELECT concept_id, concept_name, standard_concept FROM cdm.concept"
+  concept_table_query <- paste0(
+    "SELECT concept_id, concept_name, standard_concept FROM ", vocab_schema, ".concept"
+    )
+  print(concept_table_query)
   concept_table <- dbGetQuery(db_connection, concept_table_query) %>%
     mutate(concept_id = as.character(concept_id)) %>%
     mutate(concept_id = tolower(trimws(concept_id)))
