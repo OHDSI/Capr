@@ -53,7 +53,9 @@ cp connection_config-sample.yml connection_config.yml
 and fill in your configuration details.
 
 4a.  Open RStudio and verify renv >= 1.0.7 is installed by calling packageVersion("renv"). If not installed, call install.packages("renv)
+
 4b.  In the top-right "Project" dropdown menu, select "Open Project" and open ./Capr-PHEMS.Rproj
+
 4c.  .Rprofile will be sourced when opening the project; this will trigger renv::init() to initialize the environment. When prompted whether to use a DESCRIPTION file for dependency discovery, select option 1 to use the DESCRIPTION file. Next, you may be prompted the project already has a lockfile with another set of options. Here also select option 1 to restore the project from the lockfile. This will install all required packages to the environment. Your renv is now activated.
 
 5.  A template script is provided under ./inst/templates/ as both an R script and .Rmd file. The code between these files is identical. It is recommended to use the .Rmd file, so chunks of code can easily be run at will. These chunks of code are self-explanatory.
