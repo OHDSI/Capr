@@ -1,37 +1,27 @@
----
-title: "cohortCapr markdown"
-author: "Guus @TheHyve"
-date: "2024-07-17"
-output: html_document
----
-## Set-up knitr
-```{r knitr, include=FALSE}
+## ----knitr, include=FALSE------------------------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 
 # knitr::purl(
 #   input = './R/cohortCapr_md.Rmd',
 #   output = './R/cohortCapr.R'
 # )
-```
 
-## Set-up config
-```{r Get project configurations}
+
+## ----Get project configurations------------------------------------------------------------------------------
 connectionConfig <- config::get(config = 'config', file = './inst/config/connection_config.yml')
 config_oth <- config::get(config = 'config', file = './inst/config/config.yml')
-```
 
-## Load libraries
-```{r Load libraries}
+
+## ----Load libraries------------------------------------------------------------------------------------------
 library(RSQLite)
 library(tibble)
 library(DatabaseConnector)
 library(CohortGenerator)
 library(CirceR)
 library(Capr)
-```
 
-## Connect to DB
-```{r connect to database, eval=TRUE, include=TRUE}
+
+## ----connect to database, eval=TRUE, include=TRUE------------------------------------------------------------
 #  Use connection details from configuration
 connectionDetails <- createConnectionDetails(
   dbms = connectionConfig$dbms,
@@ -42,11 +32,9 @@ connectionDetails <- createConnectionDetails(
   oracleDriver = connectionConfig$oracleDriver,
   pathToDriver = connectionConfig$pathToDriver
 )
-```
 
-## Concept sets
-Define a measurement concept set using Capr and include all descendants
-```{r concept sets, echo=TRUE}
+
+## ----concept sets, echo=TRUE---------------------------------------------------------------------------------
 ## Concept sets
 source("./R/conceptSets.R")
 
@@ -61,11 +49,9 @@ conceptSets$conceptSets <- conceptSets$conceptSets %>%
 
 # Disconnect
 disconnect(con)
-```
 
-## Concept counts
-Retrieve counts for a concept set
-```{r count occurences}
+
+## ----count occurences----------------------------------------------------------------------------------------
 ## Count occurrences of each concept in data
 
 # Establish connection
@@ -89,10 +75,9 @@ labTestsCounts <-
 
 # Disconnect
 disconnect(con)
-```
 
-## Standard and non-standard concepts given a list of concept IDs
-```{r Standard non-standard check}
+
+## ----Standard non-standard check-----------------------------------------------------------------------------
 # Connect to DB
 con <- connect(connectionDetails)
 
@@ -110,9 +95,9 @@ disconnect(con)
 
 # Print all non-standard concepts
 nonStandard
-```
-## Standard and non-standard concepts given a concept set
-```{r Standard non-standard check concept set}
+
+
+## ----Standard non-standard check concept set-----------------------------------------------------------------
 # connect to DB
 con <- connect(connectionDetails)
 
@@ -132,14 +117,9 @@ disconnect(con)
 
 # print results (non-standard)
 nonStandardCS
-```
 
 
-## Initial event cohort
-People having any of the following:
-any of the lab test measurements
-limit to first/earliest occurrence of any of the above measurements (+descendants) per person
-```{r Cohort definition}
+## ----Cohort definition---------------------------------------------------------------------------------------
 ## Cohort definition
 # Create cohort definition
 ch <- cohort(
@@ -179,14 +159,13 @@ ch <- cohort(
     )
   )
 )
-```
 
-## Write json expressions and sql queries
-```{r json and sql}
+
+## ----json and sql--------------------------------------------------------------------------------------------
 ## Cohort json and sql
 # Generate json for cohort
 chJson <- ch %>%
-  toCirce() %>%
+  Capr::toCirce() %>%
   jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE) %>%
   as.character()
 
@@ -195,10 +174,9 @@ sql <- CirceR::buildCohortQuery(
   expression = CirceR::cohortExpressionFromJson(chJson),
   options = CirceR::createGenerateOptions(generateStats = FALSE)
 )
-```
 
-Save the cohort and concept set jsons; these can be imported into ATLAS
-```{r Save cohort and concept set json}
+
+## ----Save cohort and concept set json------------------------------------------------------------------------
 write(chJson, paste0(config_oth$save_path_json, "/cohort.json"))
 for (cs in names(conceptSets$conceptSets)) {
   writeConceptSet(
@@ -206,9 +184,9 @@ for (cs in names(conceptSets$conceptSets)) {
     path = paste(config_oth$save_path_json, "/", cs, "_cs.json", sep="")
   )
 }
-```
 
-```{r Create and generate cohorts}
+
+## ----Create and generate cohorts-----------------------------------------------------------------------------
 # Establish connection
 con <- connect(connectionDetails)
 
@@ -248,10 +226,9 @@ disconnect(con)
 
 
 cohortCounts
-```
 
-## Number of people in db
-```{r Number of people in DB}
+
+## ----Number of people in DB----------------------------------------------------------------------------------
 # Establish connection
 con <- connect(connectionDetails)
 
@@ -273,4 +250,4 @@ cat("Number of persons in cohort: ", result_cohort, "\n")
 
 # Disconnect
 disconnect(con)
-```
+
