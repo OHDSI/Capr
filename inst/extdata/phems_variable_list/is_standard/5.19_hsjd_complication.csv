@@ -1,0 +1,21 @@
+concept_id,concept_name,standard_concept,sourceCode
+4044892,Procedure on sternum,S,Sternum reopening (procedure undertaken)
+4046868,Vocal cord dysfunction,S,Vocal Cord Dysfunction
+4049398,Temporary cardiac pacemaker procedure,S,"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing)"
+4051940,Permanent cardiac pacemaker procedure,S,"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing)"
+4353741,Cardioversion,S,"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing)"
+4117045,Atrial overdrive pacing,S,"Arrhythmia therapy (procedures): Cardioversion, Rapid atrial pacing, temporary pacing, permanent pacing)"
+253796,Pneumothorax,S,Pneumothorax
+609312,Awaiting transplantation of heart,S,Listed for heart transplantation
+4202832,Intubation,S,intubation
+315643,Tachyarrhythmia,S,"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.)"
+4275564,Operation on heart,S,Cardiac surgeries (interventions)
+44783799,Exteriorization of trachea,S,Tracheostomy
+44784217,Cardiac arrhythmia,S,"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.)"
+4068155,Atrial arrhythmia,S,"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.)"
+4228448,Bradyarrhythmia,S,"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.)"
+4185572,Ventricular arrhythmia,S,"Arrhythmia diagnosis (tachyarrhythmia, bradyarrhythmia, atrial, ventricular etc.)"
+4275136,Paralysis of diaphragm,S,Diaphragmatic Paralysis
+46234437,ivabradine,S,"Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide)"
+1354860,flecainide,S,"Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide)"
+1309944,amiodarone,S,"Drugs administered; Arrhythmia therapy (drugs): IV anthyarritmics (ivabradine, amiodarone, flecainide)"

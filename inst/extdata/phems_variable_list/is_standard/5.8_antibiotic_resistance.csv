@@ -1,0 +1,11 @@
+concept_id,concept_name,standard_concept,sourceCode
+4019195,Methicillin resistant Staphylococcus aureus,S,MRSA
+4257547,Extended spectrum beta-lactamase producing bacteria,S,ESBL
+37017134,Multidrug-resistant bacteria,S,Drug-resistant
+37017134,Multidrug-resistant bacteria,S,Multidrug-resistant
+37017134,Multidrug-resistant bacteria,S,Clindamycin-resistant
+37017134,Multidrug-resistant bacteria,S,Vancomycin-resistant
+37017134,Multidrug-resistant bacteria,S,Erythromycin-resistant
+1707687,vancomycin,S,Vancomycin-resistant
+997881,clindamycin,S,Clindamycin-resistant
+1746940,erythromycin,S,Erythromycin-resistant

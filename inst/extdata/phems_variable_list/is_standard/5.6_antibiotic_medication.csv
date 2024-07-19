@@ -1,0 +1,51 @@
+concept_id,concept_name,standard_concept,sourceCode
+4273629,Chemotherapy,S,Chemotherapy
+21603754,Monoclonal antibodies,C,Monoclonal Antibodies
+1836430,sulfamethoxazole,S,Trimethoprim-Sulfamethoxazole
+1836948,tetracycline,S,Tetracycline
+902722,tobramycin,S,Tobramycin
+1705674,trimethoprim,S,Trimethoprim-Sulfamethoxazole
+1707687,vancomycin,S,Vancomycin
+19010400,fusidate,S,Fusidic acid
+45892419,gentamicin,S,Gentamicin
+45892599,ceftolozane,S,Ceftolozane-Tazovactam
+46221507,avibactam,S,Ceftazidime-Avibactam
+1734104,azithromycin,S,Azithromycin
+1736887,linezolid,S,Linezolid
+1748975,cefepime,S,Cefepime
+1750500,clarithromycin,S,Clarithromycin
+1769535,cefadroxil,S,Cefadroxil
+1771162,cefazolin,S,Cefazolin
+1774470,cefotaxime,S,Cefotaxime
+1776684,ceftazidime,S,Ceftazidime
+1776684,ceftazidime,S,Ceftazidime-Avibactam
+1778162,cefuroxime,S,Cefuroxime
+1786617,daptomycin,S,Daptomycin
+1797513,ciprofloxacin,S,Ciprofloxacin
+997881,clindamycin,S,Clindamycin
+901845,colistin,S,Colistin
+1709170,meropenem,S,Meropenem
+1717963,ertapenem,S,Ertapenem
+1518254,dexamethasone,S,Dexamethasone
+1741122,tazobactam,S,Piperacillin-Tazobactam
+1741122,tazobactam,S,Ceftolozane-Tazovactam
+1746940,erythromycin,S,Erythromycin
+951511,mupirocin,S,Mupirocin
+956653,fosfomycin,S,Fosfomycin
+1759842,clavulanate,S,Amoxicillin clavulanate
+975125,hydrocortisone,S,Hydrocortisone
+1778262,imipenem,S,Imipenem
+19078399,teicoplanin,S,Teicoplanin
+1790868,amikacin,S,Amikacin
+1506270,methylprednisolone,S,Methylprednisolone
+1713332,amoxicillin,S,Amoxicillin clavulanate
+1713332,amoxicillin,S,Amoxicillin
+1717327,ampicillin,S,Ampicillin
+920293,nitrofurantoin,S,Nitrofurantoin
+1721543,norfloxacin,S,Norfloxacin
+1724703,oxacillin,S,Oxacillin
+1728416,penicillin G,S,Penicillin
+1742253,levofloxacin,S,Levofloxacin
+1746114,piperacillin,S,Piperacillin-Tazobactam
+1550557,prednisolone,S,Prednisolone
+1763204,rifampin,S,Rifampicin

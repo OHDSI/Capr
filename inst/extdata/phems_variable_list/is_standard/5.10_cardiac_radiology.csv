@@ -1,0 +1,43 @@
+concept_id,concept_name,standard_concept,sourceCode
+4019824,Transesophageal echocardiography,S,US transoesophageal echocardiogram (toe)
+4032404,Bronchoscopy,S,IR bronchoscopy
+4065416,Exercise tolerance test,S,Exercise test (non-CPET)
+4345925,Videofluoroscopy swallow,S,FL video swallow
+4083106,US scan of head,S,US cranial contents
+4083108,US scan of neck,S,US neck
+4082979,MRI of head,S,MRI head
+4093436,Ultrasonography of thorax,S,US thorax and pleural cavity
+4125350,CT of head,S,CT head
+4125530,US urinary tract,S,US urinary tract
+44802640,MRI study for cardiac congenital anomaly,S,MRI cardiac complex congenital
+4163872,Plain chest X-ray,S,XR chest
+4167029,Ultrasonography of inguinal region,S,US doppler groin both
+4167052,Doppler ultrasonography of kidney,S,US doppler renal both
+4305221,US scan of abdomen and pelvis,S,US abdomen and pelvis/ US abdomen
+4303522,US scan of diaphragm,S,US diaphragmatic region
+4306317,CT angiography of coronary artery with contrast,S,CT heart with contrast/ CT cardiac angiogram coronary/ CT cardiac gated with contrast
+4169275,X-ray of chest and abdomen,S,XR chest and abdomen
+4322380,Insertion of peripherally inserted central catheter,S,IR PICC line insertion
+4140473,Holter extended electrocardiographic recording,S,24h holter monitor
+4329508,Ultrasonography of pleural cavity,S,US thorax and pleural cavity
+4335392,Doppler ultrasonography of vein of lower limb,S,US doppler lower limb veins both
+4203365,Epicardial echocardiography,S,Epicardial echocardiogram
+4335825,Transthoracic echocardiography,S,US transthoracic echocardiogram/ us transthoracic echocardiogram (pre- admission)/ US transthoracic echocardiogram (sedated)
+40482732,Insertion of tunneled venous catheter,S,IR tunnelled central venous line insertion
+40489841,Doppler ultrasonography of jugular vein,S,US doppler jugular vein both
+40492338,Cardiopulmonary exercise test,S,Cardiopulmonary exercise test (CPET)
+40488431,Interrogation of cardiac pacemaker,S,Pacemaker/ICD interrogation (in clinic)/ pacemaker/ICD interrogation (other)
+42873079,Removal of tunneled central venous catheter,S,IR tunnelled central venous line removal
+4261497,Ultrasonography of abdomen,S,US abdomen and pelvis/ US abdomen
+4205144,Portable electroencephalogram,S,EEG routine portable
+4181917,Electroencephalogram,S,EEG routine
+4264477,Diagnostic radiography of abdomen,S,XR abdomen
+45764527,Electrocardiographic Holter analyzer,S,24h holter monitor
+45765560,Cardiovascular monitor,S,Event monitor
+4327032,CT of thorax with contrast,S,CT thorax with contrast
+35622931,Doppler ultrasound,S,US doppler groin both
+35622931,Doppler ultrasound,S,US doppler
+44813863,Ultrasonography of vocal cord,S,US vocal cord
+4312208,Contrast bronchogram,S,IR bronchogram
+4235141,Check artificial pacemaker,S,Pacemaker/ICD device check - remote patient initiated
+4235141,Check artificial pacemaker,S,Pacemaker/ICD device check - remote device initiated

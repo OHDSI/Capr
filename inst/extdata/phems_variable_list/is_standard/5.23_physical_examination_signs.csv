@@ -1,0 +1,36 @@
+concept_id,concept_name,standard_concept,sourceCode
+4069590,Normal,S,Pupillary reactivity (right)
+4069590,Normal,S,Pupillary reactivity (left)
+4116857,Medium,S,Pupillary size (right)
+4116857,Medium,S,Pupillary size (left)
+4124461,Weak,S,Peripheral pulse (pressure)
+4124461,Weak,S,Central pulse
+4132135,Absent,S,Peripheral pulse (pressure)
+4132135,Absent,S,Central pulse
+4188539,Yes,S,Pupillary reactivity (right)
+4188539,Yes,S,Pupillary reactivity (left)
+4188540,No,S,Pupillary reactivity (right)
+4188540,No,S,Pupillary reactivity (left)
+4181412,Present,S,Peripheral pulse (pressure)
+4181412,Present,S,Central pulse
+4224504,Pulse,S,Central pulse
+4314539,Arterial pulse pressure,S,Peripheral pulse (pressure)
+8483,counts per minute,S,Peripheral pulse (pressure)
+8483,counts per minute,S,Central pulse
+8588,millimeter,S,Pupillary size (right)
+8588,millimeter,S,Pupillary size (left)
+8555,second,S,Capillary refill time
+21490963,Right pupil Pupillary response,S,Pupillary reactivity (right)
+45879546,Sluggish,S,Pupillary reactivity (right)
+45879546,Sluggish,S,Pupillary reactivity (left)
+21499034,Dilated,S,Pupillary size (right)
+21499034,Dilated,S,Pupillary size (left)
+36310446,Constricted,S,Pupillary size (right)
+36310446,Constricted,S,Pupillary size (left)
+45880051,Unresponsive,S,Pupillary reactivity (right)
+45880051,Unresponsive,S,Pupillary reactivity (left)
+3032652,Glasgow coma scale,S,GCS
+3045676,Capillary refill [Time],S,Capillary refill time
+21491763,Left pupil Pupillary response,S,Pupillary reactivity (left)
+3021415,Left pupil Diameter Auto,S,Pupillary size (left)
+3027214,Right pupil Diameter Auto,S,Pupillary size (right)

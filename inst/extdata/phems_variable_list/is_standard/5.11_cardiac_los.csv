@@ -1,0 +1,5 @@
+concept_id,concept_name,standard_concept,sourceCode
+4123933,Admission to pediatric intensive care unit,S,ICU admission (start datetime and end datetime)
+8715,Hospital admission,S,Total hospital admission (start datetime and end datetime)
+4161811,Admission to high dependency unit,S,HDU admission (start datetime and end datetime)
+36675203,Admission to pediatric cardiology department,S,Cardiology ward admission (start datetime and end datetime)

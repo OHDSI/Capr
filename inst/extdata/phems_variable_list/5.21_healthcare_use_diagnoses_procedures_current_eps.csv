@@ -1,0 +1,88 @@
+﻿sourceCode,concept_id
+Previous diagnosis of sepsis measure ,1340204 
+Previous diagnosis of sepsis measure ,132797 
+Origin (external) ,44790567 
+Origin (internal) ,4294886 
+Reason for admission ,44803020 
+Surgical admission (non-urgent) ,4084670 
+Surgical admission (urgent) ,4123946  
+Non-surgical admission ,0 
+Central venous catheter ,4179206 
+Diagnosis of chronic condition ,443783 
+Diagnosis of chronic condition ,312723 
+Diagnosis of chronic condition ,201820 
+Diagnosis of chronic condition ,255573 
+Diagnosis of acute infection having the potential for progression to sepsis1+2 ,37174269 
+Diagnosis of acute infection having the potential for progression to sepsis1+2 ,4271450 
+Meningo-encephalitis ,4322814 
+hepatitis ,4243475 
+pneumonia ,255848 
+meningitis ,435785 
+bacteremia ,132736 
+viremia ,133327 
+UTI ,4331815 
+tuberculosis ,4103588 
+candidiasis ,433968 
+Diagnosis of SIRS ,434821 
+Diagnosis of condition producing immunodeficiency ,4140977 
+Abcess ,444202 
+appendicitis ,440448 
+,
+peritonitis ,196152 
+cellulitis ,435613 
+surgical site inflammation ,4300243 
+injury with open wound ,444187 
+renal insufficiency ,36716945 
+endocarditis ,441589 
+miocarditis ,314383 
+necrotizing enterocolitis ,44807226 
+Cancer ,443392 
+cardiac arrest ,321042 
+organ transplant ,4208341 
+acute kidney injury ,197320 
+immunodeficiency ,433740 
+asplenia ,45768671 
+cerebral palsy ,4134120 
+rheumatoid arthritis ,80809 
+sickle cell disease ,22281 
+ulcerative colitis ,81893 
+Crohn's disease ,201606 
+Cushing's disease ,195212 
+Down's syndrome ,439125 
+mitochondrial disease ,81539 
+nephrotic syndrome ,195314 
+neutropenia ,604243 
+Diagnosis of organ system dysfunction ,4080011 
+Antibiotics ,4085730 
+Antivirals ,4140762 
+Immunosuppressors ,4314777 
+Corticoids ,21602722 
+Antineoplastics ,4181511 
+Surgery previous to prediction time point ,4301351 
+"Chest opening, chest drainage ",4074689 
+Arterial blood pressure catheter ,45758028 
+Peripheral IV cannulas ,4177205 
+Urinary catheter ,4070667 
+Nasogastric/orogastric tube ,42538045 
+Endotracheal tube ,4097216 
+Tracheostomy ,44783799 
+Invasive ventilation ,44790095 
+Non-invasive ventilation ,4177224 
+FiO2 ,42869590 
+FiO2 ,8554 
+FiO2 ,8510 
+FiO2 ,720868 
+Mean Airway Pressure (MAP) ,42527086 
+Mean Airway Pressure (MAP) ,44777590 
+Mean Airway Pressure (MAP) ,8876 
+Mean Airway Pressure (MAP) ,44777602 
+Oxygenation index ,4193843 
+Oxygenation index ,8529 
+Oxygenation index ,0 
+ECMO ,4052536 
+ECMO type ,37206603 
+ECMO type ,37206601 
+Ventricular assist device (VAD) ,4235043 
+Dialysis ,4032243 
+Dialysis ,4051330 
+Peritoneal dialysis ,4324124 

@@ -1,0 +1,87 @@
+concept_id,concept_name,standard_concept,sourceCode
+37174269,At increased risk of sepsis,S,Diagnosis of acute infection having the potential for progression to sepsis1+2
+4032243,Dialysis procedure,S,Dialysis
+197320,Acute kidney injury,S,acute kidney injury
+4074689,Open drainage of pleural cavity,S,"Chest opening, chest drainage"
+4084670,Non-urgent surgical admission,S,Surgical admission (non-urgent)
+4070667,Urinary catheter,S,Urinary catheter
+44790095,Invasive ventilation,S,Invasive ventilation
+4052536,Extracorporeal membrane oxygenation,S,ECMO
+4051330,Continuous venovenous hemofiltration,S,Dialysis
+44790567,Patient transfer from hospital to hospital,S,Origin (external)
+133327,Viremia,S,viremia
+4097216,Endotracheal tube,S,Endotracheal tube
+4085730,Antibiotic therapy,S,Antibiotics
+4123946,Admission to surgical department,S,Surgical admission (urgent)
+4208341,Solid organ transplant,S,organ transplant
+4193843,Oxygenation index measurement,S,Oxygenation index
+4235043,Ventricular assist device,S,Ventricular assist device (VAD)
+443392,Malignant neoplastic disease,S,Cancer
+4181511,Administration of antineoplastic agent,S,Antineoplastics
+4294886,"Patient transfer, in-hospital",S,Origin (internal)
+4301351,Surgical procedure,S,Surgery previous to prediction time point
+4140762,Antiviral therapy,S,Antivirals
+4177205,Cannulation,S,Peripheral IV cannulas
+4177224,Non-invasive ventilation,S,Non-invasive ventilation
+45758028,Arterial blood pressure catheter,S,Arterial blood pressure catheter
+44803020,Primary reason for admission,S,Reason for admission
+4179206,Central venous catheter,S,Central venous catheter
+132736,Bacteremia,S,bacteremia
+44783799,Exteriorization of trachea,S,Tracheostomy
+45768671,Asplenia,S,asplenia
+4324124,Peritoneal dialysis,S,Peritoneal dialysis
+435785,Meningitis,S,meningitis
+201820,Diabetes mellitus,S,Diagnosis of chronic condition
+42538045,Nasogastric/orogastric tube stylet,S,Nasogastric/orogastric tube
+37206601,Venoarterial extracorporeal membrane oxygenation,S,ECMO type
+37206603,Venovenous extracorporeal membrane oxygenation,S,ECMO type
+4314777,Immunosuppressive therapy,S,Immunosuppressors
+604243,Acquired neutropenia,S,neutropenia
+444187,Open wound,S,injury with open wound
+22281,Sickle cell-hemoglobin SS disease,S,sickle cell disease
+435613,Cellulitis,S,cellulitis
+4134120,Cerebral palsy,S,cerebral palsy
+444202,Abscess,S,Abcess
+312723,Congenital heart disease,S,Diagnosis of chronic condition
+255573,Chronic obstructive lung disease,S,Diagnosis of chronic condition
+255848,Pneumonia,S,pneumonia
+433740,Immunodeficiency disorder,S,immunodeficiency
+4080011,Organ dysfunction syndrome,S,Diagnosis of organ system dysfunction
+434821,Systemic inflammatory response syndrome,S,Diagnosis of SIRS
+81539,Mitochondrial cytopathy,S,mitochondrial disease
+4103588,Acute tuberculosis,S,tuberculosis
+443783,Chronic disease,S,Diagnosis of chronic condition
+4140977,Secondary immune deficiency disorder,S,Diagnosis of condition producing immunodeficiency
+201606,Crohn's disease,S,Crohn's disease
+4243475,Acute hepatitis,S,hepatitis
+4300243,Postoperative complication,S,surgical site inflammation
+439125,Complete trisomy 21 syndrome,S,Down's syndrome
+321042,Cardiac arrest,S,cardiac arrest
+4331815,Acute urinary tract infection,S,UTI
+195212,Hypercortisolism,S,Cushing's disease
+196152,Peritonitis,S,peritonitis
+314383,Myocarditis,S,miocarditis
+195314,Nephrotic syndrome,S,nephrotic syndrome
+441589,Endocarditis,S,endocarditis
+4271450,Acute infectious disease,S,Diagnosis of acute infection having the potential for progression to sepsis1+2
+81893,Ulcerative colitis,S,ulcerative colitis
+80809,Rheumatoid arthritis,S,rheumatoid arthritis
+4322814,Meningoencephalitis,S,Meningo-encephalitis
+36716945,Renal insufficiency,S,renal insufficiency
+440448,Appendicitis,S,appendicitis
+433968,Candidiasis,S,candidiasis
+44807226,Necrotising enterocolitis,S,necrotizing enterocolitis
+132797,Sepsis,S,Previous diagnosis of sepsis measure
+44777590,centimeter watercolumn,S,Mean Airway Pressure (MAP)
+44777602,kilopascal,S,Mean Airway Pressure (MAP)
+8510,unit,S,FiO2
+8554,percent,S,FiO2
+720868,fraction,S,FiO2
+8529,index,S,Oxygenation index
+8876,millimeter mercury column,S,Mean Airway Pressure (MAP)
+21602722,CORTICOSTEROIDS FOR SYSTEMIC USE,C,Corticoids
+42869590,Oxygen/Gas total [Pure volume fraction] Inhaled gas,S,FiO2
+42527086,Mean airway pressure,S,Mean Airway Pressure (MAP)
+0,No matching concept,NA,Non-surgical admission
+0,No matching concept,NA,Oxygenation index
+1340204,History of event,S,Previous diagnosis of sepsis measure

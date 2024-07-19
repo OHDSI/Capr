@@ -1,3 +1,6 @@
+!.gitignore
+
+# Capr
 .Rhistory
 .Rproj.user
 .DS_Store
@@ -7,3 +10,24 @@ errorReportSql.txt
 work/*
 scratch/
 inst/doc
+
+# project-specific
+inst/config/*
+!inst/config/*-sample.yml
+
+inst/extdata/**/*
+
+!inst/extdata/phems_variable_list
+
+!inst/extdata/json
+inst/extdata/json/*
+
+!inst/extdata/standard_concepts
+inst/extdata/standard_concepts/*
+
+!inst/extdata/vocabularies
+inst/extdata/vocabularies/*
+
+!*.gitkeep
+
+renv

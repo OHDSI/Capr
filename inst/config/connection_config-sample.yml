@@ -1,0 +1,37 @@
+---
+## Default configuration values
+#    Default values are necessary for the `config` CRAN library, not used in package otherwise
+#    No need to change these values; they are unused
+default:
+  dbms: 'postgres'  # Database management system
+  user: 'postgres'
+  password: null 
+  server: localhost/omop_db
+  port: 5432
+  oracleDriver: null
+  pathToDriver: '~/jdbc/'
+  cdm_schema: 'cdm'
+  vocabulary_schema: 'vocab'
+  cohort_schema: 'cohort'
+
+## Connection details
+#    Replace with your connection details
+#    Used primarily as input to DatabaseConnector::createConnectionDetails()
+#    see the function documentation for more information
+#    Please check carefully which details are required for your dbms
+#    as not all of these details may be required.
+#    cdm_schema should point to the OMOP CDM schema
+#    vocabulary_schema should point to the schema where the vocabulary tables are stored
+#    cohort_schema should point to the schema where the cohort tables are stored
+#    All schemas should be EXISTING in the database
+config:
+  dbms: ''
+  user: ''
+  password: ''
+  server: ''
+  port: 5432
+  oracleDriver: null
+  pathToDriver: ''
+  cdm_schema: ''
+  vocabulary_schema: ''
+  cohort_schema: ''

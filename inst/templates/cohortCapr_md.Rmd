@@ -1,0 +1,289 @@
+---
+title: "cohortCapr markdown"
+author: "Guus @TheHyve"
+date: "2024-07-17"
+output: pdf_document
+---
+## Set-up knitr
+```{r knitr, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# knitr::purl(
+#   input = './inst/templates/cohortCapr_md.Rmd',
+#   output = './inst/templates/cohortCapr.R'
+# )
+```
+
+## Set-up config
+```{r Get project configurations}
+connectionConfig <- config::get(config = 'config', file = './inst/config/connection_config.yml')
+config_oth <- config::get(config = 'config', file = './inst/config/config.yml')
+```
+
+## Load libraries
+```{r Load libraries}
+library(RSQLite)
+library(tibble)
+library(DatabaseConnector)
+library(CohortGenerator)
+library(CirceR)
+library(Capr)
+```
+
+## Connect to DB
+```{r connect to database, eval=TRUE, include=TRUE}
+#  Use connection details from configuration
+connectionDetails <- createConnectionDetails(
+  dbms = connectionConfig$dbms,
+  user = connectionConfig$user,
+  password = connectionConfig$password,
+  server = connectionConfig$server,
+  port = connectionConfig$port,
+  oracleDriver = connectionConfig$oracleDriver,
+  pathToDriver = connectionConfig$pathToDriver
+)
+```
+
+## Concept sets
+Define a measurement concept set using Capr and include all descendants
+```{r concept sets, echo=TRUE}
+## Concept sets
+source("./R/conceptSets.R")
+
+# Establish connection
+con <- connect(connectionDetails)
+
+conceptSets$conceptSets <- conceptSets$conceptSets %>%
+  # Add details for all concepts (excl. descendants)
+  lapply(FUN = getConceptSetDetails,
+         con = con,
+         vocabularyDatabaseSchema = connectionConfig$vocabulary_schema)
+
+# Disconnect
+disconnect(con)
+```
+
+## Concept counts
+Retrieve counts for a concept set
+```{r count occurences}
+## Count occurrences of each concept in data
+
+# Establish connection
+con <- connect(connectionDetails)
+
+# Get countOccurrences function
+source("./R/countOccurrences.R")
+
+# Get links between tables and fields as input
+source("./R/table_linked_to_concept_field.R")
+
+# count occurrences of each concept 'x' and print results; cardiac complications as example
+# cardiacComplicationsCounts <- 
+#   countOccurrences(
+#     conceptSets$concepts$cardiacComplications, c("condition_occurrence", "procedure_occurrence"), links, con, connectionConfig$cdm_schema
+#   ) %>% print()
+labTestsCounts <-
+  countOccurrences(
+    conceptSets$concepts$labTests, c("measurement"), links, con, connectionConfig$cdm_schema, connectionConfig$vocabulary_schema
+  ) %>% print()
+
+# Disconnect
+disconnect(con)
+```
+
+## Standard and non-standard concepts given a list of concept IDs
+To check for each concept in a list of concept_ids and source codes, the "isStandard.R" function
+can be used. This takes as input a list of concept_ids and source codes and returns a table of non-standard concepts.
+See inst/extdata/phems-variable-list for examples of CSVs tables in the expected format.
+```{r Standard non-standard check}
+# Connect to DB
+con <- connect(connectionDetails)
+
+# Return table of non-standard concepts
+source('./R/isStandard.R')
+nonStandard <- isStandard(
+  db_connection = con,
+  data_concepts_path = config_oth$concepts_path,
+  vocab_schema = connectionConfig$vocabulary_schema,
+  # (optional) Save the results (with standard and non-standard concepts)
+  save_path = config_oth$save_path_isStandard
+)
+
+# Disconnect
+disconnect(con)
+
+# Print all non-standard concepts
+nonStandard
+
+```
+
+## Standard and non-standard concepts given a concept set
+Similarly to isStandard(), isStandardCS() can be used to check the standardness of concepts, but rather given a concept set than a list.
+```{r Standard non-standard check concept set}
+# connect to DB
+con <- connect(connectionDetails)
+
+# run for labTests conceptSet
+labTests <- conceptSets$conceptSets$labTests
+
+# check standardness across concept set
+source('./R/isStandardCS.R')
+nonStandardCS <- isStandardCS(
+  db_connection = con,
+  conceptSet = conceptSets$conceptSets$labTests,
+  # (optional) Save the results (with standard and non-standard concepts)
+  save_path = config_oth$save_path_isStandard
+)
+
+# Disconnect
+disconnect(con)
+
+# print results (non-standard)
+nonStandardCS
+```
+
+
+## Initial event cohort
+People having any of the following:
+any of the lab test measurements
+limit to first/earliest occurrence of any of the above measurements (+descendants) per person
+```{r Cohort definition}
+## Cohort definition
+# Create cohort definition
+ch <- cohort(
+  entry = entry(
+    # enter patients who have had cardiac surgery
+    procedure(conceptSets$conceptSets$cardiacSurgery),
+    observationWindow = continuousObservation(0, 0),
+    primaryCriteriaLimit = "All"
+  ),
+  attrition = attrition(
+    withAny(
+      # include all cardiac complications
+      atLeast(
+        x = 1,
+        # include all cardiac complications represented by condition concepts
+        query = conditionOccurrence(conceptSets$conceptSets$cardiacComplications)
+      ),
+      atLeast(
+        x = 1,
+        # include all cardiac complications represented by procedure concepts
+        query = procedure(conceptSets$conceptSets$cardiacComplications)
+      )
+    ),
+    withAny(
+      atLeast(
+        x = 1,
+        # include patients who have had cardiac surgery
+        query = procedure(conceptSets$conceptSets$cardiacSurgery)
+      )
+    ),
+    withAny(
+      atLeast(
+        x = 1,
+        # include patients who have had laboratory measurements
+        query = measurement(conceptSets$conceptSets$labTests)
+      )
+    )
+  ),
+  exit = exit(
+    endStrategy = observationExit()
+  )
+)
+```
+
+## Write json expressions and sql queries
+```{r json and sql}
+## Cohort json and sql
+# Generate json for cohort
+chJson <- ch %>%
+  Capr::toCirce() %>%
+  jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE) %>%
+  as.character()
+
+# Generate cohort sql query
+sql <- CirceR::buildCohortQuery(
+  expression = CirceR::cohortExpressionFromJson(chJson),
+  options = CirceR::createGenerateOptions(generateStats = FALSE)
+)
+```
+
+Save the cohort and concept set jsons; these can be imported into ATLAS
+```{r Save cohort and concept set json}
+write(chJson, paste0(config_oth$save_path_json, "/cohort.json"))
+for (cs in names(conceptSets$conceptSets)) {
+  writeConceptSet(
+    x = conceptSets$conceptSets[[cs]],
+    path = paste(config_oth$save_path_json, "/", cs, "_cs.json", sep="")
+  )
+}
+```
+
+```{r Create and generate cohorts}
+# Establish connection
+con <- connect(connectionDetails)
+
+# Cohorts to create
+cohortsToCreate <- tibble::tibble(
+  cohortId = 9876,
+  cohortName = "cohort",
+  sql = sql
+)
+
+# Cohort tables
+cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = "cohort")
+CohortGenerator::createCohortTables(
+  connectionDetails = connectionDetails,
+  cohortDatabaseSchema = "cohort",
+  cohortTableNames = cohortTableNames,
+)
+
+# Generate the cohorts
+cohortsGenerated <- CohortGenerator::generateCohortSet(
+  connectionDetails = connectionDetails,
+  cdmDatabaseSchema = "cdm",
+  cohortDatabaseSchema = "cohort",
+  cohortTableNames = cohortTableNames,
+  cohortDefinitionSet = cohortsToCreate
+)
+
+# Get cohort counts
+cohortCounts <- CohortGenerator::getCohortCounts(
+  connectionDetails = connectionDetails,
+  cohortDatabaseSchema = "cohort",
+  cohortTable = cohortTableNames$cohortTable
+)
+
+# Disconnect
+disconnect(con)
+
+
+cohortCounts
+```
+
+## Number of people in db
+```{r Number of people in DB}
+# Establish connection
+con <- connect(connectionDetails)
+
+# Count unique person_id in the person table
+query_person <- 
+  paste0("SELECT COUNT(DISTINCT person_id) AS num_persons FROM ", connectionConfig$cdm_schema, ".person")
+result_person <- dbGetQuery(con, query_person)$num_persons
+
+# Count unique subject_id in the cardiac_arrest table
+query_cohort <-   
+  paste0("SELECT COUNT(DISTINCT subject_id) AS num_persons FROM ", connectionConfig$cohort_schema, ".cohort")
+
+result_cohort <- dbGetQuery(con, query_cohort)$num_persons
+
+# Print results
+cat("Number of persons in dataset: ", result_person, "\n")
+cat("Number of persons in cohort: ", result_cohort, "\n")
+
+
+# Disconnect
+disconnect(con)
+```
