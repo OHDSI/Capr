@@ -12,8 +12,8 @@ Bicarbonate (venous) ,8753 
 Bicarbonate (venous) ,3027273 
 Bilirubin ,3006140 
 Bilirubin ,8749 
-Blood urea nitrogen ,8753 
 Blood urea nitrogen ,3024641 
+Blood urea nitrogen ,8753 
 CRP ,8751 
 CRP ,3020460 
 Calcium ,8753 
@@ -25,11 +25,11 @@ Creatinine ,8840 
 Creatinine ,3051825 
 Glucose ,3013826 
 Glucose ,8753 
-Hematocrit ,8554 
 Hematocrit ,3009542 
-Hemoglobin ,40762351 
-Hemoglobin ,8636 
+Hematocrit ,8554 
 Hemoglobin ,8713 
+Hemoglobin ,8636 
+Hemoglobin ,40762351 
 INR prothrombin time ,3034426 
 INR prothrombin time ,8555 
 Immature WBC count ,4298431 
@@ -42,8 +42,8 @@ Neutrophil count ,3007670 
 Neutrophil count ,8647 
 Phosphate ,3003458 
 Phosphate ,8753 
-Platelet count ,4267147 
 Platelet count ,8647 
+Platelet count ,4267147 
 Potassium ,8753 
 Potassium ,3005456 
 Sodium ,3019550 

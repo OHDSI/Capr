@@ -11,12 +11,12 @@ FiO2 ,8554 
 "High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",201957 
 "High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",314383 
 "High Risk Diagnoses: (None, spontaneous cerbral hemorrhage, cardiomyopathy or myocarditis, hypoplastic left heart syndrome, neurodegenerative disorder, necrotizing enterocolitis) ",321319 
-"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",443727 
-"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",4029498 
-"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",317009 
-"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",4165112 
 "Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",260134 
+"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",4165112 
 "Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",442588 
+"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",4029498 
+"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",443727 
+"Low Risk Diagnoses: None, asthma, bronchiolitis, croup, obstructive sleep apnea, diabetic ketoacidosis, seizure disorder ",317009 
 Mechanical ventilation ,40493026 
 Outpatient appointment type (telephone/ clinic visit etc.) ,5083 
 "Outpatient appointments start datetime, end datetime ",9202 
@@ -35,17 +35,3 @@ Systolic blood pressure ,3004249 
 "Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",317510 
 "Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",29783 
 "Very High Risk Diagnoses: None, cardiac arrest preceding ICU admission, severe combined immune deficiency, leukemia or lymphoma after first induction, bone marrow transplant recipient, liver failure ",4245975 
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
