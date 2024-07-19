@@ -151,11 +151,11 @@ any of the lab test measurements
 limit to first/earliest occurrence of any of the above measurements (+descendants) per person
 ```{r Cohort definition}
 ## Cohort definition
-# Example cohort definition
+# Create cohort definition
 ch <- cohort(
   entry = entry(
-    # enter patients who have had a lab test
-    measurement(conceptSets$conceptSets$labTests),
+    # enter patients who have had cardiac surgery
+    procedure(conceptSets$conceptSets$cardiacSurgery),
     observationWindow = continuousObservation(0, 0),
     primaryCriteriaLimit = "All"
   ),
@@ -176,17 +176,20 @@ ch <- cohort(
     withAny(
       atLeast(
         x = 1,
-        # include all cardiac surgeries
-        query = procedure(conceptSets$conceptSets$cardiacProcedures)
+        # include patients who have had cardiac surgery
+        query = procedure(conceptSets$conceptSets$cardiacSurgery)
+      )
+    ),
+    withAny(
+      atLeast(
+        x = 1,
+        # include patients who have had laboratory measurements
+        query = measurement(conceptSets$conceptSets$labTests)
       )
     )
   ),
   exit = exit(
-    endStrategy = observationExit(),
-    censor = censoringEvents(
-      # exit if intubation has taken place
-      procedure(conceptSets$conceptSets$intubation)
-    )
+    endStrategy = observationExit()
   )
 )
 ```
