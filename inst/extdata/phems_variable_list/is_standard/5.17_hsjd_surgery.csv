@@ -1,9 +1,0 @@
-concept_id,concept_name,standard_concept,sourceCode
-44790138,Induced circulatory arrest,S,"Deep hypothermic circulatory arrest start datetime, end datetime"
-4336464,Coronary artery bypass graft,S,"Cardiac bypass start datetime, end datetime"
-4150627,Removal of endotracheal tube,S,Extubation event
-4201547,Placement of arterial cross clamp,S,"Cross-clamping start datetime, end datetime"
-4301351,Surgical procedure,S,"Surgery start datetime, end datetime"
-40490494,Society of Thoracic Surgeons risk calculator,S,STAT/EACTS score of surgery
-4272324,Cardiopulmonary bypass operation,S,"Antegrade Cerebral Perfusion start datetime, end datetime"
-0,No matching concept,NA,Aristotle's score of surgery
