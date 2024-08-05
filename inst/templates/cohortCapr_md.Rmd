@@ -86,7 +86,8 @@ source("./R/table_linked_to_concept_field.R")
 #   ) %>% print()
 labTestsCounts <-
   countOccurrences(
-    conceptSets$concepts$labTests, c("measurement"), links, con, connectionConfig$cdm_schema, connectionConfig$vocabulary_schema
+    conceptSets$concepts$labTests, c("measurement"), links, con, connectionConfig$cdm_schema, connectionConfig$vocabulary_schema,
+    save_path = config_oth$save_path_counts
   ) %>% print()
 
 # Disconnect
@@ -171,13 +172,6 @@ ch <- cohort(
         x = 1,
         # include all cardiac complications represented by procedure concepts
         query = procedure(conceptSets$conceptSets$cardiacComplications)
-      )
-    ),
-    withAny(
-      atLeast(
-        x = 1,
-        # include patients who have had cardiac surgery
-        query = procedure(conceptSets$conceptSets$cardiacSurgery)
       )
     ),
     withAny(

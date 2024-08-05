@@ -10,6 +10,7 @@
 #' @param db_connection A database connection object through which queries will be executed.
 #' @param cdm_schema The database cdm_schema in which the tables are located.
 #' @param vocab_schema The database vocab_schema in which the concept tables are located.
+#' @param save_path The path to save the results to. If NULL, the results are not saved.
 #'
 #' @return A tibble with columns for the number of times any concept from 'v' occurs: direct count of persons, 
 #'         direct count of records, descendant count of persons, and descendant count of records. 
@@ -25,7 +26,7 @@
 #'                             db_connection = db_connection, cdm_schema = "public")
 #'
 #' @export
-countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_schema) {
+countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_schema, save_path = NULL) {
   library(DBI)
   library(dplyr)
   library(tibble)
@@ -79,6 +80,10 @@ countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_
     ungroup() %>%
     mutate(concept_name = names(v)[match(concept_id, v)]) %>%
     arrange(desc(count_records + descendant_count_record))
+
+    if (!is.null(save_path)) {
+      readr::write_csv(final_res, paste0(save_path, '/', 'count_occurrences.csv'))
+    }
   
   return(final_res)
 }
