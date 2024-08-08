@@ -1,20 +1,20 @@
-## ----knitr, include=FALSE-----------------------------------------------------------------
+## ----knitr, include=FALSE-----------------------------------------------------
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 
 knitr::opts_chunk$set(echo = TRUE)
 
-knitr::purl(
-  input = './inst/templates/cohortCapr_md.Rmd',
-  output = './inst/templates/cohortCapr.R'
-)
+# knitr::purl(
+#   input = './inst/templates/cohortCapr_md.Rmd',
+#   output = './inst/templates/cohortCapr.R'
+# )
 
 
-## ----Get project configurations-----------------------------------------------------------
+## ----Get project configurations-----------------------------------------------
 connectionConfig <- config::get(config = 'config', file = './inst/config/connection_config.yml')
 config_oth <- config::get(config = 'config', file = './inst/config/config.yml')
 
 
-## ----Load libraries-----------------------------------------------------------------------
+## ----Load libraries-----------------------------------------------------------
 library(RSQLite)
 library(tibble)
 library(DatabaseConnector)
@@ -23,7 +23,7 @@ library(CirceR)
 library(Capr)
 
 
-## ----connect to database, eval=TRUE, include=TRUE-----------------------------------------
+## ----connect to database, eval=TRUE, include=TRUE-----------------------------
 #  Use connection details from configuration
 connectionDetails <- createConnectionDetails(
   dbms = connectionConfig$dbms,
@@ -36,7 +36,7 @@ connectionDetails <- createConnectionDetails(
 )
 
 
-## ----concept sets, echo=TRUE--------------------------------------------------------------
+## ----concept sets, echo=TRUE--------------------------------------------------
 ## Concept sets
 source("./R/conceptSets.R")
 
@@ -53,7 +53,7 @@ conceptSets$conceptSets <- conceptSets$conceptSets %>%
 disconnect(con)
 
 
-## ----count occurences---------------------------------------------------------------------
+## ----count occurences---------------------------------------------------------
 ## Count occurrences of each concept in data
 
 # Establish connection
@@ -65,21 +65,22 @@ source("./R/countOccurrences.R")
 # Get links between tables and fields as input
 source("./R/table_linked_to_concept_field.R")
 
-# count occurrences of each concept 'x' and print results; cardiac complications as example
-# cardiacComplicationsCounts <- 
-#   countOccurrences(
-#     conceptSets$concepts$cardiacComplications, c("condition_occurrence", "procedure_occurrence"), links, con, connectionConfig$cdm_schema
-#   ) %>% print()
-labTestsCounts <-
+additionalVarsCounts <-
   countOccurrences(
-    conceptSets$concepts$labTests, c("measurement"), links, con, connectionConfig$cdm_schema, connectionConfig$vocabulary_schema
+    conceptSets$concepts$additional,
+    c("condition_occurrence", "procedure_occurrence", "measurement", "observation"),
+    links,
+    con,
+    connectionConfig$cdm_schema,
+    connectionConfig$vocabulary_schema,
+    save_path = config_oth$save_path_counts
   ) %>% print()
 
 # Disconnect
 disconnect(con)
 
 
-## ----Standard non-standard check----------------------------------------------------------
+## ----Standard non-standard check----------------------------------------------
 # Connect to DB
 con <- connect(connectionDetails)
 
@@ -101,7 +102,7 @@ nonStandard
 
 
 
-## ----Standard non-standard check concept set----------------------------------------------
+## ----Standard non-standard check concept set----------------------------------
 # connect to DB
 con <- connect(connectionDetails)
 
@@ -124,7 +125,7 @@ disconnect(con)
 nonStandardCS
 
 
-## ----Cohort definition--------------------------------------------------------------------
+## ----Cohort definition--------------------------------------------------------
 ## Cohort definition
 # Create cohort definition
 ch <- cohort(
@@ -151,13 +152,6 @@ ch <- cohort(
     withAny(
       atLeast(
         x = 1,
-        # include patients who have had cardiac surgery
-        query = procedure(conceptSets$conceptSets$cardiacSurgery)
-      )
-    ),
-    withAny(
-      atLeast(
-        x = 1,
         # include patients who have had laboratory measurements
         query = measurement(conceptSets$conceptSets$labTests)
       )
@@ -169,7 +163,7 @@ ch <- cohort(
 )
 
 
-## ----json and sql-------------------------------------------------------------------------
+## ----json and sql-------------------------------------------------------------
 ## Cohort json and sql
 # Generate json for cohort
 chJson <- ch %>%
@@ -184,7 +178,7 @@ sql <- CirceR::buildCohortQuery(
 )
 
 
-## ----Save cohort and concept set json-----------------------------------------------------
+## ----Save cohort and concept set json-----------------------------------------
 write(chJson, paste0(config_oth$save_path_json, "/cohort.json"))
 for (cs in names(conceptSets$conceptSets)) {
   writeConceptSet(
@@ -194,7 +188,7 @@ for (cs in names(conceptSets$conceptSets)) {
 }
 
 
-## ----Create and generate cohorts----------------------------------------------------------
+## ----Create and generate cohorts----------------------------------------------
 # Establish connection
 con <- connect(connectionDetails)
 
@@ -236,7 +230,7 @@ disconnect(con)
 cohortCounts
 
 
-## ----Number of people in DB---------------------------------------------------------------
+## ----Number of people in DB---------------------------------------------------
 # Establish connection
 con <- connect(connectionDetails)
 
