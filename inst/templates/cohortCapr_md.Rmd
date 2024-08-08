@@ -79,14 +79,9 @@ source("./R/countOccurrences.R")
 # Get links between tables and fields as input
 source("./R/table_linked_to_concept_field.R")
 
-# count occurrences of each concept 'x' and print results; cardiac complications as example
-# cardiacComplicationsCounts <- 
-#   countOccurrences(
-#     conceptSets$concepts$cardiacComplications, c("condition_occurrence", "procedure_occurrence"), links, con, connectionConfig$cdm_schema
-#   ) %>% print()
-labTestsCounts <-
+additionalVarsCounts <-
   countOccurrences(
-    conceptSets$concepts$labTests, c("measurement"), links, con, connectionConfig$cdm_schema, connectionConfig$vocabulary_schema,
+    conceptSets$concepts$additional, c("measurement"), links, con, connectionConfig$cdm_schema, connectionConfig$vocabulary_schema,
     save_path = config_oth$save_path_counts
   ) %>% print()
 
