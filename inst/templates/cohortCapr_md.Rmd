@@ -81,7 +81,12 @@ source("./R/table_linked_to_concept_field.R")
 
 additionalVarsCounts <-
   countOccurrences(
-    conceptSets$concepts$additional, c("condition_occurrence", "procedure_occurrence", "measurement", "observation"), links, con, connectionConfig$cdm_schema, connectionConfig$vocabulary_schema,
+    conceptSets$concepts$additional,
+    c("condition_occurrence", "procedure_occurrence", "measurement", "observation"),
+    links,
+    con,
+    connectionConfig$cdm_schema,
+    connectionConfig$vocabulary_schema,
     save_path = config_oth$save_path_counts
   ) %>% print()
 
