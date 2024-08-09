@@ -43,26 +43,48 @@ countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_
     
     # Combined SQL query for direct and descendant counts
     combined_sql <- sprintf(
+      # WITH clause to define common table expressions (CTEs)
       "WITH direct_counts AS (
+        -- Select the concept_id and count the distinct persons and total records for each concept_id
         SELECT %s AS concept_id, COUNT(DISTINCT person_id) AS count_persons, COUNT(*) AS count_records
+        -- From the cdm schema and the specified table
         FROM %s.%s
+        -- Where the concept_id is in the provided vector
         WHERE %s IN (%s)
+        -- Group by the concept_id
         GROUP BY %s
-      ), descendant_counts AS (
-        SELECT b.ancestor_concept_id AS concept_id, COUNT(DISTINCT a.person_id) AS descendant_count_person, COUNT(*) AS descendant_count_record
+        -- Define the second expression for descendants
+      ), desc_counts AS (
+        -- Select the ancestor_concept_id and count the distinct persons and total records for each concept_id
+        SELECT b.ancestor_concept_id AS concept_id, COUNT(DISTINCT a.person_id) AS desc_count_person, COUNT(*) AS desc_count_record
+        -- From the vocab schema and concept ancestor table (vocab schema must contain concept_ancestor table; this can be the same schema as the cdm)
         FROM %s.%s a
+        -- Join the concept_ancestor table to get the ancestor_concept_id
         JOIN %s.concept_ancestor b ON a.%s = b.descendant_concept_id
+        -- Where the descendant_concept_id is in the provided vector
         WHERE b.ancestor_concept_id IN (%s)
+        -- Group by the ancestor_concept_id
         GROUP BY b.ancestor_concept_id
       )
-      SELECT coalesce(d.concept_id, dc.concept_id) AS concept_id, coalesce(count_persons, 0) AS count_persons, coalesce(count_records, 0) AS count_records, coalesce(descendant_count_person, 0) AS descendant_count_person, coalesce(descendant_count_record, 0) AS descendant_count_record
+      -- Combine the direct and descendant counts into one result set
+      SELECT coalesce(d.concept_id, dc.concept_id) AS concept_id, coalesce(count_persons, 0) AS count_persons, coalesce(count_records, 0) AS count_records, coalesce(desc_count_person, 0) AS desc_count_person, coalesce(desc_count_record, 0) AS desc_count_record
       FROM direct_counts d
-      FULL OUTER JOIN descendant_counts dc ON d.concept_id = dc.concept_id",
+      FULL OUTER JOIN desc_counts dc ON d.concept_id = dc.concept_id",
       concept_id_field, cdm_schema, table, concept_id_field, paste(v, collapse = ","), concept_id_field,
       cdm_schema, table, vocab_schema, concept_id_field, paste(v, collapse = ",")
     )
     
     combined_res <- dbGetQuery(db_connection, combined_sql)
+
+    not_in_data <- v[!(v %in% combined_res$concept_id)]
+    combined_res <- combined_res |>
+      bind_rows(tibble(
+        concept_id = not_in_data,
+        count_persons = 0,
+        count_records = 0,
+        desc_count_person = 0,
+        desc_count_record = 0
+       ))
     
     # Append results
     results[[table]] <- combined_res
@@ -74,12 +96,12 @@ countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_
     summarise(
       count_persons = sum(count_persons),
       count_records = sum(count_records),
-      descendant_count_person = sum(descendant_count_person),
-      descendant_count_record = sum(descendant_count_record)
+      desc_count_person = sum(desc_count_person),
+      desc_count_record = sum(desc_count_record)
     ) %>%
     ungroup() %>%
     mutate(concept_name = names(v)[match(concept_id, v)]) %>%
-    arrange(desc(count_records + descendant_count_record))
+    arrange(desc(count_records + desc_count_record))
 
     if (!is.null(save_path)) {
       readr::write_csv(final_res, paste0(save_path, '/', 'count_occurrences.csv'))
