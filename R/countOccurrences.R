@@ -29,6 +29,10 @@
 #'
 #' @export
 countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_schema, save_path = NULL) {
+  library(DBI)
+  library(dplyr)
+  library(tibble)
+
   stopifnot(is.vector(v))
   stopifnot(is.character(tables) & is.vector(tables))
   stopifnot(is.list(links))
@@ -40,10 +44,9 @@ countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_
     concept_id_field <- links[[table]]
 
     # Combined SQL query for direct and descendant counts
-    combined_sql <- SqlRender::render(
-      sprintf(
-        # WITH clause to define common table expressions (CTEs)
-        "WITH direct_counts AS (
+    combined_sql <- sprintf(
+      # WITH clause to define common table expressions (CTEs)
+      "WITH direct_counts AS (
         -- Select the concept_id and count the distinct persons and total records for each concept_id
         SELECT %s AS concept_id, COUNT(DISTINCT person_id) AS count_persons, COUNT(*) AS count_records
         -- From the cdm schema and the specified table
