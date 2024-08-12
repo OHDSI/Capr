@@ -16,10 +16,6 @@
 #'
 #' @export
 isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
-  library(readr)
-  library(dplyr)
-  library(DBI)
-
   # Initialize vectors for non-standard concepts
   nonStandard <- c()
   conceptNameNonStandard <- c()
@@ -31,10 +27,10 @@ isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
   cs <- conceptSet@Expression
 
   # initialize vectors
-  concept_name = c()
-  concept_id = c()
-  concept_set = c()
-  standardness = c()
+  concept_name <- c()
+  concept_id <- c()
+  concept_set <- c()
+  standardness <- c()
 
   for (concept in cs) {
     concept_name <- append(concept_name, concept@Concept@concept_name)
@@ -43,7 +39,7 @@ isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
   }
   cs_name <- conceptSet@Name
   concept_set <- rep.int(cs_name, length(concept_id))
-  
+
   # Replace NAs with non-standard
   standardness[is.na(standardness)] <- "Non-standard"
 
@@ -58,16 +54,18 @@ isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
   # Save if not empty and save_path is provided
   if (!is.null(save_path) && nrow(df) > 0) {
     message(paste0("saving file: CONCEPTSET_", cs_name))
-    write_csv(df, paste0(save_path, "/CONCEPTSET_", cs_name, ".csv"))
+    readr::write_csv(df, paste0(save_path, "/CONCEPTSET_", cs_name, ".csv"))
   } else if (is.null(save_path)) {
     message("No save path specified; returning non-standard concepts\n")
   } else {
-    message(paste0("No matches found for concept set: ", table_name, "\n"))
+    message(paste0("No matches found for concept set: ", cs_name, "\n"))
   }
 
 
   # NonStandard concepts
-  res <- df %>% filter(standardness != "S" | is.na(standardness)) %>% tibble::tibble()
+  res <- df |>
+    dplyr::filter(!(standardness %in% c("S", "C")) | is.na(standardness)) |>
+    tibble::tibble()
   if (nrow(res) == 0) {
     message("No non-standard concepts found in concept set: ", cs_name)
   } else {
