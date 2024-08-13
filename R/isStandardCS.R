@@ -15,13 +15,13 @@
 #' non_standard_concepts <- isStandardCS(db_conn, conceptSet, "path/to/save_standard_AND_non_standard/")
 #'
 #' @export
-isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
+isStandardCS <- function(conceptSet, save_path = NULL) {
   # Initialize vectors for non-standard concepts
   nonStandard <- c()
   conceptNameNonStandard <- c()
   sourceCodeNonStandard <- c()
   sourceTableNonStandard <- c()
-  standardness <- c()
+  standard_concept <- c()
 
   # Get concept set details
   cs <- conceptSet@Expression
@@ -30,25 +30,25 @@ isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
   concept_name <- c()
   concept_id <- c()
   concept_set <- c()
-  standardness <- c()
+  standard_concept <- c()
 
   for (concept in cs) {
     concept_name <- append(concept_name, concept@Concept@concept_name)
     concept_id <- append(concept_id, concept@Concept@concept_id)
-    standardness <- append(standardness, concept@Concept@standard_concept)
+    standard_concept <- append(standard_concept, concept@Concept@standard_concept)
   }
   cs_name <- conceptSet@Name
   concept_set <- rep.int(cs_name, length(concept_id))
 
   # Replace NAs with non-standard
-  standardness[is.na(standardness)] <- "Non-standard"
+  standard_concept[standard_concept == ""] <- "Non-standard"
 
   # Filter out standard and classification concepts; keep non-standard and NA
   df <- data.frame(
     concept_name,
     concept_id,
     concept_set,
-    standardness
+    standard_concept
   )
 
   # Save if not empty and save_path is provided
@@ -64,7 +64,7 @@ isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
 
   # NonStandard concepts
   res <- df |>
-    dplyr::filter(!(standardness %in% c("S", "C")) | is.na(standardness)) |>
+    dplyr::filter(standard_concept != "S" | is.na(standard_concept)) |>
     tibble::tibble()
   if (nrow(res) == 0) {
     message("No non-standard concepts found in concept set: ", cs_name)

@@ -29,10 +29,6 @@
 #'
 #' @export
 countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_schema, save_path = NULL) {
-  library(DBI)
-  library(dplyr)
-  library(tibble)
-
   stopifnot(is.vector(v))
   stopifnot(is.character(tables) & is.vector(tables))
   stopifnot(is.list(links))
@@ -75,15 +71,15 @@ countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_
         concept_id_field, cdm_schema, table, concept_id_field, paste(v, collapse = ","), concept_id_field,
         cdm_schema, table, vocab_schema, concept_id_field, paste(v, collapse = ",")
       )
-    )
 
     combined_sql_translated <- SqlRender::translate(
       sql = combined_sql,
-      targetDialect = db_connection@dbms
+      targetDialect = attr(db_connection, "dbms")
     )
 
-    combined_res <- dbGetQuery(db_connection, combined_sql_translated)
-
+    combined_res <- DatabaseConnector::querySql(db_connection, combined_sql_translated) |>
+      dplyr::rename(concept_id = CONCEPT_ID, count_persons = COUNT_PERSONS, count_records = COUNT_RECORDS,
+                    desc_count_person = DESC_COUNT_PERSON, desc_count_record = DESC_COUNT_RECORD)
     not_in_data <- v[!(v %in% combined_res$concept_id)]
     combined_res <- combined_res |>
       dplyr::bind_rows(tibble::tibble(
