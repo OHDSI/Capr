@@ -28,6 +28,18 @@ inst/extdata/standard_concepts/*
 !inst/extdata/vocabularies
 inst/extdata/vocabularies/*
 
+*inst/templates
+*inst/config
+
+Capr-PHEMS.Rproj
+renv.lock
+
+R/conceptSets.R
+
+!inst/extdata/*.csv
+inst/extdata/*
+
+
 !*.gitkeep
 
 renv
