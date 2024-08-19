@@ -33,11 +33,12 @@ countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_
   stopifnot(is.character(tables) & is.vector(tables))
   stopifnot(is.list(links))
   stopifnot(is.character(cdm_schema))
+  stopifnot(is.character(vocab_schema))
 
   results <- list()
 
   for (table in tables) {
-    concept_id_field <- links[[table]]
+    concept_id_field <- links[[table]][1]
 
     # Combined SQL query for direct and descendant counts
     combined_sql <- sprintf(
@@ -70,7 +71,7 @@ countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_
       FULL OUTER JOIN desc_counts dc ON d.concept_id = dc.concept_id",
         concept_id_field, cdm_schema, table, concept_id_field, paste(v, collapse = ","), concept_id_field,
         cdm_schema, table, vocab_schema, concept_id_field, paste(v, collapse = ",")
-      )
+    )
 
     combined_sql_translated <- SqlRender::translate(
       sql = combined_sql,
@@ -108,6 +109,9 @@ countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_
     dplyr::arrange(dplyr::desc(count_records + desc_count_record))
 
   if (!is.null(save_path)) {
+    if (!dir.exists(save_path)) {
+      dir.create(save_path, recursive = TRUE)
+    }
     readr::write_csv(final_res, paste0(save_path, "/", "count_occurrences.csv"))
   }
 
