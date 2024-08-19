@@ -77,8 +77,7 @@ isStandard <- function(db_connection, data_concepts_path, vocab_schema, save_pat
       dplyr::mutate(standard_concept = ifelse(is.na(standard_concept), 'Non-standard', standard_concept)) |>
       dplyr::mutate(standard_concept = dplyr::recode(
         standard_concept,
-        "S" = "Standard",
-        "C" = "Classification"
+        "S" = "Standard"
       )) |>
       dplyr::filter(!(standard_concept == "Standard"))
 
