@@ -3,6 +3,7 @@
 # Capr
 .Rhistory
 .Rproj.user
+.Rprofile
 .DS_Store
 errorReportSql.txt
 *.log
@@ -41,7 +42,6 @@ inst/res
 
 !inst/extdata/*.csv
 inst/extdata/*
-
 
 !*.gitkeep
 
