@@ -62,7 +62,6 @@ isStandardDB <- function(db_connection, cdm_schema, vocab_schema, links, save_pa
       dplyr::mutate(concept_id = as.character(concept_id)) |>
       dplyr::mutate(concept_id = tolower(trimws(concept_id)))
     concept_table["source_table"] <- rep.int(table, nrow(concept_table))
-    print(concept_table)
     nonStandardDF <- concept_table |> dplyr::filter(is.na(standard_concept))
     
     # Initialize res on first loop iteration
