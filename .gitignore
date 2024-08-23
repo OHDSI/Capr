@@ -37,6 +37,7 @@ renv.lock
 
 R/conceptSets.R
 R/queryDB.R
+./man/conceptSets.Rd
 
 inst/res
 

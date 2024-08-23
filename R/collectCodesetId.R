@@ -25,7 +25,6 @@ setGeneric("collectGuid", function(x) standardGeneric("collectGuid"))
 # })
 
 #' @include query.R
-#' @export
 setMethod("collectGuid", "Query", function(x) {
   ids <- getGuid(x)
 
