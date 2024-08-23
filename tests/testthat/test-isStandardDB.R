@@ -44,7 +44,7 @@ test_that("isStandardDB returns empty tibble when no non-standard concepts", {
     )
   )
   
-  stub(isStandardDB, "DatabaseConnector::querySql", mock_querySql_empty)
+  mockery::stub(isStandardDB, "DatabaseConnector::querySql", mock_querySql_empty)
   
   links <- list(
     "table1" = c("concept_id_col1", "source_code_col1")
