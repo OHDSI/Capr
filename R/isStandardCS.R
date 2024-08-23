@@ -2,17 +2,16 @@
 #'
 #' This function examines a concept set for non-standard concepts by comparing them against a standard concepts table in a SQL database. It identifies non-standard concepts and optionally saves the details of these non-standard concepts to a specified path.
 #'
-#' @param db_connection A DBI database connection object to the SQL database containing the standard concepts table. This parameter is currently not used in the function but intended for future use where database queries might be necessary.
 #' @param conceptSet An object representing a set of concepts, containing details such as concept ID, concept name, and whether it is a standard concept. The structure of this object should support `@Expression` to access the individual concepts and their properties.
 #' @param save_path (Optional) The file path where the details of non-standard concepts should be saved as a CSV file. If not provided, the information will not be saved but will still be checked for non-standard concepts.
 #'
-#' @return A tibble containing the columns `concept_name`, `concept_id`, `concept_set`, and `standard`, which represent the concept name, concept ID, the name of the concept set, and the standard status for each concept found to be non-standard or not classified as standard.
+#' @return A tibble containing the columns `concept_name`, `concept_id`, `concept_set`, and `standard_concept`, which represent the concept name, concept ID, the name of the concept set, and the standard status for each concept found to be non-standard or not classified as standard.
 #'
-#' @details The function processes a given concept set to identify non-standard concepts. Non-standard concepts are those not marked as 'S' (Standard) or 'C' (Classification) in their `standard_concept` attribute. The function creates a data frame with concept details, filters out standard and classification concepts, and if a `save_path` is provided, saves this information to a CSV file. If no non-standard concepts are found, appropriate messages are displayed.
+#' @details The function processes a given concept set to identify non-standard concepts. Non-standard concepts are those not marked as 'S' (Standard) or 'C' (Classification) in their `standard_concept` attribute. The function creates a data frame with concept details, replaces empty `standard_concept` values with "Non-standard", filters out standard and classification concepts, and if a `save_path` is provided, saves this information to a CSV file. If no non-standard concepts are found, appropriate messages are displayed.
 #'
 #' @examples
 #' # Assuming you have a concept set `conceptSet`:
-#' non_standard_concepts <- isStandardCS(db_conn, conceptSet, "path/to/save_standard_AND_non_standard/")
+#' non_standard_concepts <- isStandardCS(conceptSet, "path/to/save_standard_AND_non_standard/")
 #'
 #' @export
 isStandardCS <- function(conceptSet, save_path = NULL) {

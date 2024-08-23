@@ -10,9 +10,9 @@
 #'
 #' @return A tibble containing the columns `concept_id`, `concept_name`, `source_code`, and `source_table`, representing the concept ID, concept name, source code, and source table name for each non-standard concept found.
 #'
-#' @details The function first queries the `concept` table from the provided SQL database to retrieve the standard concepts. It then reads each specified table, preparing and joining it with the standard concepts table based on the concept ID. Non-standard concepts are identified based on the `standard_concept` column being `NA`. Information about these non-standard concepts is collected and returned as a tibble.
+#' @details The function first queries the `concept` table from the provided SQL database to retrieve the standard concepts. It then reads each specified table, preparing and joining it with the standard concepts table based on the concept ID. Non-standard concepts are identified based on the `standard_concept` column being `NA`. Information about these non-standard concepts is collected and returned as a tibble. The function also adds a `source_table` column to indicate the source table name.
 #'
-#' If a `save_path` is provided, each joined table that contains at least one non-standard concept is saved to the specified directory with the same name as the original table file.
+#' If a `save_path` is provided, each joined table (including both standard and non-standard concepts) is saved to the specified directory with the same name as the original table file.
 #'
 #' @examples
 #' # Assuming you have a valid DBI connection `db_conn` and your tables are specified in the `links` list:
