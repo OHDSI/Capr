@@ -27,10 +27,6 @@
 #'
 #' @export
 countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_schema, save_path = NULL) {
-  library(DBI)
-  library(dplyr)
-  library(tibble)
-
   stopifnot(is.vector(v))
   stopifnot(is.character(tables) & is.vector(tables))
   stopifnot(is.list(links))
