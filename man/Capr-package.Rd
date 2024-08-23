@@ -4,7 +4,7 @@
 \name{Capr-package}
 \alias{Capr}
 \alias{Capr-package}
-\title{Capr: Cohort Definition Application Programming - project specific for PHEMS}
+\title{Capr: Cohort Definition Application Programming}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 

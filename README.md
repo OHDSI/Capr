@@ -24,41 +24,6 @@ Users can install the current development version of Capr from [GitHub](https://
 devtools::install_github("ohdsi/Capr")
 ```
 
-For Capr-PHEMS, it is recommended to clone the repo and work from the template script cohortCapr.R, whilst using the Capr-PHEMS.Rproj as the project.
-
-# Getting started with Capr-PHEMS
-**Prerequisites**
-
-Please make sure you have the following:
--   R version >= 4.4.0
--   RStudio >= 2024.04.2
--   (CRAN library) renv >= 1.0.7
-
-
-1.  Clone the repo:
-```
-git clone https://github.com/thehyve/Capr-PHEMS.git
-```
-
-2.  Navigate to ./inst/config/. Here you will find two sample configuration files; config-sample.yml and connection_config-sample.yml
-
-3.  Copy these files using: 
-```
-cp config-sample.yml config.yml
-``` 
-and 
-```
-cp connection_config-sample.yml connection_config.yml
-``` 
-and fill in your configuration details.
-
-4a.  Open RStudio and verify renv >= 1.0.7 is installed by calling packageVersion("renv"). If not installed, call install.packages("renv)
-
-4b.  In the top-right "Project" dropdown menu, select "Open Project" and open ./Capr-PHEMS.Rproj
-
-4c.  .Rprofile will be sourced when opening the project; this will trigger renv::init() to initialize the environment. When prompted whether to use a DESCRIPTION file for dependency discovery, select option 1 to use the DESCRIPTION file. Next, you may be prompted the project already has a lockfile with another set of options. Here also select option 1 to restore the project from the lockfile. This will install all required packages to the environment. Your renv is now activated.
-
-5.  A template script is provided under ./inst/templates/ as both an R script and .Rmd file. The code between these files is identical. It is recommended to start by using the .Rmd file, so chunks of code can easily be run at will. These chunks of code are self-explanatory. These templates serve as examples of how Capr and Capr-PHEMS can be used and it is encouraged to modify them locally as you see fit.
 
 # User Documentation
 
@@ -91,10 +56,8 @@ Capr is licensed under Apache License 2.0
 # Development
 
 Capr is being developed in R Studio.
-Capr-PHEMS is beind developed in R Studio.
 
 # Acknowledgements
 
--   The original Capr package is maintained by Martin Lavallee and Adam Black
+-   This package is maintained by Martin Lavallee and Adam Black
 -   Guidance and support for the original development of Capr came from Lee Evans and LTS Computing LLC
--   Additional scripts and templates specific to Capr-PHEMS are maintained by Guus Wilmink
