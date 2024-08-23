@@ -35,6 +35,9 @@ Capr-PHEMS.Rproj
 renv.lock
 
 R/conceptSets.R
+R/queryDB.R
+
+inst/res
 
 !inst/extdata/*.csv
 inst/extdata/*
