@@ -1,5 +1,5 @@
-Package: Capr-PHEMS
-Title: Cohort Definition Application Programming - project specific for PHEMS
+Package: Capr
+Title: Cohort Definition Application Programming
 Version: 2.0.8
 Authors@R: c(
     person("Martin", "Lavallee", , "martin.lavallee@boehringer-ingelheim.com", role = c("aut", "cre")),
@@ -12,13 +12,12 @@ Description: Provides a programming language for defining cohort definitions in 
     'Capr' functions can be used to create, save, and load component parts to a cohort definition allowing 
     R programmers to easily reuse cohort logic. 'Capr' provides tools to create a large number of OHDSI cohorts 
     while also helping bridge the gap between human readable descriptions of clinical phenotypes
-    and their computational implementation.
-    For PHEMS this package has been extended with additional functions to support PHEMS cohort creation. 
+    and their computational implementation. 
 License: Apache License (>= 2)
 URL: https://ohdsi.github.io/Capr/, https://github.com/OHDSI/Capr/
 BugReports: https://github.com/OHDSI/Capr/issues/
 Encoding: UTF-8
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.1
 Depends: 
   R (>= 3.5.0)
 Imports: 
@@ -45,8 +44,6 @@ Imports:
     CirceR,
     codetools,
     readr,
-    dplyr,
-    DBI
 Suggests:
     testthat (>= 3.0.0),
     knitr,
