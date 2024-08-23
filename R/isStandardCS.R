@@ -15,59 +15,57 @@
 #' non_standard_concepts <- isStandardCS(db_conn, conceptSet, "path/to/save_standard_AND_non_standard/")
 #'
 #' @export
-isStandardCS <- function(db_connection, conceptSet, save_path = NULL) {
-  library(readr)
-  library(dplyr)
-  library(DBI)
-
+isStandardCS <- function(conceptSet, save_path = NULL) {
   # Initialize vectors for non-standard concepts
   nonStandard <- c()
   conceptNameNonStandard <- c()
   sourceCodeNonStandard <- c()
   sourceTableNonStandard <- c()
-  standardness <- c()
+  standard_concept <- c()
 
   # Get concept set details
   cs <- conceptSet@Expression
 
   # initialize vectors
-  concept_name = c()
-  concept_id = c()
-  concept_set = c()
-  standardness = c()
+  concept_name <- c()
+  concept_id <- c()
+  concept_set <- c()
+  standard_concept <- c()
 
   for (concept in cs) {
     concept_name <- append(concept_name, concept@Concept@concept_name)
     concept_id <- append(concept_id, concept@Concept@concept_id)
-    standardness <- append(standardness, concept@Concept@standard_concept)
+    standard_concept <- append(standard_concept, concept@Concept@standard_concept)
   }
   cs_name <- conceptSet@Name
   concept_set <- rep.int(cs_name, length(concept_id))
-  
+
   # Replace NAs with non-standard
-  standardness[is.na(standardness)] <- "Non-standard"
+  standard_concept[standard_concept == ""] <- "Non-standard"
 
   # Filter out standard and classification concepts; keep non-standard and NA
   df <- data.frame(
     concept_name,
     concept_id,
     concept_set,
-    standardness
+    standard_concept
   )
 
   # Save if not empty and save_path is provided
   if (!is.null(save_path) && nrow(df) > 0) {
     message(paste0("saving file: CONCEPTSET_", cs_name))
-    write_csv(df, paste0(save_path, "/CONCEPTSET_", cs_name, ".csv"))
+    readr::write_csv(df, paste0(save_path, "/CONCEPTSET_", cs_name, ".csv"))
   } else if (is.null(save_path)) {
     message("No save path specified; returning non-standard concepts\n")
   } else {
-    message(paste0("No matches found for concept set: ", table_name, "\n"))
+    message(paste0("No matches found for concept set: ", cs_name, "\n"))
   }
 
 
   # NonStandard concepts
-  res <- df %>% filter(standardness != "S" | is.na(standardness)) %>% tibble::tibble()
+  res <- df |>
+    dplyr::filter(standard_concept != "S" | is.na(standard_concept)) |>
+    tibble::tibble()
   if (nrow(res) == 0) {
     message("No non-standard concepts found in concept set: ", cs_name)
   } else {

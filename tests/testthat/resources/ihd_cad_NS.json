@@ -1,0 +1,55 @@
+{
+  "items": [
+    {
+      "concept": {
+        "CONCEPT_ID": 40398869,
+        "CONCEPT_NAME": "Coronary (atherosclerosis or artery disease) or triple vessel disease of the heart",
+        "STANDARD_CONCEPT": "",
+        "STANDARD_CONCEPT_CAPTION": "",
+        "INVALID_REASON": "D",
+        "INVALID_REASON_CAPTION": "",
+        "CONCEPT_CODE": "194841001",
+        "DOMAIN_ID": "Condition",
+        "VOCABULARY_ID": "SNOMED",
+        "CONCEPT_CLASS_ID": "Disorder"
+      },
+      "isExcluded": false,
+      "includeDescendants": true,
+      "includeMapped": false
+    },
+    {
+      "concept": {
+        "CONCEPT_ID": 40348851,
+        "CONCEPT_NAME": "Ischemic heart disease",
+        "STANDARD_CONCEPT": "",
+        "STANDARD_CONCEPT_CAPTION": "",
+        "INVALID_REASON": "D",
+        "INVALID_REASON_CAPTION": "",
+        "CONCEPT_CODE": "2610009",
+        "DOMAIN_ID": "Condition",
+        "VOCABULARY_ID": "SNOMED",
+        "CONCEPT_CLASS_ID": "Disorder"
+      },
+      "isExcluded": false,
+      "includeDescendants": true,
+      "includeMapped": false
+    },
+    {
+      "concept": {
+        "CONCEPT_ID": 37063456,
+        "CONCEPT_NAME": "Hospital admission ischemic heart disease diagnosis | Patient | Cardiopulmonary",
+        "STANDARD_CONCEPT": "C",
+        "STANDARD_CONCEPT_CAPTION": "Classification",
+        "INVALID_REASON": "V",
+        "INVALID_REASON_CAPTION": "Valid",
+        "CONCEPT_CODE": "LP408320-2",
+        "DOMAIN_ID": "Measurement",
+        "VOCABULARY_ID": "LOINC",
+        "CONCEPT_CLASS_ID": "LOINC Hierarchy"
+      },
+      "isExcluded": false,
+      "includeDescendants": true,
+      "includeMapped": false
+    }
+  ]
+}
