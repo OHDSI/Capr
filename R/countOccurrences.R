@@ -75,7 +75,7 @@ countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_
 
     ind_not_in_data <- which(!(v %in% combined_res$concept_id))
     combined_res <- combined_res |>
-      bind_rows(tibble(
+      dplyr::bind_rows(tibble(
         concept_id = v[ind_not_in_data],
         concept_name = "Unknown; concept_id not found in data",
         domain_id = "Unknown; concept_id not found in data",
@@ -91,16 +91,16 @@ countOccurrences <- function(v, tables, links, db_connection, cdm_schema, vocab_
   }
 
   # Combine all results into a single data frame and transform
-  final_res <- bind_rows(results) |>
-    group_by(concept_id, concept_name, domain_id) |>
-    summarise(
+  final_res <- dplyr::bind_rows(results) |>
+    dplyr::group_by(concept_id, concept_name, domain_id) |>
+    dplyr::summarise(
       count_persons = sum(count_persons),
       count_records = sum(count_records),
       desc_count_person = sum(desc_count_person),
       desc_count_record = sum(desc_count_record)
     ) |>
-    ungroup() |>
-    arrange(desc(desc_count_record))
+    dplyr::ungroup() |>
+    dplyr::arrange(desc(desc_count_record))
 
   if (!is.null(save_path)) {
     readr::write_csv(final_res, paste0(save_path, "/", "count_occurrences.csv"))
