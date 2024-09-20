@@ -3,7 +3,8 @@ Title: Cohort Definition Application Programming
 Version: 2.0.8
 Authors@R: c(
     person("Martin", "Lavallee", , "martin.lavallee@boehringer-ingelheim.com", role = c("aut", "cre")),
-    person("Adam", "Black", , "black@ohdsi.org", role = c("aut"))
+    person("Adam", "Black", , "black@ohdsi.org", role = c("aut")),
+    person("Guus", "Wilmink", , "guus@thehyve.nl", role = c("aut"))
   )
 Description: Provides a programming language for defining cohort definitions in R to use in studies for Observational 
     Health Data Sciences and Informatics (OHDSI). The functions in 'Capr' allow for the programmatic creation of 
@@ -40,7 +41,9 @@ Imports:
     DatabaseConnector,
     SqlRender,
     generics,
-    CirceR
+    CirceR,
+    codetools,
+    readr,
 Suggests:
     testthat (>= 3.0.0),
     knitr,
@@ -61,4 +64,9 @@ Collate:
     'exit.R'
     'cohort.R'
     'collectCodesetId.R'
+    'conceptSets.R'
+    'countOccurrences.R'
+    'isStandard.R'
+    'isStandardCS.R'
+    'table_linked_to_concept_field.R'
     'utils.R'

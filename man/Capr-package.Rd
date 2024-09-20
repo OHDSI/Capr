@@ -25,6 +25,7 @@ Useful links:
 Authors:
 \itemize{
   \item Adam Black \email{black@ohdsi.org}
+  \item Guus Wilmink \email{guus@thehyve.nl}
 }
 
 }
