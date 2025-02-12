@@ -209,10 +209,10 @@ cs <- function(..., name, id = NULL) {
   ids <- purrr::map_int(conceptList, ~.@Concept@concept_id)
   dups <- ids[duplicated(ids)]
   if (length(dups) > 0) {
-    rlang::abort(paste("ID: ", paste(dups, collapse = ", "), " are duplicated in the concept set."))
+    warning(paste("ID: ", paste(dups, collapse = ", "), " are duplicated in the concept set."))
   }
 
-  # TODO decide how to handle duplicate ids in `cs`. For now we throw error.
+  # TODO decide how to handle duplicate ids in `cs`. For now we throw warning.
 
   if (is.null(id)) {
     id <- purrr::map_chr(conceptList, ~paste0(.@Concept@concept_id,
