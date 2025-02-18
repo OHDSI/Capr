@@ -194,11 +194,29 @@ test_that("user op date work", {
   expect_equal(t1@op, "gte")
   expect_equal(t1@value, dd)
 
+
+  # test start date with type era
+  dd <- lubridate::as_date("2010-01-01")
+  t1 <- startDate(gte(dd), type = "era")
+  expect_s4_class(t1, "opAttributeDate")
+  expect_equal(t1@name, "EraStartDate")
+  expect_equal(t1@op, "gte")
+  expect_equal(t1@value, dd)
+
   # test end date
   ee <- lubridate::as_date("2020-01-01")
   t2 <- endDate(lte(ee))
   expect_s4_class(t2, "opAttributeDate")
   expect_equal(t2@name, "OccurrenceEndDate")
+  expect_equal(t2@op, "lte")
+  expect_equal(t2@value, ee)
+
+
+  # test end date with type era
+  ee <- lubridate::as_date("2020-01-01")
+  t2 <- endDate(lte(ee), type = "era")
+  expect_s4_class(t2, "opAttributeDate")
+  expect_equal(t2@name, "EraEndDate")
   expect_equal(t2@op, "lte")
   expect_equal(t2@value, ee)
 })

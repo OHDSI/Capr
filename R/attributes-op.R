@@ -485,39 +485,69 @@ drugQuantity <- function(op) {
 #' Function that creates a start date attribute
 #' @param op   an opAttribute object must be a date that defines the logical operation used to
 #'             determine eligible start dates
+#' @param type specify the type of date to use either occurrence or era. default as occurrence
 #' @return An attribute that can be used in a cohort definition
 #' @export
-startDate <- function(op) {
+startDate <- function(op, type = "occurrence") {
+
+  type <- match.arg(type, choices = c("occurrence", "era"))
 
   check <- all(grepl("opAttribute(Date|Super)", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeDate.")
   }
 
-  methods::new("opAttributeDate",
-               name = "OccurrenceStartDate",
-               op = op@op,
-               value = op@value,
-               extent = op@extent)
+  if (type == "occurrence") {
+    sd <- methods::new("opAttributeDate",
+                 name = "OccurrenceStartDate",
+                 op = op@op,
+                 value = op@value,
+                 extent = op@extent)
+  }
+
+  if (type == "era") {
+    sd <- methods::new("opAttributeDate",
+                 name = "EraStartDate",
+                 op = op@op,
+                 value = op@value,
+                 extent = op@extent)
+  }
+  return(sd)
+
 }
 
 #' Function that creates a end date attribute
 #' @param op   an opAttribute object must be a date that defines the logical operation used to
 #'             determine eligible end dates
+#' @param type specify the type of date to use either occurrence or era. default as occurrence
 #' @return An attribute that can be used in a cohort definition
 #' @export
-endDate <- function(op) {
+endDate <- function(op, type = "occurrence") {
+
+  type <- match.arg(type, choices = c("occurrence", "era"))
 
   check <- all(grepl("opAttribute(Date|Super)", methods::is(op)))
   if (!check) {
     stop("Input must be an opAttributeDate.")
   }
 
-  methods::new("opAttributeDate",
-               name = "OccurrenceEndDate",
-               op = op@op,
-               value = op@value,
-               extent = op@extent)
+  if (type == "occurrence") {
+    ed <- methods::new("opAttributeDate",
+                       name = "OccurrenceEndDate",
+                       op = op@op,
+                       value = op@value,
+                       extent = op@extent)
+  }
+
+  if (type == "era") {
+    ed <- methods::new("opAttributeDate",
+                       name = "EraEndDate",
+                       op = op@op,
+                       value = op@value,
+                       extent = op@extent)
+  }
+  return(ed)
+
 }
 
 # Coercion ------------
