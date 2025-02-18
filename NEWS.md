@@ -1,9 +1,11 @@
 Capr 2.0.9
 ==========
-- convert duplicate concept ids to a warning instead of error
+- convert duplicate concept ids to a warning instead of error #107
 - add as.json function for cohorts #97
 - fix vignette for nested cohort example #106
 - add type to `startDate` and `endDate` attributes to make Era dates #103
+- remove magrittr pipe dependency #100
+- export as.data.frame #104
 
 Capr 2.0.8
 ==========

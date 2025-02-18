@@ -40,9 +40,9 @@ setValidity("Query", function(object) {
                     "ObservationWindow")
   stopifnot(object@domain %in% validDomains)
 
-  domainsInConceptSet <- purrr::map_chr(object@conceptSet@Expression, ~.@Concept@domain_id) %>%
-    {.[!is.na(.)]} %>%
-    {.[. != ""]}
+  domainsInConceptSet <- purrr::map_chr(object@conceptSet@Expression, ~.@Concept@domain_id)
+  domainsInConceptSet <- domainsInConceptSet[!is.na(domainsInConceptSet)]
+  domainsInConceptSet <- domainsInConceptSet[domainsInConceptSet != ""]
 
   domainMap <- c("ConditionEra" = "Condition",
                  "ConditionOccurrence" = "Condition",
@@ -256,11 +256,11 @@ setMethod("as.list", "Query", function(x) {
   #create initial list for query
   ll <- list(
     'CodesetId' = x@conceptSet@id
-  ) %>%
+  ) |>
     purrr::discard(~length(.x) == 0)
   #list out attributes
   if (length(x@attributes) > 0) {
-    atr <- purrr::map(x@attributes, ~as.list(.x)) %>%
+    atr <- purrr::map(x@attributes, ~as.list(.x)) |>
       purrr::reduce(append)
     #append to query list
     ll <- append(ll, atr)
@@ -285,7 +285,7 @@ setMethod("as.list", "Query", function(x) {
 #   atr <- list("Age" = list("Value" = 90, "Op" = "lt"),
 #               "Age2" = list("Value" = 90, "Op" = "lt"))
 #
-#   domainList <- c(0, atr) %>%  rlang::set_names(c("CodesetId", names(atr)))
+#   domainList <- c(0, atr) |>  rlang::set_names(c("CodesetId", names(atr)))
 #
 #   atr_name <- "Age2"
 #   atr_value <- list("Value" = 90, "Op" = "lt")

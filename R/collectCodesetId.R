@@ -32,7 +32,7 @@ setMethod("collectGuid", "Query", function(x) {
   checkNest <- purrr::map_chr(x@attributes, ~as.character(.x@name))
   if (any(checkNest %in% c("CorrelatedCriteria"))) {
     ii <- which(checkNest == "CorrelatedCriteria")
-    id2 <- collectGuid(x@attributes[[ii]]@group) %>%
+    id2 <- collectGuid(x@attributes[[ii]]@group) |>
       purrr::flatten()
 
     ids <- dplyr::bind_rows(ids, id2)
@@ -48,19 +48,19 @@ setMethod("collectGuid", "Criteria", function(x) {
 
 #' @include criteria.R
 setMethod("collectGuid", "Group", function(x) {
-  purrr::map(x@criteria, ~collectGuid(.x)) %>%
+  purrr::map(x@criteria, ~collectGuid(.x)) |>
     append(purrr::map(x@group, ~collectGuid(.x)))
 })
 
 
 setMethod("collectGuid", "CohortEntry", function(x) {
-  purrr::map(x@entryEvents, ~collectGuid(.x)) %>%
+  purrr::map(x@entryEvents, ~collectGuid(.x)) |>
     append(collectGuid(x@additionalCriteria))
   #TODO may need a flatten here with additional criteria
 })
 
 setMethod("collectGuid", "CohortAttrition", function(x) {
-  purrr::map(unname(x@rules), ~collectGuid(.x)) %>%
+  purrr::map(unname(x@rules), ~collectGuid(.x)) |>
     purrr::flatten()
 })
 
@@ -79,18 +79,20 @@ setMethod("collectGuid", "CohortExit", function(x) {
 
 setMethod("collectGuid", "Cohort", function(x) {
 
-  collectGuid(x@entry) %>%
-    append(collectGuid(x@attrition)) %>%
-    append(collectGuid(x@exit)) %>%
-    unlist() %>%
-    unname() %>%
-    unique() %>%
-    tibble::tibble(guid = .) %>%
+  tt <- collectGuid(x@entry) |>
+    append(collectGuid(x@attrition)) |>
+    append(collectGuid(x@exit)) |>
+    unlist() |>
+    unname() |>
+    unique()
+
+  tb <- tibble::tibble(guid = tt) |>
     dplyr::mutate(
       codesetId = dplyr::row_number() - 1,
       codesetId = as.integer(.data$codesetId)
     )
 
+  return(tb)
 })
 
 # Replace CodesetId -----------------------
@@ -100,8 +102,8 @@ setGeneric("replaceCodesetId", function(x, guidTable) standardGeneric("replaceCo
 
 setMethod("replaceCodesetId", "Query", function(x, guidTable) {
 
-  y <- getGuid(x) %>%
-    dplyr::inner_join(guidTable, by = c("guid")) %>%
+  y <- getGuid(x) |>
+    dplyr::inner_join(guidTable, by = c("guid")) |>
     dplyr::pull(.data$codesetId)
   #first replace the query id
   x <- replaceGuid(x, y)
@@ -121,8 +123,8 @@ setMethod("replaceCodesetId", "Query", function(x, guidTable) {
 
 setMethod("replaceCodesetId", "DrugExposureExit", function(x, guidTable) {
 
-  y <- getGuid(x) %>%
-    dplyr::inner_join(guidTable, by = c("guid")) %>%
+  y <- getGuid(x) |>
+    dplyr::inner_join(guidTable, by = c("guid")) |>
     dplyr::pull(.data$codesetId)
 
   x <- replaceGuid(x, y)
@@ -269,17 +271,17 @@ setMethod("listConceptSets", "CohortEntry", function(x) {
   ce <- purrr::map(x@entryEvents, ~listConceptSets(.x))
   check <- purrr::map_int(ce, ~length(.x))
   if (!all(check == 3)) {
-    ce <- ce %>%
+    ce <- ce |>
       purrr::flatten()
   }
 
-  ce %>%
+  ce |>
     append(listConceptSets(x@additionalCriteria))
   # TODO may need a flatten here with additional criteria
 })
 
 setMethod("listConceptSets", "CohortAttrition", function(x) {
-  purrr::map(unname(x@rules), ~listConceptSets(.x)) %>%
+  purrr::map(unname(x@rules), ~listConceptSets(.x)) |>
     purrr::list_flatten()
 })
 
@@ -294,7 +296,7 @@ setMethod("listConceptSets", "CohortExit", function(x) {
   }
   # get concept sets from censoring criteria
   ll2 <- purrr::map(x@censoringCriteria@criteria,
-                    ~listConceptSets(.x) %>%
+                    ~listConceptSets(.x) |>
                       purrr::flatten())
 
   res <- append(ll, ll2)

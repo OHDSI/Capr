@@ -83,8 +83,8 @@ setClass("opAttributeDate",
 
 opToPrint <- function(x) {
   tibble::tibble(symbol = c("<", "<=", ">", ">=", "==", "-", "!-"), op = c("lt", "lte", "gt", "gte",
-                                                                           "eq", "bt", "!bt")) %>%
-    dplyr::filter(.data$op == x) %>%
+                                                                           "eq", "bt", "!bt")) |>
+    dplyr::filter(.data$op == x) |>
     dplyr::pull(.data$symbol)
 }
 
@@ -553,7 +553,7 @@ endDate <- function(op, type = "occurrence") {
 # Coercion ------------
 #' @importFrom rlang :=
 listOpAttribute <- function(x) {
-  atr <- list(Op = x@op, Value = x@value, Extent = x@extent) %>%
+  atr <- list(Op = x@op, Value = x@value, Extent = x@extent) |>
     purrr::discard(is.na)
 
   tibble::lst(`:=`(!!x@name, atr))

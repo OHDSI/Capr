@@ -223,14 +223,14 @@ test_that("user op date work", {
 
 
 test_that("coersion works for op", {
-  t1 <- age(bt(18L, 65L)) %>%
+  t1 <- age(bt(18L, 65L)) |>
     listOpAttribute()
   expect_named(t1, "Age")
   expect_equal(t1$Age$Extent, 65L)
 
 
   dd <- lubridate::as_date("2010-01-01")
-  t1 <- startDate(gte(dd)) %>%
+  t1 <- startDate(gte(dd)) |>
     listOpAttribute()
   expect_named(t1, "OccurrenceStartDate")
   expect_equal(t1$OccurrenceStartDate$Value, dd)

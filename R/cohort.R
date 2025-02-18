@@ -224,7 +224,7 @@ setMethod("as.list", "CohortEntry", function(x) {
     'QualifiedLimit' = list('Type' = x@qualifiedLimit)
   )
 
-  ll <- list('PrimaryCriteria' = pc) %>%
+  ll <- list('PrimaryCriteria' = pc) |>
     append(ac)
 
   if (is.na(ll$AdditionalCriteria$Type)) {
@@ -290,10 +290,10 @@ setMethod("as.list", "CohortEra", function(x) {
 ## Coerce Cohort ----------
 setMethod("as.list", "Cohort", function(x) {
 
-  ll <- as.list(x@entry) %>%
-    append(as.list(x@attrition)) %>%
-    append(as.list(x@exit)) %>%
-    append(as.list(x@era)) %>%
+  ll <- as.list(x@entry) |>
+    append(as.list(x@attrition)) |>
+    append(as.list(x@exit)) |>
+    append(as.list(x@era)) |>
     append(list("cdmVersionRange" = ">=5.0.0"))
 
   return(ll)
@@ -313,7 +313,7 @@ toCirce <- function(cd) {
   cdCirce <- list(
     #start with getting concept set structure
     'ConceptSets' = listConceptSets(cd2)
-  ) %>%
+  ) |>
     #append cohort structure
     append(as.list(cd2))
 
@@ -402,7 +402,7 @@ writeCohort <- function(x, path) {
   checkmate::assertClass(x, "Cohort")
   checkmate::assertCharacter(path, len = 1, min.chars = 1, pattern = "\\.json$")
 
-  toCirce(x) %>%
+  toCirce(x) |>
     jsonlite::write_json(
       path = path,
       auto_unbox = TRUE,
@@ -442,8 +442,8 @@ writeCohort <- function(x, path) {
 
 # capr_to_circe <- function(cd) {
 #
-#   circeJson <- toCirce(cd) %>%
-#     jsonlite::toJSON(auto_unbox = TRUE, pretty = TRUE) %>%
+#   circeJson <- toCirce(cd) |>
+#     jsonlite::toJSON(auto_unbox = TRUE, pretty = TRUE) |>
 #     as.character()
 #
 #   return(circeJson)
