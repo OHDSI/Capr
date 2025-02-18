@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.9</span>
       </span>
     </div>
 
@@ -113,8 +113,6 @@
 
     
     
-<pre><code><span><span class="co">#&gt; Loading required package: CirceR</span></span>
-<span><span class="co">#&gt; Warning: package 'CirceR' was built under R version 4.3.3</span></span></code></pre>
 <div class="section level2">
 <h2 id="intro">Intro<a class="anchor" aria-label="anchor" href="#intro"></a>
 </h2>
@@ -198,14 +196,14 @@ below provides the mapping between the OMOP domain and the the
 </h3>
 <p>A simple example of how to use a query in <code>Capr</code> can be
 seen below:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t1dConceptSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">195771</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T1D"</span><span class="op">)</span></span>
 <span><span class="va">t1dQuery</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">t1dConceptSet</span><span class="op">)</span></span></code></pre></div>
 <p>With our query we can apply this in a variety of places within the
 cohort definition. Below we give an example of a cohort of persons
 starting on metformin as our index event, where they could not have been
 diagnosed with Type 1 Diabetes any time prior.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">metforminConceptSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1503297</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"metformin"</span><span class="op">)</span></span>
 <span><span class="va">t1dConceptSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">195771</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T1D"</span><span class="op">)</span></span>
 <span></span>
@@ -262,7 +260,7 @@ observation of another event occurring). We will go into more details on
 different attributes in a different vignette. In <code>Capr</code> as
 many attributes can be attached within the query after providing the
 concept set. Example below:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t1dConceptSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">195771</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T1D"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">maleT1D</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">t1dConceptSet</span>, <span class="fu"><a href="../reference/attributes.html">male</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -307,7 +305,7 @@ this idea around the index event in a variety of different ways.</p>
 </h3>
 <p>With this definition in mind, let us build an example of a
 <em>criteria</em> object that reflects the image above.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">atenololConceptSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1314002</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"atenolol"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">atenololCriteria</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span></span>
@@ -327,7 +325,7 @@ called in three ways: <code>atLeast</code>, <code>atMost</code> and
 is contextualized by the number of occurrences of the query for its
 function call. If we wanted to have exactly 2 drug exposures of atenolol
 or at most 2 drug exposures they can be done as shown below.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">atenololConceptSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">1314002</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"atenolol"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">atenololCriteriaA</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span></span>
@@ -362,7 +360,7 @@ few examples of building an aperture and then show the corresponding the
 are observing when an event starts between time of 365 to 30 days before
 the index start date. To build this aperture we use the following
 <code>Capr</code> code:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aperture1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span></span>
 <span>  startWindow <span class="op">=</span> <span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span>a <span class="op">=</span> <span class="op">-</span><span class="fl">365</span>, b <span class="op">=</span> <span class="op">-</span><span class="fl">30</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -375,7 +373,7 @@ window. In this case the event start must be between any time before and
 30 days before the index start date. In <code>Capr</code> we can always
 create an unbounded event window by using the <code>Inf</code> operator
 in our code, as shown below.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aperture2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span></span>
 <span>  startWindow <span class="op">=</span> <span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span>a <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, b <span class="op">=</span> <span class="op">-</span><span class="fl">30</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -384,7 +382,7 @@ provides an instance where we want our event window to utilize future
 time. Normally we want to observe an event prior to index. On occasion
 we can allow for an event to take place after index. The
 <code>Capr</code> code to build this aperture is shown below:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aperture3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span></span>
 <span>  startWindow <span class="op">=</span> <span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span>a <span class="op">=</span> <span class="op">-</span><span class="fl">30</span>, b <span class="op">=</span> <span class="fl">30</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -397,7 +395,7 @@ the interest is the full time the person was encountering this medical
 event we need to create both a start and end window in the aperture. The
 <code>Capr</code> code below would replicate the concept from the
 figure.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aperture4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span></span>
 <span>  startWindow <span class="op">=</span> <span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span>a <span class="op">=</span> <span class="op">-</span><span class="fl">365</span>, b <span class="op">=</span> <span class="op">-</span><span class="fl">30</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span>,</span>
 <span>  endWindow <span class="op">=</span> <span class="fu"><a href="../reference/eventEnds.html">eventEnds</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">30</span>, b <span class="op">=</span> <span class="fl">365</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span></span>
@@ -409,7 +407,7 @@ need to be defined in the <code>Capr</code> code unless made
 <code>TRUE</code>. These are more advanced options in cohort building.
 To use the we add this to aperture example 4 to show a full set of
 options for an aperture in <code>Capr</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aperture5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span></span>
 <span>  startWindow <span class="op">=</span> <span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span>a <span class="op">=</span> <span class="op">-</span><span class="fl">365</span>, b <span class="op">=</span> <span class="op">-</span><span class="fl">30</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span>,</span>
 <span>  endWindow <span class="op">=</span> <span class="fu"><a href="../reference/eventEnds.html">eventEnds</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">30</span>, b <span class="op">=</span> <span class="fl">365</span>, index <span class="op">=</span> <span class="st">"startDate"</span><span class="op">)</span>,</span>
@@ -446,7 +444,7 @@ to determine how many <em>criteria</em> must be <code>TRUE</code>.</p>
 complicated cohort, like the <a href="https://www.phekb.org/phenotype/type-2-diabetes-mellitus" class="external-link">PheKB
 T2D case algorithm</a>. To consider a person to be a case of T2D, any
 one of 5 pathways needs to be <code>TRUE</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t2dAlgo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/withAny.html">withAny</a></span><span class="op">(</span></span>
 <span>  <span class="co"># Path 1: 0 T2Dx + 1 T2Rx + 1 abLab</span></span>
 <span>  <span class="fu"><a href="../reference/withAll.html">withAll</a></span><span class="op">(</span></span>
@@ -566,7 +564,7 @@ there are a few important comments on how these objects are used within
 <p>A <em>criteria</em> can not be used on its own, it must be wrapped in
 a <em>group</em>. Even if only one <em>criteria</em> is needed, still
 wrap it in a <em>group</em>. An example would be:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">noT1d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/withAll.html">withAll</a></span><span class="op">(</span></span>
 <span>  <span class="co"># criteria: no t1d prior</span></span>
 <span>  <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span></span>
@@ -581,7 +579,7 @@ wrap it in a <em>group</em>. An example would be:</p>
 <p>Further to this point, a single attrition rule is a <em>group</em>.
 The example of <code>noT1d</code> above would be a single rule in the
 cohort attrition. This is how we would apply it:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cohort</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span></span>
 <span>  entry <span class="op">=</span> <span class="fu"><a href="../reference/entry.html">entry</a></span><span class="op">(</span></span>
 <span>    <span class="co"># index event....</span></span>
@@ -609,7 +607,7 @@ In the definition there are 3 types of abnormal labs: random glucose,
 fasting glucose and HbA1c. Any one of these three could be abnormal as
 part of path 1 of the case algorithm. To build this we need a group
 within a group.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Path 1: 0 T2Dx + 1 T2Rx + 1 abLab</span></span>
 <span><span class="va">path1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/withAll.html">withAll</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, </span>
@@ -649,7 +647,7 @@ has occurred around the time of the inpatient visit. In
 example below. The enumeration of the <em>criteria</em> is now indexed
 based on the inpatient visit rather than the entry event of the cohort
 definition.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ipCse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">9201</span>, <span class="fl">9203</span>, <span class="fl">262</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"visit"</span><span class="op">)</span></span>
 <span><span class="va">hf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">316139</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"heart failure"</span><span class="op">)</span></span>
 <span></span>
