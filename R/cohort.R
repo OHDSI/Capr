@@ -334,6 +334,16 @@ compile.Cohort <- function(object, ...) {
   as.character(jsonlite::toJSON(toCirce(object), auto_unbox = TRUE, ...))
 }
 
+
+#' @rdname as.json
+#' @aliases as.json,Cohort-method
+setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
+  # Use the existing toCirce function to get the proper structure
+  circe_data <- toCirce(x)
+  # Convert to JSON using jsonlite and ensure it's a character string
+  as.character(jsonlite::toJSON(x = circe_data, pretty = pretty, auto_unbox = TRUE, ...))
+})
+
 #' Compile a Capr cohort to json
 #'
 #' @param object A Capr cohort or list of Capr cohorts
