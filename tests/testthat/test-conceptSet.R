@@ -48,8 +48,6 @@ test_that("equality works", {
   expect_false(cs(exclude(9), 3, name = "test") == cs(exclude(mapped(9)),3, name = "test"))
   expect_false(cs(exclude(9), 3, name = "test") == cs(exclude(mapped(9)),3, name = "test"))
 
-  expect_error(cs(3, 3, name = "test"), "duplicated") # duplicates are not allowed
-
   # name and id are ignored
   expect_true(cs(9, 3, name = "a") == cs(9, 3, name = "b"))
   expect_true(cs(9, 3, id = "a", name = "test") == cs(9, 3, id = "b", name = "test"))

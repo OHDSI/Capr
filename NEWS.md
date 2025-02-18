@@ -1,3 +1,8 @@
+Capr 2.0.9
+==========
+- convert duplicate concept ids to a warning instead of error
+- add as.json function for cohorts #97
+
 Capr 2.0.8
 ==========
 - add conceptTypes to determine data provenance #93
