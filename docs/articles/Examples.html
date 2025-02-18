@@ -297,22 +297,47 @@ secondary diabetes</strong></p>
 <span></span>
 <span><span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span></span>
 <span>  entry <span class="op">=</span> <span class="fu"><a href="../reference/entry.html">entry</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">afib</span>,</span>
-<span>      <span class="fu"><a href="../reference/nestedWithAny.html">nestedWithAny</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="../reference/visit.html">visit</a></span><span class="op">(</span><span class="va">ip</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="../reference/eventEnds.html">eventEnds</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="../reference/nestedWithAll.html">nestedWithAll</a></span><span class="op">(</span></span>
-<span>          <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="../reference/visit.html">visit</a></span><span class="op">(</span><span class="va">op</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="../reference/eventEnds.html">eventEnds</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span></span>
+<span>      conceptSet <span class="op">=</span> <span class="va">afib</span>,</span>
+<span>      <span class="fu"><a href="../reference/nestedWithAll.html">nestedWithAll</a></span><span class="op">(</span></span>
+<span>        <span class="co"># an inpatient afib</span></span>
+<span>        <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span></span>
+<span>          x <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>          aperture <span class="op">=</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="../reference/eventEnds.html">eventEnds</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          query <span class="op">=</span> <span class="fu"><a href="../reference/visit.html">visit</a></span><span class="op">(</span>conceptSet <span class="op">=</span> <span class="va">ip</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span>, </span>
+<span>    <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span></span>
+<span>      conceptSet <span class="op">=</span> <span class="va">afib</span>,</span>
+<span>      <span class="fu"><a href="../reference/nestedWithAll.html">nestedWithAll</a></span><span class="op">(</span></span>
+<span>        <span class="co"># 2 afib in outpatient</span></span>
+<span>        <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span></span>
+<span>          x <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>          aperture <span class="op">=</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="../reference/eventEnds.html">eventEnds</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          query <span class="op">=</span> <span class="fu"><a href="../reference/visit.html">visit</a></span><span class="op">(</span></span>
+<span>            conceptSet <span class="op">=</span> <span class="va">op</span>, </span>
 <span>            <span class="fu"><a href="../reference/nestedWithAll.html">nestedWithAll</a></span><span class="op">(</span></span>
-<span>              <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">afib</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="fl">7</span>, <span class="fl">365</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                <span class="fu"><a href="../reference/nestedWithAll.html">nestedWithAll</a></span><span class="op">(</span></span>
-<span>                  <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="../reference/visit.html">visit</a></span><span class="op">(</span><span class="va">op</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="../reference/eventEnds.html">eventEnds</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>              <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span></span>
+<span>                x <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                aperture <span class="op">=</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="fl">7</span>, <span class="fl">365</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                query <span class="op">=</span> <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span></span>
+<span>                  conceptSet <span class="op">=</span> <span class="va">afib</span>, </span>
+<span>                  <span class="fu"><a href="../reference/nestedWithAll.html">nestedWithAll</a></span><span class="op">(</span></span>
+<span>                    <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span></span>
+<span>                      x <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                      aperture <span class="op">=</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="../reference/eventEnds.html">eventEnds</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                      query <span class="op">=</span> <span class="fu"><a href="../reference/visit.html">visit</a></span><span class="op">(</span>conceptSet <span class="op">=</span> <span class="va">op</span><span class="op">)</span></span>
+<span>                    <span class="op">)</span></span>
+<span>                  <span class="op">)</span></span>
 <span>                <span class="op">)</span></span>
-<span>              <span class="op">)</span><span class="op">)</span></span>
+<span>              <span class="op">)</span></span>
 <span>            <span class="op">)</span></span>
-<span>          <span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
 <span>        <span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
+<span>    </span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>

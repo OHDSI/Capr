@@ -2,6 +2,7 @@ Capr 2.0.9
 ==========
 - convert duplicate concept ids to a warning instead of error
 - add as.json function for cohorts #97
+- fix vignette for nested cohort example #106
 
 Capr 2.0.8
 ==========

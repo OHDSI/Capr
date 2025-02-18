@@ -279,22 +279,47 @@ op <- cs(descendants(9202, 9203),
 
 ch <- cohort(
   entry = entry(
-    conditionOccurrence(afib,
-      nestedWithAny(
-        atLeast(1, visit(ip), duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf))),
-        nestedWithAll(
-          atLeast(1, visit(op, duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf)),
+    conditionOccurrence(
+      conceptSet = afib,
+      nestedWithAll(
+        # an inpatient afib
+        atLeast(
+          x = 1, 
+          aperture = duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf)),
+          query = visit(conceptSet = ip)
+        )
+      )
+    ), 
+    conditionOccurrence(
+      conceptSet = afib,
+      nestedWithAll(
+        # 2 afib in outpatient
+        atLeast(
+          x = 1,
+          aperture = duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf)),
+          query = visit(
+            conceptSet = op, 
             nestedWithAll(
-              atLeast(1, conditionOccurrence(afib, duringInterval(eventStarts(7, 365)),
-                nestedWithAll(
-                  atLeast(1, visit(op, duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf))))
+              atLeast(
+                x = 1, 
+                aperture = duringInterval(eventStarts(7, 365)),
+                query = conditionOccurrence(
+                  conceptSet = afib, 
+                  nestedWithAll(
+                    atLeast(
+                      x = 1, 
+                      aperture = duringInterval(eventStarts(-Inf, 0), eventEnds(0, Inf)),
+                      query = visit(conceptSet = op)
+                    )
+                  )
                 )
-              ))
+              )
             )
-          ))
+          )
         )
       )
     )
+    
   )
 )
 

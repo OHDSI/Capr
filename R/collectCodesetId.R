@@ -53,7 +53,6 @@ setMethod("collectGuid", "Group", function(x) {
 })
 
 
-
 setMethod("collectGuid", "CohortEntry", function(x) {
   purrr::map(x@entryEvents, ~collectGuid(.x)) %>%
     append(collectGuid(x@additionalCriteria))
