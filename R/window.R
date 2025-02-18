@@ -256,7 +256,7 @@ setMethod("as.list", "EventAperture", function(x) {
     'EndWindow' = as.list(x@endWindow),
     'RestrictVisit' = x@restrictVisit,
     'IgnoreObservationPeriod' = x@ignoreObservationPeriod
-  ) %>%
+  ) |>
     purrr::discard(isFALSE)
 
   if (is.na(ll$EndWindow$UseEventEnd)) {

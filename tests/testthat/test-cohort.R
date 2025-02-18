@@ -14,7 +14,7 @@ test_that("cohort entry works", {
   expect_type(compile(x), "character")
 
 
-  sql <- CirceR::cohortExpressionFromJson(compile(x)) %>%
+  sql <- CirceR::cohortExpressionFromJson(compile(x)) |>
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
   expect_type(sql, "character")
 
@@ -27,7 +27,7 @@ test_that("cohort entry works", {
   expect_type(toCirce(x), "list")
   expect_type(compile(x), "character")
 
-  sql <- CirceR::cohortExpressionFromJson(compile(x)) %>%
+  sql <- CirceR::cohortExpressionFromJson(compile(x)) |>
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
   expect_type(sql, "character")
 
@@ -81,13 +81,13 @@ test_that("full cohort works", {
   cohortList <- toCirce(cd)
   expect_type(cohortList, "list")
 
-  cohortJson <- jsonlite::toJSON(cohortList, pretty = TRUE, auto_unbox = TRUE) %>%
+  cohortJson <- jsonlite::toJSON(cohortList, pretty = TRUE, auto_unbox = TRUE) |>
     as.character()
 
   expect_type(cohortJson, "character")
   expect_true(nchar(cohortJson) > 1)
 
-  sql <- CirceR::cohortExpressionFromJson(cohortJson) %>%
+  sql <- CirceR::cohortExpressionFromJson(cohortJson) |>
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
 
   expect_type(sql, "character")
@@ -124,13 +124,13 @@ test_that("full cohort works without group", {
   cohortList <- toCirce(cd)
   expect_type(cohortList, "list")
 
-  cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) %>%
+  cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) |>
     as.character()
 
   expect_type(cohortJson, "character")
   expect_true(nchar(cohortJson) > 1)
 
-  sql <- CirceR::cohortExpressionFromJson(cohortJson) %>%
+  sql <- CirceR::cohortExpressionFromJson(cohortJson) |>
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
 
   expect_type(sql, "character")
@@ -153,13 +153,13 @@ test_that("full cohort works without group", {
 #   cohortList <- toCirce(cd)
 #   expect_type(cohortList, "list")
 #
-#   cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) %>%
+#   cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) |>
 #     as.character()
 #
 #   expect_type(cohortJson, "character")
 #   expect_true(nchar(cohortJson) > 1)
 #
-#   sql <- CirceR::cohortExpressionFromJson(cohortJson) %>%
+#   sql <- CirceR::cohortExpressionFromJson(cohortJson) |>
 #     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
 #
 #   expect_type(sql, "character")

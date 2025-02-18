@@ -236,7 +236,7 @@ setMethod("as.list", "Occurrence", function(x) {
 
 setMethod("as.list", "Criteria", function(x) {
   ll <- list('Criteria' = as.list(x@query),
-             'Occurrence' = as.list(x@occurrence)) %>%
+             'Occurrence' = as.list(x@occurrence)) |>
     append(as.list(x@aperture), after = 1)
   return(ll)
 })
@@ -245,9 +245,9 @@ setMethod("as.list", "Criteria", function(x) {
 
 setMethod("as.list", "Group", function(x) {
 
-  criteriaList <- purrr::keep(x@criteria, is.Criteria) %>%
+  criteriaList <- purrr::keep(x@criteria, is.Criteria) |>
     purrr::map(~as.list(.x))
-  demographicsList <- purrr::discard(x@criteria, is.Criteria) %>%
+  demographicsList <- purrr::discard(x@criteria, is.Criteria) |>
     purrr::map(~as.list(.x))
 
   if (length(x@group) == 0) {

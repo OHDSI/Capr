@@ -4,11 +4,13 @@
 \alias{startDate}
 \title{Function that creates a start date attribute}
 \usage{
-startDate(op)
+startDate(op, type = "occurrence")
 }
 \arguments{
 \item{op}{an opAttribute object must be a date that defines the logical operation used to
 determine eligible start dates}
+
+\item{type}{specify the type of date to use either occurrence or era. default as occurrence}
 }
 \value{
 An attribute that can be used in a cohort definition

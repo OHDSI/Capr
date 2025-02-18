@@ -4,11 +4,13 @@
 \alias{endDate}
 \title{Function that creates a end date attribute}
 \usage{
-endDate(op)
+endDate(op, type = "occurrence")
 }
 \arguments{
 \item{op}{an opAttribute object must be a date that defines the logical operation used to
 determine eligible end dates}
+
+\item{type}{specify the type of date to use either occurrence or era. default as occurrence}
 }
 \value{
 An attribute that can be used in a cohort definition

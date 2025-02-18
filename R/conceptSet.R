@@ -209,19 +209,19 @@ cs <- function(..., name, id = NULL) {
   ids <- purrr::map_int(conceptList, ~.@Concept@concept_id)
   dups <- ids[duplicated(ids)]
   if (length(dups) > 0) {
-    rlang::abort(paste("ID: ", paste(dups, collapse = ", "), " are duplicated in the concept set."))
+    warning(paste("ID: ", paste(dups, collapse = ", "), " are duplicated in the concept set."))
   }
 
-  # TODO decide how to handle duplicate ids in `cs`. For now we throw error.
+  # TODO decide how to handle duplicate ids in `cs`. For now we throw warning.
 
   if (is.null(id)) {
     id <- purrr::map_chr(conceptList, ~paste0(.@Concept@concept_id,
                                               .@isExcluded,
                                               .@includeDescendants,
-                                              .@includeMapped)) %>%
-      sort() %>%
-      paste0(collapse = "") %>%
-      digest::digest(algo = "md5") %>%
+                                              .@includeMapped)) |>
+      sort() |>
+      paste0(collapse = "") |>
+      digest::digest(algo = "md5") |>
       as.character()
   }
 
@@ -309,6 +309,7 @@ descendants <- function(...) {
 #' @param x A Caper Concept Set
 #'
 #' @return A tibble (dataframe) with columns: concept_id, includeDescendants, isExcluded, includeMapped.
+#' @export
 setMethod("as.data.frame", "ConceptSet", function(x) {
   df <- tibble::tibble(
     conceptId = purrr::map_int(x@Expression, ~.@Concept@concept_id),
@@ -490,19 +491,19 @@ readConceptSet <- function(path, name, id = NULL) {
     }
 
     conceptDf <- tibble::tibble(
-      id = df[["concept_id"]] %||% df[["concept id"]] %>% as.integer(),
-      isExcluded = df[["isexcluded"]] %||% df[["exclude"]] %||% FALSE %>% as.logical(),
-      includeDescendants = df[["includedescendants"]] %||% df[["descendants"]] %||% FALSE %>% as.logical(),
-      includeMapped = df[["includemapped"]] %||% df[["mapped"]] %||% FALSE %>%  as.logical(),
-      conceptName = df[["concept_name"]] %||% df[["concept name"]] %||% "" %>% as.character(),
-      standardConcept = df[["standard_concept"]] %||% df[["standard concept"]] %||% "" %>% as.character(),
-      standardConceptCaption = df[["standard_concept_caption"]] %||% "" %>% as.character(),
-      invalidReason = df[["invalid_reason"]] %||% "" %>% as.character(),
-      invalidReasonCaption = df[["invalid_reason_caption"]] %||% "" %>% as.character(),
-      conceptCode = df[["concept_code"]] %||%  df[["concept code"]] %||% "" %>% as.character(),
-      domainId = df[["domain_id"]] %||%  df[["domain"]] %||% "" %>% as.character(),
-      vocabularyId = df[["vocabulary_id"]] %||%  df[["vocabulary"]] %||% "" %>% as.character(),
-      conceptClassId = df[["concept_class_id"]] %||% "" %>% as.character()) %>%
+      id = df[["concept_id"]] %||% df[["concept id"]] |> as.integer(),
+      isExcluded = df[["isexcluded"]] %||% df[["exclude"]] %||% FALSE |> as.logical(),
+      includeDescendants = df[["includedescendants"]] %||% df[["descendants"]] %||% FALSE |> as.logical(),
+      includeMapped = df[["includemapped"]] %||% df[["mapped"]] %||% FALSE |>  as.logical(),
+      conceptName = df[["concept_name"]] %||% df[["concept name"]] %||% "" |> as.character(),
+      standardConcept = df[["standard_concept"]] %||% df[["standard concept"]] %||% "" |> as.character(),
+      standardConceptCaption = df[["standard_concept_caption"]] %||% "" |> as.character(),
+      invalidReason = df[["invalid_reason"]] %||% "" |> as.character(),
+      invalidReasonCaption = df[["invalid_reason_caption"]] %||% "" |> as.character(),
+      conceptCode = df[["concept_code"]] %||%  df[["concept code"]] %||% "" |> as.character(),
+      domainId = df[["domain_id"]] %||%  df[["domain"]] %||% "" |> as.character(),
+      vocabularyId = df[["vocabulary_id"]] %||%  df[["vocabulary"]] %||% "" |> as.character(),
+      conceptClassId = df[["concept_class_id"]] %||% "" |> as.character()) |>
       dplyr::mutate_if(is.character, ~tidyr::replace_na(.x, ""))
 
     conceptList <- purrr::pmap(conceptDf, newConcept)
@@ -551,23 +552,23 @@ getConceptSetDetails <- function(x,
 
   ids <- purrr::map_int(x@Expression, ~.@Concept@concept_id)
 
-  sql <- "SELECT * FROM @schema.concept WHERE concept_id IN (@ids);" %>%
-    SqlRender::render(schema = vocabularyDatabaseSchema, ids = ids) %>%
+  sql <- "SELECT * FROM @schema.concept WHERE concept_id IN (@ids);" |>
+    SqlRender::render(schema = vocabularyDatabaseSchema, ids = ids) |>
     SqlRender::translate(targetDialect = DatabaseConnector::dbms(con))
 
-  df <- DBI::dbGetQuery(con, sql) %>%
-    tibble::tibble() %>%
-    dplyr::rename_all(tolower) %>%
+  df <- DBI::dbGetQuery(con, sql) |>
+    tibble::tibble() |>
+    dplyr::rename_all(tolower) |>
     # TODO what is the logic is for filling in the caption and invalid_reason fields?
     dplyr::mutate(invalid_reason = ifelse(
       is.na(.data$invalid_reason), "V", .data$invalid_reason)
-      ) %>%
+      ) |>
     dplyr::mutate(
       standard_concept_caption = dplyr::case_when(
         standard_concept == "S" ~ "Standard",
         standard_concept == "" ~ "Non-Standard",
         standard_concept == "C" ~ "Classification",
-        TRUE ~ "")) %>%
+        TRUE ~ "")) |>
     dplyr::mutate(invalid_reason_caption = dplyr::case_when(
         invalid_reason == "V" ~ "Valid",
         invalid_reason == "I" ~ "Invalid",
@@ -579,7 +580,7 @@ getConceptSetDetails <- function(x,
   for (i in seq_along(x@Expression)) {
     id <- x@Expression[[i]]@Concept@concept_id
     for (n in checkSlotNames) {
-      dtl <- dplyr::filter(df, .data$concept_id == id) %>%
+      dtl <- dplyr::filter(df, .data$concept_id == id) |>
         dplyr::pull(!!n)
       if (length(dtl > 0)) {
         methods::slot(x@Expression[[i]]@Concept, n) <- dtl
@@ -598,8 +599,8 @@ getConceptSetDetails <- function(x,
 #' @export
 setMethod("==", signature = c(e1 = "ConceptSet", e2 = "ConceptSet"), function(e1, e2) {
 
-  lhs <- as.data.frame(e1) %>% dplyr::arrange(.data$conceptId)
-  rhs <- as.data.frame(e2) %>% dplyr::arrange(.data$conceptId)
+  lhs <- as.data.frame(e1) |> dplyr::arrange(.data$conceptId)
+  rhs <- as.data.frame(e2) |> dplyr::arrange(.data$conceptId)
   isTRUE(all.equal(lhs, rhs))
 })
 
@@ -697,7 +698,7 @@ getConceptSetCall <- function(x, name = x@Name){
 # create a lookup table mapping guids to codesetIds
 dedupConceptSets <- function(conceptSetList) {
   uniqueConceptSets <- list(conceptSetList[[1]])
-  lookup <- c(0) %>% rlang::set_names(conceptSetList[[1]]@id)
+  lookup <- c(0) |> rlang::set_names(conceptSetList[[1]]@id)
   i <- 1
   for (newCS in conceptSetList[-1]) {
     alreadyIn <- FALSE

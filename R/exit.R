@@ -194,7 +194,7 @@ censoringEvents <- function(...) {
 # Coercion -----------
 
 toPascal <- function(x) {
-  SqlRender::camelCaseToTitleCase(x) %>%
+  SqlRender::camelCaseToTitleCase(x) |>
     stringr::str_replace_all("\\s", "")
 }
 
@@ -223,7 +223,7 @@ setMethod("as.list", "DrugExposureExit", function(x) {
     'GapDays' = x@persistenceWindow,
     'Offset' = x@surveillanceWindow,
     'DaysSupplyOverride' = x@daysSupplyOverride
-  ) %>%
+  ) |>
     purrr::discard(is.na)
   ll <- list('CustomEra' = ll)
   return(ll)

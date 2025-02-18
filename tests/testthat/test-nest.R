@@ -46,13 +46,13 @@ test_that("Can build a cohort with nested attribute", {
   cohortList <- toCirce(cd)
   expect_type(cohortList, "list")
 
-  cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) %>%
+  cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) |>
     as.character()
 
   expect_type(cohortJson, "character")
   expect_true(nchar(cohortJson) > 1)
 
-  sql <- CirceR::cohortExpressionFromJson(cohortJson) %>%
+  sql <- CirceR::cohortExpressionFromJson(cohortJson) |>
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = FALSE))
 
   expect_type(sql, "character")
@@ -84,7 +84,7 @@ test_that("Can build a cohort with nested attribute", {
   # 	cohort_end_date DATE
   # );")
   #
-  # SqlRender::splitSql(sql) %>% purrr::walk(~DBI::dbExecute(con, .))
+  # SqlRender::splitSql(sql) |> purrr::walk(~DBI::dbExecute(con, .))
   #
   # df <- DBI::dbGetQuery(con, "select * from main.cohort")
   #
@@ -195,13 +195,13 @@ test_that("Can build a cohort with nested groups", {
   cohortList <- toCirce(cd)
   expect_type(cohortList, "list")
 
-  cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) %>%
+  cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) |>
     as.character()
 
   expect_type(cohortJson, "character")
   expect_true(nchar(cohortJson) > 1)
 
-  sql <- CirceR::cohortExpressionFromJson(cohortJson) %>%
+  sql <- CirceR::cohortExpressionFromJson(cohortJson) |>
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = FALSE))
 
   expect_type(sql, "character")
@@ -225,7 +225,7 @@ test_that("listConceptSets works with nested Query", {
 
 # extra code for generation
 
-  # sql <- CirceR::cohortExpressionFromJson(cohortJson) %>%
+  # sql <- CirceR::cohortExpressionFromJson(cohortJson) |>
   #   CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = FALSE))
   #
   # expect_type(sql, "character")
@@ -256,7 +256,7 @@ test_that("listConceptSets works with nested Query", {
   # 	cohort_end_date DATE
   # );")
   #
-  # SqlRender::splitSql(sql) %>% purrr::walk(~DBI::dbExecute(con, .))
+  # SqlRender::splitSql(sql) |> purrr::walk(~DBI::dbExecute(con, .))
   #
   # df <- DBI::dbGetQuery(con, "select * from main.cohort")
   #
