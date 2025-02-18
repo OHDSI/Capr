@@ -27,5 +27,10 @@ Authors:
   \item Adam Black \email{black@ohdsi.org}
 }
 
+Other contributors:
+\itemize{
+  \item Katy Sadowski \email{sadowski@ohdsi.org} [contributor]
+}
+
 }
 \keyword{internal}
