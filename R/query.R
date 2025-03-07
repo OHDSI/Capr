@@ -37,7 +37,8 @@ setValidity("Query", function(object) {
                     "PayerPlanPeriod",
                     "Specimen",
                     "VisitOccurrence",
-                    "ObservationWindow")
+                    "ObservationWindow", # check on this
+                    "ObservationPeriod")
   stopifnot(object@domain %in% validDomains)
 
   domainsInConceptSet <- purrr::map_chr(object@conceptSet@Expression, ~.@Concept@domain_id)
@@ -248,7 +249,9 @@ observation <- function(conceptSet, ...) {
         ...)
 }
 
-
+observationPeriod <- function(...) {
+  query(domain = "ObservationPeriod", conceptSet = NULL, ...)
+}
 
 # Coercion -----
 ## Coerce Query ----
