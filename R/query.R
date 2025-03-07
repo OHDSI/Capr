@@ -249,6 +249,12 @@ observation <- function(conceptSet, ...) {
         ...)
 }
 
+#' Query the observation period domain
+#'
+#' @param ... optional attributes
+#'
+#' @return A Capr Query of domain observation period
+#' @export
 observationPeriod <- function(...) {
   query(domain = "ObservationPeriod", conceptSet = NULL, ...)
 }
