@@ -201,6 +201,22 @@ procedureType <- function(ids, connection, vocabularyDatabaseSchema) {
   return(res)
 }
 
+#' Add a observation period type attribute to determine the provenance of the record
+#' @param ids the concept ids for the attribute
+#' @param connection a connection to an OMOP dbms to get vocab info about the concept
+#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+observationPeriodType <- function(ids, connection, vocabularyDatabaseSchema) {
+  res <- buildConceptAttribute(ids = ids, attributeName = "observationPeriodType",
+                               connection = connection,
+                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+  return(res)
+}
+
+
 #' Add unit attribute to a query
 #' @param x   A single character idetifier for a unit or a concept set that identifies units
 #' @return
@@ -212,7 +228,7 @@ procedureType <- function(ids, connection, vocabularyDatabaseSchema) {
 #' # create a unit attribute
 #' unit(8713L)
 #' unit("%")
-unit <- function(x) {
+measurementUnit <- function(x) {
   if (missing(x)) {
     rlang::abort("Unit must be specified")
   }
