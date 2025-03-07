@@ -8,6 +8,14 @@ test_that("listConceptSets - Query", {
   expect_true(all(purrr::map_lgl(conceptSets, ~all(names(.) == c("id", "name", "expression")))))
 })
 
+test_that("listConceptSets - Query no concept", {
+  conceptSets <- listConceptSets(observationPeriod())
+  expect_true(all(purrr::map_lgl(conceptSets, ~all(names(.) == c("id", "name", "expression")))))
+  expect_equal(conceptSets[[1]]$id, NULL)
+})
+
+
+
 test_that("listConceptSets - Criteria", {
   conceptSets <- listConceptSets(atLeast(1, conditionOccurrence(cs(1, name = "test"))))
   expect_true(all(purrr::map_lgl(conceptSets, ~all(names(.) == c("id", "name", "expression")))))
@@ -57,7 +65,7 @@ test_that("listConceptSets - Attrition", {
               measurement(
                 cs(descendants(4184637L), name = "test"),
                 valueAsNumber(lt(13)),
-                unit(8713L)
+                measurementUnit(8713L)
               ),
               duringInterval(eventStarts(-Inf, -1))
       )
@@ -166,7 +174,7 @@ test_that("listConceptSets - Cohort", {
                 measurement(
                   cs(descendants(4184637L), name = "test"),
                   valueAsNumber(lt(13)),
-                  unit(8713L)
+                  measurementUnit(8713L)
                 ),
                 duringInterval(eventStarts(-Inf, -1))
         )
