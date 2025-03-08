@@ -13,11 +13,12 @@ conceptSetToCapr <- function(cs) {
                         function(y) purrr::map(y, function(z) names(z)[names(z) %notin% "concept"]))
 
 
-  getMappings <- function(x){
+  getMappings <- function(x) {
     list('includeDescendants' = "includeDescendants" %in% x,
          'isExcluded' = "isExcluded" %in% x,
          'includeMapped' = "includeMapped" %in% x)
   }
+
   #run the get mappings function
   mapping <- purrr::map(mapping, function(x) purrr::map(x, getMappings))
 
@@ -51,7 +52,7 @@ getCsKey <- function(cs, caprCs) {
 queryToCapr <- function(x, caprCs, csTb) {
 
   # get the capr domain call
-  domain <- names(x) |> snakecase::to_lower_camel_case()
+  domain <- names(x) |> SqlRender::snakeCaseToCamelCase()
 
   # get the caprCs index of the concept set
   idx <- csTb |>
@@ -77,7 +78,7 @@ queryToCapr <- function(x, caprCs, csTb) {
 }
 
 #function to turn a circe count into a capr criteria
-criteriaToCapr <- function()
+criteriaToCapr <- function() {}
 
 
 # function to turn a circe primary criteria into capr
@@ -94,7 +95,7 @@ primaryCriteriaToCapr <- function(cd) {
   pcQueries <- purrr::map(pc$CriteriaList, ~queryToCapr(.x, caprCs = caprCs, csTb = csTb))
 
   ctsObs <- continuousObservation(
-    priorDays =  pc$ObservationWindow$PriorDays,
+    priorDays = pc$ObservationWindow$PriorDays,
     postDays = pc$ObservationWindow$PostDays
   )
   pcL <- pc$PrimaryCriteriaLimit$Type
@@ -114,3 +115,15 @@ primaryCriteriaToCapr <- function(cd) {
 
 }
 
+#' Read a circe json definition and convert it to a Capr cohort definition
+#' @export
+#' @param path character string that must be a valid path to read json from
+readInCirce <- function(path) {
+  checkmate::assertFileExists(path)
+  circeObj <- jsonlite::fromJSON(path)
+  checkmate::assertList(circeObj)
+  entry <- primaryCriteriaToCapr(circeObj)
+
+  Capr::cohort(entry = entry)
+  return(caprDef)
+}
