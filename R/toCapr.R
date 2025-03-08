@@ -190,8 +190,14 @@ exitToCapr <- function(cd) {
 
 # function to convert collapse to Capr
 eraToCapr <- function(cd) {
-  collapseSettings <- cd$CollapseSettings
-  censorWindow <- cd$CensorWindow
+
+  res <- era(
+    eraDays = cd$CollapseSettings$EraPad,
+    studyStartDate = cd$CensorWindow$StartDate,
+    studyEndDate = cd$CensorWindow$EndDate
+  )
+
+  return(res)
 }
 
 
