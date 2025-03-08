@@ -76,9 +76,61 @@ queryToCapr <- function(x, caprCs, csTb) {
 
 }
 
-#function to turn a circe count into a capr criteria
-criteriaToCapr <- function()
 
+#function to turn a circe count into a capr criteria
+criteriaToCapr <- function(x, caprCs, csTb) {
+  # prep query
+  criteriaQuery <- queryToCapr(x$Criteria, caprCs = caprCs, csTb = csTb)
+
+  # prep aperture
+  es <- eventStarts(
+    a = x$StartWindow$Start$Days * x$StartWindow$Start$Coeff,
+    b = x$StartWindow$End$Days * x$StartWindow$End$Coeff,
+    index = ifelse(x$StartWindow$UseEventEnd, "endDate", "startDate")
+  )
+
+  if (!is.null(x$EndWindow)) {
+    en <- eventStarts(
+      a = x$EndWindow$Start$Days * x$EndWindow$Start$Coeff,
+      b = x$EndWindow$End$Days * x$EndWindow$End$Coeff,
+      index = ifelse(x$EndWindow$UseEventEnd, "endDate", "startDate")
+    )
+  } else {
+    en <- NULL
+  }
+
+  # create duration interval
+  di <- duringInterval(
+    startWindow = es,
+    endWindow = en,
+    restrictVisit = ifelse(!is.null(x$RestrictVisit), TRUE, FALSE),
+    ignoreObservationPeriod = ifelse(!is.null(x$IgnoreObservationPeriod), TRUE, FALSE)
+  )
+
+  # identify the occurrence type capr call
+  tt <- as.character(x$Occurrence$Type)
+  caprCall <- switch(
+    tt,
+    '0' = "exactly",
+    '1' = "atMost",
+    '2' = "atLeast"
+  )
+
+  criteriaCall <- rlang::call2(
+    caprCall,
+    x = x$Occurrence$Count,
+    query = criteriaQuery,
+    aperture = di
+  )
+  res <- eval(criteriaCall)
+
+  return(res)
+}
+
+#function to turn circe group into capr group
+groupToCapr <- function(x, caprCs, csTb) {
+
+}
 
 # function to turn a circe primary criteria into capr
 primaryCriteriaToCapr <- function(cd) {
@@ -114,3 +166,30 @@ primaryCriteriaToCapr <- function(cd) {
 
 }
 
+# function to covert inclusion rules to Capr
+inclusionRulesToCapr <- function(cd) {
+  # get concept sets for arrangement
+  cs <- cd$ConceptSets
+  caprCs <- conceptSetToCapr(cs)
+  csTb <- getCsKey(cs, caprCs)
+
+  ir <- cd$InclusionRules
+}
+
+
+
+# function to covert end strategy and censor to Capr
+exitToCapr <- function(cd) {
+  # get concept sets for arrangement
+  cs <- cd$ConceptSets
+  caprCs <- conceptSetToCapr(cs)
+  csTb <- getCsKey(cs, caprCs)
+
+  censor <- cd$CensoringCriteria
+}
+
+# function to convert collapse to Capr
+eraToCapr <- function(cd) {
+  collapseSettings <- cd$CollapseSettings
+  censorWindow <- cd$CensorWindow
+}
