@@ -22,6 +22,7 @@ VisitLength,opAttributeToCapr,integer
 ConditionType,conceptAttributeToCapr,
 Gender,conceptAttributeToCapr,
 VisitType,conceptAttributeToCapr,
+PeriodType,conceptAttributeToCapr,
 DrugType,conceptAttributeToCapr,
 RouteConcepts,conceptAttributeToCapr,
 DoseUnit,conceptAttributeToCapr,

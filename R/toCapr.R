@@ -70,7 +70,7 @@ conceptAttributeToCapr <- function(attribute, name, type = NULL) {
       vocabularyId = .x$VOCABULARY_ID
     )@Concept
   )
-  ca <- methods::new("conceptAttribute", name = name, conceptSet = list(cl))
+  ca <- methods::new("conceptAttribute", name = name, conceptSet = cl)
   return(ca)
 }
 
@@ -180,24 +180,35 @@ queryToCapr <- function(x, caprCs, csTb) {
   # get the capr domain call
   domain <- names(x) |> snakecase::to_lower_camel_case()
 
-  # get the caprCs index of the concept set
-  idx <- csTb |>
-    dplyr::filter(
-      oid == x[[1]]$CodesetId
-    ) |>
-    dplyr::pull(idx)
-
-  # pull out the query cs
-  queryCs <- caprCs[[idx]]
-
+  # get attributes if any
   attributeList <- attributesToCapr(x[[1]])
 
-  # make a query call
-  queryCall <- rlang::call2(
-    domain,
-    queryCs,
-    !!!attributeList
-  )
+  # get the caprCs index of the concept set
+  if (any(names(x[[1]]) == "CodesetId")) {
+    idx <- csTb |>
+      dplyr::filter(
+        oid == x[[1]]$CodesetId
+      ) |>
+      dplyr::pull(idx)
+
+    # pull out the query cs
+    queryCs <- caprCs[[idx]]
+
+    # make a query call
+    queryCall <- rlang::call2(
+      domain,
+      conceptSet = queryCs,
+      !!!attributeList
+    )
+
+  } else {
+    # make a query call
+    queryCall <- rlang::call2(
+      domain,
+      !!!attributeList
+    )
+  }
+
 
   res <- eval(queryCall)
 
@@ -211,17 +222,18 @@ criteriaToCapr <- function(x, caprCs, csTb) {
   # prep query
   criteriaQuery <- queryToCapr(x$Criteria, caprCs = caprCs, csTb = csTb)
 
+  dy <- ifelse(is.null(x$StartWindow$Start$Days), Inf, x$StartWindow$Start$Days)
   # prep aperture
   es <- eventStarts(
-    a = x$StartWindow$Start$Days * x$StartWindow$Start$Coeff,
-    b = x$StartWindow$End$Days * x$StartWindow$End$Coeff,
+    a = ifelse(is.null(x$StartWindow$Start$Days), Inf, x$StartWindow$Start$Days) * x$StartWindow$Start$Coeff,
+    b = ifelse(is.null(x$StartWindow$End$Days), Inf, x$StartWindow$End$Days) * x$StartWindow$End$Coeff,
     index = ifelse(x$StartWindow$UseEventEnd, "endDate", "startDate")
   )
 
   if (!is.null(x$EndWindow)) {
     en <- eventStarts(
-      a = x$EndWindow$Start$Days * x$EndWindow$Start$Coeff,
-      b = x$EndWindow$End$Days * x$EndWindow$End$Coeff,
+      a = ifelse(is.null(x$EndWindow$Start$Days), Inf, x$EndWindow$Start$Days) * x$EndWindow$Start$Coeff,
+      b = ifelse(is.null(x$EndWindow$End$Days), Inf, x$EndWindow$End$Days) * x$EndWindow$End$Coeff,
       index = ifelse(x$EndWindow$UseEventEnd, "endDate", "startDate")
     )
   } else {
@@ -258,6 +270,7 @@ criteriaToCapr <- function(x, caprCs, csTb) {
 
 # Group -----------------------------
 #function to turn circe group into capr group
+# NOT DONE!!!!!
 groupToCapr <- function(x, caprCs, csTb) {
   # get the fn call
   tt <- as.character(x$Type)
@@ -271,6 +284,10 @@ groupToCapr <- function(x, caprCs, csTb) {
 
   #get the criteriaList first
   criteriaList <- purrr::map(x$CriteriaList, ~criteriaToCapr(.x, caprCs = caprCs, csTb = csTb))
+  # TODO demographic criteria list
+  # demoCriteriaList <- purrr::map(x$DemographicCriteriaList, ~demoCriteriaToCapr(...))
+  # TODO group list
+  #groupList <- purrr::map(x$Groups, ~groupToCapr(.x, caprCs = caprCs, csTb = csTb))
 
   if (any(caprCall %in% c("withAtLeast", "withAtMost"))) {
     amt <- x$Count
@@ -287,6 +304,7 @@ groupToCapr <- function(x, caprCs, csTb) {
   }
 
   res <- eval(groupCall)
+  return(res)
 }
 
 # Primary Criteria -------------------
@@ -333,7 +351,25 @@ inclusionRulesToCapr <- function(cd) {
   caprCs <- conceptSetToCapr(cs)
   csTb <- getCsKey(cs, caprCs)
 
+  # extract the rules
   ir <- cd$InclusionRules
+  # turn each rule into a capr group
+  rules <- purrr::map(ir, ~groupToCapr(.x$expression, caprCs = caprCs, csTb = csTb))
+
+  # extract the rule names
+  ruleNames <- purrr::map(ir, ~.x$name)
+
+  #build the attrition call
+  irCall <- rlang::call2(
+    "attrition",
+    !!!rules,
+    expressionLimit = cd$ExpressionLimit$Type
+  )
+  #evaluate the attrition call
+  res <- eval(irCall)
+  names(res@rules) <- ruleNames
+
+  return(res)
 }
 
 
