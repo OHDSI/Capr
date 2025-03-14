@@ -382,6 +382,22 @@ exitToCapr <- function(cd) {
   csTb <- getCsKey(cs, caprCs)
 
   censor <- cd$CensoringCriteria
+  censorItems <- purrr::map(censor, ~queryToCapr(.x, caprCs = caprCs, csTb = csTb))
+
+  if (is.null(cd$EndStrategy)) {
+    es <- observationExit()
+  }
+  # TODO add if  end strategy is fixed or drug
+
+  exitCall <- rlang::call2(
+    "exit",
+    endStrategy = es,
+    censor = censoringEvents(!!!censorItems)
+  )
+
+  res <- eval(exitCall)
+
+  return(res)
 }
 
 # Era --------------------
