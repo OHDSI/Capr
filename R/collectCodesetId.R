@@ -325,7 +325,11 @@ setMethod("listConceptSets", "Cohort", function(x) {
 .removeNullId <- function(ll) {
   idToDrop <- purrr::map_lgl(ll, ~is.null(.x$id)) |>
     which()
+  if (length(idToDrop) == 0) {
+    ll2 <- ll
+  } else {
+    ll2 <- ll[-c(idToDrop)]
+  }
 
-  ll2 <- ll[-c(idToDrop)]
   return(ll2)
 }
