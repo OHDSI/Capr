@@ -102,9 +102,14 @@ setGeneric("replaceCodesetId", function(x, guidTable) standardGeneric("replaceCo
 
 setMethod("replaceCodesetId", "Query", function(x, guidTable) {
 
-  y <- getGuid(x) |>
-    dplyr::inner_join(guidTable, by = c("guid")) |>
-    dplyr::pull(.data$codesetId)
+  if (nrow(getGuid(x)) > 0) {
+    y <- getGuid(x) |>
+      dplyr::inner_join(guidTable, by = c("guid")) |>
+      dplyr::pull(.data$codesetId)
+  } else {
+    y <- NULL
+  }
+
   #first replace the query id
   x <- replaceGuid(x, y)
 
@@ -307,10 +312,24 @@ setMethod("listConceptSets", "Cohort", function(x) {
   l1 <- listConceptSets(x@entry)
   l2 <- listConceptSets(x@attrition)
   l3 <- listConceptSets(x@exit)
-  ll <- c(l1, l2, l3)
+  ll <- c(l1, l2, l3) |>
+    .removeNullId()
 
   ids <- purrr::map_chr(ll, ~as.character(.x$id))
 
   rr <- ll[!duplicated(ids)]
   return(rr)
 })
+
+
+.removeNullId <- function(ll) {
+  idToDrop <- purrr::map_lgl(ll, ~is.null(.x$id)) |>
+    which()
+  if (length(idToDrop) == 0) {
+    ll2 <- ll
+  } else {
+    ll2 <- ll[-c(idToDrop)]
+  }
+
+  return(ll2)
+}

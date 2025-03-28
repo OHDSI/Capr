@@ -7,3 +7,4 @@ errorReportSql.txt
 work/*
 scratch/
 inst/doc
+hidden/

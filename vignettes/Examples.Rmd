@@ -161,8 +161,8 @@ ch <- cohort(
   entry = entry(
     conditionOccurrence(cs0),
     drugExposure(cs4),
-    measurement(cs3, valueAsNumber(bt(6.5, 30)), unit("%")),
-    measurement(cs3, valueAsNumber(bt(48, 99)), unit("mmol/mol")),
+    measurement(cs3, valueAsNumber(bt(6.5, 30)), measurementUnit("%")),
+    measurement(cs3, valueAsNumber(bt(48, 99)), measurementUnit("mmol/mol")),
     observationWindow = continuousObservation(priorDays = 365)
   ),
   attrition = attrition(

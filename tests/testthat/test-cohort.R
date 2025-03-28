@@ -68,7 +68,7 @@ test_that("full cohort works", {
           measurement(
             cs(descendants(4184637L), name = "test"),
             valueAsNumber(lt(13)),
-            unit(8713L)
+            measurementUnit(8713L)
           ),
           duringInterval(eventStarts(-Inf, -1))
         )
@@ -112,8 +112,64 @@ test_that("full cohort works without group", {
           measurement(
             cs(descendants(4184637L), name = "test"),
             valueAsNumber(lt(13)),
-            unit(8713L)),
+            measurementUnit(8713L)),
           duringInterval(eventStarts(-Inf, -1))
+      )
+    )
+  )
+
+  conceptSets <- listConceptSets(cd)
+  expect_true(all(purrr::map_lgl(conceptSets, ~all(names(.) == c("id", "name", "expression")))))
+
+  cohortList <- toCirce(cd)
+  expect_type(cohortList, "list")
+
+  cohortJson <- jsonlite::toJSON(cohortList, pretty = T, auto_unbox = TRUE) |>
+    as.character()
+
+  expect_type(cohortJson, "character")
+  expect_true(nchar(cohortJson) > 1)
+
+  sql <- CirceR::cohortExpressionFromJson(cohortJson) |>
+    CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
+
+  expect_type(sql, "character")
+  expect_true(nchar(sql) > 1)
+})
+
+
+
+
+test_that("full cohort works with domains without concepts", {
+  skip_if_not_installed("CirceR")
+
+  cd <- cohort(
+    entry = entry(
+      conditionOccurrence(cs(descendants(201826L), name = "test"), male())
+    ),
+    attrition = attrition(
+      'no t1d' = exactly(0,
+                         conditionOccurrence(cs(descendants(201254L), name = "test")),
+                         duringInterval(eventStarts(-Inf, -1))
+      ),
+      '365d OP' = withAll(
+        exactly(1,
+                observationPeriod(),
+                duringInterval(eventStarts(-Inf, -365), eventEnds(-1, Inf))
+        )
+      ),
+      'abnormal hba1c' = atLeast(1,
+                                 measurement(
+                                   cs(descendants(4184637L), name = "test"),
+                                   valueAsNumber(lt(13)),
+                                   measurementUnit(8713L)),
+                                 duringInterval(eventStarts(-Inf, -1))
+      )
+    ),
+    exit = exit(
+      endStrategy = observationExit(),
+      censor = censoringEvents(
+        death()
       )
     )
   )
