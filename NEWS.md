@@ -3,6 +3,7 @@ Capr 2.1.0
 - add observation period query 
 - improve ability to use a circe query without a concept set. Death and OP typically dont have concept sets #92
 - change fn name of unit to measurementUnit to avoid mask with dplyr
+- Add Condition Status attribute #114
 
 
 Capr 2.0.9

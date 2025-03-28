@@ -97,6 +97,9 @@
     <loc>/reference/conditionOccurrence.html</loc>
   </url>
   <url>
+    <loc>/reference/conditionStatus.html</loc>
+  </url>
+  <url>
     <loc>/reference/conditionType.html</loc>
   </url>
   <url>
@@ -232,6 +235,9 @@
     <loc>/reference/measurementType.html</loc>
   </url>
   <url>
+    <loc>/reference/measurementUnit.html</loc>
+  </url>
+  <url>
     <loc>/reference/nbt.html</loc>
   </url>
   <url>
@@ -257,6 +263,12 @@
   </url>
   <url>
     <loc>/reference/observationExit.html</loc>
+  </url>
+  <url>
+    <loc>/reference/observationPeriod.html</loc>
+  </url>
+  <url>
+    <loc>/reference/observationPeriodType.html</loc>
   </url>
   <url>
     <loc>/reference/observationType.html</loc>
