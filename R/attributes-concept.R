@@ -242,8 +242,8 @@ observationPeriodType <- function(ids, connection, vocabularyDatabaseSchema) {
 #'
 #' @examples
 #' # create a unit attribute
-#' unit(8713L)
-#' unit("%")
+#' measurementUnit(8713L)
+#' measurementUnit("%")
 measurementUnit <- function(x) {
   if (missing(x)) {
     rlang::abort("Unit must be specified")
