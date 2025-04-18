@@ -107,6 +107,23 @@ buildConceptAttribute <- function(ids, attributeName, connection, vocabularyData
   return(attr_concept)
 }
 
+
+#' Add a value as concept attribute
+#' @param ids the concept ids for the attribute
+#' @param connection a connection to an OMOP dbms to get vocab info about the concept
+#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+valueAsConcept <- function(ids, connection, vocabularyDatabaseSchema) {
+  res <- buildConceptAttribute(ids = ids, attributeName = "ValueAsConcept",
+                               connection = connection,
+                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+  return(res)
+}
+
+
 #' Add a drug type attribute to determine the provenance of the record
 #' @param ids the concept ids for the attribute
 #' @param connection a connection to an OMOP dbms to get vocab info about the concept
