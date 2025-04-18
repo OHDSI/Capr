@@ -17,6 +17,6 @@ Add unit attribute to a query
 }
 \examples{
 # create a unit attribute
-unit(8713L)
-unit("\%")
+measurementUnit(8713L)
+measurementUnit("\%")
 }
