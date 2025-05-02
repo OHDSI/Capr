@@ -15,6 +15,10 @@ replaceGuid <- function(x, y) {
 
 setGeneric("collectGuid", function(x) standardGeneric("collectGuid"))
 
+setMethod("collectGuid", "conceptAttribute", function(x) {
+  return(NULL)
+})
+
 
 # setMethod("collectGuid", "Query", function(x) {
 #   getGuid(x)
@@ -99,6 +103,9 @@ setMethod("collectGuid", "Cohort", function(x) {
 ## TODO HASH table implementation of find/replace
 setGeneric("replaceCodesetId", function(x, guidTable) standardGeneric("replaceCodesetId"))
 
+setMethod("replaceCodesetId", "conceptAttribute", function(x, guidTable) {
+  return(x)
+})
 
 setMethod("replaceCodesetId", "Query", function(x, guidTable) {
 
@@ -203,6 +210,10 @@ setMethod("replaceCodesetId", "Cohort", function(x, guidTable = guidTable) {
 # list Concept Set ------------------
 
 setGeneric("listConceptSets", function(x) standardGeneric("listConceptSets"))
+
+setMethod("listConceptSets", "conceptAttribute", function(x) {
+  return(NULL)
+})
 
 #' @include query.R
 setMethod("listConceptSets", "Query", function(x) {
