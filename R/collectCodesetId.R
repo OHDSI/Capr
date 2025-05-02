@@ -19,6 +19,9 @@ setMethod("collectGuid", "conceptAttribute", function(x) {
   return(NULL)
 })
 
+setMethod("collectGuid", "opAttributeSuper", function(x) {
+  return(NULL)
+})
 
 # setMethod("collectGuid", "Query", function(x) {
 #   getGuid(x)
@@ -106,6 +109,11 @@ setGeneric("replaceCodesetId", function(x, guidTable) standardGeneric("replaceCo
 setMethod("replaceCodesetId", "conceptAttribute", function(x, guidTable) {
   return(x)
 })
+
+setMethod("replaceCodesetId", "opAttributeSuper", function(x, guidTable) {
+  return(x)
+})
+
 
 setMethod("replaceCodesetId", "Query", function(x, guidTable) {
 
@@ -214,6 +222,11 @@ setGeneric("listConceptSets", function(x) standardGeneric("listConceptSets"))
 setMethod("listConceptSets", "conceptAttribute", function(x) {
   return(NULL)
 })
+
+setMethod("listConceptSets", "opAttributeSuper", function(x) {
+  return(NULL)
+})
+
 
 #' @include query.R
 setMethod("listConceptSets", "Query", function(x) {
