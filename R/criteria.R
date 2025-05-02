@@ -60,11 +60,11 @@ setClass("Group",
 
 # Class Type ----
 is.Criteria <- function(x) {
-  methods::is(x) == "Criteria"
+  any(methods::is(x) %in% "Criteria")
 }
 
 is.Group <- function(x) {
-  methods::is(x) == "Group"
+  any(methods::is(x) %in% "Group")
 }
 
 # Constructors -----------------------

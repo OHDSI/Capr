@@ -1,3 +1,5 @@
+^renv$
+^renv\.lock$
 ^Capr\.Rproj$
 ^\.Rproj\.user$
 .github
