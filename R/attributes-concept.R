@@ -1,3 +1,27 @@
+# Concept Set Attribute class ----------------------------
+
+#' An S4 class for a concept set attribute that holds a reference to a concept set ID
+#' @slot
+#' name the name of the attribute
+#' @slot
+#' conceptSet a ConceptSet object that provides the ID reference
+#' @include conceptSet.R
+setClass("conceptSetAttribute",
+         slots = c(name = "character",
+                   conceptSet = "ConceptSet"),
+  prototype = list(name = NA_character_, conceptSet = new("ConceptSet")))
+
+setValidity("conceptSetAttribute", function(object) {
+  stopifnot(is.character(object@name), length(object@name) == 1)
+  TRUE
+})
+
+# Console Print ---------------
+
+setMethod("show", "conceptSetAttribute", function(object) {
+  cli::cat_bullet(paste("Capr Concept Set Attribute:", object@name, "- ID:", object@conceptSet@id), bullet = "sup_plus")
+})
+
 # Concept Attribute class ----------------------------
 
 #' An S4 class for a concept attribute
@@ -234,6 +258,23 @@ conditionStatus <- function(ids, connection, vocabularyDatabaseSchema) {
   return(res)
 }
 
+#' Add a condition source concept attribute
+#' @param conceptSet a ConceptSet object containing the source concepts
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+conditionSourceConcept <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("conditionSourceConcept requires a ConceptSet object")
+  }
+  
+  res <- methods::new("conceptSetAttribute",
+                      name = "ConditionSourceConcept",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
 #' Add a observation period type attribute to determine the provenance of the record
 #' @param ids the concept ids for the attribute
 #' @param connection a connection to an OMOP dbms to get vocab info about the concept
@@ -297,6 +338,11 @@ measurementUnit <- function(x) {
 }
 
 # Coercion ------------------
+
+setMethod("as.list", "conceptSetAttribute", function(x) {
+  nm <- x@name
+  tibble::lst(`:=`(!!nm, x@conceptSet@id))
+})
 
 setMethod("as.list", "conceptAttribute", function(x) {
 

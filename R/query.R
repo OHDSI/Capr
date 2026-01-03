@@ -111,12 +111,12 @@ query <- function(domain, conceptSet = NULL, ...) {
 
 #' Query the condition domain
 #'
-#' @param conceptSet A condition concept set
+#' @param conceptSet A condition concept set (optional)
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
 #' @export
-conditionOccurrence <- function(conceptSet, ...) {
+conditionOccurrence <- function(conceptSet = NULL, ...) {
 
   query(domain = "ConditionOccurrence",
         conceptSet = conceptSet,

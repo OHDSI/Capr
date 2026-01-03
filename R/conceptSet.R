@@ -114,10 +114,7 @@ setClass("ConceptSet",
                    Expression = "list"))
 
 setValidity("ConceptSet", function(object) {
-  stopifnot(is.character(object@id),
-            length(object@id) == 1,
-            #is.character(object@id),
-            length(object@id) == 1,
+  stopifnot(length(object@id) == 1,
             is.list(object@Expression),
             all(purrr::map_lgl(object@Expression, ~is(., "ConceptSetItem")))
             )
