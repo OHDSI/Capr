@@ -314,3 +314,21 @@ test_that("collectGuid works with Query containing conceptSetAttribute", {
   expect_equal(sort(guid_result$guid), sort(c("main-id-789", "source-id-456")))
   # Query collectGuid now collects both the main conceptSet ID and attribute IDs
 })
+
+test_that("conditionOccurrence gives clear error when conceptSet is missing", {
+  expect_error(
+    conditionOccurrence(),
+    "conceptSet argument is required. If you don't want to specify a concept set, use: conceptSet = NULL",
+    fixed = TRUE
+  )
+})
+
+test_that("conditionOccurrence works with conceptSet = NULL", {
+  expect_no_error({
+    query <- conditionOccurrence(conceptSet = NULL)
+  })
+  
+  query <- conditionOccurrence(conceptSet = NULL)
+  expect_s4_class(query, "Query")
+  expect_equal(query@domain, "ConditionOccurrence")
+})

@@ -116,7 +116,12 @@ query <- function(domain, conceptSet = NULL, ...) {
 #'
 #' @return A Capr Query
 #' @export
-conditionOccurrence <- function(conceptSet = NULL, ...) {
+conditionOccurrence <- function(conceptSet, ...) {
+  
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set (i.e., Any Condition in ATLAS) use: conceptSet = NULL")
+  }
 
   query(domain = "ConditionOccurrence",
         conceptSet = conceptSet,
