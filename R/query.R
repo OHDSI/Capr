@@ -120,7 +120,7 @@ conditionOccurrence <- function(conceptSet, ...) {
 
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
-    stop("conceptSet argument is required. If you don't want to specify a concept set (i.e., Any Condition in ATLAS) use: conceptSet = NULL")
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
   }
 
   query(domain = "ConditionOccurrence",
@@ -139,7 +139,7 @@ drugExposure <- function(conceptSet, ...) {
 
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
-    stop("conceptSet argument is required. If you don't want to specify a concept set (i.e., Any Drug in ATLAS) use: conceptSet = NULL")
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
   }
 
   query(domain = "DrugExposure",
@@ -159,7 +159,7 @@ deviceExposure <- function(conceptSet, ...) {
 
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
-    stop("conceptSet argument is required. If you don't want to specify a concept set (i.e., Any DeviceExposure in ATLAS) use: conceptSet = NULL")
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
   }
 
   query(domain = "DeviceExposure",
@@ -178,7 +178,7 @@ measurement <- function(conceptSet, ...) {
 
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
-    stop("conceptSet argument is required. If you don't want to specify a concept set (i.e., Any Measurement in ATLAS) use: conceptSet = NULL")
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
   }
 
   query(domain = "Measurement",
@@ -197,7 +197,7 @@ procedure <- function(conceptSet, ...) {
 
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
-    stop("conceptSet argument is required. If you don't want to specify a concept set (i.e., Any Procedure in ATLAS) use: conceptSet = NULL")
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
   }
 
   query(domain = "ProcedureOccurrence",
@@ -216,7 +216,7 @@ drugEra <- function(conceptSet, ...) {
 
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
-    stop("conceptSet argument is required. If you don't want to specify a concept set (i.e., Any DrugEra in ATLAS) use: conceptSet = NULL")
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
   }
 
   query(domain = "DrugEra",
@@ -235,7 +235,7 @@ conditionEra <- function(conceptSet, ...) {
 
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
-    stop("conceptSet argument is required. If you don't want to specify a concept set (i.e., Any ConditionEra in ATLAS) use: conceptSet = NULL")
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
   }
 
   query(domain = "ConditionEra",
@@ -254,7 +254,7 @@ visit <- function(conceptSet, ...) {
 
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
-    stop("conceptSet argument is required. If you don't want to specify a concept set (i.e., Any Visit in ATLAS) use: conceptSet = NULL")
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
   }
 
   query(domain = "VisitOccurrence",
@@ -287,7 +287,7 @@ observation <- function(conceptSet, ...) {
 
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
-    stop("conceptSet argument is required. If you don't want to specify a concept set (i.e., Any Observation in ATLAS) use: conceptSet = NULL")
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
   }
 
   query(domain = "Observation",
