@@ -7,7 +7,7 @@
 deviceExposure(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A drug concept set}
+\item{conceptSet}{A drug concept set (optional)}
 
 \item{...}{optional attributes}
 }

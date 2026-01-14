@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
       </span>
     </div>
 
@@ -338,6 +338,30 @@ secondary diabetes</strong></p>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>    </span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="source-concept-example">Source Concept Example<a class="anchor" aria-label="anchor" href="#source-concept-example"></a>
+</h2>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">lf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">4197819</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"lung fibrosis"</span><span class="op">)</span></span>
+<span><span class="va">lfSource</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span></span>
+<span>  <span class="fl">725357</span>,<span class="fl">35208074</span>,<span class="fl">45543276</span>,<span class="fl">45548125</span>,<span class="fl">45552899</span>,<span class="fl">45562465</span>,<span class="fl">45567273</span>,<span class="fl">45581864</span>,<span class="fl">45586679</span>,<span class="fl">45586680</span>,<span class="fl">45601135</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"Lung Fibrosis Source"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Want cohort where entry is lung fibrosis but only using source ICD10CM codes</span></span>
+<span></span>
+<span><span class="va">cd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span></span>
+<span>  entry <span class="op">=</span> <span class="fu"><a href="../reference/entry.html">entry</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span></span>
+<span>      conceptSet <span class="op">=</span> <span class="va">lf</span>,</span>
+<span>      <span class="fu"><a href="../reference/conditionSourceConcept.html">conditionSourceConcept</a></span><span class="op">(</span><span class="va">lfSource</span><span class="op">)</span> <span class="co"># add source concept as attribute</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    observationWindow <span class="op">=</span> <span class="fu"><a href="../reference/continuousObservation.html">continuousObservation</a></span><span class="op">(</span><span class="fl">365L</span>, <span class="fl">0L</span><span class="op">)</span>,</span>
+<span>    primaryCriteriaLimit <span class="op">=</span> <span class="st">"First"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>

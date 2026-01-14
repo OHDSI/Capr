@@ -2,12 +2,12 @@
 % Please edit documentation in R/query.R
 \name{death}
 \alias{death}
-\title{Query the condition era domain}
+\title{Query the death domain}
 \usage{
 death(conceptSet = NULL, ...)
 }
 \arguments{
-\item{conceptSet}{A condition concept set}
+\item{conceptSet}{A death domain, with rare exceptions this is always NULL}
 
 \item{...}{optional attributes}
 }
@@ -15,5 +15,5 @@ death(conceptSet = NULL, ...)
 A Capr Query
 }
 \description{
-Query the condition era domain
+Query the death domain
 }

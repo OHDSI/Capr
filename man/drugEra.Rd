@@ -7,7 +7,7 @@
 drugEra(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A drug ingredient concept set}
+\item{conceptSet}{A drug ingredient concept set (optional)}
 
 \item{...}{optional attributes}
 }
