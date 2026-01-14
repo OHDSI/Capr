@@ -268,9 +268,80 @@ conditionSourceConcept <- function(conceptSet) {
   if (!methods::is(conceptSet, "ConceptSet")) {
     rlang::abort("conditionSourceConcept requires a ConceptSet object")
   }
-  
+
   res <- methods::new("conceptSetAttribute",
                       name = "ConditionSourceConcept",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
+#' Add a drug source concept attribute
+#' @param conceptSet a ConceptSet object containing the source concepts
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+drugSourceConcept <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("drugSourceConcept requires a ConceptSet object")
+  }
+
+  res <- methods::new("conceptSetAttribute",
+                      name = "DrugSourceConcept",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
+
+#' Add a procedure source concept attribute
+#' @param conceptSet a ConceptSet object containing the source concepts
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+procedureSourceConcept <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("procedureSourceConcept requires a ConceptSet object")
+  }
+
+  res <- methods::new("conceptSetAttribute",
+                      name = "ProcedureSourceConcept",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
+
+
+#' Add a observation source concept attribute
+#' @param conceptSet a ConceptSet object containing the source concepts
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+observationSourceConcept <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("observationSourceConcept requires a ConceptSet object")
+  }
+
+  res <- methods::new("conceptSetAttribute",
+                      name = "ObservationSourceConcept",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
+#' Add a visit source concept attribute
+#' @param conceptSet a ConceptSet object containing the source concepts
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+visitSourceConcept <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("visitSourceConcept requires a ConceptSet object")
+  }
+
+  res <- methods::new("conceptSetAttribute",
+                      name = "VisitSourceConcept",
                       conceptSet = conceptSet)
   return(res)
 }
