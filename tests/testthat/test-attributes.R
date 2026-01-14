@@ -263,6 +263,22 @@ test_that("concept attributes build", {
   expect_equal(tt@conceptSet[[1]]@concept_name, "%")
 })
 
+test_that("conceptSetAttribute builds", {
+  # Test the new conceptSetAttribute class
+  test_cs <- cs(c(123, 456), name = "test source concepts", id = "test-id-123")
+  attr <- conditionSourceConcept(test_cs)
+  
+  expect_s4_class(attr, "conceptSetAttribute")
+  expect_equal(attr@name, "ConditionSourceConcept")
+  expect_s4_class(attr@conceptSet, "ConceptSet")
+  expect_equal(attr@conceptSet@id, "test-id-123")
+  
+  # Test as.list conversion
+  as_list <- as.list(attr)
+  expect_named(as_list, "ConditionSourceConcept")
+  expect_equal(as_list$ConditionSourceConcept, "test-id-123")
+})
+
 test_that("logical attributes build", {
 
   t1 <- firstOccurrence()

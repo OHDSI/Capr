@@ -15,6 +15,10 @@ replaceGuid <- function(x, y) {
 
 setGeneric("collectGuid", function(x) standardGeneric("collectGuid"))
 
+setMethod("collectGuid", "conceptSetAttribute", function(x) {
+  getGuid(x)
+})
+
 setMethod("collectGuid", "conceptAttribute", function(x) {
   return(NULL)
 })
@@ -44,6 +48,14 @@ setMethod("collectGuid", "Query", function(x) {
 
     ids <- dplyr::bind_rows(ids, id2)
   }
+  
+  # collect guids for conceptSetAttribute objects
+  conceptSetAttrs <- purrr::keep(x@attributes, ~methods::is(.x, "conceptSetAttribute"))
+  if (length(conceptSetAttrs) > 0) {
+    conceptSetIds <- purrr::map_dfr(conceptSetAttrs, ~collectGuid(.x))
+    ids <- dplyr::bind_rows(ids, conceptSetIds)
+  }
+  
   return(ids)
 
 })
@@ -106,6 +118,21 @@ setMethod("collectGuid", "Cohort", function(x) {
 ## TODO HASH table implementation of find/replace
 setGeneric("replaceCodesetId", function(x, guidTable) standardGeneric("replaceCodesetId"))
 
+setMethod("replaceCodesetId", "conceptSetAttribute", function(x, guidTable) {
+  
+  if (nrow(getGuid(x)) > 0) {
+    y <- getGuid(x) |>
+      dplyr::inner_join(guidTable, by = c("guid")) |>
+      dplyr::pull(.data$codesetId)
+  } else {
+    y <- NULL
+  }
+  
+  x <- replaceGuid(x, y)
+  
+  return(x)
+})
+
 setMethod("replaceCodesetId", "conceptAttribute", function(x, guidTable) {
   return(x)
 })
@@ -136,6 +163,14 @@ setMethod("replaceCodesetId", "Query", function(x, guidTable) {
     nest <- replaceCodesetId(x@attributes[[ii]]@group, guidTable)
 
     x@attributes[[ii]]@group <- nest
+  }
+  
+  # replace codeset ids for conceptSetAttribute objects
+  conceptSetAttrIndices <- which(purrr::map_lgl(x@attributes, ~methods::is(.x, "conceptSetAttribute")))
+  if (length(conceptSetAttrIndices) > 0) {
+    for (i in conceptSetAttrIndices) {
+      x@attributes[[i]] <- replaceCodesetId(x@attributes[[i]], guidTable)
+    }
   }
 
   return(x)
@@ -219,6 +254,10 @@ setMethod("replaceCodesetId", "Cohort", function(x, guidTable = guidTable) {
 
 setGeneric("listConceptSets", function(x) standardGeneric("listConceptSets"))
 
+setMethod("listConceptSets", "conceptSetAttribute", function(x) {
+  as.list(x@conceptSet)
+})
+
 setMethod("listConceptSets", "conceptAttribute", function(x) {
   return(NULL)
 })
@@ -242,6 +281,13 @@ setMethod("listConceptSets", "Query", function(x) {
     out <- c(list(qs), nest)
   } else {
     out <- list(qs)
+  }
+  
+  # handle listing concept sets from conceptSetAttribute objects
+  conceptSetAttrs <- purrr::keep(x@attributes, ~methods::is(.x, "conceptSetAttribute"))
+  if (length(conceptSetAttrs) > 0) {
+    conceptSetsFromAttrs <- purrr::map(conceptSetAttrs, ~listConceptSets(.x))
+    out <- c(out, conceptSetsFromAttrs)
   }
 
   return(out)

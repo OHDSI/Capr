@@ -111,12 +111,17 @@ query <- function(domain, conceptSet = NULL, ...) {
 
 #' Query the condition domain
 #'
-#' @param conceptSet A condition concept set
+#' @param conceptSet A condition concept set (optional)
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
 #' @export
 conditionOccurrence <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
 
   query(domain = "ConditionOccurrence",
         conceptSet = conceptSet,
@@ -125,12 +130,17 @@ conditionOccurrence <- function(conceptSet, ...) {
 
 #' Query the drug domain
 #'
-#' @param conceptSet A drug concept set
+#' @param conceptSet A drug concept set (optional)
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
 #' @export
 drugExposure <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
 
   query(domain = "DrugExposure",
         conceptSet = conceptSet,
@@ -140,12 +150,17 @@ drugExposure <- function(conceptSet, ...) {
 
 #' Query the drug domain
 #'
-#' @param conceptSet A drug concept set
+#' @param conceptSet A drug concept set (optional)
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
 #' @export
 deviceExposure <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
 
   query(domain = "DeviceExposure",
         conceptSet = conceptSet,
@@ -154,12 +169,17 @@ deviceExposure <- function(conceptSet, ...) {
 
 #' Query the measurement domain
 #'
-#' @param conceptSet A measurement concept set
+#' @param conceptSet A measurement concept set (optional)
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
 #' @export
 measurement <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
 
   query(domain = "Measurement",
         conceptSet = conceptSet,
@@ -168,12 +188,17 @@ measurement <- function(conceptSet, ...) {
 
 #' Query the procedure domain
 #'
-#' @param conceptSet A procedure concept set
+#' @param conceptSet A procedure concept set (optional)
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
 #' @export
 procedure <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
 
   query(domain = "ProcedureOccurrence",
         conceptSet = conceptSet,
@@ -182,12 +207,17 @@ procedure <- function(conceptSet, ...) {
 
 #' Query the drug era domain
 #'
-#' @param conceptSet A drug ingredient concept set
+#' @param conceptSet A drug ingredient concept set (optional)
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
 #' @export
 drugEra <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
 
   query(domain = "DrugEra",
         conceptSet = conceptSet,
@@ -196,12 +226,17 @@ drugEra <- function(conceptSet, ...) {
 
 #' Query the condition era domain
 #'
-#' @param conceptSet A condition concept set
+#' @param conceptSet A condition concept set (optional)
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
 #' @export
 conditionEra <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
 
   query(domain = "ConditionEra",
         conceptSet = conceptSet,
@@ -210,21 +245,26 @@ conditionEra <- function(conceptSet, ...) {
 
 #' Query the visit occurrence domain
 #'
-#' @param conceptSet A condition concept set
+#' @param conceptSet A condition concept set (optional)
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
 #' @export
 visit <- function(conceptSet, ...) {
 
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
+
   query(domain = "VisitOccurrence",
         conceptSet = conceptSet,
         ...)
 }
 
-#' Query the condition era domain
+#' Query the death domain
 #'
-#' @param conceptSet A condition concept set
+#' @param conceptSet A death domain, with rare exceptions this is always NULL
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
@@ -238,12 +278,18 @@ death <- function(conceptSet = NULL, ...) {
 
 #' Query the observation domain
 #'
-#' @param conceptSet A condition concept set
+#' @param conceptSet A condition concept set (optional)
 #' @param ... optional attributes
 #'
 #' @return A Capr Query
 #' @export
 observation <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
+
   query(domain = "Observation",
         conceptSet = conceptSet,
         ...)
