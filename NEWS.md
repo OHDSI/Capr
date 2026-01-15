@@ -1,3 +1,10 @@
+Capr 2.1.1
+==========
+- add functions to include source concepts as attributes to a query
+- add demographic criteria for Inclusion rules
+- add value as concept attribute
+
+
 Capr 2.1.0
 ==========
 - add observation period query 

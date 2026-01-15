@@ -7,7 +7,7 @@
 procedure(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A procedure concept set}
+\item{conceptSet}{A procedure concept set (optional)}
 
 \item{...}{optional attributes}
 }

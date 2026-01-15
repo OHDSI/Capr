@@ -7,7 +7,7 @@
 measurement(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A measurement concept set}
+\item{conceptSet}{A measurement concept set (optional)}
 
 \item{...}{optional attributes}
 }

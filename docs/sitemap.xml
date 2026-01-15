@@ -88,6 +88,9 @@
     <loc>/reference/ConceptSet-class.html</loc>
   </url>
   <url>
+    <loc>/reference/conceptSetAttribute-class.html</loc>
+  </url>
+  <url>
     <loc>/reference/ConceptSetItem-class.html</loc>
   </url>
   <url>
@@ -95,6 +98,9 @@
   </url>
   <url>
     <loc>/reference/conditionOccurrence.html</loc>
+  </url>
+  <url>
+    <loc>/reference/conditionSourceConcept.html</loc>
   </url>
   <url>
     <loc>/reference/conditionStatus.html</loc>
@@ -143,6 +149,9 @@
   </url>
   <url>
     <loc>/reference/drugRefills.html</loc>
+  </url>
+  <url>
+    <loc>/reference/drugSourceConcept.html</loc>
   </url>
   <url>
     <loc>/reference/drugType.html</loc>
@@ -271,6 +280,9 @@
     <loc>/reference/observationPeriodType.html</loc>
   </url>
   <url>
+    <loc>/reference/observationSourceConcept.html</loc>
+  </url>
+  <url>
     <loc>/reference/observationType.html</loc>
   </url>
   <url>
@@ -298,6 +310,9 @@
     <loc>/reference/procedure.html</loc>
   </url>
   <url>
+    <loc>/reference/procedureSourceConcept.html</loc>
+  </url>
+  <url>
     <loc>/reference/procedureType.html</loc>
   </url>
   <url>
@@ -322,10 +337,16 @@
     <loc>/reference/unit.html</loc>
   </url>
   <url>
+    <loc>/reference/valueAsConcept.html</loc>
+  </url>
+  <url>
     <loc>/reference/valueAsNumber.html</loc>
   </url>
   <url>
     <loc>/reference/visit.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visitSourceConcept.html</loc>
   </url>
   <url>
     <loc>/reference/visitType.html</loc>

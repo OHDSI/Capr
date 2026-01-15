@@ -331,3 +331,27 @@ assertCohortCompiles(ch)
 ```
 
 
+# Source Concept Example
+
+```{r sourceEx, eval=FALSE}
+
+lf <- cs(descendants(4197819), name = "lung fibrosis")
+lfSource <- cs(
+  725357,35208074,45543276,45548125,45552899,45562465,45567273,45581864,45586679,45586680,45601135,
+  name = "Lung Fibrosis Source"
+)
+
+# Want cohort where entry is lung fibrosis but only using source ICD10CM codes
+
+cd <- cohort(
+  entry = entry(
+    conditionOccurrence(
+      conceptSet = lf,
+      conditionSourceConcept(lfSource) # add source concept as attribute
+    ),
+    observationWindow = continuousObservation(365L, 0L),
+    primaryCriteriaLimit = "First"
+  )
+)
+```
+

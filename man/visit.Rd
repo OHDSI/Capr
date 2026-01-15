@@ -7,7 +7,7 @@
 visit(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A condition concept set}
+\item{conceptSet}{A condition concept set (optional)}
 
 \item{...}{optional attributes}
 }
