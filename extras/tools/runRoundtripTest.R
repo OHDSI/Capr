@@ -4,9 +4,13 @@
 # Usage: Rscript extras/runRoundtripTest.R
 # Requires: Capr (load_all from repo or install), PhenotypeLibrary, CirceR (for SQL comparison).
 
+ca <- commandArgs(trailingOnly = FALSE)
+fa <- ca[grepl("^--file=", ca)]
+scriptDir <- if (length(fa) > 0) dirname(sub("^--file=", "", fa[1])) else "."
+source(file.path(scriptDir, "roundtrip_utils.R"))
+
 devtools::load_all()
 if (!("package:Capr" %in% search())) library(Capr, character.only = TRUE)
-`%||%` <- function(x, y) if (is.null(x)) y else x
 
 if (!requireNamespace("PhenotypeLibrary", quietly = TRUE)) {
   message("PhenotypeLibrary is not installed. Install it first.")
@@ -21,6 +25,7 @@ jsonFiles <- list.files(jsonFolder, pattern = "\\.json$", full.names = TRUE)
 message("Found ", length(jsonFiles), " cohort JSON files in PhenotypeLibrary")
 if (length(jsonFiles) == 0L) quit(save = "no", status = 1)
 
+# Normalize Circe JSON list (concept set order and IDs) for comparison.
 normalizeCirceList <- function(x, idMap = NULL) {
   if (is.null(idMap) && is.list(x) && !is.null(x$ConceptSets) && length(x$ConceptSets) > 0L) {
     ids <- vapply(x$ConceptSets, function(cs) as.integer(if (!is.null(cs$id)) cs$id else 0L), integer(1L))
@@ -48,104 +53,12 @@ normalizeCirceList <- function(x, idMap = NULL) {
   x
 }
 
-# Sort concept_id in (id1,id2,...) so order differences don't affect equivalence
-sort_concept_id_in_lists <- function(s) {
-  pattern <- "concept_id in \\(([0-9,]+)\\)"
-  m <- gregexpr(pattern, s)[[1]]
-  if (m[1] < 0) return(s)
-  starts <- as.integer(m)
-  lens <- attr(m, "match.length")
-  matches <- substring(s, starts, starts + lens - 1)
-  inners <- sub(pattern, "\\1", matches)
-  replacements <- vapply(inners, function(inner) {
-    nums <- sort(as.integer(strsplit(inner, ",", fixed = TRUE)[[1]]))
-    paste0("concept_id in (", paste(nums, collapse = ","), ")")
-  }, character(1))
-  for (i in rev(seq_along(starts))) {
-    s <- paste0(
-      substr(s, 1, starts[i] - 1),
-      replacements[i],
-      substr(s, starts[i] + lens[i], nchar(s))
-    )
-  }
-  s
-}
-
-normalize_circe_sql <- function(s) {
-  s <- trimws(gsub("[ \t\r\n]+", " ", s))
-  s <- gsub("@codeset_[0-9]+", "@codeset_X", s)
-  s <- gsub("[0-9]+ as codeset_id", "X as codeset_id", s)
-  s <- gsub("codeset_id = [0-9]+", "codeset_id = X", s)
-  s <- sort_concept_id_in_lists(s)
-  s
-}
-
-# Fingerprint a concept set for matching (ignore id, name, concept metadata)
-concept_set_fingerprint <- function(cs) {
-  items <- cs$expression$items %||% list()
-  fp <- lapply(items, function(it) {
-    c <- it$concept %||% it
-    list(
-      id = as.integer(c$CONCEPT_ID %||% c$concept_id),
-      isExcluded = isTRUE(it$isExcluded),
-      includeDescendants = isTRUE(it$includeDescendants),
-      includeMapped = isTRUE(it$includeMapped)
-    )
-  })
-  fp <- fp[order(vapply(fp, function(x) x$id, integer(1)))]
-  list(fp)
-}
-
-# Reorder round-trip ConceptSets to match original order; remap CodesetIds so SQL comparison is valid.
-reorder_roundtrip_concept_sets_to_match_original <- function(originalJsonStr, roundTripJsonStr) {
-  orig <- jsonlite::fromJSON(originalJsonStr, simplifyVector = FALSE)
-  rt <- jsonlite::fromJSON(roundTripJsonStr, simplifyVector = FALSE)
-  origSets <- orig$ConceptSets %||% list()
-  rtSets <- rt$ConceptSets %||% list()
-  if (length(origSets) == 0 || length(rtSets) == 0) return(roundTripJsonStr)
-  origFp <- lapply(origSets, concept_set_fingerprint)
-  rtFp <- lapply(rtSets, concept_set_fingerprint)
-  # For each orig set in order, find matching rt set (by fingerprint)
-  rtUsed <- logical(length(rtSets))
-  newOrder <- integer(0)
-  for (i in seq_along(origFp)) {
-    for (j in which(!rtUsed)) {
-      if (identical(origFp[[i]], rtFp[[j]])) {
-        newOrder <- c(newOrder, j)
-        rtUsed[j] <- TRUE
-        break
-      }
-    }
-  }
-  if (length(newOrder) != length(rtSets)) return(roundTripJsonStr)
-  reordered <- rtSets[newOrder]
-  oldIds <- vapply(seq_along(reordered), function(k) reordered[[k]]$id, integer(1))
-  for (k in seq_along(reordered)) reordered[[k]]$id <- k - 1L
-  idMap <- stats::setNames(seq_along(reordered) - 1L, as.character(oldIds))
-  rt$ConceptSets <- reordered
-  replace_codeset_ids <- function(x, map) {
-    if (is.null(x)) return(x)
-    if (is.list(x)) {
-      for (key in c("CodesetId", "CodesetID", "DrugCodesetId")) {
-        if (!is.null(x[[key]])) {
-          m <- map[as.character(x[[key]])]
-          if (length(m) > 0L && !is.na(m[1L])) x[[key]] <- m[1L]
-        }
-      }
-      return(lapply(x, replace_codeset_ids, map = map))
-    }
-    x
-  }
-  rt <- replace_codeset_ids(rt, idMap)
-  as.character(jsonlite::toJSON(rt, auto_unbox = TRUE))
-}
-
-roundtrip_circe_sql_equivalent <- function(originalJsonStr, roundTripJsonStr) {
+roundtripCirceSqlEquivalent <- function(originalJsonStr, roundTripJsonStr) {
   if (!requireNamespace("CirceR", quietly = TRUE)) {
     return(list(ok = NA, msg = "CirceR not installed"))
   }
   # Reorder round-trip ConceptSets to match original so codeset indices align
-  rtForSql <- reorder_roundtrip_concept_sets_to_match_original(originalJsonStr, roundTripJsonStr)
+  rtForSql <- reorderRoundtripConceptSetsToMatchOriginal(originalJsonStr, roundTripJsonStr)
   opts <- CirceR::createGenerateOptions(generateStats = FALSE)
   sqlOrig <- tryCatch(
     CirceR::buildCohortQuery(CirceR::cohortExpressionFromJson(originalJsonStr), options = opts),
@@ -157,7 +70,7 @@ roundtrip_circe_sql_equivalent <- function(originalJsonStr, roundTripJsonStr) {
     error = function(e) list(ok = FALSE, msg = paste0("Round-trip SQL: ", conditionMessage(e)))
   )
   if (is.list(sqlRt) && !is.null(sqlRt$ok)) return(sqlRt)
-  if (identical(normalize_circe_sql(sqlOrig), normalize_circe_sql(sqlRt))) {
+  if (identical(normalizeCirceSql(sqlOrig), normalizeCirceSql(sqlRt))) {
     return(list(ok = TRUE, msg = "OK"))
   }
   list(ok = FALSE, msg = "Generated Circe SQL differs")
@@ -165,8 +78,8 @@ roundtrip_circe_sql_equivalent <- function(originalJsonStr, roundTripJsonStr) {
 
 # JSON (semantic) equivalence: same concept set count + concept IDs per set, same primary criteria domains, same end strategy.
 # Compare original vs reordered round-trip so concept set order aligns.
-roundtrip_json_semantically_equivalent <- function(originalJsonStr, roundTripJsonStr) {
-  rtForSql <- reorder_roundtrip_concept_sets_to_match_original(originalJsonStr, roundTripJsonStr)
+roundtripJsonSemanticallyEquivalent <- function(originalJsonStr, roundTripJsonStr) {
+  rtForSql <- reorderRoundtripConceptSetsToMatchOriginal(originalJsonStr, roundTripJsonStr)
   orig <- jsonlite::fromJSON(originalJsonStr, simplifyVector = FALSE)
   rt <- jsonlite::fromJSON(rtForSql, simplifyVector = FALSE)
   if (length(orig$ConceptSets %||% list()) != length(rt$ConceptSets %||% list())) {
@@ -200,7 +113,7 @@ roundtrip_json_semantically_equivalent <- function(originalJsonStr, roundTripJso
   list(ok = TRUE, msg = "OK")
 }
 
-run_one_roundtrip <- function(jsonPath, outRPath) {
+runOneRoundtrip <- function(jsonPath, outRPath) {
   name <- sub("\\.json$", "", basename(jsonPath))
   rPath <- file.path(outRPath, paste0(name, ".R"))
   tryCatch(
@@ -237,50 +150,50 @@ run_one_roundtrip <- function(jsonPath, outRPath) {
 
 outRPath <- tempfile("capr_roundtrip")
 dir.create(outRPath, showWarnings = FALSE, recursive = TRUE)
-results <- lapply(jsonFiles, run_one_roundtrip, outRPath = outRPath)
+results <- lapply(jsonFiles, runOneRoundtrip, outRPath = outRPath)
 unlink(outRPath, recursive = TRUE)
 
-roundtrip_ok <- vapply(results, function(r) identical(r$ok, TRUE), logical(1L))
-n_total <- length(jsonFiles)
-n_no_roundtrip <- sum(!roundtrip_ok)
+roundtripOk <- vapply(results, function(r) identical(r$ok, TRUE), logical(1L))
+nTotal <- length(jsonFiles)
+nNoRoundtrip <- sum(!roundtripOk)
 
 # JSON (semantic) and SQL equivalence for cohorts that round-tripped
-json_results <- list()
-sql_results <- list()
-for (i in which(roundtrip_ok)) {
+jsonResults <- list()
+sqlResults <- list()
+for (i in which(roundtripOk)) {
   r <- results[[i]]
-  json_results[[r$name]] <- roundtrip_json_semantically_equivalent(r$originalRaw, r$roundTripJsonStr)
-  sql_results[[r$name]] <- roundtrip_circe_sql_equivalent(r$originalRaw, r$roundTripJsonStr)
+  jsonResults[[r$name]] <- roundtripJsonSemanticallyEquivalent(r$originalRaw, r$roundTripJsonStr)
+  sqlResults[[r$name]] <- roundtripCirceSqlEquivalent(r$originalRaw, r$roundTripJsonStr)
 }
 
-n_roundtrip <- length(sql_results)
-json_pass <- sum(vapply(json_results, function(x) identical(x$ok, TRUE), logical(1L)))
-json_fail <- sum(vapply(json_results, function(x) identical(x$ok, FALSE), logical(1L)))
-sql_pass <- sum(vapply(sql_results, function(x) identical(x$ok, TRUE), logical(1L)))
-sql_fail <- sum(vapply(sql_results, function(x) identical(x$ok, FALSE), logical(1L)))
-sql_na <- sum(vapply(sql_results, function(x) identical(x$ok, NA), logical(1L)))
+nRoundtrip <- length(sqlResults)
+jsonPass <- sum(vapply(jsonResults, function(x) identical(x$ok, TRUE), logical(1L)))
+jsonFail <- sum(vapply(jsonResults, function(x) identical(x$ok, FALSE), logical(1L)))
+sqlPass <- sum(vapply(sqlResults, function(x) identical(x$ok, TRUE), logical(1L)))
+sqlFail <- sum(vapply(sqlResults, function(x) identical(x$ok, FALSE), logical(1L)))
+sqlNa <- sum(vapply(sqlResults, function(x) identical(x$ok, NA), logical(1L)))
 
 message("")
 message("Round-trip (PhenotypeLibrary cohorts):")
-message("  Round-trip succeeded: ", n_roundtrip, " (decompile -> source -> compile)")
-message("  Round-trip failed:   ", n_no_roundtrip, " (write/source/compile)")
-message("  Total:               ", n_total)
+message("  Round-trip succeeded: ", nRoundtrip, " (decompile -> source -> compile)")
+message("  Round-trip failed:   ", nNoRoundtrip, " (write/source/compile)")
+message("  Total:               ", nTotal)
 message("")
 message("JSON equivalence (semantic: concept sets, primary criteria domains, end strategy; reordered round-trip):")
-message("  Pass: ", json_pass)
-message("  Fail: ", json_fail)
-message("  (among ", n_roundtrip, " cohorts that round-tripped)")
+message("  Pass: ", jsonPass)
+message("  Fail: ", jsonFail)
+message("  (among ", nRoundtrip, " cohorts that round-tripped)")
 message("")
 message("SQL equivalence (same Circe SQL from original vs reordered round-trip JSON):")
-message("  Pass: ", sql_pass)
-message("  Fail: ", sql_fail)
-if (sql_na > 0L) message("  N/A (CirceR not installed): ", sql_na)
-message("  (among ", n_roundtrip, " cohorts that round-tripped)")
+message("  Pass: ", sqlPass)
+message("  Fail: ", sqlFail)
+if (sqlNa > 0L) message("  N/A (CirceR not installed): ", sqlNa)
+message("  (among ", nRoundtrip, " cohorts that round-tripped)")
 message("")
 
-if (n_no_roundtrip > 0L) {
-  failed_rt <- results[!roundtrip_ok]
-  stages <- table(vapply(failed_rt, function(r) r$stage, character(1)))
+if (nNoRoundtrip > 0L) {
+  failedRt <- results[!roundtripOk]
+  stages <- table(vapply(failedRt, function(r) r$stage, character(1)))
   message("Round-trip failures by stage:")
   for (s in names(stages)) message("  ", s, ": ", stages[s])
   message("")
@@ -290,23 +203,23 @@ if (n_no_roundtrip > 0L) {
   tryCatch({
     conn <- file(failFile, open = "wt")
     on.exit(close(conn))
-    writeLines(paste0(vapply(failed_rt, function(r) paste0(r$name, "\t", r$stage, "\t", gsub("[\t\n\r]+", " ", r$msg)), character(1))), conn)
+    writeLines(paste0(vapply(failedRt, function(r) paste0(r$name, "\t", r$stage, "\t", gsub("[\t\n\r]+", " ", r$msg)), character(1))), conn)
   }, error = function(e) NULL)
-  message("All ", length(failed_rt), " round-trip failures (name, stage, msg):")
-  for (r in failed_rt) {
+  message("All ", length(failedRt), " round-trip failures (name, stage, msg):")
+  for (r in failedRt) {
     message("  ", r$name, " [", r$stage, "] ", substr(r$msg, 1L, 80))
   }
   message("")
 }
 
-if (json_fail > 0L) {
-  json_fail_names <- names(json_results)[vapply(json_results, function(x) identical(x$ok, FALSE), logical(1L))]
-  message("JSON-equivalence failures (", length(json_fail_names), "): ", paste(head(json_fail_names, 20), collapse = ", "))
-  if (length(json_fail_names) > 20L) message(" ... and ", length(json_fail_names) - 20L, " more")
+if (jsonFail > 0L) {
+  jsonFailNames <- names(jsonResults)[vapply(jsonResults, function(x) identical(x$ok, FALSE), logical(1L))]
+  message("JSON-equivalence failures (", length(jsonFailNames), "): ", paste(head(jsonFailNames, 20), collapse = ", "))
+  if (length(jsonFailNames) > 20L) message(" ... and ", length(jsonFailNames) - 20L, " more")
   message("")
 }
 
-if (sql_fail > 0L) {
-  sql_fail_names <- names(sql_results)[vapply(sql_results, function(x) identical(x$ok, FALSE), logical(1L))]
-  message("SQL-equivalence failures (", length(sql_fail_names), "): ", paste(sort(sql_fail_names), collapse = ", "))
+if (sqlFail > 0L) {
+  sqlFailNames <- names(sqlResults)[vapply(sqlResults, function(x) identical(x$ok, FALSE), logical(1L))]
+  message("SQL-equivalence failures (", length(sqlFailNames), "): ", paste(sort(sqlFailNames), collapse = ", "))
 }

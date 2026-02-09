@@ -3,6 +3,11 @@
 # diff normalized SQL and optionally compare JSON keys.
 # Usage: Rscript tools/analyzeSqlFailures.R [n_sample]
 
+ca <- commandArgs(trailingOnly = FALSE)
+fa <- ca[grepl("^--file=", ca)]
+scriptDir <- if (length(fa) > 0) dirname(sub("^--file=", "", fa[1])) else "."
+source(file.path(scriptDir, "roundtrip_utils.R"))
+
 devtools::load_all()
 if (!("package:Capr" %in% search())) library(Capr, character.only = TRUE)
 library(CirceR)
@@ -10,36 +15,11 @@ library(CirceR)
 jsonFolder <- system.file("cohorts", package = "PhenotypeLibrary", mustWork = FALSE)
 jsonFiles <- list.files(jsonFolder, pattern = "\\.json$", full.names = TRUE)
 
-sort_concept_id_in_lists <- function(s) {
-  pattern <- "concept_id in \\(([0-9,]+)\\)"
-  m <- gregexpr(pattern, s)[[1]]
-  if (m[1] < 0) return(s)
-  starts <- as.integer(m); lens <- attr(m, "match.length")
-  matches <- substring(s, starts, starts + lens - 1)
-  inners <- sub(pattern, "\\1", matches)
-  replacements <- vapply(inners, function(inner) {
-    nums <- sort(as.integer(strsplit(inner, ",", fixed = TRUE)[[1]]))
-    paste0("concept_id in (", paste(nums, collapse = ","), ")")
-  }, character(1))
-  for (i in rev(seq_along(starts))) {
-    s <- paste0(substr(s, 1, starts[i] - 1), replacements[i], substr(s, starts[i] + lens[i], nchar(s)))
-  }
-  s
-}
-normalize_circe_sql <- function(s) {
-  s <- trimws(gsub("[ \t\r\n]+", " ", s))
-  s <- gsub("@codeset_[0-9]+", "@codeset_X", s)
-  s <- gsub("[0-9]+ as codeset_id", "X as codeset_id", s)
-  s <- gsub("codeset_id = [0-9]+", "codeset_id = X", s)
-  s <- sort_concept_id_in_lists(s)
-  s
-}
-
 outRPath <- tempfile("rt")
 dir.create(outRPath, showWarnings = FALSE)
 on.exit(unlink(outRPath, recursive = TRUE), add = TRUE)
 
-run_one <- function(jsonPath) {
+runOne <- function(jsonPath) {
   name <- sub("\\.json$", "", basename(jsonPath))
   rPath <- file.path(outRPath, paste0(name, ".R"))
   tryCatch(jsonToCaprFile(jsonPath, rPath, mode = "skip"), error = function(e) return(NULL))
@@ -61,7 +41,7 @@ run_one <- function(jsonPath) {
     error = function(e) NULL
   )
   if (is.null(sqlO) || is.null(sqlR)) return(list(name = name, sqlEq = FALSE, err = TRUE))
-  sqlEq <- identical(normalize_circe_sql(sqlO), normalize_circe_sql(sqlR))
+  sqlEq <- identical(normalizeCirceSql(sqlO), normalizeCirceSql(sqlR))
   list(name = name, orig = orig, rt = rt, sqlO = sqlO, sqlR = sqlR, sqlEq = sqlEq)
 }
 
@@ -70,7 +50,7 @@ if (is.na(nSample) || nSample <= 0) nSample <- 100L
 set.seed(42)
 idx <- sample(seq_along(jsonFiles), min(nSample, length(jsonFiles)))
 message("Running round-trip on ", length(idx), " cohorts...")
-results <- lapply(jsonFiles[idx], run_one)
+results <- lapply(jsonFiles[idx], runOne)
 results <- results[!vapply(results, is.null, logical(1))]
 failed <- results[!vapply(results, function(r) isTRUE(r$sqlEq), logical(1))]
 failed <- failed[!vapply(failed, function(r) isTRUE(r$err), logical(1))]
@@ -88,17 +68,13 @@ for (fi in seq_len(min(5L, length(failed)))) {
   r <- failed[[fi]]
   message("")
   message("=== Failure ", fi, ": ", r$name, " ===")
-  no <- normalize_circe_sql(r$sqlO)
-  nr <- normalize_circe_sql(r$sqlR)
-  n <- min(nchar(no), nchar(nr))
-  charsO <- strsplit(no, "")[[1]]
-  charsR <- strsplit(nr, "")[[1]]
-  diffs <- which(charsO[1:n] != charsR[1:n])
-  if (length(diffs) > 0) {
-    i <- diffs[1]
-    message("First SQL diff at position ", i, ":")
-    message("  Orig: ", substr(no, max(1, i - 35), i + 55))
-    message("  Rt  : ", substr(nr, max(1, i - 35), i + 55))
+  no <- normalizeCirceSql(r$sqlO)
+  nr <- normalizeCirceSql(r$sqlR)
+  diffInfo <- firstSqlDiff(no, nr, contextChars = 35L)
+  if (!is.na(diffInfo$position)) {
+    message("First SQL diff at position ", diffInfo$position, ":")
+    message("  Orig: ", diffInfo$orig)
+    message("  Rt  : ", diffInfo$rt)
   }
   # Compare key JSON fields
   o <- jsonlite::fromJSON(r$orig, simplifyVector = FALSE)
