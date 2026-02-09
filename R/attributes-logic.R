@@ -23,3 +23,28 @@ setMethod("as.list", "logicAttribute", function(x) {
 
   tibble::lst(`:=`(!!x@name, TRUE))
 })
+
+## Key-value attribute (e.g. ConditionTypeExclude = FALSE) ----
+
+#' Attribute that serializes to a single key-value pair in query JSON.
+#' Used for boolean query options like ConditionTypeExclude.
+#' Has a \code{name} slot (same as key) so compile/collectGuid work.
+setClass("keyValueAttribute",
+         slots = c(key = "character", value = "logical", name = "character"),
+         prototype = list(key = NA_character_, value = NA, name = NA_character_))
+
+setMethod("as.list", "keyValueAttribute", function(x) {
+  setNames(list(x@value), x@key)
+})
+
+#' ConditionTypeExclude query attribute
+#'
+#' When FALSE, condition type is not excluded (include all). When TRUE, excludes
+#' specified condition types (Capr does not support type-concept lists without DB).
+#' @param exclude logical; FALSE = include all types (default), TRUE = exclude (unsupported in decompiler)
+#' @return An attribute for use in conditionOccurrence()
+#' @export
+conditionTypeExclude <- function(exclude = FALSE) {
+  k <- "ConditionTypeExclude"
+  methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
+}
