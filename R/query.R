@@ -224,6 +224,25 @@ drugEra <- function(conceptSet, ...) {
         ...)
 }
 
+#' Query the dose era domain
+#'
+#' @param conceptSet A drug ingredient concept set (optional)
+#' @param ... optional attributes
+#'
+#' @return A Capr Query
+#' @export
+doseEra <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
+
+  query(domain = "DoseEra",
+        conceptSet = conceptSet,
+        ...)
+}
+
 #' Query the condition era domain
 #'
 #' @param conceptSet A condition concept set (optional)
@@ -308,23 +327,22 @@ observationPeriod <- function(...) {
 # Coercion -----
 ## Coerce Query ----
 setMethod("as.list", "Query", function(x) {
-  #create initial list for query
-  ll <- list(
-    'CodesetId' = x@conceptSet@id
-  ) |>
-    purrr::discard(~length(.x) == 0)
-  #list out attributes
+  # Include CodesetId only when the query has a concept set (non-empty expression).
+  # When conceptSet is empty/null (e.g. "any condition" with only ConditionSourceConcept), omit CodesetId.
+  ll <- list()
+  if (length(x@conceptSet@Expression) > 0L) {
+    ll[["CodesetId"]] <- x@conceptSet@id
+  }
+  # List out attributes
   if (length(x@attributes) > 0) {
     atr <- purrr::map(x@attributes, ~as.list(.x)) |>
       purrr::reduce(append)
-    #append to query list
     ll <- append(ll, atr)
   }
 
   tibble::lst(
     !!x@domain := ll
   )
-
 })
 # class(x@conceptSet@Expression[[1]])
 # as.list(x@conceptSet@Expression[[1]])
