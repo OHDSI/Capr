@@ -322,12 +322,14 @@ parseCirceDate <- function(x) {
   x
 }
 
-formatScalar <- function(x) {
+formatScalar <- function(x, integersAsNumeric = FALSE) {
   if (inherits(x, "Date")) return(sprintf('as.Date(%s)', deparse(as.character(x))))
-  if (is.numeric(x) && is.finite(x) && abs(x - round(x)) < .Machine$double.eps^0.5) {
-    return(sprintf("%sL", as.integer(round(x))))
+  if (is.numeric(x) && is.finite(x)) {
+    if (!integersAsNumeric && abs(x - round(x)) < .Machine$double.eps^0.5) {
+      return(sprintf("%sL", as.integer(round(x))))
+    }
+    return(as.character(x))
   }
-  if (is.numeric(x)) return(as.character(x))
   if (is.character(x)) return(deparse(x))
   stop("Unsupported scalar type")
 }
@@ -526,7 +528,7 @@ limitToCode <- function(limit) {
 # opAttribute + attribute constructors
 # =============================================================================
 
-opAttributeToCode <- function(opObj) {
+opAttributeToCode <- function(opObj, integersAsNumeric = FALSE) {
   if (is.null(opObj) || is.null(opObj$Op)) return(NULL)
 
   op <- opObj$Op
@@ -535,18 +537,20 @@ opAttributeToCode <- function(opObj) {
 
   if (is.null(value)) stop("Op attribute missing Value", call. = FALSE)
 
+  fmt <- function(z) formatScalar(z, integersAsNumeric = integersAsNumeric)
+
   if (op %in% c("bt", "BT")) {
     if (is.null(extent)) stop("bt op missing Extent", call. = FALSE)
-    return(sprintf("bt(%s, %s)", formatScalar(value), formatScalar(extent)))
+    return(sprintf("bt(%s, %s)", fmt(value), fmt(extent)))
   }
 
   if (op %in% c("!bt", "nbt", "NBT")) {
     if (is.null(extent)) stop("nbt (!bt) op missing Extent", call. = FALSE)
-    return(sprintf("nbt(%s, %s)", formatScalar(value), formatScalar(extent)))
+    return(sprintf("nbt(%s, %s)", fmt(value), fmt(extent)))
   }
 
   if (op %in% c("gt", "gte", "lt", "lte", "eq")) {
-    return(sprintf("%s(%s)", op, formatScalar(value)))
+    return(sprintf("%s(%s)", op, fmt(value)))
   }
 
   stop("Unsupported op: ", op, call. = FALSE)
@@ -755,18 +759,20 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
 
   # Measurement
   if (domainKey == "Measurement") {
-    if (!is.null(domainVal$ValueAsNumber)) attributeCalls <- c(attributeCalls, sprintf("valueAsNumber(%s)", opAttributeToCode(domainVal$ValueAsNumber)))
-    if (!is.null(domainVal$RangeLow))      attributeCalls <- c(attributeCalls, sprintf("rangeLow(%s)", opAttributeToCode(domainVal$RangeLow)))
-    if (!is.null(domainVal$RangeHigh))     attributeCalls <- c(attributeCalls, sprintf("rangeHigh(%s)", opAttributeToCode(domainVal$RangeHigh)))
+    if (!is.null(domainVal$ValueAsNumber)) attributeCalls <- c(attributeCalls, sprintf("valueAsNumber(%s)", opAttributeToCode(domainVal$ValueAsNumber, integersAsNumeric = TRUE)))
+    if (!is.null(domainVal$RangeLow))      attributeCalls <- c(attributeCalls, sprintf("rangeLow(%s)", opAttributeToCode(domainVal$RangeLow, integersAsNumeric = TRUE)))
+    if (!is.null(domainVal$RangeHigh))     attributeCalls <- c(attributeCalls, sprintf("rangeHigh(%s)", opAttributeToCode(domainVal$RangeHigh, integersAsNumeric = TRUE)))
 
     if (!is.null(domainVal$Unit)) {
       ids <- conceptListToIds(domainVal$Unit)
-      if (length(ids) > 0) attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", paste(ids, collapse = ", ")))
+      if (length(ids) > 0) {
+        unitArg <- if (length(ids) == 1L) paste0(ids[1], "L") else sprintf("c(%s)", paste0(ids, "L", collapse = ", "))
+        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", unitArg))
+      }
     }
 
     if (!is.null(domainVal$ValueAsConcept)) {
-      ids <- conceptListToIds(domainVal$ValueAsConcept)
-      if (length(ids) > 0) attributeCalls <- c(attributeCalls, sprintf("valueAsConcept(%s)", paste(ids, collapse = ", ")))
+      # valueAsConcept(ids, connection, vocabularyDatabaseSchema) requires DB connection; omit in round-trip
     }
   }
 
