@@ -329,14 +329,35 @@ toCirce <- function(cd) {
 #'
 #' @param object A Capr object such as a cohort, list of cohorts, or concept set.
 #' @param ... Arguments passed on to jsonlite::toJSON.
-#' e.g. `pretty = TRUE` for nicely formatted json.
+#'   For \code{compile,Cohort}: \code{includeConceptSets} — optional list of
+#'   \code{ConceptSet} objects to include in the JSON even if not referenced in
+#'   the cohort (e.g. to preserve round-trip equivalence when the source JSON
+#'   had unused concept sets).
+#'   e.g. `pretty = TRUE` for nicely formatted json.
 #'
 #' @return The json representation of the Capr object
 #' @export
 setGeneric("compile", function(object, ...) { standardGeneric("compile") })
 
-compile.Cohort <- function(object, ...) {
-  as.character(jsonlite::toJSON(toCirce(object), auto_unbox = TRUE, ...))
+compile.Cohort <- function(object, ..., includeConceptSets = NULL) {
+  circe <- toCirce(object)
+  if (length(includeConceptSets) > 0L) {
+    existingIds <- vapply(circe$ConceptSets, function(cs) cs$id, integer(1L))
+    maxId <- if (length(existingIds) > 0L) max(existingIds) else -1L
+    for (cs in includeConceptSets) {
+      if (!methods::is(cs, "ConceptSet")) next
+      csList <- as.list(cs)
+      already <- any(vapply(circe$ConceptSets, function(ex) {
+        identical(ex$expression$items %||% list(), csList$expression$items %||% list())
+      }, logical(1L)))
+      if (!already) {
+        maxId <- maxId + 1L
+        csList$id <- maxId
+        circe$ConceptSets <- c(circe$ConceptSets, list(csList))
+      }
+    }
+  }
+  as.character(jsonlite::toJSON(circe, auto_unbox = TRUE, ...))
 }
 
 
