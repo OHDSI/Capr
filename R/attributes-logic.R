@@ -48,3 +48,27 @@ conditionTypeExclude <- function(exclude = FALSE) {
   k <- "ConditionTypeExclude"
   methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
 }
+
+#' DeathTypeExclude query attribute
+#'
+#' When FALSE, death type is not excluded (include all). When TRUE, excludes
+#' specified death types (Capr does not support type-concept lists without DB).
+#' @param exclude logical; FALSE = include all types (default), TRUE = exclude (unsupported in decompiler)
+#' @return An attribute for use in death()
+#' @export
+deathTypeExclude <- function(exclude = FALSE) {
+  k <- "DeathTypeExclude"
+  methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
+}
+
+#' MeasurementTypeExclude query attribute
+#'
+#' When FALSE, measurement type is not excluded (include all). When TRUE, excludes
+#' specified measurement types (Capr does not support type-concept lists without DB).
+#' @param exclude logical; FALSE = include all types (default), TRUE = exclude (unsupported in decompiler)
+#' @return An attribute for use in measurement()
+#' @export
+measurementTypeExclude <- function(exclude = FALSE) {
+  k <- "MeasurementTypeExclude"
+  methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
+}
