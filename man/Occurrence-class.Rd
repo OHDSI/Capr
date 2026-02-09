@@ -15,5 +15,9 @@ in the cohort definition (relative to the index event)
 all, any, exactly, atLeast, or atMost}
 
 \item{\code{count}}{an integer specifying the number of occurrences for a criteria}
+
+\item{\code{isDistinct}}{optional logical; if TRUE, count distinct (e.g. by CountColumn)}
+
+\item{\code{countColumn}}{optional character; when counting, use this column for distinct (e.g. "DOMAIN_CONCEPT")}
 }}
 

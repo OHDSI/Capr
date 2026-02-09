@@ -4,7 +4,13 @@
 \alias{exactly}
 \title{Function to enumerate an exact count of occurrences}
 \usage{
-exactly(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
+exactly(
+  x,
+  query,
+  aperture = duringInterval(eventStarts(-Inf, Inf)),
+  distinct = NA,
+  countColumn = NA_character_
+)
 }
 \arguments{
 \item{x}{the integer counting the number of occurrences}
@@ -13,6 +19,10 @@ exactly(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
 
 \item{aperture}{an eventAperture object that shows the temporal span where the event is to be observed
 relative to the index event}
+
+\item{distinct}{optional logical; if TRUE, count distinct (e.g. by countColumn)}
+
+\item{countColumn}{optional character; when counting, use this column for distinct (e.g. "DOMAIN_CONCEPT")}
 }
 \value{
 A criteria that can be used in a cohort definition specifying satisfaction of exactly x instances of a query

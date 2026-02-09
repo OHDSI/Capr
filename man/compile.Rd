@@ -10,6 +10,10 @@ compile(object, ...)
 \item{object}{A Capr object such as a cohort, list of cohorts, or concept set.}
 
 \item{...}{Arguments passed on to jsonlite::toJSON.
+For \code{compile,Cohort}: \code{includeConceptSets} — optional list of
+\code{ConceptSet} objects to include in the JSON even if not referenced in
+the cohort (e.g. to preserve round-trip equivalence when the source JSON
+had unused concept sets).
 e.g. `pretty = TRUE` for nicely formatted json.}
 }
 \value{

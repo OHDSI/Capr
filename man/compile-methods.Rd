@@ -5,7 +5,7 @@
 \alias{compile,ConceptSet-method}
 \title{Compile a Capr cohort to json}
 \usage{
-\S4method{compile}{Cohort}(object, ...)
+\S4method{compile}{Cohort}(object, ..., includeConceptSets = NULL)
 
 \S4method{compile}{ConceptSet}(object, ...)
 }
