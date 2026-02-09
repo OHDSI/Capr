@@ -352,7 +352,6 @@ setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
 #'
 #' @return The json representation of Capr cohorts
 #' @importFrom generics compile
-#' @exportS3Method compile Cohort
 #' @export
 #' @rdname compile-methods
 #' @examples
