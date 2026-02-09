@@ -298,7 +298,8 @@ test_that("PhenotypeLibrary JSON round-trips: most pass, failures reported for d
   dir.create(outRPath, showWarnings = FALSE)
   on.exit(unlink(outRPath, recursive = TRUE), add = TRUE)
 
-  results <- lapply(jsonFiles, run_one_roundtrip, outRPath = outRPath)
+  # Generated code starts with library(Capr); source in .GlobalEnv so it runs and subsequent lines see Capr
+  results <- lapply(jsonFiles, run_one_roundtrip, outRPath = outRPath, envParent = .GlobalEnv)
   passed <- vapply(results, function(r) identical(r$ok, TRUE), logical(1L))
   failed <- results[!passed]
 
