@@ -21,8 +21,8 @@
 #' @param jsonPath Character. Path to the cohort JSON file.
 #' @param mode \code{"strict"} (default): stop on unsupported elements.
 #'   \code{"skip"}: omit unsupported parts and emit \code{# SKIPPED:} comments (unsafe).
-#' @param returnSkipped If \code{TRUE}, return a list with \code{lines}, \code{skipped}, and \code{emptyGroupWarnings} instead of just the character vector (for regression/reporting).
-#' @return Character vector of R code lines, or if \code{returnSkipped = TRUE}, a list with \code{lines}, \code{skipped}, \code{emptyGroupWarnings}.
+#' @param returnSkipped If \code{TRUE}, return a list with \code{lines}, \code{skipped}, and \code{emptyGroupWarnings} instead of just the character string (for regression/reporting).
+#' @return A single character string of R code with newlines between lines (so \code{cat(jsonToCapr(...))} prints nicely), or if \code{returnSkipped = TRUE}, a list with \code{lines}, \code{skipped}, \code{emptyGroupWarnings}.
 #' @seealso \code{\link{cohort}}, \code{\link{cs}}
 #' @importFrom rlang %||%
 #' @export
@@ -186,7 +186,7 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
       emptyGroupWarnings = emitter$getEmptyGroupWarnings()
     ))
   }
-  lines
+  paste(lines, collapse = "\n")
 }
 
 #' Write decompiled Capr R code to a file
@@ -204,6 +204,45 @@ jsonToCaprFile <- function(jsonPath, outRPath, mode = c("strict", "skip")) {
   }
   writeLines(lines, outRPath)
   invisible(outRPath)
+}
+
+#' Insert decompiled Capr code into the current document (RStudio only)
+#'
+#' Converts the given cohort JSON to Capr R code and inserts it into the
+#' active RStudio editor. The function looks upward from the current cursor
+#' position for the previous call to \code{insertCaprCode()} in the file and
+#' inserts the generated code on the line directly below that call.
+#' For interactive use in RStudio only; requires the \pkg{rstudioapi} package.
+#'
+#' @param jsonPath Character. Path to the cohort JSON file.
+#' @param mode \code{"strict"} or \code{"skip"} (see \code{\link{jsonToCapr}}).
+#' @return Invisibly, the inserted Capr code (character string).
+#' @seealso \code{\link{jsonToCapr}}, \code{\link{jsonToCaprFile}}
+#' @export
+insertCaprCode <- function(jsonPath, mode = c("strict", "skip")) {
+  rlang::check_installed("rstudioapi", reason = "to insert Capr code into the editor in RStudio")
+  if (!interactive()) {
+    stop("insertCaprCode() is for interactive use only.", call. = FALSE)
+  }
+  if (!rstudioapi::isAvailable()) {
+    stop("RStudio API is not available. Use insertCaprCode() from within RStudio.", call. = FALSE)
+  }
+  code <- jsonToCapr(jsonPath, mode = mode)
+  context <- rstudioapi::getActiveDocumentContext()
+  if (is.null(context) || length(context$contents) == 0L) {
+    stop("No active document in RStudio.", call. = FALSE)
+  }
+  cursor_row <- context$selection[[1L]]$range$end[["row"]]
+  contents <- context$contents
+  call_rows <- which(grepl("insertCaprCode\\s*\\(", contents[seq_len(cursor_row)]))
+  if (length(call_rows) == 0L) {
+    stop("No call to insertCaprCode() found above the cursor in the current document.", call. = FALSE)
+  }
+  call_row <- call_rows[[length(call_rows)]]
+  line <- contents[[call_row]]
+  insert_pos <- rstudioapi::document_position(row = call_row, column = nchar(line) + 1L)
+  rstudioapi::insertText(insert_pos, paste0("\n", code), id = context$id)
+  invisible(code)
 }
 
 # =============================================================================
@@ -554,7 +593,7 @@ conceptListToInlineConceptSet <- function(concepts, name = "sourceConcepts") {
 getSupportedKeysForDomain <- function(domainKey) {
   baseKeys <- c(
     "CodesetId", "CodesetID", "CorrelatedCriteria",
-    "First", "DateAdjustment", "Age",
+    "First", "DateAdjustment", "Age", "Gender",
     "OccurrenceStartDate", "OccurrenceEndDate", "EraStartDate", "EraEndDate",
     "UserDefinedPeriod",
     "ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept",
@@ -636,6 +675,14 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
   if (domainKey == "ConditionOccurrence" && identical(domainVal$ConditionTypeExclude, FALSE)) {
     attributeCalls <- c(attributeCalls, "conditionTypeExclude(FALSE)")
   }
+  # DeathTypeExclude: same for Death domain
+  if (domainKey == "Death" && identical(domainVal$DeathTypeExclude, FALSE)) {
+    attributeCalls <- c(attributeCalls, "deathTypeExclude(FALSE)")
+  }
+  # MeasurementTypeExclude: same for Measurement domain
+  if (domainKey == "Measurement" && identical(domainVal$MeasurementTypeExclude, FALSE)) {
+    attributeCalls <- c(attributeCalls, "measurementTypeExclude(FALSE)")
+  }
 
   # DateAdjustment
   if (!is.null(domainVal$DateAdjustment)) {
@@ -645,6 +692,19 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
   # Age (cross-domain)
   if (!is.null(domainVal$Age)) {
     attributeCalls <- c(attributeCalls, sprintf("age(%s)", opAttributeToCode(domainVal$Age)))
+  }
+
+  # Gender (demographic on query: male=8507, female=8532)
+  if (!is.null(domainVal$Gender) && length(domainVal$Gender) > 0) {
+    genderIds <- as.integer(vapply(domainVal$Gender, function(g) getConceptId(g), numeric(1)))
+    genderSet <- sort(unique(genderIds))
+    if (identical(genderSet, 8507L)) {
+      attributeCalls <- c(attributeCalls, "male()")
+    } else if (identical(genderSet, 8532L)) {
+      attributeCalls <- c(attributeCalls, "female()")
+    } else if (!identical(genderSet, sort(c(8507L, 8532L)))) {
+      emitter$skipOrStop(paste0("Unsupported Gender concept ids: ", paste(genderSet, collapse = ", ")))
+    }
   }
 
   # Date attrs (cross-domain)
@@ -762,7 +822,20 @@ demographicCriterionToCapr <- function(demo, emitter) {
 
 criteriaGroupToCapr <- function(group, conceptSetById, emitter, context = "group") {
   type <- group$Type %||% "ALL"
-  groupFun <- if (identical(type, "ANY")) "withAny" else "withAll"
+  count <- as.integer(group$Count %||% 1L)
+  if (identical(type, "ANY")) {
+    groupFun <- "withAny"
+    groupArgs <- NULL
+  } else if (identical(type, "AT_LEAST")) {
+    groupFun <- "withAtLeast"
+    groupArgs <- sprintf("%sL", count)
+  } else if (identical(type, "AT_MOST")) {
+    groupFun <- "withAtMost"
+    groupArgs <- sprintf("%sL", count)
+  } else {
+    groupFun <- "withAll"
+    groupArgs <- NULL
+  }
 
   criteriaList <- group$CriteriaList %||% list()
   criteriaCalls <- Filter(
@@ -788,12 +861,28 @@ criteriaGroupToCapr <- function(group, conceptSetById, emitter, context = "group
     return(sprintf("%s()", groupFun))
   }
 
+  if (!is.null(groupArgs)) {
+    args <- c(groupArgs, args)
+  }
   sprintf("%s(%s)", groupFun, paste(args, collapse = ", "))
 }
 
 correlatedCriteriaToCapr <- function(correlatedCriteria, conceptSetById, emitter) {
   type <- correlatedCriteria$Type %||% "ALL"
-  nestedFun <- if (identical(type, "ANY")) "nestedWithAny" else "nestedWithAll"
+  count <- as.integer(correlatedCriteria$Count %||% 1L)
+  if (identical(type, "ANY")) {
+    nestedFun <- "nestedWithAny"
+    nestedArgs <- NULL
+  } else if (identical(type, "AT_LEAST")) {
+    nestedFun <- "nestedWithAtLeast"
+    nestedArgs <- sprintf("%sL", count)
+  } else if (identical(type, "AT_MOST")) {
+    nestedFun <- "nestedWithAtMost"
+    nestedArgs <- sprintf("%sL", count)
+  } else {
+    nestedFun <- "nestedWithAll"
+    nestedArgs <- NULL
+  }
 
   criteriaList <- correlatedCriteria$CriteriaList %||% list()
   criteriaCalls <- Filter(
@@ -819,6 +908,9 @@ correlatedCriteriaToCapr <- function(correlatedCriteria, conceptSetById, emitter
     return(sprintf("%s()", nestedFun))
   }
 
+  if (!is.null(nestedArgs)) {
+    args <- c(nestedArgs, args)
+  }
   sprintf("%s(%s)", nestedFun, paste(args, collapse = ", "))
 }
 
@@ -835,15 +927,20 @@ criterionNodeToCapr <- function(criterionNode, conceptSetById, emitter, context 
   if (is.null(queryFun)) return(NULL)
 
   codesetId <- domainVal$CodesetId %||% domainVal$CodesetID %||% NULL
+  # Death domain typically has no concept set (any death)
+  allowNoCodeset <- identical(domainKey, "Death")
   if (is.null(codesetId)) {
-    emitter$skipOrStop(paste0("Missing CodesetId for domain: ", domainKey, " (", context, ")"))
-    return(NULL)
-  }
-
-  conceptSetVar <- conceptSetById[[as.character(codesetId)]]
-  if (is.null(conceptSetVar)) {
-    emitter$skipOrStop(paste0("CodesetId not found in ConceptSets: ", codesetId, " (", context, ")"))
-    return(NULL)
+    if (!allowNoCodeset) {
+      emitter$skipOrStop(paste0("Missing CodesetId for domain: ", domainKey, " (", context, ")"))
+      return(NULL)
+    }
+    conceptSetVar <- "NULL"
+  } else {
+    conceptSetVar <- conceptSetById[[as.character(codesetId)]]
+    if (is.null(conceptSetVar)) {
+      emitter$skipOrStop(paste0("CodesetId not found in ConceptSets: ", codesetId, " (", context, ")"))
+      return(NULL)
+    }
   }
 
   attributeCalls <- domainAttributesToCapr(domainKey, domainVal, emitter, jsonContextPath = context, conceptSetById = conceptSetById)
