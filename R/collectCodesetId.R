@@ -43,10 +43,10 @@ setMethod("collectGuid", "Query", function(x) {
   checkNest <- purrr::map_chr(x@attributes, ~as.character(.x@name))
   if (any(checkNest %in% c("CorrelatedCriteria"))) {
     ii <- which(checkNest == "CorrelatedCriteria")
-    id2 <- collectGuid(x@attributes[[ii]]@group) |>
-      purrr::flatten()
-
-    ids <- dplyr::bind_rows(ids, id2)
+    id2 <- collectGuid(x@attributes[[ii]]@group)
+    flat <- purrr::flatten(id2)
+    dfs <- purrr::keep(flat, is.data.frame)
+    if (length(dfs) > 0L) ids <- dplyr::bind_rows(ids, dfs)
   }
   
   # collect guids for conceptSetAttribute objects
@@ -385,6 +385,8 @@ setMethod("listConceptSets", "Cohort", function(x) {
   ll <- c(l1, l2, l3) |>
     .removeNullId()
 
+  # Drop elements with no id or length != 1 (e.g. from nested groups)
+  ll <- purrr::keep(ll, function(x) length(x$id) == 1L)
   ids <- purrr::map_chr(ll, ~as.character(.x$id))
 
   rr <- ll[!duplicated(ids)]
