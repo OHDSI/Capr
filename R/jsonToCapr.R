@@ -241,16 +241,16 @@ insertCaprCode <- function(jsonPath, mode = c("strict", "skip")) {
   if (is.null(context) || length(context$contents) == 0L) {
     stop("No active document in RStudio.", call. = FALSE)
   }
-  cursor_row <- context$selection[[1L]]$range$end[["row"]]
+  cursorRow <- context$selection[[1L]]$range$end[["row"]]
   contents <- context$contents
-  call_rows <- which(grepl("insertCaprCode\\s*\\(", contents[seq_len(cursor_row)]))
-  if (length(call_rows) == 0L) {
+  callRows <- which(grepl("insertCaprCode\\s*\\(", contents[seq_len(cursorRow)]))
+  if (length(callRows) == 0L) {
     stop("No call to insertCaprCode() found above the cursor in the current document.", call. = FALSE)
   }
-  call_row <- call_rows[[length(call_rows)]]
-  line <- contents[[call_row]]
-  insert_pos <- rstudioapi::document_position(row = call_row, column = nchar(line) + 1L)
-  rstudioapi::insertText(insert_pos, paste0("\n", code), id = context$id)
+  callRow <- callRows[[length(callRows)]]
+  line <- contents[[callRow]]
+  insertPos <- rstudioapi::document_position(row = callRow, column = nchar(line) + 1L)
+  rstudioapi::insertText(insertPos, paste0("\n", code), id = context$id)
   invisible(code)
 }
 
