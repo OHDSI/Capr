@@ -213,8 +213,13 @@ cohort <- function(entry,
 
 ## Coerce Entry ----------
 setMethod("as.list", "CohortEntry", function(x) {
+  # Emit CriteriaList as domain-keyed query only (matches Atlas/CIRCE format);
+  # each item is { "Measurement": {...} } not { "Criteria": {...}, "Occurrence": ..., ... }
+  criteriaList <- purrr::map(x@entryEvents, function(ev) {
+    if (methods::is(ev, "Criteria")) as.list(ev@query) else as.list(ev)
+  })
   pc <- list(
-    'CriteriaList' = purrr::map(x@entryEvents, ~as.list(.x)),
+    'CriteriaList' = criteriaList,
     'ObservationWindow' = as.list(x@observationWindow),
     'PrimaryCriteriaLimit' = list('Type' = x@primaryCriteriaLimit)
   )
