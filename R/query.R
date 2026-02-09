@@ -333,11 +333,14 @@ setMethod("as.list", "Query", function(x) {
   if (length(x@conceptSet@Expression) > 0L) {
     ll[["CodesetId"]] <- x@conceptSet@id
   }
-  # List out attributes
+  # List out attributes. Put *TypeExclude keys first so serialized JSON key order
+  # matches Atlas/CIRCE (e.g. conditionTypeExclude before other attributes).
   if (length(x@attributes) > 0) {
     atr <- purrr::map(x@attributes, ~as.list(.x)) |>
       purrr::reduce(append)
-    ll <- append(ll, atr)
+    typeExcludeKeys <- grep("TypeExclude$", names(atr), value = TRUE)
+    otherKeys <- setdiff(names(atr), typeExcludeKeys)
+    ll <- append(ll, atr[c(typeExcludeKeys, otherKeys)])
   }
 
   # Use empty named list when ll is empty so JSON serializes as {} not [] (CIRCE
