@@ -97,7 +97,7 @@ reorder_roundtrip_concept_sets_to_match_original <- function(originalJsonStr, ro
   reordered <- rtSets[newOrder]
   oldIds <- vapply(seq_along(reordered), function(k) reordered[[k]]$id, integer(1))
   for (k in seq_along(reordered)) reordered[[k]]$id <- k - 1L
-  idMap <- setNames(seq_along(reordered) - 1L, as.character(oldIds))
+  idMap <- stats::setNames(seq_along(reordered) - 1L, as.character(oldIds))
   rt$ConceptSets <- reordered
   replace_codeset_ids <- function(x, map) {
     if (is.null(x)) return(x)

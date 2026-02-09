@@ -14,6 +14,9 @@
 
 \item{...}{Arguments passed on to jsonlite::toJSON.
 e.g. `pretty = TRUE` for nicely formatted json.}
+
+\item{includeConceptSets}{Optional list of \code{ConceptSet} objects to include
+in the JSON even if not referenced in the cohort (e.g. for round-trip equivalence).}
 }
 \value{
 The json representation of Capr cohorts

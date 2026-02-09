@@ -26,7 +26,7 @@ normalizeCirceList <- function(x, idMap = NULL) {
     ids <- vapply(x$ConceptSets, function(cs) as.integer(if (!is.null(cs$id)) cs$id else 0L), integer(1L))
     o <- order(ids)
     x$ConceptSets <- x$ConceptSets[o]
-    idMap <- setNames(seq_along(ids), as.character(ids[o]))
+    idMap <- stats::setNames(seq_along(ids), as.character(ids[o]))
     for (k in seq_along(x$ConceptSets)) x$ConceptSets[[k]]$id <- idMap[[k]]
   }
   if (!is.list(x)) return(x)
@@ -121,7 +121,7 @@ reorder_roundtrip_concept_sets_to_match_original <- function(originalJsonStr, ro
   reordered <- rtSets[newOrder]
   oldIds <- vapply(seq_along(reordered), function(k) reordered[[k]]$id, integer(1))
   for (k in seq_along(reordered)) reordered[[k]]$id <- k - 1L
-  idMap <- setNames(seq_along(reordered) - 1L, as.character(oldIds))
+  idMap <- stats::setNames(seq_along(reordered) - 1L, as.character(oldIds))
   rt$ConceptSets <- reordered
   replace_codeset_ids <- function(x, map) {
     if (is.null(x)) return(x)

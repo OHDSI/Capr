@@ -46,7 +46,8 @@ Suggests:
     knitr,
     rmarkdown,
     PhenotypeLibrary (>= 3.36.0),
-    rstudioapi
+    rstudioapi,
+    waldo
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 

@@ -328,12 +328,9 @@ toCirce <- function(cd) {
 #' Compile a Capr object to json
 #'
 #' @param object A Capr object such as a cohort, list of cohorts, or concept set.
-#' @param ... Arguments passed on to jsonlite::toJSON.
-#'   For \code{compile,Cohort}: \code{includeConceptSets} — optional list of
-#'   \code{ConceptSet} objects to include in the JSON even if not referenced in
-#'   the cohort (e.g. to preserve round-trip equivalence when the source JSON
-#'   had unused concept sets).
-#'   e.g. `pretty = TRUE` for nicely formatted json.
+#' @param ... Arguments passed on to jsonlite::toJSON (e.g. \code{pretty = TRUE}).
+#'   For the Cohort method, \code{includeConceptSets} is also allowed; see
+#'   \code{\link{compile,Cohort-method}}.
 #'
 #' @return The json representation of the Capr object
 #' @export
@@ -373,8 +370,9 @@ setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
 #' Compile a Capr cohort to json
 #'
 #' @param object A Capr cohort or list of Capr cohorts
-#' @param ... Arguments passed on to jsonlite::toJSON.
-#' e.g. `pretty = TRUE` for nicely formatted json.
+#' @param ... Arguments passed on to jsonlite::toJSON (e.g. \code{pretty = TRUE}).
+#' @param includeConceptSets Optional list of \code{ConceptSet} objects to include
+#'   in the JSON even if not referenced in the cohort (e.g. for round-trip equivalence).
 #'
 #' @return The json representation of Capr cohorts
 #' @importFrom generics compile

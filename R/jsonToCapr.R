@@ -25,6 +25,7 @@
 #' @return A single character string of R code with newlines between lines (so \code{cat(jsonToCapr(...))} prints nicely), or if \code{returnSkipped = TRUE}, a list with \code{lines}, \code{skipped}, \code{emptyGroupWarnings}. The generated code starts with \code{library(Capr)} so the file is self-contained and can be sourced directly.
 #' @seealso \code{\link{cohort}}, \code{\link{cs}}
 #' @importFrom rlang %||%
+#' @importFrom stats setNames
 #' @export
 jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FALSE) {
   emitter <- makeEmitter(mode)
@@ -39,7 +40,7 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
     conceptSetToCode(conceptSet)
   })
 
-  conceptSetById <- setNames(
+  conceptSetById <- stats::setNames(
     lapply(conceptSetDefs, \(x) x$varName),
     vapply(cohortJson$ConceptSets %||% list(), \(cs) as.character(cs$id), character(1))
   )
@@ -626,6 +627,13 @@ getSupportedKeysForDomain <- function(domainKey) {
 
 #' Detect domain keys not in the supported set and emit skipOrStop for each (non-null/non-empty).
 #' Prevents silent semantic drift when new Circe fields appear.
+#'
+#' @param domainKey Character. The domain name (e.g. \code{"ConditionOccurrence"}, \code{"Measurement"}).
+#' @param domainVal Named list. The domain criterion object from the JSON.
+#' @param supportedKeySet Character vector of supported attribute keys for this domain.
+#' @param emitter Emitter object from \code{makeEmitter()} (handles \code{skipOrStop}).
+#' @param jsonContextPath Character. Path prefix for error messages (e.g. \code{"PrimaryCriteria"}).
+#' @export
 detectUnsupportedKeys <- function(domainKey, domainVal, supportedKeySet, emitter, jsonContextPath = "") {
   typeLikeKeys <- grep("Type$|TypeExclude$", names(domainVal), value = TRUE)
   knownKeys <- union(supportedKeySet, typeLikeKeys)

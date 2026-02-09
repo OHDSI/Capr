@@ -13,6 +13,17 @@ detectUnsupportedKeys(
   jsonContextPath = ""
 )
 }
+\arguments{
+\item{domainKey}{Character. The domain name (e.g. \code{"ConditionOccurrence"}, \code{"Measurement"}).}
+
+\item{domainVal}{Named list. The domain criterion object from the JSON.}
+
+\item{supportedKeySet}{Character vector of supported attribute keys for this domain.}
+
+\item{emitter}{Emitter object from \code{makeEmitter()} (handles \code{skipOrStop}).}
+
+\item{jsonContextPath}{Character. Path prefix for error messages (e.g. \code{"PrimaryCriteria"}).}
+}
 \description{
 Detect domain keys not in the supported set and emit skipOrStop for each (non-null/non-empty).
 Prevents silent semantic drift when new Circe fields appear.

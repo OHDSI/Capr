@@ -34,7 +34,7 @@ setClass("keyValueAttribute",
          prototype = list(key = NA_character_, value = NA, name = NA_character_))
 
 setMethod("as.list", "keyValueAttribute", function(x) {
-  setNames(list(x@value), x@key)
+  stats::setNames(list(x@value), x@key)
 })
 
 #' ConditionTypeExclude query attribute
