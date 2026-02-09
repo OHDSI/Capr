@@ -340,6 +340,12 @@ setMethod("as.list", "Query", function(x) {
     ll <- append(ll, atr)
   }
 
+  # Use empty named list when ll is empty so JSON serializes as {} not [] (CIRCE
+  # expects domain value to be an object, e.g. ObservationPeriod: {}).
+  if (length(ll) == 0L) {
+    ll <- structure(list(), names = character(0))
+  }
+
   tibble::lst(
     !!x@domain := ll
   )
