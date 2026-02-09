@@ -330,8 +330,9 @@ setMethod("as.list", "Query", function(x) {
   # Include CodesetId only when the query has a concept set (non-empty expression).
   # When conceptSet is empty/null (e.g. "any condition" with only ConditionSourceConcept), omit CodesetId.
   ll <- list()
-  if (length(x@conceptSet@Expression) > 0L) {
-    ll[["CodesetId"]] <- x@conceptSet@id
+  if (length(x@conceptSet@Expression) > 0L && length(x@conceptSet@id) >= 1L) {
+    id <- x@conceptSet@id
+    ll[["CodesetId"]] <- if (is.numeric(id) || is.integer(id)) as.integer(id)[1L] else id[1L]
   }
   # List out attributes. Put *TypeExclude keys first so serialized JSON key order
   # matches Atlas/CIRCE (e.g. conditionTypeExclude before other attributes).

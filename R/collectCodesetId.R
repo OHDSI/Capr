@@ -44,8 +44,8 @@ setMethod("collectGuid", "Query", function(x) {
   if (any(checkNest %in% c("CorrelatedCriteria"))) {
     ii <- which(checkNest == "CorrelatedCriteria")
     id2 <- collectGuid(x@attributes[[ii]]@group)
-    flat <- purrr::flatten(id2)
-    dfs <- purrr::keep(flat, is.data.frame)
+    # id2 is a list of tibbles; do not flatten (would turn tibbles into columns)
+    dfs <- purrr::keep(id2, is.data.frame)
     if (length(dfs) > 0L) ids <- dplyr::bind_rows(ids, dfs)
   }
   
