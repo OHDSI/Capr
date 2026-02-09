@@ -68,6 +68,7 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
   primaryQueryCalls <- Filter(
     Negate(is.null),
     lapply(primaryCriteriaList, function(primaryNode) {
+      if (length(primaryNode) == 0L || length(names(primaryNode)) == 0L) return(NULL)
       domainKey <- names(primaryNode)[[1]]
       domainVal <- primaryNode[[1]]
 
@@ -75,19 +76,25 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
       if (is.null(queryFun)) return(NULL)
 
       codesetId <- domainVal$CodesetId %||% domainVal$CodesetID %||% NULL
-      # No CodesetId is allowed when a SourceConcept attribute references a concept set (e.g. "any condition" + ConditionSourceConcept = 2)
+      # No CodesetId is allowed for Death, ObservationPeriod (any period), or when a SourceConcept attribute references a concept set
+      allowNoCodeset <- domainKey %in% c("Death", "ObservationPeriod")
       noMainConceptSet <- is.null(codesetId)
       if (noMainConceptSet) {
-        srcId <- NULL
-        for (k in sourceConceptKeys) {
-          v <- domainVal[[k]]
-          if (length(v) == 1L && is.numeric(v) && !is.null(conceptSetById[[as.character(v)]])) {
-            srcId <- as.character(v)
-            break
+        if (allowNoCodeset) {
+          # ObservationPeriod() takes no concept set arg; Death() takes conceptSet = NULL
+          conceptSetVar <- if (identical(domainKey, "ObservationPeriod")) character(0) else "NULL"
+        } else {
+          srcId <- NULL
+          for (k in sourceConceptKeys) {
+            v <- domainVal[[k]]
+            if (length(v) == 1L && is.numeric(v) && !is.null(conceptSetById[[as.character(v)]])) {
+              srcId <- as.character(v)
+              break
+            }
           }
+          if (is.null(srcId)) return(emitter$skipOrStop(paste0("Missing CodesetId in PrimaryCriteria for domain: ", domainKey, " (and no SourceConcept CodesetId reference)")))
+          conceptSetVar <- "conceptSet = NULL"
         }
-        if (is.null(srcId)) return(emitter$skipOrStop(paste0("Missing CodesetId in PrimaryCriteria for domain: ", domainKey, " (and no SourceConcept CodesetId reference)")))
-        conceptSetVar <- "conceptSet = NULL"
       } else {
         conceptSetVar <- conceptSetById[[as.character(codesetId)]]
         if (is.null(conceptSetVar)) return(emitter$skipOrStop(paste0("PrimaryCriteria CodesetId not found in ConceptSets: ", codesetId)))
@@ -928,6 +935,7 @@ correlatedCriteriaToCapr <- function(correlatedCriteria, conceptSetById, emitter
 
 criterionNodeToCapr <- function(criterionNode, conceptSetById, emitter, context = "criterion") {
   criteriaObj <- criterionNode$Criteria %||% list()
+  if (length(criteriaObj) == 0L || length(names(criteriaObj)) == 0L) return(NULL)
   domainKey <- names(criteriaObj)[[1]]
   domainVal <- criteriaObj[[1]]
 
@@ -1076,6 +1084,7 @@ censoringCriteriaToCapr <- function(censoringCriteria, conceptSetById, emitter) 
     Negate(is.null),
     lapply(censoringCriteria, function(node) {
       criteriaObj <- node$Criteria %||% list()
+      if (length(criteriaObj) == 0L || length(names(criteriaObj)) == 0L) return(NULL)
       domainKey <- names(criteriaObj)[[1]]
       domainVal <- criteriaObj[[1]]
 
