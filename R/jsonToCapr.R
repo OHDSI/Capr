@@ -1,0 +1,1020 @@
+#' Decompile Atlas/Circe cohort JSON to Capr R code
+#'
+#' These functions convert a cohort definition exported from Atlas (Circe JSON)
+#' into equivalent Capr R code (concept sets and \code{cohort()} calls).
+#'
+#' @section Supported features:
+#' Concept sets (\code{cs()}), primary criteria and entry, additional criteria
+#' (\code{withAll}/\code{withAny}), inclusion rules (\code{attrition()}), correlated
+#' criteria (\code{nestedWithAll}/\code{nestedWithAny}), start/end windows
+#' (\code{duringInterval}), occurrence (\code{exactly}/\code{atLeast}/\code{atMost}),
+#' common attributes (age, dates, firstOccurrence, dateAdjustment, source concepts),
+#' Measurement/DrugExposure attributes, exit strategies (\code{fixedExit},
+#' \code{drugExit}, \code{observationExit}), censoring criteria, and era collapse.
+#'
+#' @section Unsupported (fail in strict mode or skip with \code{mode = "skip"}):
+#' Domains: Specimen, VisitDetail, DoseEra; VisitOccurrence.ProviderSpecialty;
+#' any \code{*TypeExclude == TRUE} or \code{*Type} lists (Type lists require vocabulary lookup in Capr);
+#' DrugEra.EraLength; ConditionEra.OccurrenceCount; Measurement.RangeHighRatio.
+#' Unknown domain keys are reported via \code{detectUnsupportedKeys()} to avoid silent drift.
+#'
+#' @param jsonPath Character. Path to the cohort JSON file.
+#' @param mode \code{"strict"} (default): stop on unsupported elements.
+#'   \code{"skip"}: omit unsupported parts and emit \code{# SKIPPED:} comments (unsafe).
+#' @param returnSkipped If \code{TRUE}, return a list with \code{lines}, \code{skipped}, and \code{emptyGroupWarnings} instead of just the character vector (for regression/reporting).
+#' @return Character vector of R code lines, or if \code{returnSkipped = TRUE}, a list with \code{lines}, \code{skipped}, \code{emptyGroupWarnings}.
+#' @seealso \code{\link{cohort}}, \code{\link{cs}}
+#' @importFrom rlang %||%
+#' @export
+jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FALSE) {
+  emitter <- makeEmitter(mode)
+  stopifnot(file.exists(jsonPath))
+
+  cohortJson <- jsonlite::fromJSON(jsonPath, simplifyVector = FALSE)
+
+  # -----------------------------
+  # ConceptSets
+  # -----------------------------
+  conceptSetDefs <- lapply(cohortJson$ConceptSets %||% list(), function(conceptSet) {
+    conceptSetToCode(conceptSet)
+  })
+
+  conceptSetById <- setNames(
+    lapply(conceptSetDefs, \(x) x$varName),
+    vapply(cohortJson$ConceptSets %||% list(), \(cs) as.character(cs$id), character(1))
+  )
+
+  # -----------------------------
+  # InclusionRules -> attrition()
+  # -----------------------------
+  attritionLines <- inclusionRulesToAttritionLines(
+    inclusionRules = cohortJson$InclusionRules %||% list(),
+    expressionLimit = cohortJson$ExpressionLimit %||% "First",
+    conceptSetById = conceptSetById,
+    emitter = emitter
+  )
+
+  # -----------------------------
+  # Entry (PrimaryCriteria)
+  # -----------------------------
+  primaryCriteria <- cohortJson$PrimaryCriteria
+  if (is.null(primaryCriteria)) stop("JSON missing PrimaryCriteria", call. = FALSE)
+
+  primaryCriteriaList <- primaryCriteria$CriteriaList %||% list()
+  if (length(primaryCriteriaList) == 0) stop("PrimaryCriteria.CriteriaList is empty", call. = FALSE)
+
+  # SourceConcept keys that can be a single CodesetId (integer) meaning "any concept" + filter by that concept set
+  sourceConceptKeys <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept")
+  primaryQueryCalls <- Filter(
+    Negate(is.null),
+    lapply(primaryCriteriaList, function(primaryNode) {
+      domainKey <- names(primaryNode)[[1]]
+      domainVal <- primaryNode[[1]]
+
+      queryFun <- domainKeyToQueryFun(domainKey, emitter)
+      if (is.null(queryFun)) return(NULL)
+
+      codesetId <- domainVal$CodesetId %||% domainVal$CodesetID %||% NULL
+      # No CodesetId is allowed when a SourceConcept attribute references a concept set (e.g. "any condition" + ConditionSourceConcept = 2)
+      noMainConceptSet <- is.null(codesetId)
+      if (noMainConceptSet) {
+        srcId <- NULL
+        for (k in sourceConceptKeys) {
+          v <- domainVal[[k]]
+          if (length(v) == 1L && is.numeric(v) && !is.null(conceptSetById[[as.character(v)]])) {
+            srcId <- as.character(v)
+            break
+          }
+        }
+        if (is.null(srcId)) return(emitter$skipOrStop(paste0("Missing CodesetId in PrimaryCriteria for domain: ", domainKey, " (and no SourceConcept CodesetId reference)")))
+        conceptSetVar <- "conceptSet = NULL"
+      } else {
+        conceptSetVar <- conceptSetById[[as.character(codesetId)]]
+        if (is.null(conceptSetVar)) return(emitter$skipOrStop(paste0("PrimaryCriteria CodesetId not found in ConceptSets: ", codesetId)))
+      }
+
+      attributeCalls <- domainAttributesToCapr(domainKey, domainVal, emitter, jsonContextPath = "PrimaryCriteria", conceptSetById = conceptSetById)
+
+      # CorrelatedCriteria attached to query
+      if (!is.null(domainVal$CorrelatedCriteria) && length(domainVal$CorrelatedCriteria) > 0) {
+        corr <- correlatedCriteriaToCapr(domainVal$CorrelatedCriteria, conceptSetById, emitter)
+        if (!is.null(corr)) attributeCalls <- c(attributeCalls, corr)
+      }
+
+      queryArgs <- c(conceptSetVar, attributeCalls)
+      sprintf("%s(%s)", queryFun, paste(queryArgs, collapse = ", "))
+    })
+  )
+
+  if (length(primaryQueryCalls) == 0) {
+    stop("PrimaryCriteria produced no supported entry queries (strict) or all were skipped (skip).", call. = FALSE)
+  }
+
+  observationWindowCode <- observationWindowToCode(primaryCriteria$ObservationWindow %||% list(PriorDays = 0L, PostDays = 0L))
+  primaryLimitCode <- limitToCode(primaryCriteria$PrimaryCriteriaLimit %||% "First")
+  qualifiedLimitCode <- limitToCode(cohortJson$QualifiedLimit %||% primaryCriteria$PrimaryCriteriaLimit %||% "First")
+
+  additionalCriteriaCall <- additionalCriteriaToCode(
+    additionalCriteria = cohortJson$AdditionalCriteria %||% NULL,
+    conceptSetById = conceptSetById,
+    emitter = emitter
+  )
+
+  # -----------------------------
+  # Exit
+  # -----------------------------
+  endStrategyCall <- endStrategyToCapr(cohortJson$EndStrategy %||% NULL, conceptSetById, emitter)
+  censoringCall <- censoringCriteriaToCapr(cohortJson$CensoringCriteria %||% list(), conceptSetById, emitter)
+
+  # -----------------------------
+  # Era collapse
+  # -----------------------------
+  eraCall <- "era()"
+  if (!is.null(cohortJson$CollapseSettings)) {
+    eraCall <- collapseSettingsToEraCall(
+      collapseSettings = cohortJson$CollapseSettings,
+      censorWindow = cohortJson$CensorWindow %||% NULL,
+      emitter = emitter
+    )
+  }
+
+  # -----------------------------
+  # Assemble output
+  # -----------------------------
+  conceptLines <- c(
+    "library(Capr)",
+    "",
+    skipHeaderLines(emitter),
+    "# --- concept sets ---",
+    unlist(lapply(conceptSetDefs, \(x) x$lines)),
+    ""
+  )
+
+  entryLines <- c(
+    "# --- cohort ---",
+    "cohortDef <- cohort(",
+    "  entry = entry(",
+    paste0("    ", paste0(primaryQueryCalls, collapse = ",\n    "), ","),
+    sprintf("    observationWindow = %s,", observationWindowCode),
+    sprintf("    primaryCriteriaLimit = %s,", primaryLimitCode),
+    if (!is.null(additionalCriteriaCall)) sprintf("    additionalCriteria = %s,", additionalCriteriaCall) else NULL,
+    sprintf("    qualifiedLimit = %s", qualifiedLimitCode),
+    "  ),",
+    if (!is.null(attritionLines) && length(attritionLines) > 0) "  attrition = attritionObj," else NULL,
+    "  exit = exit(",
+    sprintf("    endStrategy = %s%s", endStrategyCall, if (!is.null(censoringCall)) "," else ""),
+    if (!is.null(censoringCall)) sprintf("    censoringCriteria = %s", censoringCall) else NULL,
+    "  ),",
+    sprintf("  era = %s", eraCall),
+    ")",
+    ""
+  )
+
+  lines <- c(
+    "# Generated by jsonToCapr()",
+    sprintf("# Source JSON: %s", normalizePath(jsonPath, winslash = "/")),
+    "",
+    conceptLines,
+    attritionLines %||% character(),
+    entryLines
+  )
+
+  if (returnSkipped) {
+    return(list(
+      lines = lines,
+      skipped = emitter$getSkipped(),
+      emptyGroupWarnings = emitter$getEmptyGroupWarnings()
+    ))
+  }
+  lines
+}
+
+#' Write decompiled Capr R code to a file
+#'
+#' @param jsonPath Character. Path to the cohort JSON file.
+#' @param outRPath Character. Path to the output R file (directory is created if needed).
+#' @param mode \code{"strict"} or \code{"skip"} (see \code{\link{jsonToCapr}}).
+#' @return Invisibly, \code{outRPath}.
+#' @export
+jsonToCaprFile <- function(jsonPath, outRPath, mode = c("strict", "skip")) {
+  lines <- jsonToCapr(jsonPath, mode = mode)
+  outDir <- dirname(outRPath)
+  if (nzchar(outDir)) {
+    dir.create(outDir, showWarnings = FALSE, recursive = TRUE)
+  }
+  writeLines(lines, outRPath)
+  invisible(outRPath)
+}
+
+# =============================================================================
+# Emitter / Mode
+# =============================================================================
+
+makeEmitter <- function(mode = c("strict", "skip")) {
+  mode <- match.arg(mode)
+  skipped <- character()
+  emptyGroupWarnings <- character()
+
+  skipOrStop <- function(msg) {
+    if (mode == "strict") stop(msg, call. = FALSE)
+    skipped <<- c(skipped, msg)
+    return(NULL)
+  }
+
+  warnEmptyGroup <- function(context) {
+    if (mode == "skip") {
+      emptyGroupWarnings <<- c(emptyGroupWarnings, context)
+    }
+  }
+
+  getSkipped <- function() skipped
+  getEmptyGroupWarnings <- function() emptyGroupWarnings
+  list(
+    mode = mode,
+    skipOrStop = skipOrStop,
+    warnEmptyGroup = warnEmptyGroup,
+    getSkipped = getSkipped,
+    getEmptyGroupWarnings = getEmptyGroupWarnings
+  )
+}
+
+skipHeaderLines <- function(emitter) {
+  skipped <- emitter$getSkipped()
+  emptyWarns <- emitter$getEmptyGroupWarnings()
+
+  lines <- character()
+
+  if (length(skipped) > 0 || length(emptyWarns) > 0) {
+    lines <- c(lines, "# --- SKIPPED / WARNINGS (mode=\"skip\" is UNSAFE) ---")
+    if (length(skipped) > 0) lines <- c(lines, paste0("# SKIPPED: ", skipped))
+    if (length(emptyWarns) > 0) lines <- c(lines, paste0("# WARNING: group became empty after skips: ", emptyWarns))
+    lines <- c(lines, "")
+  }
+
+  lines
+}
+
+# =============================================================================
+# Utilities (internal; rlang's %||% is used via package import)
+# =============================================================================
+
+toCamelCase <- function(x) {
+  if (is.null(x) || length(x) == 0 || (length(x) == 1 && is.na(x))) return("x")
+  x <- x[1]
+  x <- gsub("[^A-Za-z0-9]+", " ", x)
+  parts <- strsplit(trimws(x), "\\s+")[[1]]
+  if (length(parts) == 0 || (length(parts) == 1 && parts == "")) return("x")
+  parts <- c(
+    tolower(parts[1]),
+    paste0(toupper(substring(parts[-1], 1, 1)), tolower(substring(parts[-1], 2)))
+  )
+  paste0(parts, collapse = "")
+}
+
+makeConceptSetVarName <- function(conceptSetName, conceptSetId) {
+  base <- toCamelCase(conceptSetName %||% "conceptSet")
+  paste0("cs", toupper(substring(base, 1, 1)), substring(base, 2), conceptSetId)
+}
+
+parseCirceDate <- function(x) {
+  if (is.character(x) && grepl("^\\d{4}-\\d{2}-\\d{2}$", x)) return(as.Date(x))
+  x
+}
+
+formatScalar <- function(x) {
+  if (inherits(x, "Date")) return(sprintf('as.Date(%s)', deparse(as.character(x))))
+  if (is.numeric(x) && is.finite(x) && abs(x - round(x)) < .Machine$double.eps^0.5) {
+    return(sprintf("%sL", as.integer(round(x))))
+  }
+  if (is.numeric(x)) return(as.character(x))
+  if (is.character(x)) return(deparse(x))
+  stop("Unsupported scalar type")
+}
+
+getConceptId <- function(item) {
+  item$CONCEPT_ID %||% item$concept_id
+}
+
+conceptListToIds <- function(conceptList) {
+  if (is.null(conceptList) || length(conceptList) == 0) return(integer())
+  if (is.numeric(conceptList)) return(as.integer(conceptList))
+  as.integer(vapply(conceptList, function(u) getConceptId(u), numeric(1)))
+}
+
+# =============================================================================
+# ConceptSets
+# =============================================================================
+
+# Build one cs() argument part from a run of items with same (isExcluded, includeDescendants, includeMapped).
+# Order of items is preserved by processing items in sequence and grouping consecutive same-signature items.
+conceptSetItemsToParts <- function(items) {
+  if (is.null(items) || length(items) == 0) return(character(0))
+  conceptIds <- vapply(items, function(it) {
+    cid <- it$concept$CONCEPT_ID %||% it$concept$concept_id
+    if (is.null(cid)) stop("Concept set item missing concept ID", call. = FALSE)
+    as.integer(cid)
+  }, integer(1))
+  isExcluded <- vapply(items, function(it) isTRUE(it$isExcluded), logical(1))
+  includeDesc <- vapply(items, function(it) isTRUE(it$includeDescendants), logical(1))
+  includeMapped <- vapply(items, function(it) isTRUE(it$includeMapped), logical(1))
+
+  # Group consecutive items with same signature (order-preserving)
+  sig <- paste(isExcluded, includeDesc, includeMapped, sep = ".")
+  runs <- list()
+  i <- 1
+  while (i <= length(items)) {
+    s <- sig[i]
+    j <- i
+    while (j < length(items) && sig[j + 1] == s) j <- j + 1
+    runs <- c(runs, list(list(ids = conceptIds[i:j], ex = isExcluded[i], desc = includeDesc[i], mapped = includeMapped[i])))
+    i <- j + 1
+  }
+
+  parts <- vapply(runs, function(r) {
+    idsStr <- paste0(r$ids, collapse = ", ")
+    if (r$ex) {
+      if (r$desc) sprintf("exclude(descendants(%s))", idsStr)
+      else if (r$mapped) sprintf("exclude(mapped(%s))", idsStr)
+      else sprintf("exclude(%s)", idsStr)
+    } else {
+      if (r$desc) sprintf("descendants(%s)", idsStr)
+      else if (r$mapped) sprintf("mapped(%s)", idsStr)
+      else idsStr
+    }
+  }, character(1))
+  parts
+}
+
+conceptSetToCode <- function(conceptSet) {
+  items <- conceptSet$expression$items
+  varName <- makeConceptSetVarName(conceptSet$name, conceptSet$id)
+
+  if (is.null(items) || length(items) == 0) {
+    line <- sprintf("%s <- cs(name = %s, id = %s)", varName, deparse(conceptSet$name), conceptSet$id)
+    return(list(varName = varName, lines = line))
+  }
+
+  parts <- conceptSetItemsToParts(items)
+  line <- sprintf(
+    "%s <- cs(%s, name = %s, id = %s)",
+    varName,
+    paste(parts, collapse = ", "),
+    deparse(conceptSet$name),
+    conceptSet$id
+  )
+
+  list(varName = varName, lines = line)
+}
+
+# =============================================================================
+# Domain mapping
+# =============================================================================
+
+domainKeyToQueryFun <- function(domainKey, emitter) {
+  switch(
+    domainKey,
+    ConditionOccurrence = "conditionOccurrence",
+    ConditionEra        = "conditionEra",
+    DrugExposure        = "drugExposure",
+    DrugEra             = "drugEra",
+    ProcedureOccurrence = "procedure",
+    Measurement         = "measurement",
+    VisitOccurrence     = "visit",
+    Observation         = "observation",
+    Death               = "death",
+    DeviceExposure      = "deviceExposure",
+    ObservationPeriod   = "observationPeriod",
+    DoseEra             = "doseEra",
+
+    Specimen    = { emitter$skipOrStop("Unsupported domain: Specimen (Capr has no specimen() query)"); NULL },
+    VisitDetail = { emitter$skipOrStop("Unsupported domain: VisitDetail (Capr has no visitDetail() query)"); NULL },
+
+    { emitter$skipOrStop(paste0("Unsupported domain key: ", domainKey)); NULL }
+  )
+}
+
+# =============================================================================
+# Windows / interval
+# =============================================================================
+
+eventWindowToCode <- function(windowJson) {
+  sideToOffset <- function(side) {
+    coeff <- side$Coeff %||% 1
+    days  <- side$Days
+    if (is.null(days)) return(if (coeff < 0) "-Inf" else "Inf")
+    offset <- as.integer(days) * as.integer(coeff)
+    sprintf("%sL", offset)
+  }
+
+  startOffset <- sideToOffset(windowJson$Start %||% list(Coeff = -1))
+  endOffset   <- sideToOffset(windowJson$End   %||% list(Coeff =  1, Days = 0))
+
+  index <- if (isTRUE(windowJson$UseIndexEnd)) "endDate" else "startDate"
+  windowFun <- if (isTRUE(windowJson$UseEventEnd)) "eventEnds" else "eventStarts"
+
+  sprintf("%s(%s, %s, index = %s)", windowFun, startOffset, endOffset, deparse(index))
+}
+
+apertureToCode <- function(startWindow, endWindow = NULL, restrictVisit = FALSE, ignoreObservationPeriod = FALSE) {
+  startCode <- eventWindowToCode(startWindow %||% list())
+  if (is.null(endWindow)) {
+    return(sprintf(
+      "duringInterval(startWindow = %s, restrictVisit = %s, ignoreObservationPeriod = %s)",
+      startCode,
+      if (isTRUE(restrictVisit)) "TRUE" else "FALSE",
+      if (isTRUE(ignoreObservationPeriod)) "TRUE" else "FALSE"
+    ))
+  }
+
+  endCode <- eventWindowToCode(endWindow)
+  sprintf(
+    "duringInterval(startWindow = %s, endWindow = %s, restrictVisit = %s, ignoreObservationPeriod = %s)",
+    startCode,
+    endCode,
+    if (isTRUE(restrictVisit)) "TRUE" else "FALSE",
+    if (isTRUE(ignoreObservationPeriod)) "TRUE" else "FALSE"
+  )
+}
+
+# =============================================================================
+# Occurrence
+# =============================================================================
+
+occurrenceWrap <- function(occurrence, innerCall) {
+  type <- occurrence$Type %||% 2
+  count <- as.integer(occurrence$Count %||% 1)
+  isDistinct <- occurrence$IsDistinct %||% FALSE
+  countColumn <- occurrence$CountColumn %||% ""
+
+  wrapper <- switch(
+    as.character(type),
+    "0" = "exactly",
+    "1" = "atMost",
+    "2" = "atLeast",
+    stop("Unsupported Occurrence.Type: ", type)
+  )
+
+  args <- c(sprintf("%sL", count), innerCall)
+  if (isTRUE(isDistinct) || (is.character(countColumn) && nzchar(countColumn))) {
+    if (isTRUE(isDistinct)) args <- c(args, "distinct = TRUE")
+    if (is.character(countColumn) && nzchar(countColumn)) {
+      args <- c(args, sprintf('countColumn = "%s"', countColumn))
+    }
+  }
+  sprintf("%s(%s)", wrapper, paste(args, collapse = ", "))
+}
+
+# =============================================================================
+# Limits / ObservationWindow
+# =============================================================================
+
+observationWindowToCode <- function(observationWindow) {
+  priorDays <- observationWindow$PriorDays %||% 0L
+  postDays  <- observationWindow$PostDays  %||% 0L
+  sprintf("continuousObservation(priorDays = %sL, postDays = %sL)", as.integer(priorDays), as.integer(postDays))
+}
+
+limitToCode <- function(limit) {
+  if (is.null(limit)) return('"All"')
+  if (is.character(limit) && length(limit) == 1) return(deparse(limit))
+  if (is.list(limit) && !is.null(limit$Type)) return(deparse(limit$Type))
+  stop("Unsupported limit structure.", call. = FALSE)
+}
+
+# =============================================================================
+# opAttribute + attribute constructors
+# =============================================================================
+
+opAttributeToCode <- function(opObj) {
+  if (is.null(opObj) || is.null(opObj$Op)) return(NULL)
+
+  op <- opObj$Op
+  value <- parseCirceDate(opObj$Value)
+  extent <- if (!is.null(opObj$Extent)) parseCirceDate(opObj$Extent) else NULL
+
+  if (is.null(value)) stop("Op attribute missing Value", call. = FALSE)
+
+  if (op %in% c("bt", "BT")) {
+    if (is.null(extent)) stop("bt op missing Extent", call. = FALSE)
+    return(sprintf("bt(%s, %s)", formatScalar(value), formatScalar(extent)))
+  }
+
+  if (op %in% c("!bt", "nbt", "NBT")) {
+    if (is.null(extent)) stop("nbt (!bt) op missing Extent", call. = FALSE)
+    return(sprintf("nbt(%s, %s)", formatScalar(value), formatScalar(extent)))
+  }
+
+  if (op %in% c("gt", "gte", "lt", "lte", "eq")) {
+    return(sprintf("%s(%s)", op, formatScalar(value)))
+  }
+
+  stop("Unsupported op: ", op, call. = FALSE)
+}
+
+dateAdjustmentToCapr <- function(dateAdjustment) {
+  startWith <- dateAdjustment$StartWith %||% "START_DATE"
+  startOffset <- as.integer(dateAdjustment$StartOffset %||% 0L)
+  endWith <- dateAdjustment$EndWith %||% "END_DATE"
+  endOffset <- as.integer(dateAdjustment$EndOffset %||% 0L)
+
+  sprintf(
+    'dateAdjustment(startWith = %s, startOffset = %sL, endWith = %s, endOffset = %sL)',
+    deparse(startWith),
+    startOffset,
+    deparse(endWith),
+    endOffset
+  )
+}
+
+userDefinedPeriodToCapr <- function(userDefinedPeriod) {
+  startDateStr <- userDefinedPeriod$StartDate
+  endDateStr   <- userDefinedPeriod$EndDate
+  if (is.null(startDateStr) || is.null(endDateStr)) stop("UserDefinedPeriod missing StartDate or EndDate", call. = FALSE)
+
+  startDateVal <- as.Date(startDateStr)
+  endDateVal   <- as.Date(endDateStr)
+
+  opCode <- if (identical(startDateVal, endDateVal)) {
+    sprintf("eq(%s)", formatScalar(startDateVal))
+  } else {
+    sprintf("bt(%s, %s)", formatScalar(startDateVal), formatScalar(endDateVal))
+  }
+
+  sprintf('startDate(%s, type = "occurrence")', opCode)
+}
+
+conceptListToInlineConceptSet <- function(concepts, name = "sourceConcepts") {
+  ids <- conceptListToIds(concepts)
+  if (length(ids) == 0) return(NULL)
+  sprintf("cs(%s, name = %s)", paste(ids, collapse = ", "), deparse(name))
+}
+
+# Keys we handle or explicitly skip per domain (used for coverage-gap detection).
+# Capr ref: R/query.R (domains), R/attributes-*.R (attribute names).
+getSupportedKeysForDomain <- function(domainKey) {
+  baseKeys <- c(
+    "CodesetId", "CodesetID", "CorrelatedCriteria",
+    "First", "DateAdjustment", "Age",
+    "OccurrenceStartDate", "OccurrenceEndDate", "EraStartDate", "EraEndDate",
+    "UserDefinedPeriod",
+    "ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept",
+    "ObservationSourceConcept", "VisitSourceConcept"
+  )
+  domainExtra <- switch(
+    domainKey,
+    VisitOccurrence = c("ProviderSpecialty"),
+    Measurement     = c("ValueAsNumber", "RangeLow", "RangeHigh", "RangeHighRatio", "Unit", "ValueAsConcept"),
+    DrugExposure    = c("DaysSupply", "Refills", "Quantity"),
+    DrugEra         = c("EraLength"),
+    ConditionEra    = c("OccurrenceCount"),
+    character(0)
+  )
+  c(baseKeys, domainExtra)
+}
+
+#' Detect domain keys not in the supported set and emit skipOrStop for each (non-null/non-empty).
+#' Prevents silent semantic drift when new Circe fields appear.
+detectUnsupportedKeys <- function(domainKey, domainVal, supportedKeySet, emitter, jsonContextPath = "") {
+  typeLikeKeys <- grep("Type$|TypeExclude$", names(domainVal), value = TRUE)
+  knownKeys <- union(supportedKeySet, typeLikeKeys)
+  unknownKeys <- setdiff(names(domainVal), knownKeys)
+  pathPrefix <- if (nzchar(jsonContextPath)) paste0(jsonContextPath, ".") else ""
+  for (k in unknownKeys) {
+    v <- domainVal[[k]]
+    if (is.null(v)) next
+    if (is.list(v) && length(v) == 0) next
+    if (is.vector(v) && !is.list(v) && length(v) == 0) next
+    emitter$skipOrStop(paste0("Unsupported key: ", pathPrefix, domainKey, ".", k))
+  }
+}
+
+stopIfTypeExcludeOrTypeLists <- function(domainVal, emitter, jsonContextPath = "") {
+  pathPrefix <- if (nzchar(jsonContextPath)) paste0(jsonContextPath, ".") else ""
+  excludeKeys <- grep("TypeExclude$", names(domainVal), value = TRUE)
+  for (k in excludeKeys) {
+    if (isTRUE(domainVal[[k]])) {
+      emitter$skipOrStop(paste0("TypeExclude not supported: ", pathPrefix, k, "=TRUE (strict: stop; skip: omit this constraint only)"))
+    }
+  }
+
+  typeKeys <- grep("Type$", names(domainVal), value = TRUE)
+  for (k in typeKeys) {
+    if (is.list(domainVal[[k]]) && length(domainVal[[k]]) > 0) {
+      emitter$skipOrStop(paste0("Type attribute lists require vocabulary lookup: ", pathPrefix, k, " (Capr visitType/measurementType etc. need connection, vocabularyDatabaseSchema)"))
+    }
+  }
+}
+
+domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPath = "", conceptSetById = NULL) {
+  stopIfTypeExcludeOrTypeLists(domainVal, emitter, jsonContextPath)
+
+  # Unsupported: ProviderSpecialty (Capr has no provider specialty attribute; R/attributes-concept.R has visitType only with DB)
+  if (domainKey == "VisitOccurrence" && !is.null(domainVal$ProviderSpecialty) && length(domainVal$ProviderSpecialty) > 0) {
+    ids <- conceptListToIds(domainVal$ProviderSpecialty)
+    emitter$skipOrStop(paste0("Unsupported field: VisitOccurrence.ProviderSpecialty (", paste(ids, collapse = ","), ")"))
+  }
+
+  # Known unsupported fields (Capr has no RangeHighRatio/EraLength/OccurrenceCount attributes)
+  if (domainKey == "Measurement" && !is.null(domainVal$RangeHighRatio)) {
+    emitter$skipOrStop("Unsupported field: Measurement.RangeHighRatio")
+  }
+  if (domainKey == "DrugEra" && !is.null(domainVal$EraLength)) {
+    emitter$skipOrStop("Unsupported field: DrugEra.EraLength")
+  }
+  if (domainKey == "ConditionEra" && !is.null(domainVal$OccurrenceCount)) {
+    emitter$skipOrStop("Unsupported field: ConditionEra.OccurrenceCount")
+  }
+
+  attributeCalls <- c()
+
+  # Logic: First occurrence
+  if (isTRUE(domainVal$First %||% FALSE)) {
+    attributeCalls <- c(attributeCalls, "firstOccurrence()")
+  }
+
+  # ConditionTypeExclude: preserve when FALSE so round-trip JSON matches (CirceR SQL differs if missing)
+  if (domainKey == "ConditionOccurrence" && identical(domainVal$ConditionTypeExclude, FALSE)) {
+    attributeCalls <- c(attributeCalls, "conditionTypeExclude(FALSE)")
+  }
+
+  # DateAdjustment
+  if (!is.null(domainVal$DateAdjustment)) {
+    attributeCalls <- c(attributeCalls, dateAdjustmentToCapr(domainVal$DateAdjustment))
+  }
+
+  # Age (cross-domain)
+  if (!is.null(domainVal$Age)) {
+    attributeCalls <- c(attributeCalls, sprintf("age(%s)", opAttributeToCode(domainVal$Age)))
+  }
+
+  # Date attrs (cross-domain)
+  addDateOpAttr <- function(jsonKey, caprAttrFun, type) {
+    if (is.null(domainVal[[jsonKey]])) return()
+    opCode <- opAttributeToCode(domainVal[[jsonKey]])
+    attributeCalls <<- c(attributeCalls, sprintf('%s(%s, type = %s)', caprAttrFun, opCode, deparse(type)))
+  }
+
+  if (!is.null(domainVal$OccurrenceStartDate)) addDateOpAttr("OccurrenceStartDate", "startDate", "occurrence")
+  if (!is.null(domainVal$OccurrenceEndDate))   addDateOpAttr("OccurrenceEndDate",   "endDate",   "occurrence")
+  if (!is.null(domainVal$EraStartDate))        addDateOpAttr("EraStartDate",        "startDate", "era")
+  if (!is.null(domainVal$EraEndDate))          addDateOpAttr("EraEndDate",          "endDate",   "era")
+
+  # ObservationPeriod.UserDefinedPeriod
+  if (domainKey == "ObservationPeriod" && !is.null(domainVal$UserDefinedPeriod)) {
+    attributeCalls <- c(attributeCalls, userDefinedPeriodToCapr(domainVal$UserDefinedPeriod))
+  }
+
+  # SourceConcept attributes (Capr conceptSetAttribute constructors)
+  # Value can be a single CodesetId (integer) referencing a concept set, or a list of concept objects.
+  sourceConceptMap <- list(
+    ConditionSourceConcept = "conditionSourceConcept",
+    DrugSourceConcept      = "drugSourceConcept",
+    ProcedureSourceConcept = "procedureSourceConcept",
+    ObservationSourceConcept = "observationSourceConcept",
+    VisitSourceConcept     = "visitSourceConcept"
+  )
+
+  for (jsonKey in names(sourceConceptMap)) {
+    val <- domainVal[[jsonKey]]
+    if (is.null(val) || length(val) == 0) next
+    # Single integer = CodesetId reference (concept set id in cohort JSON)
+    if (length(val) == 1L && is.numeric(val) && !is.null(conceptSetById)) {
+      csVar <- conceptSetById[[as.character(val)]]
+      if (!is.null(csVar)) {
+        attributeCalls <- c(attributeCalls, sprintf("%s(%s)", sourceConceptMap[[jsonKey]], csVar))
+        next
+      }
+    }
+    csInline <- conceptListToInlineConceptSet(val, name = jsonKey)
+    if (!is.null(csInline)) {
+      attributeCalls <- c(attributeCalls, sprintf("%s(%s)", sourceConceptMap[[jsonKey]], csInline))
+    }
+  }
+
+  # Measurement
+  if (domainKey == "Measurement") {
+    if (!is.null(domainVal$ValueAsNumber)) attributeCalls <- c(attributeCalls, sprintf("valueAsNumber(%s)", opAttributeToCode(domainVal$ValueAsNumber)))
+    if (!is.null(domainVal$RangeLow))      attributeCalls <- c(attributeCalls, sprintf("rangeLow(%s)", opAttributeToCode(domainVal$RangeLow)))
+    if (!is.null(domainVal$RangeHigh))     attributeCalls <- c(attributeCalls, sprintf("rangeHigh(%s)", opAttributeToCode(domainVal$RangeHigh)))
+
+    if (!is.null(domainVal$Unit)) {
+      ids <- conceptListToIds(domainVal$Unit)
+      if (length(ids) > 0) attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", paste(ids, collapse = ", ")))
+    }
+
+    if (!is.null(domainVal$ValueAsConcept)) {
+      ids <- conceptListToIds(domainVal$ValueAsConcept)
+      if (length(ids) > 0) attributeCalls <- c(attributeCalls, sprintf("valueAsConcept(%s)", paste(ids, collapse = ", ")))
+    }
+  }
+
+  # DrugExposure
+  if (domainKey == "DrugExposure") {
+    if (!is.null(domainVal$DaysSupply)) attributeCalls <- c(attributeCalls, sprintf("daysOfSupply(%s)", opAttributeToCode(domainVal$DaysSupply)))
+    if (!is.null(domainVal$Refills))    attributeCalls <- c(attributeCalls, sprintf("drugRefills(%s)", opAttributeToCode(domainVal$Refills)))
+    if (!is.null(domainVal$Quantity))   attributeCalls <- c(attributeCalls, sprintf("drugQuantity(%s)", opAttributeToCode(domainVal$Quantity)))
+  }
+
+  supportedKeySet <- getSupportedKeysForDomain(domainKey)
+  detectUnsupportedKeys(domainKey, domainVal, supportedKeySet, emitter, jsonContextPath)
+
+  attributeCalls
+}
+
+# =============================================================================
+# Demographics
+# =============================================================================
+
+demographicCriterionToCapr <- function(demo, emitter) {
+  calls <- c()
+
+  if (!is.null(demo$Age)) {
+    calls <- c(calls, sprintf("age(%s)", opAttributeToCode(demo$Age)))
+  }
+
+  if (!is.null(demo$Gender) && length(demo$Gender) > 0) {
+    genderIds <- as.integer(vapply(demo$Gender, function(g) getConceptId(g), numeric(1)))
+    genderSet <- sort(unique(genderIds))
+
+    # both -> no restriction
+    if (identical(genderSet, sort(c(8507L, 8532L)))) {
+      # no-op
+    } else if (identical(genderSet, 8507L)) {
+      calls <- c(calls, "male()")
+    } else if (identical(genderSet, 8532L)) {
+      calls <- c(calls, "female()")
+    } else {
+      emitter$skipOrStop(paste0("Unsupported Gender concept ids: ", paste(genderSet, collapse = ", ")))
+    }
+  }
+
+  unsupported <- setdiff(names(demo), c("Age", "Gender"))
+  if (length(unsupported) > 0) {
+    emitter$skipOrStop(paste0("Unsupported demographic keys: ", paste(unsupported, collapse = ", ")))
+  }
+
+  calls
+}
+
+# =============================================================================
+# Group compilation (withAll/withAny) + empty-group warnings in skip mode
+# =============================================================================
+
+criteriaGroupToCapr <- function(group, conceptSetById, emitter, context = "group") {
+  type <- group$Type %||% "ALL"
+  groupFun <- if (identical(type, "ANY")) "withAny" else "withAll"
+
+  criteriaList <- group$CriteriaList %||% list()
+  criteriaCalls <- Filter(
+    Negate(is.null),
+    lapply(criteriaList, criterionNodeToCapr, conceptSetById = conceptSetById, emitter = emitter, context = context)
+  )
+
+  demoList <- group$DemographicCriteriaList %||% list()
+  demoCalls <- unlist(lapply(demoList, demographicCriterionToCapr, emitter = emitter), use.names = FALSE)
+  demoCalls <- Filter(Negate(is.null), demoCalls)
+
+  subGroups <- group$Groups %||% list()
+  subGroupCalls <- Filter(
+    Negate(is.null),
+    lapply(seq_along(subGroups), function(i) {
+      criteriaGroupToCapr(subGroups[[i]], conceptSetById, emitter, context = paste0(context, "/subgroup#", i))
+    })
+  )
+
+  args <- c(criteriaCalls, demoCalls, subGroupCalls)
+  if (length(args) == 0) {
+    emitter$warnEmptyGroup(context)
+    return(sprintf("%s()", groupFun))
+  }
+
+  sprintf("%s(%s)", groupFun, paste(args, collapse = ", "))
+}
+
+correlatedCriteriaToCapr <- function(correlatedCriteria, conceptSetById, emitter) {
+  type <- correlatedCriteria$Type %||% "ALL"
+  nestedFun <- if (identical(type, "ANY")) "nestedWithAny" else "nestedWithAll"
+
+  criteriaList <- correlatedCriteria$CriteriaList %||% list()
+  criteriaCalls <- Filter(
+    Negate(is.null),
+    lapply(criteriaList, criterionNodeToCapr, conceptSetById = conceptSetById, emitter = emitter, context = "correlatedCriteria")
+  )
+
+  demoList <- correlatedCriteria$DemographicCriteriaList %||% list()
+  demoCalls <- unlist(lapply(demoList, demographicCriterionToCapr, emitter = emitter), use.names = FALSE)
+  demoCalls <- Filter(Negate(is.null), demoCalls)
+
+  subGroups <- correlatedCriteria$Groups %||% list()
+  subGroupCalls <- Filter(
+    Negate(is.null),
+    lapply(seq_along(subGroups), function(i) {
+      criteriaGroupToCapr(subGroups[[i]], conceptSetById, emitter, context = paste0("correlatedCriteria/subgroup#", i))
+    })
+  )
+
+  args <- c(criteriaCalls, demoCalls, subGroupCalls)
+  if (length(args) == 0) {
+    emitter$warnEmptyGroup("correlatedCriteria")
+    return(sprintf("%s()", nestedFun))
+  }
+
+  sprintf("%s(%s)", nestedFun, paste(args, collapse = ", "))
+}
+
+# =============================================================================
+# Criterion node -> Capr occurrence criterion
+# =============================================================================
+
+criterionNodeToCapr <- function(criterionNode, conceptSetById, emitter, context = "criterion") {
+  criteriaObj <- criterionNode$Criteria %||% list()
+  domainKey <- names(criteriaObj)[[1]]
+  domainVal <- criteriaObj[[1]]
+
+  queryFun <- domainKeyToQueryFun(domainKey, emitter)
+  if (is.null(queryFun)) return(NULL)
+
+  codesetId <- domainVal$CodesetId %||% domainVal$CodesetID %||% NULL
+  if (is.null(codesetId)) {
+    emitter$skipOrStop(paste0("Missing CodesetId for domain: ", domainKey, " (", context, ")"))
+    return(NULL)
+  }
+
+  conceptSetVar <- conceptSetById[[as.character(codesetId)]]
+  if (is.null(conceptSetVar)) {
+    emitter$skipOrStop(paste0("CodesetId not found in ConceptSets: ", codesetId, " (", context, ")"))
+    return(NULL)
+  }
+
+  attributeCalls <- domainAttributesToCapr(domainKey, domainVal, emitter, jsonContextPath = context, conceptSetById = conceptSetById)
+
+  # CorrelatedCriteria as nested attribute on the query
+  if (!is.null(domainVal$CorrelatedCriteria) && length(domainVal$CorrelatedCriteria) > 0) {
+    corr <- correlatedCriteriaToCapr(domainVal$CorrelatedCriteria, conceptSetById, emitter)
+    if (!is.null(corr)) attributeCalls <- c(attributeCalls, corr)
+  }
+
+  startWindow <- criterionNode$StartWindow %||% list()
+  endWindow <- criterionNode$EndWindow %||% NULL
+
+  aperture <- apertureToCode(
+    startWindow = startWindow,
+    endWindow = endWindow,
+    restrictVisit = criterionNode$RestrictVisit %||% FALSE,
+    ignoreObservationPeriod = criterionNode$IgnoreObservationPeriod %||% FALSE
+  )
+
+  queryArgs <- c(conceptSetVar, attributeCalls)
+  queryCall <- sprintf("%s(%s)", queryFun, paste(queryArgs, collapse = ", "))
+  inner <- sprintf("%s, %s", queryCall, aperture)
+
+  occurrenceWrap(criterionNode$Occurrence %||% list(Type = 2, Count = 1), inner)
+}
+
+# =============================================================================
+# AdditionalCriteria / InclusionRules
+# =============================================================================
+
+additionalCriteriaToCode <- function(additionalCriteria, conceptSetById, emitter) {
+  if (is.null(additionalCriteria)) return(NULL)
+
+  hasAny <- length(additionalCriteria$CriteriaList %||% list()) > 0 ||
+    length(additionalCriteria$Groups %||% list()) > 0 ||
+    length(additionalCriteria$DemographicCriteriaList %||% list()) > 0
+
+  if (!hasAny) return(NULL)
+
+  criteriaGroupToCapr(additionalCriteria, conceptSetById, emitter, context = "additionalCriteria")
+}
+
+inclusionRulesToAttritionLines <- function(inclusionRules, expressionLimit = "First", conceptSetById, emitter) {
+  expressionLimitCode <- limitToCode(expressionLimit)
+  limitType <- if (is.list(expressionLimit)) expressionLimit$Type else expressionLimit
+  hasRules <- length(inclusionRules %||% list()) > 0L
+  if (!hasRules && (is.null(limitType) || identical(limitType, "First"))) return(NULL)
+  if (!hasRules) {
+    return(c("attritionObj <- attrition(",
+      sprintf("  expressionLimit = %s", expressionLimitCode),
+      ")", ""))
+  }
+
+  lines <- c("attritionObj <- attrition(",
+    sprintf("  expressionLimit = %s,", expressionLimitCode))
+
+  for (i in seq_along(inclusionRules)) {
+    rule <- inclusionRules[[i]]
+    ruleName <- rule$name %||% paste("rule", i)
+    expr <- rule$expression %||% list(Type = "ALL")
+
+    groupCall <- criteriaGroupToCapr(expr, conceptSetById, emitter, context = paste0("inclusionRule:", ruleName))
+
+    lines <- c(
+      lines,
+      sprintf(
+        "  %s = %s%s",
+        deparse(ruleName),
+        groupCall,
+        if (i < length(inclusionRules)) "," else ""
+      )
+    )
+  }
+
+  c(lines, ")", "")
+}
+
+# =============================================================================
+# Exit / EndStrategy / Censoring
+# =============================================================================
+
+endStrategyToCapr <- function(endStrategy, conceptSetById, emitter) {
+  if (is.null(endStrategy) || length(endStrategy) == 0) {
+    return("observationExit()")
+  }
+
+  if (!is.null(endStrategy$DateOffset)) {
+    dateField <- endStrategy$DateOffset$DateField %||% "EndDate"
+    offset <- as.integer(endStrategy$DateOffset$Offset %||% 0L)
+    index <- if (identical(dateField, "StartDate")) "startDate" else "endDate"
+    return(sprintf('fixedExit(index = %s, offsetDays = %sL)', deparse(index), offset))
+  }
+
+  if (!is.null(endStrategy$CustomEra)) {
+    drugCodesetId <- endStrategy$CustomEra$DrugCodesetId %||% endStrategy$CustomEra$DrugCodesetID %||% NULL
+    gapDays <- as.integer(endStrategy$CustomEra$GapDays %||% 0L)
+    offset <- as.integer(endStrategy$CustomEra$Offset %||% 0L)
+
+    if (is.null(drugCodesetId)) {
+      emitter$skipOrStop("CustomEra missing DrugCodesetId")
+      return("observationExit()")
+    }
+
+    conceptSetVar <- conceptSetById[[as.character(drugCodesetId)]]
+    if (is.null(conceptSetVar)) {
+      emitter$skipOrStop(paste0("CustomEra DrugCodesetId not found in ConceptSets: ", drugCodesetId))
+      return("observationExit()")
+    }
+
+    return(sprintf(
+      "drugExit(%s, persistenceWindow = %sL, surveillanceWindow = %sL)",
+      conceptSetVar, gapDays, offset
+    ))
+  }
+
+  emitter$skipOrStop(paste0("Unsupported EndStrategy structure: ", paste(names(endStrategy), collapse = ", ")))
+  "observationExit()"
+}
+
+censoringCriteriaToCapr <- function(censoringCriteria, conceptSetById, emitter) {
+  if (is.null(censoringCriteria) || length(censoringCriteria) == 0) return(NULL)
+
+  censorCalls <- Filter(
+    Negate(is.null),
+    lapply(censoringCriteria, function(node) {
+      criteriaObj <- node$Criteria %||% list()
+      domainKey <- names(criteriaObj)[[1]]
+      domainVal <- criteriaObj[[1]]
+
+      queryFun <- domainKeyToQueryFun(domainKey, emitter)
+      if (is.null(queryFun)) return(NULL)
+
+      codesetId <- domainVal$CodesetId %||% domainVal$CodesetID %||% NULL
+      if (is.null(codesetId)) return(emitter$skipOrStop(paste0("CensoringCriteria missing CodesetId for domain: ", domainKey)))
+
+      conceptSetVar <- conceptSetById[[as.character(codesetId)]]
+      if (is.null(conceptSetVar)) return(emitter$skipOrStop(paste0("CensoringCriteria CodesetId not found: ", codesetId)))
+
+      attributeCalls <- domainAttributesToCapr(domainKey, domainVal, emitter, jsonContextPath = "CensoringCriteria", conceptSetById = conceptSetById)
+      queryArgs <- c(conceptSetVar, attributeCalls)
+      sprintf("%s(%s)", queryFun, paste(queryArgs, collapse = ", "))
+    })
+  )
+
+  if (length(censorCalls) == 0) {
+    emitter$warnEmptyGroup("censoringCriteria")
+    return(NULL)
+  }
+
+  sprintf("censoringCriteria(%s)", paste(censorCalls, collapse = ", "))
+}
+
+# =============================================================================
+# Era collapse (CollapseSettings)
+# =============================================================================
+
+collapseSettingsToEraCall <- function(collapseSettings, censorWindow = NULL, emitter) {
+  collapseType <- collapseSettings$CollapseType %||% "ERA"
+  if (!identical(collapseType, "ERA")) {
+    emitter$skipOrStop(paste0("Unsupported CollapseType: ", collapseType))
+    return("era()")
+  }
+
+  eraPad <- as.integer(collapseSettings$EraPad %||% 0L)
+  studyStartDate <- censorWindow$StartDate %||% NULL
+  studyEndDate <- censorWindow$EndDate %||% NULL
+
+  args <- c(sprintf("eraDays = %sL", eraPad))
+  if (!is.null(studyStartDate)) args <- c(args, sprintf("studyStartDate = %s", formatScalar(as.Date(studyStartDate))))
+  if (!is.null(studyEndDate))   args <- c(args, sprintf("studyEndDate = %s", formatScalar(as.Date(studyEndDate))))
+
+  sprintf("era(%s)", paste(args, collapse = ", "))
+}
