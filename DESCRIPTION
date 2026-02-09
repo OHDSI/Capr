@@ -17,7 +17,7 @@ License: Apache License (>= 2)
 URL: https://ohdsi.github.io/Capr/, https://github.com/OHDSI/Capr/
 BugReports: https://github.com/OHDSI/Capr/issues/
 Encoding: UTF-8
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Depends: 
   R (>= 4.2.0)
 Imports: 
@@ -44,7 +44,8 @@ Imports:
 Suggests:
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    PhenotypeLibrary (>= 3.36.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
@@ -61,3 +62,6 @@ Collate:
     'exit.R'
     'cohort.R'
     'collectCodesetId.R'
+    'jsonToCapr.R'
+Remotes:  
+    ohdsi/PhenotypeLibrary
