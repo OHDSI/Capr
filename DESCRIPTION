@@ -40,7 +40,8 @@ Imports:
     DatabaseConnector,
     SqlRender,
     generics,
-    CirceR
+    CirceR,
+    jsonvalidate
 Suggests:
     testthat (>= 3.0.0),
     knitr,

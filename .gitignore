@@ -8,3 +8,4 @@ work/*
 scratch/
 inst/doc
 hidden/
+.vscode/

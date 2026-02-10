@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Atlas/Circe cohort definition",
+  "description": "JSON schema for cohort definitions exported from OHDSI Atlas (Circe format). Used to validate cohort JSON files from PhenotypeLibrary and other sources.",
+  "type": "object",
+  "required": ["ConceptSets", "PrimaryCriteria"],
+  "additionalProperties": true,
+  "properties": {
+    "ConceptSets": {
+      "type": "array",
+      "description": "Concept set definitions referenced by id in criteria",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "expression"],
+        "additionalProperties": true,
+        "properties": {
+          "id": { "type": ["integer", "number"] },
+          "name": { "type": "string" },
+          "expression": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["concept"],
+                  "additionalProperties": true,
+                  "properties": {
+                    "concept": {
+                      "type": "object",
+                      "description": "Concept with CONCEPT_ID or concept_id",
+                      "additionalProperties": true
+                    },
+                    "includeDescendants": { "type": "boolean" },
+                    "isExcluded": { "type": "boolean" },
+                    "includeMapped": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "PrimaryCriteria": {
+      "type": "object",
+      "description": "Entry (primary) criteria for the cohort",
+      "required": ["CriteriaList"],
+      "additionalProperties": true,
+      "properties": {
+        "CriteriaList": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "description": "Single domain criterion, e.g. ConditionOccurrence, DrugExposure",
+            "minProperties": 1,
+            "additionalProperties": true
+          }
+        },
+        "ObservationWindow": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "PriorDays": { "type": ["integer", "number"] },
+            "PostDays": { "type": ["integer", "number"] }
+          }
+        },
+        "PrimaryCriteriaLimit": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "Type": { "type": "string" }
+          }
+        }
+      }
+    },
+    "QualifiedLimit": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "object", "additionalProperties": true, "properties": { "Type": { "type": "string" } } }
+      ]
+    },
+    "ExpressionLimit": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "object", "additionalProperties": true, "properties": { "Type": { "type": "string" } } }
+      ]
+    },
+    "InclusionRules": {
+      "type": "array",
+      "items": { "type": "object", "additionalProperties": true }
+    },
+    "AdditionalCriteria": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "EndStrategy": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "CensoringCriteria": {
+      "type": "array",
+      "items": { "type": "object", "additionalProperties": true }
+    },
+    "CollapseSettings": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "CollapseType": { "type": "string" },
+        "EraPad": { "type": ["integer", "number"] }
+      }
+    },
+    "CensorWindow": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "cdmVersionRange": {
+      "type": "string"
+    }
+  }
+}

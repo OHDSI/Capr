@@ -31,7 +31,9 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
   emitter <- makeEmitter(mode)
   stopifnot(file.exists(jsonPath))
 
-  cohortJson <- jsonlite::fromJSON(jsonPath, simplifyVector = FALSE)
+  jsonStr <- paste(readLines(jsonPath, warn = FALSE), collapse = "\n")
+  validateAtlasCohortJson(jsonStr, jsonPath = jsonPath)
+  cohortJson <- jsonlite::fromJSON(jsonStr, simplifyVector = FALSE)
 
   # -----------------------------
   # ConceptSets
@@ -304,8 +306,30 @@ skipHeaderLines <- function(emitter) {
 }
 
 # =============================================================================
-# Utilities (internal; rlang's %||% is used via package import)
+# Utilities 
 # =============================================================================
+
+# Validate JSON string against Atlas cohort schema; stop with informative error if invalid.
+validateAtlasCohortJson <- function(jsonStr, jsonPath = NULL) {
+  schemaPath <- system.file("atlas-cohort-schema.json", package = "Capr", mustWork = TRUE)
+  result <- jsonvalidate::json_validate(jsonStr, schemaPath, engine = "ajv")
+  if (isTRUE(result)) return(invisible(NULL))
+  err <- attr(result, "errors")
+  msg <- if (is.data.frame(err) && nrow(err) > 0) {
+    paste0(
+      "JSON does not conform to Atlas cohort schema.",
+      if (length(jsonPath)) paste0(" File: ", jsonPath),
+      "\nSchema validation errors:\n",
+      paste(utils::capture.output(print(err)), collapse = "\n")
+    )
+  } else {
+    paste0(
+      "JSON does not conform to Atlas cohort schema.",
+      if (length(jsonPath)) paste0(" File: ", jsonPath)
+    )
+  }
+  stop(msg, call. = FALSE)
+}
 
 toCamelCase <- function(x) {
   if (is.null(x) || length(x) == 0 || (length(x) == 1 && is.na(x))) return("x")
