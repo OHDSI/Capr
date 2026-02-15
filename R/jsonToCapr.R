@@ -13,7 +13,7 @@
 #' \code{drugExit}, \code{observationExit}), censoring criteria, and era collapse.
 #'
 #' @section Unsupported (fail in strict mode or skip with \code{mode = "skip"}):
-#' Domains: Specimen, VisitDetail, DoseEra; VisitOccurrence.ProviderSpecialty;
+#' Domains: Specimen, VisitDetail; VisitOccurrence.ProviderSpecialty;
 #' any \code{*TypeExclude == TRUE} or \code{*Type} lists (Type lists require vocabulary lookup in Capr);
 #' DrugEra.EraLength; ConditionEra.OccurrenceCount; Measurement.RangeHighRatio.
 #' Unknown domain keys are reported via \code{detectUnsupportedKeys()} to avoid silent drift.
