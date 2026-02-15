@@ -408,11 +408,13 @@ conceptSetItemsToParts <- function(items) {
   parts <- vapply(runs, function(r) {
     idsStr <- paste0(r$ids, collapse = ", ")
     if (r$ex) {
-      if (r$desc) sprintf("exclude(descendants(%s))", idsStr)
+      if (r$desc && r$mapped) sprintf("exclude(descendants(mapped(%s)))", idsStr)
+      else if (r$desc) sprintf("exclude(descendants(%s))", idsStr)
       else if (r$mapped) sprintf("exclude(mapped(%s))", idsStr)
       else sprintf("exclude(%s)", idsStr)
     } else {
-      if (r$desc) sprintf("descendants(%s)", idsStr)
+      if (r$desc && r$mapped) sprintf("descendants(mapped(%s))", idsStr)
+      else if (r$desc) sprintf("descendants(%s)", idsStr)
       else if (r$mapped) sprintf("mapped(%s)", idsStr)
       else idsStr
     }
