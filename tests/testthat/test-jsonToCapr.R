@@ -95,6 +95,9 @@ run_one_roundtrip <- function(jsonPath, outRPath, envParent = baseenv()) {
     jsonlite::fromJSON(compile(cohortDef), simplifyVector = FALSE),
     error = function(e) return(list(ok = FALSE, name = name, stage = "compile", msg = conditionMessage(e)))
   )
+  if (is.list(roundTripList) && !is.null(roundTripList$ok) && identical(roundTripList$ok, FALSE)) {
+    return(roundTripList)
+  }
   roundTripList$cdmVersionRange <- NULL  # normalize for comparison with original
   roundTripList <- normalizeCirceList(roundTripList)
   roundTripList <- stripConceptMetadata(roundTripList)
