@@ -152,8 +152,6 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
   # Assemble output
   # -----------------------------
   conceptLines <- c(
-    "library(Capr)",
-    "",
     skipHeaderLines(emitter),
     "# --- concept sets ---",
     unlist(lapply(conceptSetDefs, \(x) x$lines)),
