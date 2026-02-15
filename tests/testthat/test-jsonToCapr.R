@@ -61,10 +61,11 @@ run_one_roundtrip <- function(jsonPath, outRPath, envParent = baseenv()) {
   rPath <- file.path(outRPath, paste0(name, ".R"))
 
   # 1. JSON -> Capr R code
-  tryCatch(
+  json_result <- tryCatch(
     jsonToCaprFile(jsonPath, rPath, mode = "skip"),
-    error = function(e) return(list(ok = FALSE, name = name, stage = "jsonToCapr", msg = conditionMessage(e)))
+    error = function(e) list(ok = FALSE, name = name, stage = "jsonToCapr", msg = conditionMessage(e))
   )
+  if (is.list(json_result) && isFALSE(json_result$ok)) return(json_result)
   if (!file.exists(rPath)) {
     return(list(ok = FALSE, name = name, stage = "write", msg = "R file was not created"))
   }
