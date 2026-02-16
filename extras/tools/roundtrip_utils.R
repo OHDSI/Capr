@@ -89,11 +89,17 @@ reorderRoundtripConceptSetsToMatchOriginal <- function(originalJsonStr, roundTri
     idMap <- stats::setNames(seq_along(reordered) - 1L, as.character(oldIds))
   }
   rt$ConceptSets <- reordered
+  codesetIdKeys <- c(
+    "CodesetId", "CodesetID", "DrugCodesetId",
+    "ObservationSourceConcept", "VisitSourceConcept", "ConditionSourceConcept",
+    "DrugSourceConcept", "ProcedureSourceConcept", "MeasurementSourceConcept",
+    "VisitDetailSourceConcept"
+  )
   replaceCodesetIds <- function(x, map) {
     if (is.null(x)) return(x)
     if (!is.list(x)) return(x)
-    for (key in c("CodesetId", "CodesetID", "DrugCodesetId")) {
-      if (!is.null(x[[key]])) {
+    for (key in codesetIdKeys) {
+      if (!is.null(x[[key]]) && is.numeric(x[[key]]) && length(x[[key]]) == 1L) {
         m <- map[as.character(x[[key]])]
         if (length(m) > 0L && !is.na(m[1L])) x[[key]] <- m[1L]
       }

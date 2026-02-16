@@ -42,6 +42,10 @@ setMethod("collectGuid", "opAttributeSuper", function(x) {
   return(NULL)
 })
 
+setMethod("collectGuid", "valueAsStringAttribute", function(x) {
+  return(NULL)
+})
+
 # setMethod("collectGuid", "Query", function(x) {
 #   getGuid(x)
 # })

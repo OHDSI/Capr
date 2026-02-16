@@ -276,8 +276,14 @@ setMethod("as.list", "Group", function(x) {
 
   criteriaList <- purrr::keep(x@criteria, is.Criteria) |>
     purrr::map(~as.list(.x))
-  demographicsList <- purrr::discard(x@criteria, is.Criteria) |>
-    purrr::map(~as.list(.x))
+  # Circe expects one demographic criterion per group when combining age + gender (single WHERE branch)
+  demoAttrs <- purrr::discard(x@criteria, is.Criteria)
+  demographicsList <- if (length(demoAttrs) == 0L) {
+    list()
+  } else {
+    merged <- purrr::map(demoAttrs, ~as.list(.x)) |> purrr::reduce(append)
+    list(merged)
+  }
 
   if (length(x@group) == 0) {
     groupsList <- list()

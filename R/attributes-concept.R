@@ -102,6 +102,36 @@ female <- function() {
     concept_class_id = "Gender")))
 }
 
+#' Add gender attribute with one or more concept IDs (e.g. both sexes)
+#'
+#' Use for round-trip when JSON has \code{Gender: [8507, 8532]}; a single criterion
+#' yields one \code{gender_concept_id in (...)} in SQL instead of separate branches.
+#' @param ... Integer concept IDs (e.g. \code{8507L}, \code{8532L} for male, female).
+#' @return A single conceptAttribute with name \code{Gender} for use in additional criteria.
+#' @export
+genderConcepts <- function(...) {
+  ids <- as.integer(c(...))
+  concepts <- lapply(ids, function(id) {
+    methods::new("Concept", concept_id = id, concept_name = NA_character_)
+  })
+  methods::new("conceptAttribute", name = "Gender", conceptSet = concepts)
+}
+
+#' Add provider specialty filter to a visit (round-trip from Atlas JSON)
+#'
+#' When JSON has \code{VisitOccurrence.ProviderSpecialty: [{ CONCEPT_ID: ... }]}, use this
+#' so round-trip preserves the \code{PR.specialty_concept_id in (...)} filter.
+#' @param ... Integer concept IDs for provider specialty (e.g. \code{38004463L}).
+#' @return A conceptAttribute with name \code{ProviderSpecialty} for use in \code{visit()}.
+#' @export
+providerSpecialtyConcepts <- function(...) {
+  ids <- as.integer(c(...))
+  concepts <- lapply(ids, function(id) {
+    methods::new("Concept", concept_id = id, concept_name = NA_character_)
+  })
+  methods::new("conceptAttribute", name = "ProviderSpecialty", conceptSet = concepts)
+}
+
 
 findConceptInVocabulary <- function(id, connection, vocabularyDatabaseSchema) {
 
@@ -488,6 +518,28 @@ setMethod("as.list", "conceptAttribute", function(x) {
   nm <- x@name
 
   tibble::lst(`:=`(!!nm, concepts))
+})
+
+## valueAsStringAttribute (Observation value_as_string filter, e.g. LIKE '%Yes%') ----
+
+#' Attribute for Observation value_as_string filter (round-trip from Atlas ValueAsString)
+#'
+#' Serializes to \code{ValueAsString: { Text, Op }}; Circe generates \code{WHERE value_as_string LIKE ...}.
+#' @param text Character string to match (e.g. \code{"Yes"}).
+#' @param op Circe op: \code{"contains"} (default, LIKE \code{\%text\%}), \code{"starts"}, \code{"ends"}, \code{"equals"}.
+#' @return Attribute for use in \code{observation()}.
+#' @export
+valueAsString <- function(text, op = "contains") {
+  op <- match.arg(op, c("contains", "starts", "ends", "equals"))
+  methods::new("valueAsStringAttribute", name = "ValueAsString", text = as.character(text)[1L], op = op)
+}
+
+setClass("valueAsStringAttribute",
+         slots = c(name = "character", text = "character", op = "character"),
+         prototype = list(name = "ValueAsString", text = NA_character_, op = "contains"))
+
+setMethod("as.list", "valueAsStringAttribute", function(x) {
+  list(ValueAsString = list(Text = x@text, Op = x@op))
 })
 
 # Capr Call -----------------

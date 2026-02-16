@@ -384,6 +384,18 @@ setMethod("as.list", "Query", function(x) {
     ll <- append(ll, atr[c(typeExcludeKeys, otherKeys)])
   }
 
+  # ObservationPeriod: Circe expects UserDefinedPeriod { StartDate, EndDate };
+  # we store as OccurrenceStartDate (op/Value/Extent). Convert on export.
+  if (x@domain == "ObservationPeriod" && "OccurrenceStartDate" %in% names(ll)) {
+    osd <- ll$OccurrenceStartDate
+    startDate <- format(as.Date(osd$Value), "%Y-%m-%d")
+    endDate <- if (identical(osd$Op, "bt") && !is.na(osd$Extent))
+      format(as.Date(osd$Extent), "%Y-%m-%d") else startDate
+    ll$OccurrenceStartDate <- NULL
+    ll$OccurrenceEndDate <- NULL
+    ll$UserDefinedPeriod <- list(StartDate = startDate, EndDate = endDate)
+  }
+
   # Use empty named list when ll is empty so JSON serializes as {} not [] (CIRCE
   # expects domain value to be an object, e.g. ObservationPeriod: {}).
   if (length(ll) == 0L) {

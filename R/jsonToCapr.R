@@ -102,6 +102,8 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
         conceptSetVar <- conceptSetById[[as.character(codesetId)]]
         if (is.null(conceptSetVar)) return(emitter$skipOrStop(paste0("PrimaryCriteria CodesetId not found in ConceptSets: ", codesetId)))
       }
+      # ObservationPeriod() takes no concept set; Atlas JSON may still include CodesetId for the empty set
+      if (identical(domainKey, "ObservationPeriod")) conceptSetVar <- character(0)
 
       attributeCalls <- domainAttributesToCapr(domainKey, domainVal, emitter, jsonContextPath = "PrimaryCriteria", conceptSetById = conceptSetById)
 
@@ -643,7 +645,7 @@ getSupportedKeysForDomain <- function(domainKey) {
     domainKey,
     VisitOccurrence = c("ProviderSpecialty"),
     Measurement     = c("ValueAsNumber", "RangeLow", "RangeHigh", "RangeHighRatio", "Unit", "ValueAsConcept", "MeasurementSourceConcept"),
-    Observation     = c("ValueAsNumber", "Unit", "ValueAsConcept"),
+    Observation     = c("ValueAsNumber", "Unit", "ValueAsConcept", "ValueAsString"),
     DrugExposure    = c("DaysSupply", "Refills", "Quantity"),
     DrugEra         = c("EraLength"),
     DoseEra         = c("Unit", "DoseValue", "EraLength"),
@@ -698,14 +700,13 @@ stopIfTypeExcludeOrTypeLists <- function(domainVal, emitter, jsonContextPath = "
 domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPath = "", conceptSetById = NULL) {
   stopIfTypeExcludeOrTypeLists(domainVal, emitter, jsonContextPath)
 
-  # Unsupported: ProviderSpecialty (Capr has no provider specialty attribute; R/attributes-concept.R has visitType only with DB)
+  attributeCalls <- c()
+
+  # VisitOccurrence.ProviderSpecialty (concept list -> providerSpecialtyConcepts for round-trip)
   if (domainKey == "VisitOccurrence" && !is.null(domainVal$ProviderSpecialty) && length(domainVal$ProviderSpecialty) > 0) {
     ids <- conceptListToIds(domainVal$ProviderSpecialty)
-    emitter$skipOrStop(paste0("Unsupported field: VisitOccurrence.ProviderSpecialty (", paste(ids, collapse = ","), ")"))
+    attributeCalls <- c(attributeCalls, sprintf("providerSpecialtyConcepts(%s)", paste(ids, "L", sep = "", collapse = ", ")))
   }
-
-
-  attributeCalls <- c()
 
   # ConditionEra.OccurrenceCount (filter by condition era count, e.g. eq(0) = no eras)
   if (domainKey == "ConditionEra" && !is.null(domainVal$OccurrenceCount)) {
@@ -771,11 +772,13 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
   if (!is.null(domainVal$Gender) && length(domainVal$Gender) > 0) {
     genderIds <- as.integer(vapply(domainVal$Gender, function(g) getConceptId(g), numeric(1)))
     genderSet <- sort(unique(genderIds))
-    if (identical(genderSet, 8507L)) {
+    if (identical(genderSet, sort(c(8507L, 8532L)))) {
+      attributeCalls <- c(attributeCalls, "genderConcepts(8507L, 8532L)")
+    } else if (identical(genderSet, 8507L)) {
       attributeCalls <- c(attributeCalls, "male()")
     } else if (identical(genderSet, 8532L)) {
       attributeCalls <- c(attributeCalls, "female()")
-    } else if (!identical(genderSet, sort(c(8507L, 8532L)))) {
+    } else {
       emitter$skipOrStop(paste0("Unsupported Gender concept ids: ", paste(genderSet, collapse = ", ")))
     }
   }
@@ -886,6 +889,14 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
         if (!is.null(csInline)) attributeCalls <- c(attributeCalls, sprintf("valueAsConceptSet(%s)", csInline))
       }
     }
+    if (!is.null(domainVal[["ValueAsString"]]) && is.list(domainVal[["ValueAsString"]])) {
+      vs <- domainVal[["ValueAsString"]]
+      text <- vs$Text %||% vs$text
+      op <- vs$Op %||% vs$op %||% "contains"
+      if (!is.null(text) && nzchar(text)) {
+        attributeCalls <- c(attributeCalls, sprintf('valueAsString(%s, op = %s)', deparse(as.character(text)), deparse(as.character(op))))
+      }
+    }
   }
 
   # DrugExposure
@@ -916,9 +927,9 @@ demographicCriterionToCapr <- function(demo, emitter) {
     genderIds <- as.integer(vapply(demo$Gender, function(g) getConceptId(g), numeric(1)))
     genderSet <- sort(unique(genderIds))
 
-    # both -> no restriction
+    # Single criterion with Gender: [8507, 8532] so Circe emits one gender_concept_id in (...) branch
     if (identical(genderSet, sort(c(8507L, 8532L)))) {
-      # no-op
+      calls <- c(calls, "genderConcepts(8507L, 8532L)")
     } else if (identical(genderSet, 8507L)) {
       calls <- c(calls, "male()")
     } else if (identical(genderSet, 8532L)) {
@@ -1048,9 +1059,9 @@ criterionNodeToCapr <- function(criterionNode, conceptSetById, emitter, context 
   if (is.null(queryFun)) return(NULL)
 
   codesetId <- domainVal$CodesetId %||% domainVal$CodesetID %||% NULL
-  # Death domain typically has no concept set (any death). Also allow when only a SourceConcept attribute references a concept set.
+  # Death: no concept set (any death). ObservationPeriod: no concept set (any period). Also allow when only a SourceConcept attribute references a concept set.
   sourceConceptKeysCriterion <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept", "VisitDetailSourceConcept")
-  allowNoCodeset <- identical(domainKey, "Death")
+  allowNoCodeset <- identical(domainKey, "Death") || identical(domainKey, "ObservationPeriod")
   if (is.null(codesetId)) {
     if (!allowNoCodeset) {
       srcId <- NULL
@@ -1066,7 +1077,7 @@ criterionNodeToCapr <- function(criterionNode, conceptSetById, emitter, context 
         return(NULL)
       }
     }
-    conceptSetVar <- "conceptSet = NULL"
+    conceptSetVar <- if (identical(domainKey, "ObservationPeriod")) character(0) else "conceptSet = NULL"
   } else {
     conceptSetVar <- conceptSetById[[as.character(codesetId)]]
     if (is.null(conceptSetVar)) {
@@ -1074,6 +1085,8 @@ criterionNodeToCapr <- function(criterionNode, conceptSetById, emitter, context 
       return(NULL)
     }
   }
+  # ObservationPeriod() takes no concept set; Atlas may include CodesetId for empty set
+  if (identical(domainKey, "ObservationPeriod")) conceptSetVar <- character(0)
 
   attributeCalls <- domainAttributesToCapr(domainKey, domainVal, emitter, jsonContextPath = context, conceptSetById = conceptSetById)
 
@@ -1221,10 +1234,16 @@ censoringCriteriaToCapr <- function(censoringCriteria, conceptSetById, emitter) 
       if (is.null(queryFun)) return(NULL)
 
       codesetId <- domainVal$CodesetId %||% domainVal$CodesetID %||% NULL
-      if (is.null(codesetId)) return(emitter$skipOrStop(paste0("CensoringCriteria missing CodesetId for domain: ", domainKey)))
-
-      conceptSetVar <- conceptSetById[[as.character(codesetId)]]
-      if (is.null(conceptSetVar)) return(emitter$skipOrStop(paste0("CensoringCriteria CodesetId not found: ", codesetId)))
+      if (is.null(codesetId)) {
+        if (identical(domainKey, "Death")) {
+          conceptSetVar <- "NULL"
+        } else {
+          return(emitter$skipOrStop(paste0("CensoringCriteria missing CodesetId for domain: ", domainKey)))
+        }
+      } else {
+        conceptSetVar <- conceptSetById[[as.character(codesetId)]]
+        if (is.null(conceptSetVar)) return(emitter$skipOrStop(paste0("CensoringCriteria CodesetId not found: ", codesetId)))
+      }
 
       attributeCalls <- domainAttributesToCapr(domainKey, domainVal, emitter, jsonContextPath = "CensoringCriteria", conceptSetById = conceptSetById)
       queryArgs <- c(conceptSetVar, attributeCalls)
