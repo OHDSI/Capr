@@ -356,23 +356,54 @@ toCirce <- function(cd) {
 #' @export
 setGeneric("compile", function(object, ...) { standardGeneric("compile") })
 
+# Remap cohort codeset ids (0,1,2,... from replaceCodesetId) back to original ids from includeConceptSets.
+# Used when includeConceptSets is provided so round-trip JSON preserves original concept set numbering.
+remapCirceCodesetIdsToOriginal <- function(circe, guidTable, codesetKeys = c(
+  "CodesetId", "CodesetID", "DrugCodesetId",
+  "ObservationSourceConcept", "VisitSourceConcept", "ConditionSourceConcept",
+  "DrugSourceConcept", "ProcedureSourceConcept", "MeasurementSourceConcept", "VisitDetailSourceConcept"
+)) {
+  if (is.null(guidTable) || nrow(guidTable) == 0L) return(circe)
+  origIds <- suppressWarnings(as.integer(guidTable$guid))
+  map <- stats::setNames(origIds, as.character(guidTable$codesetId))
+  recurse <- function(x) {
+    if (is.null(x)) return(x)
+    if (!is.list(x)) return(x)
+    if (length(x) == 0L) return(x)
+    if (!is.null(names(x))) {
+      for (k in names(x)) {
+        if (k %in% codesetKeys && length(x[[k]]) == 1L && is.numeric(x[[k]])) {
+          m <- map[as.character(as.integer(x[[k]]))]
+          if (length(m) > 0L && !is.na(m[1L])) x[[k]] <- as.integer(m[1L])
+        } else if (k != "ConceptSets") {
+          x[[k]] <- recurse(x[[k]])
+        }
+      }
+    } else {
+      x <- lapply(x, recurse)
+    }
+    x
+  }
+  for (nm in setdiff(names(circe), "ConceptSets")) circe[[nm]] <- recurse(circe[[nm]])
+  circe
+}
+
 compile.Cohort <- function(object, ..., includeConceptSets = NULL) {
+  guidTable <- if (length(includeConceptSets) > 0L) collectGuid(object) else NULL
   circe <- toCirce(object)
   if (length(includeConceptSets) > 0L) {
-    existingIds <- vapply(circe$ConceptSets, function(cs) cs$id, integer(1L))
-    maxId <- if (length(existingIds) > 0L) max(existingIds) else -1L
-    for (cs in includeConceptSets) {
-      if (!methods::is(cs, "ConceptSet")) next
-      csList <- as.list(cs)
-      already <- any(vapply(circe$ConceptSets, function(ex) {
-        identical(ex$expression$items %||% list(), csList$expression$items %||% list())
-      }, logical(1L)))
-      if (!already) {
-        maxId <- maxId + 1L
-        csList$id <- maxId
-        circe$ConceptSets <- c(circe$ConceptSets, list(csList))
-      }
+    # Use includeConceptSets as the full ConceptSets list (order and ids) so round-trip matches (e.g. pah_event_cohort with duplicate sets).
+    validCs <- Filter(function(cs) methods::is(cs, "ConceptSet"), includeConceptSets)
+    if (length(validCs) > 0L) {
+      circe$ConceptSets <- unname(lapply(validCs, function(cs) {
+        csList <- as.list(cs)
+        if (is.null(csList$id) || !is.numeric(csList$id)) csList$id <- seq_along(validCs)[match(cs, validCs, 0L)] - 1L
+        csList$id <- as.integer(csList$id)
+        csList
+      }))
     }
+    # Restore original concept set ids in cohort structure (replaceCodesetId had assigned 0,1,2,...; map back to original ids).
+    circe <- remapCirceCodesetIdsToOriginal(circe, guidTable)
   }
   as.character(jsonlite::toJSON(circe, auto_unbox = TRUE, ...))
 }
