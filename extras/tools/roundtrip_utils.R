@@ -52,7 +52,9 @@ conceptSetFingerprint <- function(cs) {
 }
 
 # Reorder round-trip ConceptSets to match original order; remap CodesetIds so SQL comparison is valid.
-reorderRoundtripConceptSetsToMatchOriginal <- function(originalJsonStr, roundTripJsonStr) {
+# If preserveOriginalIds is TRUE (default), concept set id and all CodesetId references use the
+# original JSON's IDs (e.g. 4, 14, 15) so the output matches the original numbering.
+reorderRoundtripConceptSetsToMatchOriginal <- function(originalJsonStr, roundTripJsonStr, preserveOriginalIds = TRUE) {
   orig <- jsonlite::fromJSON(originalJsonStr, simplifyVector = FALSE)
   rt <- jsonlite::fromJSON(roundTripJsonStr, simplifyVector = FALSE)
   origSets <- orig$ConceptSets %||% list()
@@ -74,8 +76,14 @@ reorderRoundtripConceptSetsToMatchOriginal <- function(originalJsonStr, roundTri
   if (length(newOrder) != length(rtSets)) return(roundTripJsonStr)
   reordered <- rtSets[newOrder]
   oldIds <- vapply(seq_along(reordered), function(k) reordered[[k]]$id, integer(1))
-  for (k in seq_along(reordered)) reordered[[k]]$id <- k - 1L
-  idMap <- stats::setNames(seq_along(reordered) - 1L, as.character(oldIds))
+  origIds <- vapply(seq_along(origSets), function(k) as.integer(origSets[[k]]$id), integer(1))
+  if (preserveOriginalIds) {
+    for (k in seq_along(reordered)) reordered[[k]]$id <- origIds[k]
+    idMap <- stats::setNames(origIds, as.character(oldIds))
+  } else {
+    for (k in seq_along(reordered)) reordered[[k]]$id <- k - 1L
+    idMap <- stats::setNames(seq_along(reordered) - 1L, as.character(oldIds))
+  }
   rt$ConceptSets <- reordered
   replaceCodesetIds <- function(x, map) {
     if (is.null(x)) return(x)
