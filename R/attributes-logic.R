@@ -72,3 +72,15 @@ measurementTypeExclude <- function(exclude = FALSE) {
   k <- "MeasurementTypeExclude"
   methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
 }
+
+#' SpecimenTypeExclude query attribute
+#'
+#' When FALSE, specimen type is not excluded (include all). When TRUE, excludes
+#' specified specimen types (Capr does not support type-concept lists without DB).
+#' @param exclude logical; FALSE = include all types (default), TRUE = exclude (unsupported in decompiler)
+#' @return An attribute for use in specimen()
+#' @export
+specimenTypeExclude <- function(exclude = FALSE) {
+  k <- "SpecimenTypeExclude"
+  methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
+}

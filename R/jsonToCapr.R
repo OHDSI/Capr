@@ -462,7 +462,7 @@ domainKeyToQueryFun <- function(domainKey, emitter) {
     ObservationPeriod   = "observationPeriod",
     DoseEra             = "doseEra",
 
-    Specimen    = { emitter$skipOrStop("Unsupported domain: Specimen (Capr has no specimen() query)"); NULL },
+    Specimen             = "specimen",
     VisitDetail = { emitter$skipOrStop("Unsupported domain: VisitDetail (Capr has no visitDetail() query)"); NULL },
 
     { emitter$skipOrStop(paste0("Unsupported domain key: ", domainKey)); NULL }
@@ -642,9 +642,10 @@ getSupportedKeysForDomain <- function(domainKey) {
     domainKey,
     VisitOccurrence = c("ProviderSpecialty"),
     Measurement     = c("ValueAsNumber", "RangeLow", "RangeHigh", "RangeHighRatio", "Unit", "ValueAsConcept", "MeasurementSourceConcept"),
-    Observation     = c("ValueAsConcept"),
+    Observation     = c("ValueAsNumber", "Unit", "ValueAsConcept"),
     DrugExposure    = c("DaysSupply", "Refills", "Quantity"),
     DrugEra         = c("EraLength"),
+    DoseEra         = c("Unit", "DoseValue", "EraLength"),
     ConditionEra    = c("OccurrenceCount"),
     character(0)
   )
@@ -713,6 +714,19 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     attributeCalls <- c(attributeCalls, sprintf("eraLength(%s)", opAttributeToCode(domainVal$EraLength)))
   }
 
+  # DoseEra: Unit, DoseValue, EraLength
+  if (domainKey == "DoseEra") {
+    if (!is.null(domainVal[["Unit"]])) {
+      ids <- conceptListToIds(domainVal[["Unit"]])
+      if (length(ids) > 0) {
+        unitArg <- if (length(ids) == 1L) paste0(ids[1], "L") else sprintf("c(%s)", paste0(ids, "L", collapse = ", "))
+        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", unitArg))
+      }
+    }
+    if (!is.null(domainVal$DoseValue)) attributeCalls <- c(attributeCalls, sprintf("doseValue(%s)", opAttributeToCode(domainVal$DoseValue, integersAsNumeric = TRUE)))
+    if (!is.null(domainVal$EraLength))  attributeCalls <- c(attributeCalls, sprintf("eraLength(%s)", opAttributeToCode(domainVal$EraLength)))
+  }
+
   # Measurement.RangeHighRatio (filter by value_as_number / range_high ratio; use [[""]] to avoid partial match with RangeHigh)
   if (domainKey == "Measurement" && !is.null(domainVal[["RangeHighRatio"]])) {
     attributeCalls <- c(attributeCalls, sprintf("rangeHighRatio(%s)", opAttributeToCode(domainVal[["RangeHighRatio"]], integersAsNumeric = TRUE)))
@@ -734,6 +748,10 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
   # MeasurementTypeExclude: same for Measurement domain
   if (domainKey == "Measurement" && identical(domainVal$MeasurementTypeExclude, FALSE)) {
     attributeCalls <- c(attributeCalls, "measurementTypeExclude(FALSE)")
+  }
+  # SpecimenTypeExclude: same for Specimen domain
+  if (domainKey == "Specimen" && identical(domainVal$SpecimenTypeExclude, FALSE)) {
+    attributeCalls <- c(attributeCalls, "specimenTypeExclude(FALSE)")
   }
 
   # DateAdjustment
@@ -829,14 +847,24 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     }
   }
 
-  # Observation.ValueAsConcept (value_as_concept_id filter)
-  if (domainKey == "Observation" && !is.null(domainVal[["ValueAsConcept"]])) {
-    val <- domainVal[["ValueAsConcept"]]
-    if (length(val) == 1L && is.numeric(val) && !is.null(conceptSetById) && !is.null(conceptSetById[[as.character(val)]])) {
-      attributeCalls <- c(attributeCalls, sprintf("valueAsConceptSet(%s)", conceptSetById[[as.character(val)]]))
-    } else {
-      csInline <- conceptListToInlineConceptSet(val, name = "ValueAsConcept")
-      if (!is.null(csInline)) attributeCalls <- c(attributeCalls, sprintf("valueAsConceptSet(%s)", csInline))
+  # Observation (ValueAsNumber, Unit, ValueAsConcept — same pattern as Measurement)
+  if (domainKey == "Observation") {
+    if (!is.null(domainVal[["ValueAsNumber"]])) attributeCalls <- c(attributeCalls, sprintf("valueAsNumber(%s)", opAttributeToCode(domainVal[["ValueAsNumber"]], integersAsNumeric = TRUE)))
+    if (!is.null(domainVal[["Unit"]])) {
+      ids <- conceptListToIds(domainVal[["Unit"]])
+      if (length(ids) > 0) {
+        unitArg <- if (length(ids) == 1L) paste0(ids[1], "L") else sprintf("c(%s)", paste0(ids, "L", collapse = ", "))
+        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", unitArg))
+      }
+    }
+    if (!is.null(domainVal[["ValueAsConcept"]])) {
+      val <- domainVal[["ValueAsConcept"]]
+      if (length(val) == 1L && is.numeric(val) && !is.null(conceptSetById) && !is.null(conceptSetById[[as.character(val)]])) {
+        attributeCalls <- c(attributeCalls, sprintf("valueAsConceptSet(%s)", conceptSetById[[as.character(val)]]))
+      } else {
+        csInline <- conceptListToInlineConceptSet(val, name = "ValueAsConcept")
+        if (!is.null(csInline)) attributeCalls <- c(attributeCalls, sprintf("valueAsConceptSet(%s)", csInline))
+      }
     }
   }
 

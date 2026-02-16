@@ -314,6 +314,25 @@ observation <- function(conceptSet, ...) {
         ...)
 }
 
+#' Query the specimen domain
+#'
+#' @param conceptSet A specimen concept set
+#' @param ... optional attributes (e.g. CorrelatedCriteria)
+#'
+#' @return A Capr Query
+#' @export
+specimen <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
+
+  query(domain = "Specimen",
+        conceptSet = conceptSet,
+        ...)
+}
+
 #' Query the observation period domain
 #'
 #' @param ... optional attributes

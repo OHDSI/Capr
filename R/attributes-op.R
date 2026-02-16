@@ -516,6 +516,25 @@ eraLength <- function(op) {
                extent = as.integer(op@extent))
 }
 
+#' Dose value attribute for DoseEra
+#'
+#' Filter dose era criteria by dose value (e.g. \code{gt(92)} for dose > 92).
+#' Used only in a dose era query.
+#' @param op   an opAttribute object (numeric) that defines the logical operation and value
+#' @return An attribute for use in \code{\link{doseEra}()}
+#' @export
+doseValue <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) {
+    stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  }
+  methods::new("opAttributeNumeric",
+               name = "DoseValue",
+               op = op@op,
+               value = op@value,
+               extent = op@extent)
+}
+
 #' Range high ratio attribute for Measurement
 #'
 #' Filter measurement criteria by the ratio value_as_number / range_high (e.g. \code{gt(2)} for ratio > 2).
