@@ -15,7 +15,7 @@
 #' @section Unsupported (fail in strict mode or skip with \code{mode = "skip"}):
 #' Domains: Specimen, VisitDetail; VisitOccurrence.ProviderSpecialty;
 #' any \code{*TypeExclude == TRUE} or \code{*Type} lists (Type lists require vocabulary lookup in Capr);
-#' Measurement.RangeHighRatio.
+#'
 #' Unknown domain keys are reported via \code{detectUnsupportedKeys()} to avoid silent drift.
 #'
 #' @param jsonPath Character. Path to the cohort JSON file.
@@ -365,7 +365,8 @@ formatScalar <- function(x, integersAsNumeric = FALSE) {
 }
 
 getConceptId <- function(item) {
-  item$CONCEPT_ID %||% item$concept_id
+  item$CONCEPT_ID %||% item$concept_id %||%
+    (if (!is.null(item$concept)) item$concept$CONCEPT_ID %||% item$concept$concept_id else NULL)
 }
 
 conceptListToIds <- function(conceptList) {
@@ -641,6 +642,7 @@ getSupportedKeysForDomain <- function(domainKey) {
     domainKey,
     VisitOccurrence = c("ProviderSpecialty"),
     Measurement     = c("ValueAsNumber", "RangeLow", "RangeHigh", "RangeHighRatio", "Unit", "ValueAsConcept", "MeasurementSourceConcept"),
+    Observation     = c("ValueAsConcept"),
     DrugExposure    = c("DaysSupply", "Refills", "Quantity"),
     DrugEra         = c("EraLength"),
     ConditionEra    = c("OccurrenceCount"),
@@ -698,10 +700,6 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     emitter$skipOrStop(paste0("Unsupported field: VisitOccurrence.ProviderSpecialty (", paste(ids, collapse = ","), ")"))
   }
 
-  # Known unsupported fields (Capr has no RangeHighRatio attribute)
-  if (domainKey == "Measurement" && !is.null(domainVal$RangeHighRatio)) {
-    emitter$skipOrStop("Unsupported field: Measurement.RangeHighRatio")
-  }
 
   attributeCalls <- c()
 
@@ -713,6 +711,11 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
   # DrugEra.EraLength (filter by era length in days)
   if (domainKey == "DrugEra" && !is.null(domainVal$EraLength)) {
     attributeCalls <- c(attributeCalls, sprintf("eraLength(%s)", opAttributeToCode(domainVal$EraLength)))
+  }
+
+  # Measurement.RangeHighRatio (filter by value_as_number / range_high ratio; use [[""]] to avoid partial match with RangeHigh)
+  if (domainKey == "Measurement" && !is.null(domainVal[["RangeHighRatio"]])) {
+    attributeCalls <- c(attributeCalls, sprintf("rangeHighRatio(%s)", opAttributeToCode(domainVal[["RangeHighRatio"]], integersAsNumeric = TRUE)))
   }
 
   # Logic: First occurrence
@@ -801,22 +804,39 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     }
   }
 
-  # Measurement
+  # Measurement (use [["key"]] to avoid partial matching e.g. RangeHigh vs RangeHighRatio)
   if (domainKey == "Measurement") {
-    if (!is.null(domainVal$ValueAsNumber)) attributeCalls <- c(attributeCalls, sprintf("valueAsNumber(%s)", opAttributeToCode(domainVal$ValueAsNumber, integersAsNumeric = TRUE)))
-    if (!is.null(domainVal$RangeLow))      attributeCalls <- c(attributeCalls, sprintf("rangeLow(%s)", opAttributeToCode(domainVal$RangeLow, integersAsNumeric = TRUE)))
-    if (!is.null(domainVal$RangeHigh))     attributeCalls <- c(attributeCalls, sprintf("rangeHigh(%s)", opAttributeToCode(domainVal$RangeHigh, integersAsNumeric = TRUE)))
+    if (!is.null(domainVal[["ValueAsNumber"]])) attributeCalls <- c(attributeCalls, sprintf("valueAsNumber(%s)", opAttributeToCode(domainVal[["ValueAsNumber"]], integersAsNumeric = TRUE)))
+    if (!is.null(domainVal[["RangeLow"]]))      attributeCalls <- c(attributeCalls, sprintf("rangeLow(%s)", opAttributeToCode(domainVal[["RangeLow"]], integersAsNumeric = TRUE)))
+    if (!is.null(domainVal[["RangeHigh"]]))     attributeCalls <- c(attributeCalls, sprintf("rangeHigh(%s)", opAttributeToCode(domainVal[["RangeHigh"]], integersAsNumeric = TRUE)))
 
-    if (!is.null(domainVal$Unit)) {
-      ids <- conceptListToIds(domainVal$Unit)
+    if (!is.null(domainVal[["Unit"]])) {
+      ids <- conceptListToIds(domainVal[["Unit"]])
       if (length(ids) > 0) {
         unitArg <- if (length(ids) == 1L) paste0(ids[1], "L") else sprintf("c(%s)", paste0(ids, "L", collapse = ", "))
         attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", unitArg))
       }
     }
 
-    if (!is.null(domainVal$ValueAsConcept)) {
-      # valueAsConcept(ids, connection, vocabularyDatabaseSchema) requires DB connection; omit in round-trip
+    if (!is.null(domainVal[["ValueAsConcept"]])) {
+      val <- domainVal[["ValueAsConcept"]]
+      if (length(val) == 1L && is.numeric(val) && !is.null(conceptSetById) && !is.null(conceptSetById[[as.character(val)]])) {
+        attributeCalls <- c(attributeCalls, sprintf("valueAsConceptSet(%s)", conceptSetById[[as.character(val)]]))
+      } else {
+        csInline <- conceptListToInlineConceptSet(val, name = "ValueAsConcept")
+        if (!is.null(csInline)) attributeCalls <- c(attributeCalls, sprintf("valueAsConceptSet(%s)", csInline))
+      }
+    }
+  }
+
+  # Observation.ValueAsConcept (value_as_concept_id filter)
+  if (domainKey == "Observation" && !is.null(domainVal[["ValueAsConcept"]])) {
+    val <- domainVal[["ValueAsConcept"]]
+    if (length(val) == 1L && is.numeric(val) && !is.null(conceptSetById) && !is.null(conceptSetById[[as.character(val)]])) {
+      attributeCalls <- c(attributeCalls, sprintf("valueAsConceptSet(%s)", conceptSetById[[as.character(val)]]))
+    } else {
+      csInline <- conceptListToInlineConceptSet(val, name = "ValueAsConcept")
+      if (!is.null(csInline)) attributeCalls <- c(attributeCalls, sprintf("valueAsConceptSet(%s)", csInline))
     }
   }
 

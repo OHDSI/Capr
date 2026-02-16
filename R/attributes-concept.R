@@ -147,6 +147,19 @@ valueAsConcept <- function(ids, connection, vocabularyDatabaseSchema) {
   return(res)
 }
 
+#' ValueAsConcept attribute from a concept set (for round-trip without DB)
+#'
+#' Filter Measurement or Observation by value_as_concept_id using a concept set.
+#' Use this when building from JSON (CodesetId reference); use \code{valueAsConcept(ids, connection, ...)} with a DB for ad-hoc concept ids.
+#' @param conceptSet A ConceptSet object (e.g. from \code{cs()} or decompiled JSON).
+#' @return An attribute for use in \code{\link{measurement}()} or \code{\link{observation}()}.
+#' @export
+valueAsConceptSet <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("valueAsConceptSet requires a ConceptSet object")
+  }
+  methods::new("conceptSetAttribute", name = "ValueAsConcept", conceptSet = conceptSet)
+}
 
 #' Add a drug type attribute to determine the provenance of the record
 #' @param ids the concept ids for the attribute
@@ -426,6 +439,16 @@ measurementUnit <- function(x) {
 
 setMethod("as.list", "conceptSetAttribute", function(x) {
   nm <- x@name
+  # Circe expects ValueAsConcept as an array of Concept objects, not a CodesetId (integer).
+  # Serialize the concept set's expression as that array so Circe can deserialize and generate SQL.
+  if (identical(nm, "ValueAsConcept")) {
+    val <- if (length(x@conceptSet@Expression) > 0L) {
+      purrr::map(x@conceptSet@Expression, function(e) as.list(e@Concept))
+    } else {
+      list()
+    }
+    return(tibble::lst(`:=`(!!nm, val)))
+  }
   tibble::lst(`:=`(!!nm, x@conceptSet@id))
 })
 

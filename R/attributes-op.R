@@ -516,6 +516,25 @@ eraLength <- function(op) {
                extent = as.integer(op@extent))
 }
 
+#' Range high ratio attribute for Measurement
+#'
+#' Filter measurement criteria by the ratio value_as_number / range_high (e.g. \code{gt(2)} for ratio > 2).
+#' Used only in a measurement query.
+#' @param op   an opAttribute object (numeric) that defines the logical operation and value
+#' @return An attribute for use in \code{\link{measurement}()}
+#' @export
+rangeHighRatio <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) {
+    stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  }
+  methods::new("opAttributeNumeric",
+               name = "RangeHighRatio",
+               op = op@op,
+               value = as.numeric(op@value),
+               extent = op@extent)
+}
+
 ## Date Constructors ----
 
 #' Function that creates a start date attribute

@@ -315,9 +315,24 @@ toCirce <- function(cd) {
   #replace guids with codeset integer
   cd2 <- replaceCodesetId(cd, guidTable = guidTable)
 
+  # ValueAsConcept is serialized inline (array of concepts); do not list those concept sets
+  # in ConceptSets or Circe would create an extra codeset and concept set count would differ.
+  allSets <- listConceptSets(cd2)
+  usage <- collectConceptSetAttributeUsage(cd2)
+  idsByUsage <- split(
+    vapply(usage, function(u) u$id, integer(1L)),
+    vapply(usage, function(u) u$name, character(1L))
+  )
+  valueAsConceptIds <- unique(idsByUsage[["ValueAsConcept"]] %||% integer(0L))
+  otherIds <- unique(unlist(idsByUsage[names(idsByUsage) != "ValueAsConcept"], use.names = FALSE))
+  excludeIds <- setdiff(valueAsConceptIds, otherIds)
+  if (length(excludeIds) > 0L) {
+    allSets <- purrr::keep(allSets, function(cs) !(cs$id %in% excludeIds))
+  }
+
   cdCirce <- list(
     #start with getting concept set structure
-    'ConceptSets' = listConceptSets(cd2)
+    'ConceptSets' = allSets
   ) |>
     #append cohort structure
     append(as.list(cd2))
