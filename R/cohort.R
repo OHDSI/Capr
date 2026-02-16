@@ -315,17 +315,22 @@ toCirce <- function(cd) {
   #replace guids with codeset integer
   cd2 <- replaceCodesetId(cd, guidTable = guidTable)
 
-  # ValueAsConcept is serialized inline (array of concepts); do not list those concept sets
-  # in ConceptSets or Circe would create an extra codeset and concept set count would differ.
+  # ValueAsConcept and VisitType are serialized inline (array of concepts); do not list those
+  # concept sets in ConceptSets or Circe would create an extra codeset and concept set count would differ.
   allSets <- listConceptSets(cd2)
   usage <- collectConceptSetAttributeUsage(cd2)
   idsByUsage <- split(
     vapply(usage, function(u) u$id, integer(1L)),
     vapply(usage, function(u) u$name, character(1L))
   )
-  valueAsConceptIds <- unique(idsByUsage[["ValueAsConcept"]] %||% integer(0L))
-  otherIds <- unique(unlist(idsByUsage[names(idsByUsage) != "ValueAsConcept"], use.names = FALSE))
-  excludeIds <- setdiff(valueAsConceptIds, otherIds)
+  inlineOnlyNames <- c("ValueAsConcept", "VisitType")
+  excludeIds <- integer(0L)
+  for (nm in inlineOnlyNames) {
+    ids <- unique(idsByUsage[[nm]] %||% integer(0L))
+    otherIds <- unique(unlist(idsByUsage[names(idsByUsage) != nm], use.names = FALSE))
+    excludeIds <- c(excludeIds, setdiff(ids, otherIds))
+  }
+  excludeIds <- unique(excludeIds)
   if (length(excludeIds) > 0L) {
     allSets <- purrr::keep(allSets, function(cs) !(cs$id %in% excludeIds))
   }

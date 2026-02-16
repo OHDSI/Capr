@@ -37,6 +37,7 @@ setValidity("Query", function(object) {
                     "PayerPlanPeriod",
                     "Specimen",
                     "VisitOccurrence",
+                    "VisitDetail",
                     "ObservationWindow", # check on this
                     "ObservationPeriod")
   stopifnot(object@domain %in% validDomains)
@@ -51,7 +52,8 @@ setValidity("Query", function(object) {
                  "DrugExposure" = "Drug",
                  "Measurement" = "Measurement",
                  "Specimen" = "Specimen",
-                 "VisitOccurrence" = "Visit")
+                 "VisitOccurrence" = "Visit",
+                 "VisitDetail" = "Visit")
 
   # Print a warning if the concept set does not include concepts with the expected domain_id (domain_id must be populated)
   if ((object@domain %in% names(domainMap)) &&
@@ -329,6 +331,25 @@ specimen <- function(conceptSet, ...) {
   }
 
   query(domain = "Specimen",
+        conceptSet = conceptSet,
+        ...)
+}
+
+#' Query the visit detail domain
+#'
+#' @param conceptSet A visit detail concept set
+#' @param ... optional attributes (e.g. VisitDetailSourceConcept)
+#'
+#' @return A Capr Query
+#' @export
+visitDetail <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
+
+  query(domain = "VisitDetail",
         conceptSet = conceptSet,
         ...)
 }

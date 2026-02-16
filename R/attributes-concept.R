@@ -373,6 +373,37 @@ visitSourceConcept <- function(conceptSet) {
   return(res)
 }
 
+#' Add a visit type attribute (filter by visit_concept_id) from a concept set
+#'
+#' Restricts criteria to events occurring in specified visit types (e.g. inpatient, ER).
+#' Used when decompiling cohort JSON that has VisitType as concept list or CodesetId.
+#' @param conceptSet a ConceptSet object containing visit type concepts
+#' @return An attribute for use in conditionOccurrence(), drugExposure(), etc.
+#' @export
+visitTypeSet <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("visitTypeSet requires a ConceptSet object")
+  }
+  res <- methods::new("conceptSetAttribute",
+                      name = "VisitType",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
+#' Add a visit detail source concept attribute
+#' @param conceptSet a ConceptSet object containing the source concepts
+#' @return An attribute for use in visitDetail()
+#' @export
+visitDetailSourceConcept <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("visitDetailSourceConcept requires a ConceptSet object")
+  }
+  res <- methods::new("conceptSetAttribute",
+                      name = "VisitDetailSourceConcept",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
 #' Add a observation period type attribute to determine the provenance of the record
 #' @param ids the concept ids for the attribute
 #' @param connection a connection to an OMOP dbms to get vocab info about the concept
@@ -439,9 +470,8 @@ measurementUnit <- function(x) {
 
 setMethod("as.list", "conceptSetAttribute", function(x) {
   nm <- x@name
-  # Circe expects ValueAsConcept as an array of Concept objects, not a CodesetId (integer).
-  # Serialize the concept set's expression as that array so Circe can deserialize and generate SQL.
-  if (identical(nm, "ValueAsConcept")) {
+  # Circe expects these as arrays of Concept objects, not a CodesetId (integer).
+  if (identical(nm, "ValueAsConcept") || identical(nm, "VisitType")) {
     val <- if (length(x@conceptSet@Expression) > 0L) {
       purrr::map(x@conceptSet@Expression, function(e) as.list(e@Concept))
     } else {

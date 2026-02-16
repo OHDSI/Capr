@@ -67,7 +67,7 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
   if (length(primaryCriteriaList) == 0) stop("PrimaryCriteria.CriteriaList is empty", call. = FALSE)
 
   # SourceConcept keys that can be a single CodesetId (integer) meaning "any concept" + filter by that concept set
-  sourceConceptKeys <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept")
+  sourceConceptKeys <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept", "VisitDetailSourceConcept")
   primaryQueryCalls <- Filter(
     Negate(is.null),
     lapply(primaryCriteriaList, function(primaryNode) {
@@ -463,7 +463,7 @@ domainKeyToQueryFun <- function(domainKey, emitter) {
     DoseEra             = "doseEra",
 
     Specimen             = "specimen",
-    VisitDetail = { emitter$skipOrStop("Unsupported domain: VisitDetail (Capr has no visitDetail() query)"); NULL },
+    VisitDetail           = "visitDetail",
 
     { emitter$skipOrStop(paste0("Unsupported domain key: ", domainKey)); NULL }
   )
@@ -636,7 +636,8 @@ getSupportedKeysForDomain <- function(domainKey) {
     "OccurrenceStartDate", "OccurrenceEndDate", "EraStartDate", "EraEndDate",
     "UserDefinedPeriod",
     "ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept",
-    "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept"
+    "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept",
+    "VisitDetailSourceConcept", "VisitType"
   )
   domainExtra <- switch(
     domainKey,
@@ -647,6 +648,7 @@ getSupportedKeysForDomain <- function(domainKey) {
     DrugEra         = c("EraLength"),
     DoseEra         = c("Unit", "DoseValue", "EraLength"),
     ConditionEra    = c("OccurrenceCount"),
+    VisitDetail     = c("VisitDetailSourceConcept"),
     character(0)
   )
   c(baseKeys, domainExtra)
@@ -686,6 +688,7 @@ stopIfTypeExcludeOrTypeLists <- function(domainVal, emitter, jsonContextPath = "
 
   typeKeys <- grep("Type$", names(domainVal), value = TRUE)
   for (k in typeKeys) {
+    if (k == "VisitType") next  # Handled in domainAttributesToCapr via visitTypeSet(conceptSet)
     if (is.list(domainVal[[k]]) && length(domainVal[[k]]) > 0) {
       emitter$skipOrStop(paste0("Type attribute lists require vocabulary lookup: ", pathPrefix, k, " (Capr visitType/measurementType etc. need connection, vocabularyDatabaseSchema)"))
     }
@@ -802,7 +805,8 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     ProcedureSourceConcept = "procedureSourceConcept",
     ObservationSourceConcept = "observationSourceConcept",
     VisitSourceConcept     = "visitSourceConcept",
-    MeasurementSourceConcept = "measurementSourceConcept"
+    MeasurementSourceConcept = "measurementSourceConcept",
+    VisitDetailSourceConcept = "visitDetailSourceConcept"
   )
 
   for (jsonKey in names(sourceConceptMap)) {
@@ -819,6 +823,22 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     csInline <- conceptListToInlineConceptSet(val, name = jsonKey)
     if (!is.null(csInline)) {
       attributeCalls <- c(attributeCalls, sprintf("%s(%s)", sourceConceptMap[[jsonKey]], csInline))
+    }
+  }
+
+  # VisitType (filter by visit_concept_id): list of concepts or CodesetId
+  if (!is.null(domainVal[["VisitType"]]) && length(domainVal[["VisitType"]]) > 0) {
+    val <- domainVal[["VisitType"]]
+    if (length(val) == 1L && is.numeric(val) && !is.null(conceptSetById)) {
+      csVar <- conceptSetById[[as.character(val)]]
+      if (!is.null(csVar)) {
+        attributeCalls <- c(attributeCalls, sprintf("visitTypeSet(%s)", csVar))
+      }
+    } else {
+      csInline <- conceptListToInlineConceptSet(val, name = "VisitType")
+      if (!is.null(csInline)) {
+        attributeCalls <- c(attributeCalls, sprintf("visitTypeSet(%s)", csInline))
+      }
     }
   }
 
@@ -1029,7 +1049,7 @@ criterionNodeToCapr <- function(criterionNode, conceptSetById, emitter, context 
 
   codesetId <- domainVal$CodesetId %||% domainVal$CodesetID %||% NULL
   # Death domain typically has no concept set (any death). Also allow when only a SourceConcept attribute references a concept set.
-  sourceConceptKeysCriterion <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept")
+  sourceConceptKeysCriterion <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept", "VisitDetailSourceConcept")
   allowNoCodeset <- identical(domainKey, "Death")
   if (is.null(codesetId)) {
     if (!allowNoCodeset) {
@@ -1185,8 +1205,8 @@ censoringCriteriaToCapr <- function(censoringCriteria, conceptSetById, emitter) 
       if (length(criteriaObj) == 0L || length(names(criteriaObj)) == 0L) {
         # Atlas may export censoring items as a single domain object at top level (no Criteria wrapper)
         knownDomains <- c("ConditionOccurrence", "ConditionEra", "DrugExposure", "DrugEra",
-                         "ProcedureOccurrence", "Measurement", "VisitOccurrence", "Observation",
-                         "Death", "DeviceExposure", "ObservationPeriod", "DoseEra")
+                         "ProcedureOccurrence", "Measurement", "VisitOccurrence", "VisitDetail", "Observation",
+                         "Death", "DeviceExposure", "ObservationPeriod", "DoseEra", "Specimen")
         if (length(node) > 0L && length(names(node)) > 0L &&
             names(node)[[1]] %in% knownDomains) {
           criteriaObj <- node
