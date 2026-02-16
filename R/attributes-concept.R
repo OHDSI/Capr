@@ -329,6 +329,20 @@ observationSourceConcept <- function(conceptSet) {
   return(res)
 }
 
+#' Add a measurement source concept attribute
+#' @param conceptSet a ConceptSet object containing the source concepts
+#' @return An attribute that can be used in a measurement query
+#' @export
+measurementSourceConcept <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("measurementSourceConcept requires a ConceptSet object")
+  }
+  res <- methods::new("conceptSetAttribute",
+                      name = "MeasurementSourceConcept",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
 #' Add a visit source concept attribute
 #' @param conceptSet a ConceptSet object containing the source concepts
 #' @return

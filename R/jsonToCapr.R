@@ -15,7 +15,7 @@
 #' @section Unsupported (fail in strict mode or skip with \code{mode = "skip"}):
 #' Domains: Specimen, VisitDetail; VisitOccurrence.ProviderSpecialty;
 #' any \code{*TypeExclude == TRUE} or \code{*Type} lists (Type lists require vocabulary lookup in Capr);
-#' DrugEra.EraLength; ConditionEra.OccurrenceCount; Measurement.RangeHighRatio.
+#' Measurement.RangeHighRatio.
 #' Unknown domain keys are reported via \code{detectUnsupportedKeys()} to avoid silent drift.
 #'
 #' @param jsonPath Character. Path to the cohort JSON file.
@@ -67,7 +67,7 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
   if (length(primaryCriteriaList) == 0) stop("PrimaryCriteria.CriteriaList is empty", call. = FALSE)
 
   # SourceConcept keys that can be a single CodesetId (integer) meaning "any concept" + filter by that concept set
-  sourceConceptKeys <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept")
+  sourceConceptKeys <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept")
   primaryQueryCalls <- Filter(
     Negate(is.null),
     lapply(primaryCriteriaList, function(primaryNode) {
@@ -171,7 +171,7 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
     if (!is.null(attritionLines) && length(attritionLines) > 0) "  attrition = attritionObj," else NULL,
     "  exit = exit(",
     sprintf("    endStrategy = %s%s", endStrategyCall, if (!is.null(censoringCall)) "," else ""),
-    if (!is.null(censoringCall)) sprintf("    censoringCriteria = %s", censoringCall) else NULL,
+    if (!is.null(censoringCall)) sprintf("    censor = %s", censoringCall) else NULL,
     "  ),",
     sprintf("  era = %s", eraCall),
     ")",
@@ -635,12 +635,12 @@ getSupportedKeysForDomain <- function(domainKey) {
     "OccurrenceStartDate", "OccurrenceEndDate", "EraStartDate", "EraEndDate",
     "UserDefinedPeriod",
     "ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept",
-    "ObservationSourceConcept", "VisitSourceConcept"
+    "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept"
   )
   domainExtra <- switch(
     domainKey,
     VisitOccurrence = c("ProviderSpecialty"),
-    Measurement     = c("ValueAsNumber", "RangeLow", "RangeHigh", "RangeHighRatio", "Unit", "ValueAsConcept"),
+    Measurement     = c("ValueAsNumber", "RangeLow", "RangeHigh", "RangeHighRatio", "Unit", "ValueAsConcept", "MeasurementSourceConcept"),
     DrugExposure    = c("DaysSupply", "Refills", "Quantity"),
     DrugEra         = c("EraLength"),
     ConditionEra    = c("OccurrenceCount"),
@@ -698,18 +698,22 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     emitter$skipOrStop(paste0("Unsupported field: VisitOccurrence.ProviderSpecialty (", paste(ids, collapse = ","), ")"))
   }
 
-  # Known unsupported fields (Capr has no RangeHighRatio/EraLength/OccurrenceCount attributes)
+  # Known unsupported fields (Capr has no RangeHighRatio attribute)
   if (domainKey == "Measurement" && !is.null(domainVal$RangeHighRatio)) {
     emitter$skipOrStop("Unsupported field: Measurement.RangeHighRatio")
   }
-  if (domainKey == "DrugEra" && !is.null(domainVal$EraLength)) {
-    emitter$skipOrStop("Unsupported field: DrugEra.EraLength")
-  }
-  if (domainKey == "ConditionEra" && !is.null(domainVal$OccurrenceCount)) {
-    emitter$skipOrStop("Unsupported field: ConditionEra.OccurrenceCount")
-  }
 
   attributeCalls <- c()
+
+  # ConditionEra.OccurrenceCount (filter by condition era count, e.g. eq(0) = no eras)
+  if (domainKey == "ConditionEra" && !is.null(domainVal$OccurrenceCount)) {
+    attributeCalls <- c(attributeCalls, sprintf("occurrenceCount(%s)", opAttributeToCode(domainVal$OccurrenceCount)))
+  }
+
+  # DrugEra.EraLength (filter by era length in days)
+  if (domainKey == "DrugEra" && !is.null(domainVal$EraLength)) {
+    attributeCalls <- c(attributeCalls, sprintf("eraLength(%s)", opAttributeToCode(domainVal$EraLength)))
+  }
 
   # Logic: First occurrence
   if (isTRUE(domainVal$First %||% FALSE)) {
@@ -776,7 +780,8 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     DrugSourceConcept      = "drugSourceConcept",
     ProcedureSourceConcept = "procedureSourceConcept",
     ObservationSourceConcept = "observationSourceConcept",
-    VisitSourceConcept     = "visitSourceConcept"
+    VisitSourceConcept     = "visitSourceConcept",
+    MeasurementSourceConcept = "measurementSourceConcept"
   )
 
   for (jsonKey in names(sourceConceptMap)) {
@@ -975,14 +980,25 @@ criterionNodeToCapr <- function(criterionNode, conceptSetById, emitter, context 
   if (is.null(queryFun)) return(NULL)
 
   codesetId <- domainVal$CodesetId %||% domainVal$CodesetID %||% NULL
-  # Death domain typically has no concept set (any death)
+  # Death domain typically has no concept set (any death). Also allow when only a SourceConcept attribute references a concept set.
+  sourceConceptKeysCriterion <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept")
   allowNoCodeset <- identical(domainKey, "Death")
   if (is.null(codesetId)) {
     if (!allowNoCodeset) {
-      emitter$skipOrStop(paste0("Missing CodesetId for domain: ", domainKey, " (", context, ")"))
-      return(NULL)
+      srcId <- NULL
+      for (k in sourceConceptKeysCriterion) {
+        v <- domainVal[[k]]
+        if (length(v) == 1L && is.numeric(v) && !is.null(conceptSetById[[as.character(v)]])) {
+          srcId <- as.character(v)
+          break
+        }
+      }
+      if (is.null(srcId)) {
+        emitter$skipOrStop(paste0("Missing CodesetId for domain: ", domainKey, " (", context, ")"))
+        return(NULL)
+      }
     }
-    conceptSetVar <- "NULL"
+    conceptSetVar <- "conceptSet = NULL"
   } else {
     conceptSetVar <- conceptSetById[[as.character(codesetId)]]
     if (is.null(conceptSetVar)) {
@@ -1112,11 +1128,24 @@ endStrategyToCapr <- function(endStrategy, conceptSetById, emitter) {
 censoringCriteriaToCapr <- function(censoringCriteria, conceptSetById, emitter) {
   if (is.null(censoringCriteria) || length(censoringCriteria) == 0) return(NULL)
 
+  # Each node is either { Criteria: { DomainKey: {...} }, Occurrence?, ... } (Capr/Circe) or
+  # directly { DomainKey: {...} } (no Criteria wrapper).
   censorCalls <- Filter(
     Negate(is.null),
     lapply(censoringCriteria, function(node) {
       criteriaObj <- node$Criteria %||% list()
-      if (length(criteriaObj) == 0L || length(names(criteriaObj)) == 0L) return(NULL)
+      if (length(criteriaObj) == 0L || length(names(criteriaObj)) == 0L) {
+        # Atlas may export censoring items as a single domain object at top level (no Criteria wrapper)
+        knownDomains <- c("ConditionOccurrence", "ConditionEra", "DrugExposure", "DrugEra",
+                         "ProcedureOccurrence", "Measurement", "VisitOccurrence", "Observation",
+                         "Death", "DeviceExposure", "ObservationPeriod", "DoseEra")
+        if (length(node) > 0L && length(names(node)) > 0L &&
+            names(node)[[1]] %in% knownDomains) {
+          criteriaObj <- node
+        } else {
+          return(NULL)
+        }
+      }
       domainKey <- names(criteriaObj)[[1]]
       domainVal <- criteriaObj[[1]]
 
@@ -1140,7 +1169,7 @@ censoringCriteriaToCapr <- function(censoringCriteria, conceptSetById, emitter) 
     return(NULL)
   }
 
-  sprintf("censoringCriteria(%s)", paste(censorCalls, collapse = ", "))
+  sprintf("censoringEvents(%s)", paste(censorCalls, collapse = ", "))
 }
 
 # =============================================================================

@@ -477,8 +477,44 @@ drugQuantity <- function(op) {
                extent = op@extent)
 }
 
+#' Occurrence count attribute for ConditionEra
+#'
+#' Filter condition era criteria by the number of condition eras (e.g. occurrence count = 0
+#' for no matching eras). Used only in a condition era query.
+#' @param op   an opAttribute object (integer) that defines the logical operation and value
+#'             (e.g. \code{eq(0L)} for "count equals 0")
+#' @return An attribute for use in \code{\link{conditionEra}()}
+#' @export
+occurrenceCount <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) {
+    stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  }
+  methods::new("opAttributeInteger",
+               name = "OccurrenceCount",
+               op = op@op,
+               value = as.integer(op@value),
+               extent = as.integer(op@extent))
+}
 
-
+#' Era length attribute for DrugEra
+#'
+#' Filter drug era criteria by era length in days (e.g. \code{gt(14L)} for era longer than 14 days).
+#' Used only in a drug era query.
+#' @param op   an opAttribute object (integer) that defines the logical operation and value
+#' @return An attribute for use in \code{\link{drugEra}()}
+#' @export
+eraLength <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) {
+    stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  }
+  methods::new("opAttributeInteger",
+               name = "EraLength",
+               op = op@op,
+               value = as.integer(op@value),
+               extent = as.integer(op@extent))
+}
 
 ## Date Constructors ----
 
