@@ -252,7 +252,6 @@ test_that("full cohort works with domains without concepts", {
 #   expect_true(df$cohortEntries > 1)
 #
 # })
-\
 test_that("makeCohortSet works", {
   skip_if_not_installed("CirceR")
   #make concept set for celecoxib

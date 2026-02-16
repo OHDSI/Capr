@@ -418,6 +418,25 @@ test_that("ObservationPeriod UserDefinedPeriod (e.g. cohort 1071) produces start
   expect_true(any(grepl("startDate\\(", code)), info = "startDate(...) for UserDefinedPeriod should appear")
 })
 
+test_that("ObservationPeriod round-trip compiles to JSON with UserDefinedPeriod", {
+  jsonPath <- test_path("resources", "observationPeriodUserDefined.json")
+  skip_if(!file.exists(jsonPath))
+  code <- jsonToCapr(jsonPath, mode = "strict")
+  env <- new.env(parent = .GlobalEnv)
+  expect_error(eval(parse(text = code), envir = env), NA)
+  cohortDef <- env$cohortDef
+  expect_false(is.null(cohortDef))
+  allCs <- Filter(function(x) methods::is(x, "ConceptSet"), mget(ls(env), envir = env, ifnotfound = list(NULL)))
+  rtJson <- if (length(allCs) > 0L) compile(cohortDef, includeConceptSets = allCs) else compile(cohortDef)
+  rt <- jsonlite::fromJSON(rtJson, simplifyVector = FALSE)
+  obsCriterion <- rt$PrimaryCriteria$CriteriaList[[1]]$ObservationPeriod
+  expect_true("UserDefinedPeriod" %in% names(obsCriterion),
+    info = "Round-trip JSON should contain UserDefinedPeriod for Circe compatibility"
+  )
+  expect_equal(obsCriterion$UserDefinedPeriod$StartDate, "2020-01-01")
+  expect_equal(obsCriterion$UserDefinedPeriod$EndDate, "2020-12-31")
+})
+
 test_that("Correlated criteria (e.g. cohort 1009) produces nestedWithAll or nestedWithAny", {
   jsonPath <- test_path("resources", "correlatedCriteria.json")
   skip_if(!file.exists(jsonPath))
@@ -440,12 +459,9 @@ test_that("CensoringCriteria produces censoringEvents and censor = in exit()", {
   expect_true(any(grepl("censor\\s*=", code)), info = "exit() should use censor = ... for censoring criteria")
 })
 
-test_that("VisitOccurrence ProviderSpecialty triggers skip with stable message in skip mode", {
+test_that("VisitOccurrence ProviderSpecialty produces providerSpecialtyConcepts for round-trip", {
   jsonPath <- test_path("resources", "visitProviderSpecialty.json")
   skip_if(!file.exists(jsonPath))
-  code <- jsonToCapr(jsonPath, mode = "skip")
-  expect_true(any(grepl("# SKIPPED:", code)), info = "At least one SKIPPED comment")
-  expect_true(any(grepl("ProviderSpecialty", code)), info = "ProviderSpecialty mentioned in skip or output")
-  out <- jsonToCapr(jsonPath, mode = "skip", returnSkipped = TRUE)
-  expect_true(any(grepl("ProviderSpecialty", out$skipped)), info = "ProviderSpecialty in skipped messages")
+  code <- jsonToCapr(jsonPath, mode = "strict")
+  expect_true(any(grepl("providerSpecialtyConcepts\\(", code)), info = "providerSpecialtyConcepts(...) for ProviderSpecialty round-trip")
 })
