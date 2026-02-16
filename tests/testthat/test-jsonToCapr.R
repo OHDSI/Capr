@@ -384,7 +384,7 @@ test_that("PhenotypeLibrary JSON round-trips: sample of cohorts pass, failures r
 test_that("Minimal JSON fixtures are valid Circe JSON (cohortExpressionFromJson)", {
   skip_if_not_installed("CirceR")
   fixtures <- c(
-    "cohortTest.json", "exitCustomEra.json", "observationPeriodUserDefined.json",
+    "cohortTest.json", "exitCustomEra.json", "exitWithCensoring.json", "observationPeriodUserDefined.json",
     "correlatedCriteria.json", "measurementValueAsNumber.json", "visitProviderSpecialty.json"
   )
   for (f in fixtures) {
@@ -430,6 +430,14 @@ test_that("Measurement with valueAsNumber (e.g. cohort 1091) produces valueAsNum
   skip_if(!file.exists(jsonPath))
   code <- jsonToCapr(jsonPath, mode = "strict")
   expect_true(any(grepl("valueAsNumber\\(", code)), info = "valueAsNumber(...) should appear")
+})
+
+test_that("CensoringCriteria produces censoringEvents and censor = in exit()", {
+  jsonPath <- test_path("resources", "exitWithCensoring.json")
+  skip_if(!file.exists(jsonPath))
+  code <- jsonToCapr(jsonPath, mode = "strict")
+  expect_true(any(grepl("censoringEvents\\(", code)), info = "censoringEvents(...) should appear when CensoringCriteria is non-empty")
+  expect_true(any(grepl("censor\\s*=", code)), info = "exit() should use censor = ... for censoring criteria")
 })
 
 test_that("VisitOccurrence ProviderSpecialty triggers skip with stable message in skip mode", {
