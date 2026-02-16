@@ -10,6 +10,21 @@ replaceGuid <- function(x, y) {
   return(x)
 }
 
+# Recursively collect all data.frames from a list (e.g. nested lists from Group)
+# without flattening data.frames. Used when CorrelatedCriteria has nested groups.
+collect_dfs <- function(x) {
+  if (is.data.frame(x)) {
+    return(list(x))
+  }
+  if (!is.list(x)) {
+    return(list())
+  }
+  out <- list()
+  for (i in seq_along(x)) {
+    out <- c(out, collect_dfs(x[[i]]))
+  }
+  out
+}
 
 # Collect Guid --------------------------
 
@@ -44,8 +59,8 @@ setMethod("collectGuid", "Query", function(x) {
   if (any(checkNest %in% c("CorrelatedCriteria"))) {
     ii <- which(checkNest == "CorrelatedCriteria")
     id2 <- collectGuid(x@attributes[[ii]]@group)
-    # id2 is a list of tibbles; do not flatten (would turn tibbles into columns)
-    dfs <- purrr::keep(id2, is.data.frame)
+    # id2 can be nested lists of tibbles when group contains nested groups
+    dfs <- collect_dfs(id2)
     if (length(dfs) > 0L) ids <- dplyr::bind_rows(ids, dfs)
   }
   
