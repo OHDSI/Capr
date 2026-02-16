@@ -51,7 +51,7 @@
       "properties": {
         "CriteriaList": {
           "type": "array",
-          "minItems": 1,
+          "minItems": 0,
           "items": {
             "type": "object",
             "description": "Single domain criterion, e.g. ConditionOccurrence, DrugExposure",

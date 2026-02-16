@@ -64,7 +64,7 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
   if (is.null(primaryCriteria)) stop("JSON missing PrimaryCriteria", call. = FALSE)
 
   primaryCriteriaList <- primaryCriteria$CriteriaList %||% list()
-  if (length(primaryCriteriaList) == 0) stop("PrimaryCriteria.CriteriaList is empty", call. = FALSE)
+  # Empty CriteriaList is allowed (e.g. placeholder cohort); entry will have no queries.
 
   # SourceConcept keys that can be a single CodesetId (integer) meaning "any concept" + filter by that concept set
   sourceConceptKeys <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept", "VisitDetailSourceConcept")
@@ -95,8 +95,12 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
               break
             }
           }
-          if (is.null(srcId)) return(emitter$skipOrStop(paste0("Missing CodesetId in PrimaryCriteria for domain: ", domainKey, " (and no SourceConcept CodesetId reference)")))
-          conceptSetVar <- "conceptSet = NULL"
+          if (!is.null(srcId)) {
+            conceptSetVar <- "conceptSet = NULL"
+          } else {
+            # No CodesetId and no SourceConcept: "any" event (e.g. any condition with date filter)
+            conceptSetVar <- "NULL"
+          }
         }
       } else {
         conceptSetVar <- conceptSetById[[as.character(codesetId)]]
@@ -118,7 +122,7 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
     })
   )
 
-  if (length(primaryQueryCalls) == 0) {
+  if (length(primaryQueryCalls) == 0 && length(primaryCriteriaList) > 0) {
     stop("PrimaryCriteria produced no supported entry queries (strict) or all were skipped (skip).", call. = FALSE)
   }
 
@@ -160,11 +164,16 @@ jsonToCapr <- function(jsonPath, mode = c("strict", "skip"), returnSkipped = FAL
     ""
   )
 
+  entryQueryLines <- if (length(primaryQueryCalls) > 0) {
+    paste0("    ", paste0(primaryQueryCalls, collapse = ",\n    "), ",")
+  } else {
+    character(0)
+  }
   entryLines <- c(
     "# --- cohort ---",
     "cohortDef <- cohort(",
     "  entry = entry(",
-    paste0("    ", paste0(primaryQueryCalls, collapse = ",\n    "), ","),
+    entryQueryLines,
     sprintf("    observationWindow = %s,", observationWindowCode),
     sprintf("    primaryCriteriaLimit = %s,", primaryLimitCode),
     if (!is.null(additionalCriteriaCall)) sprintf("    additionalCriteria = %s,", additionalCriteriaCall) else NULL,
