@@ -39,7 +39,6 @@ Imports:
     DBI,
     DatabaseConnector,
     SqlRender,
-    generics,
     CirceR,
     jsonvalidate
 Suggests:
