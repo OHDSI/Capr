@@ -1076,7 +1076,7 @@ criterionNodeToCapr <- function(criterionNode, conceptSetById, emitter, context 
   if (is.null(queryFun)) return(NULL)
 
   codesetId <- domainVal$CodesetId %||% domainVal$CodesetID %||% NULL
-  # Death: no concept set (any death). ObservationPeriod: no concept set (any period). Also allow when only a SourceConcept attribute references a concept set.
+  # Death: no concept set (any death). ObservationPeriod: no concept set (any period). Also allow when only a SourceConcept attribute references a concept set, or "any" event (e.g. inclusion rule with no CodesetId).
   sourceConceptKeysCriterion <- c("ConditionSourceConcept", "DrugSourceConcept", "ProcedureSourceConcept", "ObservationSourceConcept", "VisitSourceConcept", "MeasurementSourceConcept", "VisitDetailSourceConcept")
   allowNoCodeset <- identical(domainKey, "Death") || identical(domainKey, "ObservationPeriod")
   if (is.null(codesetId)) {
@@ -1089,12 +1089,15 @@ criterionNodeToCapr <- function(criterionNode, conceptSetById, emitter, context 
           break
         }
       }
-      if (is.null(srcId)) {
-        emitter$skipOrStop(paste0("Missing CodesetId for domain: ", domainKey, " (", context, ")"))
-        return(NULL)
+      if (!is.null(srcId)) {
+        conceptSetVar <- "conceptSet = NULL"
+      } else {
+        # No CodesetId and no SourceConcept: "any" event (e.g. inclusion rule "any condition")
+        conceptSetVar <- "NULL"
       }
+    } else {
+      conceptSetVar <- if (identical(domainKey, "ObservationPeriod")) character(0) else "conceptSet = NULL"
     }
-    conceptSetVar <- if (identical(domainKey, "ObservationPeriod")) character(0) else "conceptSet = NULL"
   } else {
     conceptSetVar <- conceptSetById[[as.character(codesetId)]]
     if (is.null(conceptSetVar)) {
@@ -1141,7 +1144,10 @@ additionalCriteriaToCode <- function(additionalCriteria, conceptSetById, emitter
     length(additionalCriteria$Groups %||% list()) > 0 ||
     length(additionalCriteria$DemographicCriteriaList %||% list()) > 0
 
-  if (!hasAny) return(NULL)
+  if (!hasAny) {
+    # Emit withAll() so round-trip JSON has AdditionalCriteria (Type ALL, empty lists) and Circe produces same SQL (e.g. outcome_death QualifiedLimit ordinal).
+    return("withAll()")
+  }
 
   criteriaGroupToCapr(additionalCriteria, conceptSetById, emitter, context = "additionalCriteria")
 }
