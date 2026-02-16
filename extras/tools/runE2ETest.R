@@ -54,7 +54,11 @@ roundtripJsonSemanticallyEquivalent <- function(originalJsonStr, roundTripJsonSt
   }
   origIds <- lapply(orig$ConceptSets %||% list(), getConceptIds)
   rtIds <- lapply(rt$ConceptSets %||% list(), getConceptIds)
-  if (!identical(origIds, rtIds)) {
+  # Compare sets of concept sets regardless of order (sort by canonical key so order doesn't cause failure)
+  canonical <- function(ids) paste(sort(ids), collapse = ",")
+  origSorted <- origIds[order(vapply(origIds, canonical, character(1)))]
+  rtSorted <- rtIds[order(vapply(rtIds, canonical, character(1)))]
+  if (!identical(origSorted, rtSorted)) {
     return(list(ok = FALSE, msg = "Concept IDs in sets differ"))
   }
   pclOrig <- orig$PrimaryCriteria$CriteriaList %||% list()
@@ -282,19 +286,12 @@ diffCirceSql <- function(jsonPath, outFile = "diff.sql") {
   ))
 }
 
-# source("extras/tools/runE2ETest.R")
-paths <- list.files("~/Desktop/AtlasCohortGenerator/inst/cohorts/", pattern = "json", full.names = T)
-runE2ETest(paths[100:300])
-
-
-
-# toChk <- file.path("~/Desktop/AtlasCohortGenerator/inst/cohorts/",
-# "all_events_of_hemolytic_disease_fetus_and_newborn_hdfn_rhd_type_with_a_pregnancy_episode.json")
-#
-# system(paste("open ", toChk))
-#
-# diffCirceSql(toChk)
-# system(paste("open diff.sql"))
+# Example usage (run manually, not on source):
+#   devtools::load_all(".")
+#   source("extras/tools/roundtrip_utils.R"); source("extras/tools/runE2ETest.R")
+#   paths <- list.files("~/Desktop/AtlasCohortGenerator/inst/cohorts/", pattern = "json", full.names = TRUE)
+#   runE2ETest(paths[100:300])
+#   diffCirceSql("path/to/cohort.json", outFile = "diff.sql")
 
 
 

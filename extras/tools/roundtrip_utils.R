@@ -3,26 +3,30 @@
 
 `%||%` <- function(x, y) if (is.null(x)) y else x
 
-# Sort concept_id in (id1,id2,...) so order differences don't affect SQL equivalence.
+# Sort concept_id in (id1,id2,...) and value_as_concept_id in (...) so order doesn't affect equivalence.
 sortConceptIdInLists <- function(s) {
-  pattern <- "concept_id in \\(([0-9,]+)\\)"
-  m <- gregexpr(pattern, s)[[1]]
-  if (m[1] < 0) return(s)
-  starts <- as.integer(m)
-  lens <- attr(m, "match.length")
-  matches <- substring(s, starts, starts + lens - 1)
-  inners <- sub(pattern, "\\1", matches)
-  replacements <- vapply(inners, function(inner) {
-    nums <- sort(as.integer(strsplit(inner, ",", fixed = TRUE)[[1]]))
-    paste0("concept_id in (", paste(nums, collapse = ","), ")")
-  }, character(1))
-  for (i in rev(seq_along(starts))) {
-    s <- paste0(
-      substr(s, 1, starts[i] - 1),
-      replacements[i],
-      substr(s, starts[i] + lens[i], nchar(s))
-    )
+  sortIdsInPattern <- function(s, pattern, prefix) {
+    m <- gregexpr(pattern, s)[[1]]
+    if (m[1] < 0) return(s)
+    starts <- as.integer(m)
+    lens <- attr(m, "match.length")
+    matches <- substring(s, starts, starts + lens - 1)
+    inners <- sub(pattern, "\\1", matches)
+    replacements <- vapply(inners, function(inner) {
+      nums <- sort(as.integer(strsplit(inner, ",", fixed = TRUE)[[1]]))
+      paste0(prefix, "(", paste(nums, collapse = ","), ")")
+    }, character(1))
+    for (i in rev(seq_along(starts))) {
+      s <- paste0(
+        substr(s, 1, starts[i] - 1),
+        replacements[i],
+        substr(s, starts[i] + lens[i], nchar(s))
+      )
+    }
+    s
   }
+  s <- sortIdsInPattern(s, "concept_id in \\(([0-9,]+)\\)", "concept_id in ")
+  s <- sortIdsInPattern(s, "value_as_concept_id in \\(([0-9,]+)\\)", "value_as_concept_id in ")
   s
 }
 
