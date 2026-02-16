@@ -36,7 +36,7 @@ Measurement/DrugExposure attributes, exit strategies (\code{fixedExit},
 
 Domains: Specimen, VisitDetail; VisitOccurrence.ProviderSpecialty;
 any \code{*TypeExclude == TRUE} or \code{*Type} lists (Type lists require vocabulary lookup in Capr);
-Measurement.RangeHighRatio.
+
 Unknown domain keys are reported via \code{detectUnsupportedKeys()} to avoid silent drift.
 }
 
