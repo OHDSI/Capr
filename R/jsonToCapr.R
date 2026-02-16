@@ -939,7 +939,15 @@ demographicCriterionToCapr <- function(demo, emitter) {
     }
   }
 
-  unsupported <- setdiff(names(demo), c("Age", "Gender"))
+  # Event (index occurrence) start/end date filter, e.g. from InclusionRules "After 2020"
+  if (!is.null(demo$OccurrenceStartDate)) {
+    calls <- c(calls, sprintf('startDate(%s, type = "occurrence")', opAttributeToCode(demo$OccurrenceStartDate)))
+  }
+  if (!is.null(demo$OccurrenceEndDate)) {
+    calls <- c(calls, sprintf('endDate(%s, type = "occurrence")', opAttributeToCode(demo$OccurrenceEndDate)))
+  }
+
+  unsupported <- setdiff(names(demo), c("Age", "Gender", "OccurrenceStartDate", "OccurrenceEndDate"))
   if (length(unsupported) > 0) {
     emitter$skipOrStop(paste0("Unsupported demographic keys: ", paste(unsupported, collapse = ", ")))
   }
