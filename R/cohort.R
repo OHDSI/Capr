@@ -426,7 +426,6 @@ setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
 #'   in the JSON even if not referenced in the cohort (e.g. for round-trip equivalence).
 #'
 #' @return The json representation of Capr cohorts
-#' @importFrom generics compile
 #' @export
 #' @rdname compile-methods
 #' @examples
