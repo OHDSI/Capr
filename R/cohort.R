@@ -213,8 +213,13 @@ cohort <- function(entry,
 
 ## Coerce Entry ----------
 setMethod("as.list", "CohortEntry", function(x) {
+  # Emit CriteriaList as domain-keyed query only (matches Atlas/CIRCE format);
+  # each item is { "Measurement": {...} } not { "Criteria": {...}, "Occurrence": ..., ... }
+  criteriaList <- purrr::map(x@entryEvents, function(ev) {
+    if (methods::is(ev, "Criteria")) as.list(ev@query) else as.list(ev)
+  })
   pc <- list(
-    'CriteriaList' = purrr::map(x@entryEvents, ~as.list(.x)),
+    'CriteriaList' = criteriaList,
     'ObservationWindow' = as.list(x@observationWindow),
     'PrimaryCriteriaLimit' = list('Type' = x@primaryCriteriaLimit)
   )
@@ -310,9 +315,29 @@ toCirce <- function(cd) {
   #replace guids with codeset integer
   cd2 <- replaceCodesetId(cd, guidTable = guidTable)
 
+  # ValueAsConcept and VisitType are serialized inline (array of concepts); do not list those
+  # concept sets in ConceptSets or Circe would create an extra codeset and concept set count would differ.
+  allSets <- listConceptSets(cd2)
+  usage <- collectConceptSetAttributeUsage(cd2)
+  idsByUsage <- split(
+    vapply(usage, function(u) u$id, integer(1L)),
+    vapply(usage, function(u) u$name, character(1L))
+  )
+  inlineOnlyNames <- c("ValueAsConcept", "VisitType")
+  excludeIds <- integer(0L)
+  for (nm in inlineOnlyNames) {
+    ids <- unique(idsByUsage[[nm]] %||% integer(0L))
+    otherIds <- unique(unlist(idsByUsage[names(idsByUsage) != nm], use.names = FALSE))
+    excludeIds <- c(excludeIds, setdiff(ids, otherIds))
+  }
+  excludeIds <- unique(excludeIds)
+  if (length(excludeIds) > 0L) {
+    allSets <- purrr::keep(allSets, function(cs) !(cs$id %in% excludeIds))
+  }
+
   cdCirce <- list(
     #start with getting concept set structure
-    'ConceptSets' = listConceptSets(cd2)
+    'ConceptSets' = allSets
   ) |>
     #append cohort structure
     append(as.list(cd2))
@@ -323,15 +348,64 @@ toCirce <- function(cd) {
 #' Compile a Capr object to json
 #'
 #' @param object A Capr object such as a cohort, list of cohorts, or concept set.
-#' @param ... Arguments passed on to jsonlite::toJSON.
-#' e.g. `pretty = TRUE` for nicely formatted json.
+#' @param ... Arguments passed on to jsonlite::toJSON (e.g. \code{pretty = TRUE}).
+#'   For the Cohort method, \code{includeConceptSets} is also allowed; see
+#'   \code{\link{compile,Cohort-method}}.
 #'
 #' @return The json representation of the Capr object
 #' @export
 setGeneric("compile", function(object, ...) { standardGeneric("compile") })
 
-compile.Cohort <- function(object, ...) {
-  as.character(jsonlite::toJSON(toCirce(object), auto_unbox = TRUE, ...))
+# Remap cohort codeset ids (0,1,2,... from replaceCodesetId) back to original ids from includeConceptSets.
+# Used when includeConceptSets is provided so round-trip JSON preserves original concept set numbering.
+remapCirceCodesetIdsToOriginal <- function(circe, guidTable, codesetKeys = c(
+  "CodesetId", "CodesetID", "DrugCodesetId",
+  "ObservationSourceConcept", "VisitSourceConcept", "ConditionSourceConcept",
+  "DrugSourceConcept", "ProcedureSourceConcept", "MeasurementSourceConcept", "VisitDetailSourceConcept"
+)) {
+  if (is.null(guidTable) || nrow(guidTable) == 0L) return(circe)
+  origIds <- suppressWarnings(as.integer(guidTable$guid))
+  map <- stats::setNames(origIds, as.character(guidTable$codesetId))
+  recurse <- function(x) {
+    if (is.null(x)) return(x)
+    if (!is.list(x)) return(x)
+    if (length(x) == 0L) return(x)
+    if (!is.null(names(x))) {
+      for (k in names(x)) {
+        if (k %in% codesetKeys && length(x[[k]]) == 1L && is.numeric(x[[k]])) {
+          m <- map[as.character(as.integer(x[[k]]))]
+          if (length(m) > 0L && !is.na(m[1L])) x[[k]] <- as.integer(m[1L])
+        } else if (k != "ConceptSets") {
+          x[[k]] <- recurse(x[[k]])
+        }
+      }
+    } else {
+      x <- lapply(x, recurse)
+    }
+    x
+  }
+  for (nm in setdiff(names(circe), "ConceptSets")) circe[[nm]] <- recurse(circe[[nm]])
+  circe
+}
+
+compile.Cohort <- function(object, ..., includeConceptSets = NULL) {
+  guidTable <- if (length(includeConceptSets) > 0L) collectGuid(object) else NULL
+  circe <- toCirce(object)
+  if (length(includeConceptSets) > 0L) {
+    # Use includeConceptSets as the full ConceptSets list (order and ids) so round-trip matches (e.g. pah_event_cohort with duplicate sets).
+    validCs <- Filter(function(cs) methods::is(cs, "ConceptSet"), includeConceptSets)
+    if (length(validCs) > 0L) {
+      circe$ConceptSets <- unname(lapply(validCs, function(cs) {
+        csList <- as.list(cs)
+        if (is.null(csList$id) || !is.numeric(csList$id)) csList$id <- seq_along(validCs)[match(cs, validCs, 0L)] - 1L
+        csList$id <- as.integer(csList$id)
+        csList
+      }))
+    }
+    # Restore original concept set ids in cohort structure (replaceCodesetId had assigned 0,1,2,...; map back to original ids).
+    circe <- remapCirceCodesetIdsToOriginal(circe, guidTable)
+  }
+  as.character(jsonlite::toJSON(circe, auto_unbox = TRUE, ...))
 }
 
 
@@ -347,12 +421,11 @@ setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
 #' Compile a Capr cohort to json
 #'
 #' @param object A Capr cohort or list of Capr cohorts
-#' @param ... Arguments passed on to jsonlite::toJSON.
-#' e.g. `pretty = TRUE` for nicely formatted json.
+#' @param ... Arguments passed on to jsonlite::toJSON (e.g. \code{pretty = TRUE}).
+#' @param includeConceptSets Optional list of \code{ConceptSet} objects to include
+#'   in the JSON even if not referenced in the cohort (e.g. for round-trip equivalence).
 #'
 #' @return The json representation of Capr cohorts
-#' @importFrom generics compile
-#' @exportS3Method compile Cohort
 #' @export
 #' @rdname compile-methods
 #' @examples

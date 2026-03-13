@@ -477,8 +477,82 @@ drugQuantity <- function(op) {
                extent = op@extent)
 }
 
+#' Occurrence count attribute for ConditionEra
+#'
+#' Filter condition era criteria by the number of condition eras (e.g. occurrence count = 0
+#' for no matching eras). Used only in a condition era query.
+#' @param op   an opAttribute object (integer) that defines the logical operation and value
+#'             (e.g. \code{eq(0L)} for "count equals 0")
+#' @return An attribute for use in \code{\link{conditionEra}()}
+#' @export
+occurrenceCount <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) {
+    stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  }
+  methods::new("opAttributeInteger",
+               name = "OccurrenceCount",
+               op = op@op,
+               value = as.integer(op@value),
+               extent = as.integer(op@extent))
+}
 
+#' Era length attribute for DrugEra
+#'
+#' Filter drug era criteria by era length in days (e.g. \code{gt(14L)} for era longer than 14 days).
+#' Used only in a drug era query.
+#' @param op   an opAttribute object (integer) that defines the logical operation and value
+#' @return An attribute for use in \code{\link{drugEra}()}
+#' @export
+eraLength <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) {
+    stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  }
+  methods::new("opAttributeInteger",
+               name = "EraLength",
+               op = op@op,
+               value = as.integer(op@value),
+               extent = as.integer(op@extent))
+}
 
+#' Dose value attribute for DoseEra
+#'
+#' Filter dose era criteria by dose value (e.g. \code{gt(92)} for dose > 92).
+#' Used only in a dose era query.
+#' @param op   an opAttribute object (numeric) that defines the logical operation and value
+#' @return An attribute for use in \code{\link{doseEra}()}
+#' @export
+doseValue <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) {
+    stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  }
+  methods::new("opAttributeNumeric",
+               name = "DoseValue",
+               op = op@op,
+               value = op@value,
+               extent = op@extent)
+}
+
+#' Range high ratio attribute for Measurement
+#'
+#' Filter measurement criteria by the ratio value_as_number / range_high (e.g. \code{gt(2)} for ratio > 2).
+#' Used only in a measurement query.
+#' @param op   an opAttribute object (numeric) that defines the logical operation and value
+#' @return An attribute for use in \code{\link{measurement}()}
+#' @export
+rangeHighRatio <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) {
+    stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  }
+  methods::new("opAttributeNumeric",
+               name = "RangeHighRatio",
+               op = op@op,
+               value = as.numeric(op@value),
+               extent = op@extent)
+}
 
 ## Date Constructors ----
 

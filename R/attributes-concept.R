@@ -102,6 +102,36 @@ female <- function() {
     concept_class_id = "Gender")))
 }
 
+#' Add gender attribute with one or more concept IDs (e.g. both sexes)
+#'
+#' Use for round-trip when JSON has \code{Gender: [8507, 8532]}; a single criterion
+#' yields one \code{gender_concept_id in (...)} in SQL instead of separate branches.
+#' @param ... Integer concept IDs (e.g. \code{8507L}, \code{8532L} for male, female).
+#' @return A single conceptAttribute with name \code{Gender} for use in additional criteria.
+#' @export
+genderConcepts <- function(...) {
+  ids <- as.integer(c(...))
+  concepts <- lapply(ids, function(id) {
+    methods::new("Concept", concept_id = id, concept_name = NA_character_)
+  })
+  methods::new("conceptAttribute", name = "Gender", conceptSet = concepts)
+}
+
+#' Add provider specialty filter to a visit (round-trip from Atlas JSON)
+#'
+#' When JSON has \code{VisitOccurrence.ProviderSpecialty: [{ CONCEPT_ID: ... }]}, use this
+#' so round-trip preserves the \code{PR.specialty_concept_id in (...)} filter.
+#' @param ... Integer concept IDs for provider specialty (e.g. \code{38004463L}).
+#' @return A conceptAttribute with name \code{ProviderSpecialty} for use in \code{visit()}.
+#' @export
+providerSpecialtyConcepts <- function(...) {
+  ids <- as.integer(c(...))
+  concepts <- lapply(ids, function(id) {
+    methods::new("Concept", concept_id = id, concept_name = NA_character_)
+  })
+  methods::new("conceptAttribute", name = "ProviderSpecialty", conceptSet = concepts)
+}
+
 
 findConceptInVocabulary <- function(id, connection, vocabularyDatabaseSchema) {
 
@@ -147,6 +177,19 @@ valueAsConcept <- function(ids, connection, vocabularyDatabaseSchema) {
   return(res)
 }
 
+#' ValueAsConcept attribute from a concept set (for round-trip without DB)
+#'
+#' Filter Measurement or Observation by value_as_concept_id using a concept set.
+#' Use this when building from JSON (CodesetId reference); use \code{valueAsConcept(ids, connection, ...)} with a DB for ad-hoc concept ids.
+#' @param conceptSet A ConceptSet object (e.g. from \code{cs()} or decompiled JSON).
+#' @return An attribute for use in \code{\link{measurement}()} or \code{\link{observation}()}.
+#' @export
+valueAsConceptSet <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("valueAsConceptSet requires a ConceptSet object")
+  }
+  methods::new("conceptSetAttribute", name = "ValueAsConcept", conceptSet = conceptSet)
+}
 
 #' Add a drug type attribute to determine the provenance of the record
 #' @param ids the concept ids for the attribute
@@ -329,6 +372,20 @@ observationSourceConcept <- function(conceptSet) {
   return(res)
 }
 
+#' Add a measurement source concept attribute
+#' @param conceptSet a ConceptSet object containing the source concepts
+#' @return An attribute that can be used in a measurement query
+#' @export
+measurementSourceConcept <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("measurementSourceConcept requires a ConceptSet object")
+  }
+  res <- methods::new("conceptSetAttribute",
+                      name = "MeasurementSourceConcept",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
 #' Add a visit source concept attribute
 #' @param conceptSet a ConceptSet object containing the source concepts
 #' @return
@@ -342,6 +399,37 @@ visitSourceConcept <- function(conceptSet) {
 
   res <- methods::new("conceptSetAttribute",
                       name = "VisitSourceConcept",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
+#' Add a visit type attribute (filter by visit_concept_id) from a concept set
+#'
+#' Restricts criteria to events occurring in specified visit types (e.g. inpatient, ER).
+#' Used when decompiling cohort JSON that has VisitType as concept list or CodesetId.
+#' @param conceptSet a ConceptSet object containing visit type concepts
+#' @return An attribute for use in conditionOccurrence(), drugExposure(), etc.
+#' @export
+visitTypeSet <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("visitTypeSet requires a ConceptSet object")
+  }
+  res <- methods::new("conceptSetAttribute",
+                      name = "VisitType",
+                      conceptSet = conceptSet)
+  return(res)
+}
+
+#' Add a visit detail source concept attribute
+#' @param conceptSet a ConceptSet object containing the source concepts
+#' @return An attribute for use in visitDetail()
+#' @export
+visitDetailSourceConcept <- function(conceptSet) {
+  if (!methods::is(conceptSet, "ConceptSet")) {
+    rlang::abort("visitDetailSourceConcept requires a ConceptSet object")
+  }
+  res <- methods::new("conceptSetAttribute",
+                      name = "VisitDetailSourceConcept",
                       conceptSet = conceptSet)
   return(res)
 }
@@ -412,6 +500,15 @@ measurementUnit <- function(x) {
 
 setMethod("as.list", "conceptSetAttribute", function(x) {
   nm <- x@name
+  # Circe expects these as arrays of Concept objects, not a CodesetId (integer).
+  if (identical(nm, "ValueAsConcept") || identical(nm, "VisitType")) {
+    val <- if (length(x@conceptSet@Expression) > 0L) {
+      purrr::map(x@conceptSet@Expression, function(e) as.list(e@Concept))
+    } else {
+      list()
+    }
+    return(tibble::lst(`:=`(!!nm, val)))
+  }
   tibble::lst(`:=`(!!nm, x@conceptSet@id))
 })
 
@@ -421,6 +518,28 @@ setMethod("as.list", "conceptAttribute", function(x) {
   nm <- x@name
 
   tibble::lst(`:=`(!!nm, concepts))
+})
+
+## valueAsStringAttribute (Observation value_as_string filter, e.g. LIKE '%Yes%') ----
+
+#' Attribute for Observation value_as_string filter (round-trip from Atlas ValueAsString)
+#'
+#' Serializes to \code{ValueAsString: { Text, Op }}; Circe generates \code{WHERE value_as_string LIKE ...}.
+#' @param text Character string to match (e.g. \code{"Yes"}).
+#' @param op Circe op: \code{"contains"} (default, LIKE \code{\%text\%}), \code{"starts"}, \code{"ends"}, \code{"equals"}.
+#' @return Attribute for use in \code{observation()}.
+#' @export
+valueAsString <- function(text, op = "contains") {
+  op <- match.arg(op, c("contains", "starts", "ends", "equals"))
+  methods::new("valueAsStringAttribute", name = "ValueAsString", text = as.character(text)[1L], op = op)
+}
+
+setClass("valueAsStringAttribute",
+         slots = c(name = "character", text = "character", op = "character"),
+         prototype = list(name = "ValueAsString", text = NA_character_, op = "contains"))
+
+setMethod("as.list", "valueAsStringAttribute", function(x) {
+  list(ValueAsString = list(Text = x@text, Op = x@op))
 })
 
 # Capr Call -----------------

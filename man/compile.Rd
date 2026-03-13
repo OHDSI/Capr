@@ -9,8 +9,9 @@ compile(object, ...)
 \arguments{
 \item{object}{A Capr object such as a cohort, list of cohorts, or concept set.}
 
-\item{...}{Arguments passed on to jsonlite::toJSON.
-e.g. `pretty = TRUE` for nicely formatted json.}
+\item{...}{Arguments passed on to jsonlite::toJSON (e.g. \code{pretty = TRUE}).
+For the Cohort method, \code{includeConceptSets} is also allowed; see
+\code{\link{compile,Cohort-method}}.}
 }
 \value{
 The json representation of the Capr object

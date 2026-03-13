@@ -18,5 +18,6 @@
 "_PACKAGE"
 
 #' @import dplyr
-#' @importFrom rlang .data
+#' @importFrom rlang .data %||%
+#' @importFrom dplyr %>%
 NULL

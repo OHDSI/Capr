@@ -1,7 +1,7 @@
 # Utilities ---------------
 getGuid <- function(x) {
   tibble::tibble(
-    guid = x@conceptSet@id
+    guid = as.character(x@conceptSet@id)
   )
 }
 
@@ -10,6 +10,21 @@ replaceGuid <- function(x, y) {
   return(x)
 }
 
+# Recursively collect all data.frames from a list (e.g. nested lists from Group)
+# without flattening data.frames. Used when CorrelatedCriteria has nested groups.
+collect_dfs <- function(x) {
+  if (is.data.frame(x)) {
+    return(list(x))
+  }
+  if (!is.list(x)) {
+    return(list())
+  }
+  out <- list()
+  for (i in seq_along(x)) {
+    out <- c(out, collect_dfs(x[[i]]))
+  }
+  out
+}
 
 # Collect Guid --------------------------
 
@@ -24,6 +39,10 @@ setMethod("collectGuid", "conceptAttribute", function(x) {
 })
 
 setMethod("collectGuid", "opAttributeSuper", function(x) {
+  return(NULL)
+})
+
+setMethod("collectGuid", "valueAsStringAttribute", function(x) {
   return(NULL)
 })
 
@@ -43,10 +62,10 @@ setMethod("collectGuid", "Query", function(x) {
   checkNest <- purrr::map_chr(x@attributes, ~as.character(.x@name))
   if (any(checkNest %in% c("CorrelatedCriteria"))) {
     ii <- which(checkNest == "CorrelatedCriteria")
-    id2 <- collectGuid(x@attributes[[ii]]@group) |>
-      purrr::flatten()
-
-    ids <- dplyr::bind_rows(ids, id2)
+    id2 <- collectGuid(x@attributes[[ii]]@group)
+    # id2 can be nested lists of tibbles when group contains nested groups
+    dfs <- collect_dfs(id2)
+    if (length(dfs) > 0L) ids <- dplyr::bind_rows(ids, dfs)
   }
   
   # collect guids for conceptSetAttribute objects
@@ -385,6 +404,8 @@ setMethod("listConceptSets", "Cohort", function(x) {
   ll <- c(l1, l2, l3) |>
     .removeNullId()
 
+  # Drop elements with no id or length != 1 (e.g. from nested groups)
+  ll <- purrr::keep(ll, function(x) length(x$id) == 1L)
   ids <- purrr::map_chr(ll, ~as.character(.x$id))
 
   rr <- ll[!duplicated(ids)]
@@ -403,3 +424,51 @@ setMethod("listConceptSets", "Cohort", function(x) {
 
   return(ll2)
 }
+
+# Collect (id, attributeName) for every conceptSetAttribute in the cohort.
+# Used to exclude ValueAsConcept-only concept sets from ConceptSets when we inline them.
+setGeneric("collectConceptSetAttributeUsage", function(x) standardGeneric("collectConceptSetAttributeUsage"))
+
+setMethod("collectConceptSetAttributeUsage", "conceptSetAttribute", function(x) {
+  list(list(id = x@conceptSet@id, name = x@name))
+})
+setMethod("collectConceptSetAttributeUsage", "conceptAttribute", function(x) list())
+setMethod("collectConceptSetAttributeUsage", "opAttributeSuper", function(x) list())
+
+setMethod("collectConceptSetAttributeUsage", "Query", function(x) {
+  out <- list()
+  checkNest <- purrr::map_chr(x@attributes, ~as.character(.x@name))
+  if (any(checkNest %in% c("CorrelatedCriteria"))) {
+    ii <- which(checkNest == "CorrelatedCriteria")
+    out <- c(out, collectConceptSetAttributeUsage(x@attributes[[ii]]@group))
+  }
+  conceptSetAttrs <- purrr::keep(x@attributes, ~methods::is(.x, "conceptSetAttribute"))
+  if (length(conceptSetAttrs) > 0) {
+    out <- c(out, purrr::list_flatten(purrr::map(conceptSetAttrs, collectConceptSetAttributeUsage)))
+  }
+  out
+})
+setMethod("collectConceptSetAttributeUsage", "Criteria", function(x) collectConceptSetAttributeUsage(x@query))
+
+setMethod("collectConceptSetAttributeUsage", "Group", function(x) {
+  a <- purrr::map(x@criteria, collectConceptSetAttributeUsage)
+  b <- purrr::map(x@group, collectConceptSetAttributeUsage)
+  purrr::list_flatten(c(a, b))
+})
+setMethod("collectConceptSetAttributeUsage", "CohortEntry", function(x) {
+  ce <- purrr::map(x@entryEvents, collectConceptSetAttributeUsage)
+  purrr::list_flatten(c(ce, list(collectConceptSetAttributeUsage(x@additionalCriteria))))
+})
+setMethod("collectConceptSetAttributeUsage", "CohortAttrition", function(x) {
+  purrr::list_flatten(purrr::map(unname(x@rules), collectConceptSetAttributeUsage))
+})
+setMethod("collectConceptSetAttributeUsage", "CohortExit", function(x) {
+  purrr::list_flatten(purrr::map(x@censoringCriteria@criteria, collectConceptSetAttributeUsage))
+})
+setMethod("collectConceptSetAttributeUsage", "Cohort", function(x) {
+  purrr::list_flatten(list(
+    collectConceptSetAttributeUsage(x@entry),
+    collectConceptSetAttributeUsage(x@attrition),
+    collectConceptSetAttributeUsage(x@exit)
+  ))
+})

@@ -5,7 +5,7 @@
 \alias{compile,ConceptSet-method}
 \title{Compile a Capr cohort to json}
 \usage{
-\S4method{compile}{Cohort}(object, ...)
+\S4method{compile}{Cohort}(object, ..., includeConceptSets = NULL)
 
 \S4method{compile}{ConceptSet}(object, ...)
 }
@@ -14,6 +14,9 @@
 
 \item{...}{Arguments passed on to jsonlite::toJSON.
 e.g. `pretty = TRUE` for nicely formatted json.}
+
+\item{includeConceptSets}{Optional list of \code{ConceptSet} objects to include
+in the JSON even if not referenced in the cohort (e.g. for round-trip equivalence).}
 }
 \value{
 The json representation of Capr cohorts

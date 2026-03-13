@@ -37,6 +37,7 @@ setValidity("Query", function(object) {
                     "PayerPlanPeriod",
                     "Specimen",
                     "VisitOccurrence",
+                    "VisitDetail",
                     "ObservationWindow", # check on this
                     "ObservationPeriod")
   stopifnot(object@domain %in% validDomains)
@@ -51,7 +52,8 @@ setValidity("Query", function(object) {
                  "DrugExposure" = "Drug",
                  "Measurement" = "Measurement",
                  "Specimen" = "Specimen",
-                 "VisitOccurrence" = "Visit")
+                 "VisitOccurrence" = "Visit",
+                 "VisitDetail" = "Visit")
 
   # Print a warning if the concept set does not include concepts with the expected domain_id (domain_id must be populated)
   if ((object@domain %in% names(domainMap)) &&
@@ -224,6 +226,25 @@ drugEra <- function(conceptSet, ...) {
         ...)
 }
 
+#' Query the dose era domain
+#'
+#' @param conceptSet A drug ingredient concept set (optional)
+#' @param ... optional attributes
+#'
+#' @return A Capr Query
+#' @export
+doseEra <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
+
+  query(domain = "DoseEra",
+        conceptSet = conceptSet,
+        ...)
+}
+
 #' Query the condition era domain
 #'
 #' @param conceptSet A condition concept set (optional)
@@ -295,6 +316,44 @@ observation <- function(conceptSet, ...) {
         ...)
 }
 
+#' Query the specimen domain
+#'
+#' @param conceptSet A specimen concept set
+#' @param ... optional attributes (e.g. CorrelatedCriteria)
+#'
+#' @return A Capr Query
+#' @export
+specimen <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
+
+  query(domain = "Specimen",
+        conceptSet = conceptSet,
+        ...)
+}
+
+#' Query the visit detail domain
+#'
+#' @param conceptSet A visit detail concept set
+#' @param ... optional attributes (e.g. VisitDetailSourceConcept)
+#'
+#' @return A Capr Query
+#' @export
+visitDetail <- function(conceptSet, ...) {
+
+  # Check if conceptSet argument is missing
+  if (missing(conceptSet)) {
+    stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
+  }
+
+  query(domain = "VisitDetail",
+        conceptSet = conceptSet,
+        ...)
+}
+
 #' Query the observation period domain
 #'
 #' @param ... optional attributes
@@ -308,23 +367,44 @@ observationPeriod <- function(...) {
 # Coercion -----
 ## Coerce Query ----
 setMethod("as.list", "Query", function(x) {
-  #create initial list for query
-  ll <- list(
-    'CodesetId' = x@conceptSet@id
-  ) |>
-    purrr::discard(~length(.x) == 0)
-  #list out attributes
+  # Include CodesetId only when the query has a concept set (non-empty expression).
+  # When conceptSet is empty/null (e.g. "any condition" with only ConditionSourceConcept), omit CodesetId.
+  ll <- list()
+  if (length(x@conceptSet@Expression) > 0L && length(x@conceptSet@id) >= 1L) {
+    id <- x@conceptSet@id
+    ll[["CodesetId"]] <- if (is.numeric(id) || is.integer(id)) as.integer(id)[1L] else id[1L]
+  }
+  # List out attributes. Put *TypeExclude keys first so serialized JSON key order
+  # matches Atlas/CIRCE (e.g. conditionTypeExclude before other attributes).
   if (length(x@attributes) > 0) {
     atr <- purrr::map(x@attributes, ~as.list(.x)) |>
       purrr::reduce(append)
-    #append to query list
-    ll <- append(ll, atr)
+    typeExcludeKeys <- grep("TypeExclude$", names(atr), value = TRUE)
+    otherKeys <- setdiff(names(atr), typeExcludeKeys)
+    ll <- append(ll, atr[c(typeExcludeKeys, otherKeys)])
+  }
+
+  # ObservationPeriod: Circe expects UserDefinedPeriod { StartDate, EndDate };
+  # we store as OccurrenceStartDate (op/Value/Extent). Convert on export.
+  if (x@domain == "ObservationPeriod" && "OccurrenceStartDate" %in% names(ll)) {
+    osd <- ll$OccurrenceStartDate
+    startDate <- format(as.Date(osd$Value), "%Y-%m-%d")
+    endDate <- if (identical(osd$Op, "bt") && !is.na(osd$Extent))
+      format(as.Date(osd$Extent), "%Y-%m-%d") else startDate
+    ll$OccurrenceStartDate <- NULL
+    ll$OccurrenceEndDate <- NULL
+    ll$UserDefinedPeriod <- list(StartDate = startDate, EndDate = endDate)
+  }
+
+  # Use empty named list when ll is empty so JSON serializes as {} not [] (CIRCE
+  # expects domain value to be an object, e.g. ObservationPeriod: {}).
+  if (length(ll) == 0L) {
+    ll <- structure(list(), names = character(0))
   }
 
   tibble::lst(
     !!x@domain := ll
   )
-
 })
 # class(x@conceptSet@Expression[[1]])
 # as.list(x@conceptSet@Expression[[1]])
