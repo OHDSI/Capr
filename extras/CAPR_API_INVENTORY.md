@@ -51,7 +51,7 @@ Package version: **2.1.1**
 | `observationWindow` | `ObservationWindow` | `continuousObservation(0L, 0L)` | The number of days of required observation time before and after index. From `continuousObservation()` |
 | `primaryCriteriaLimit` | `character` | `"First"` | Whether the first, last, or all events qualifying for index event Query should be included in the cohort. One of `"First"`, `"All"`, `"Last"` |
 | `additionalCriteria` | `Group` or `NULL` | `NULL` | Restricts qualifying events with a Group of Criteria before applying `qualifiedLimit` |
-| `qualifiedLimit` | `character` | `"First"` | Whether the first, last, or all events qualifying for index event Query **and** additionalCriteria should be included in the cohort. One of `"First"`, `"All"`, `"Last"` |
+| `qualifiedLimit` | `character` | - | Whether the first, last, or all events qualifying for index event Query **and** additionalCriteria should be included in the cohort. One of `"First"`, `"All"`, `"Last"`. |
 
 **Returns:** `CohortEntry` S4 object.
 **Validation:** `primaryCriteriaLimit` and `qualifiedLimit` matched via `checkmate::matchArg()`.
@@ -415,7 +415,7 @@ All follow signature `f(ids, connection, vocabularyDatabaseSchema)`, look up con
 | `procedureType(ids, ...)` | `"procedureType"` | `procedure_type_concept_id` |
 | `observationPeriodType(ids, ...)` | `"observationPeriodType"` | `period_type_concept_id` |
 
-**No-DB boolean exclude flags** — include along with the respective `xType` attribute to *exclude* events with the listed type concept IDs:
+**Exclude flags** — include along with the respective `xType` attribute to *exclude* events with the listed type concept IDs:
 
 ##### `conditionTypeExclude(exclude = FALSE)` / `measurementTypeExclude(exclude = FALSE)` / `deathTypeExclude(exclude = FALSE)` / `specimenTypeExclude(exclude = FALSE)`
 `exclude`: `logical`. `FALSE` = include all types (default). `TRUE` = exclude.

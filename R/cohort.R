@@ -83,7 +83,9 @@ setClass("Cohort",
 #' @param observationWindow a time specifying the minimal time a person is observed
 #' @param primaryCriteriaLimit Which primary criteria matches should be considered for inclusion? "First", "Last" or "All"
 #' @param additionalCriteria a Capr group that adds restriction to the entry event
-#' @param qualifiedLimit Which criteria matches should be considered for inclusion? "First", "Last" or "All"
+#' @param qualifiedLimit Which criteria matches should be considered for inclusion? One of `"First"`,
+#'   `"Last"`, or `"All"`. Required when `additionalCriteria` is non-`NULL`. When `additionalCriteria`
+#'   is `NULL` and `qualifiedLimit` is omitted, it defaults to `primaryCriteriaLimit`.
 #'
 #' @return A cohort entry Capr object
 #' @export
@@ -91,10 +93,13 @@ entry <- function(...,
                   observationWindow = continuousObservation(0L, 0L),
                   primaryCriteriaLimit = c("First", "All", "Last"),
                   additionalCriteria = NULL,
-                  qualifiedLimit = c("First", "All", "Last")) {
+                  qualifiedLimit = NULL) {
 
   primaryCriteriaLimit <- checkmate::matchArg(primaryCriteriaLimit, c("First", "All", "Last"))
-  if (is.null(additionalCriteria) && missing(qualifiedLimit)) {
+  if (!is.null(additionalCriteria) && is.null(qualifiedLimit)) {
+    stop("qualifiedLimit must be provided when additionalCriteria is used.", call. = FALSE)
+  }
+  if (is.null(qualifiedLimit)) {
     qualifiedLimit <- primaryCriteriaLimit
   } else {
     qualifiedLimit <- checkmate::matchArg(qualifiedLimit, c("First", "All", "Last"))
