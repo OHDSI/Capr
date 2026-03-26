@@ -23,8 +23,8 @@ This is the single most important piece for reducing hallucinations. The LLM nee
 
 **What to include:**
 
-- **Function signatures with all parameters, types, and defaults** — every public function the LLM might need (`cohort()`, `entry()`, `exit()`, `attrition()`, `withAll()`, `withAny()`, `withAbsence()`, the temporal operators like `duringInterval()`, `before()`, `after()`, `between()`, era functions, demographic criteria, etc.)
-- **Enum-like constrained values** — e.g., valid options for `occurrenceType`, `domain`, `ageComparison` operators, etc. These are prime hallucination targets.
+- **Function signatures with all parameters, types, and defaults** — every public function the LLM might need (only include functions from `NAMESPACE` used in constructing cohort definitions)
+- **Enum-like constrained values** — e.g., valid options for `index`, `primaryCriteriaLimit`, `offsetDays` operators, etc. These are prime hallucination targets.
 - **Canonical patterns** — 5–10 worked examples covering the most common cohort shapes (simple entry with drug exposure, entry + inclusion criteria, entry + censoring events, nested temporal logic, correlated criteria). Each example should show the plain-English intent alongside the exact Capr code.
 - **Explicit anti-patterns** — common mistakes the LLM might make, stated as "DO NOT do X, DO Y instead."
 

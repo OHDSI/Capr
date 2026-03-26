@@ -451,46 +451,20 @@ observationPeriodType <- function(ids, connection, vocabularyDatabaseSchema) {
 }
 
 #' Add unit attribute to a query
-#' @param x   A single character idetifier for a unit or a concept set that identifies units
+#' @param x   A a concept set that identifies units
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
-#'
-#' @examples
-#' # create a unit attribute
-#' measurementUnit(8713L)
-#' measurementUnit("%")
 measurementUnit <- function(x) {
   if (missing(x)) {
     rlang::abort("Unit must be specified")
   }
 
-  stopifnot(is.character(x) || is.numeric(x) || methods::is(x, "ConceptSet"))
+  stopifnot(methods::is(x, "ConceptSet"))
 
-  if (is.character(x)) {
-    stopifnot(length(x) == 1)
-    conceptId <- switch(x,
-                        `%` = 8554,
-                        percent = 8554,
-                        `mmol/mol` = 9579,
-                        `millimole per mole` = 9579,
-
-      rlang::abort(paste(x, "is not a recogized unit identifier")))
-
-    conceptSet <- list(methods::new("Concept",
-                                    concept_id = as.integer(conceptId),
-                                    concept_name = x))
-  } else if (is.numeric(x)) {
-    conceptSet <- purrr::map(x, ~methods::new("Concept", concept_id = as.integer(.x)))
-  } else if (methods::is(x, "ConceptSet")) {
-    x <- as.data.frame(cs(1:3))$conceptId
-    conceptSet <- purrr::map(x, ~methods::new("Concept", concept_id = as.integer(.x)))
-  } else {
-    rlang::abort("unit only accepts concept sets, integers, or character unit ids")
-  }
-
-  # conceptSet <- as.list(as.data.frame(conceptSet)$conceptId) conceptSet <- as.list(conceptSet)
+  x <- as.data.frame(cs(1:3))$conceptId
+  conceptSet <- purrr::map(x, ~methods::new("Concept", concept_id = as.integer(.x)))
 
   res <- methods::new("conceptAttribute", name = "Unit", conceptSet = conceptSet)
   return(res)
