@@ -463,8 +463,7 @@ measurementUnit <- function(x) {
 
   stopifnot(methods::is(x, "ConceptSet"))
 
-  x <- as.data.frame(cs(1:3))$conceptId
-  conceptSet <- purrr::map(x, ~methods::new("Concept", concept_id = as.integer(.x)))
+  conceptSet <- purrr::map(x@Expression, ~.@Concept)
 
   res <- methods::new("conceptAttribute", name = "Unit", conceptSet = conceptSet)
   return(res)

@@ -87,7 +87,7 @@ Package version: **2.1.1**
 
 | Param | Type | Default | Notes |
 |---|---|---|---|
-| endStrategy | `endStrategy` | `observationExit()` | An endStrategy object which defines how to compute the default end date for each cohort event |
+| endStrategy | `ObservationExit`, `DrugExposureExit`, or `FixedDurationExit` | `observationExit()` | An endStrategy object which defines how to compute the default end date for each cohort event |
 | censor | `CensoringCriteria` | NULL | A `censoringEvents` call containing one or more Query objects defining events upon which a cohort event will be censored |
 
 **Returns:** `CohortExit` S4 object.
@@ -168,7 +168,7 @@ All constructors take `conceptSet` as their first argument plus zero or more att
 **Domain mismatch warning:** If the `ConceptSet` contains concepts whose `domain_id` doesn't match the query domain (e.g. Drug concepts in a `conditionOccurrence()` call), `rlang::warn()` is issued — not an error.
 
 | Function | OMOP table | `conceptSet` | Notes |
-|---|---|---|
+|---|---|---|---|
 | `conditionOccurrence(conceptSet, ...)` | CONDITION_OCCURRENCE | Required | |
 | `conditionEra(conceptSet, ...)` | CONDITION_ERA | Required | Prefer conditionOccurrence unless specifically asked for Era by user |
 | `drugExposure(conceptSet, ...)` | DRUG_EXPOSURE | Required | |
@@ -246,6 +246,8 @@ The assessment window for a Criteria object is defined using `EventAperture`.  E
 
 Group objects combine Criteria or Group objects with a logical operator.
 
+**Exception: Demographics attributes can be passed directly to a Group to apply demographics requirements as inclusion criteria (see below).**
+
 | Function | Description |
 |---|---|
 | `withAll(...)` | All criteria/groups must be satisfied |
@@ -309,7 +311,7 @@ drugExposure(
 All follow pattern `f(op)` where `op` is any `opAttribute`. All stop with an error if `op` is not an `opAttribute` subclass. Pass via `...` in domain query constructors.
 
 | Function | Returns `name =` | Recommended domain | CDM column | Notes |
-|---|---|---|---|
+|---|---|---|---|---|
 | `age(op)` | `"Age"` | Any | `year_of_birth` | Patient age at event date |
 | `daysOfSupply(op)` | `"DaysSupply"` | `drugExposure` | `days_supply` | |
 | `drugRefills(op)` | `"Refills"` | `drugExposure` | `refills` | |
@@ -465,7 +467,7 @@ The following attributes apply to measurement & observation values, which may pr
 **Returns:** `opAttributeNumeric` with `name = "ValueAsNumber"`.
 
 ###### `valueAsConcept(ids, connection, vocabularyDatabaseSchema)`
-Same DB-required signature as type attributes (section 14).
+Same DB-required signature as Type / Status attributes above.
 **Returns:** `conceptAttribute` with `name = "ValueAsConcept"`.
 
 ###### `valueAsConceptSet(conceptSet)`
@@ -485,6 +487,7 @@ Same DB-required signature as type attributes (section 14).
 ###### `measurementUnit(x)`
 
 | `x` type | Behavior |
+|---|---|
 | `ConceptSet` | Extracts concept IDs from the concept set |
 
 **Returns:** `conceptAttribute` with `name = "Unit"`. Use with `measurement()`.

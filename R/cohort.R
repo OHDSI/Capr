@@ -94,7 +94,11 @@ entry <- function(...,
                   qualifiedLimit = c("First", "All", "Last")) {
 
   primaryCriteriaLimit <- checkmate::matchArg(primaryCriteriaLimit, c("First", "All", "Last"))
-  qualifiedLimit <- checkmate::matchArg(qualifiedLimit, c("First", "All", "Last"))
+  if (is.null(additionalCriteria) && missing(qualifiedLimit)) {
+    qualifiedLimit <- primaryCriteriaLimit
+  } else {
+    qualifiedLimit <- checkmate::matchArg(qualifiedLimit, c("First", "All", "Last"))
+  }
 
   cohort_entry <- methods::new("CohortEntry",
                       entryEvents = list(...),

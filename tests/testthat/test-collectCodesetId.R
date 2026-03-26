@@ -64,7 +64,7 @@ test_that("listConceptSets - Attrition", {
               measurement(
                 cs(descendants(4184637L), name = "test"),
                 valueAsNumber(lt(13)),
-                measurementUnit(8713L)
+                measurementUnit(cs(8713L, name = "gram per deciliter"))
               ),
               duringInterval(eventStarts(-Inf, -1))
       )
@@ -173,7 +173,7 @@ test_that("listConceptSets - Cohort", {
                 measurement(
                   cs(descendants(4184637L), name = "test"),
                   valueAsNumber(lt(13)),
-                  measurementUnit(8713L)
+                  measurementUnit(cs(8713L, name = "gram per deciliter"))
                 ),
                 duringInterval(eventStarts(-Inf, -1))
         )
@@ -205,7 +205,7 @@ test_that("listConceptSets - Cohort 2", {
                 measurement(
                   cs(descendants(4184637L), name = "test"),
                   valueAsNumber(lt(13)),
-                  measurementUnit(8713L)
+                  measurementUnit(cs(8713L, name = "gram per deciliter"))
                 ),
                 duringInterval(eventStarts(-Inf, -1))
         )

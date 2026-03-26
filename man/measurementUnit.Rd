@@ -7,16 +7,11 @@
 measurementUnit(x)
 }
 \arguments{
-\item{x}{A single character idetifier for a unit or a concept set that identifies units}
+\item{x}{A a concept set that identifies units}
 }
 \value{
 An attribute that can be used in a query function
 }
 \description{
 Add unit attribute to a query
-}
-\examples{
-# create a unit attribute
-measurementUnit(8713L)
-measurementUnit("\%")
 }
