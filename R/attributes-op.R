@@ -8,7 +8,10 @@ setClass("opAttributeSuper",
 
 setMethod("show", "opAttributeSuper", function(object) {
   symbol <- opToPrint(object@op)
-  if (symbol == "-") {
+  # For string operators that don't have a symbol mapping
+  if (is.na(symbol) || length(symbol) == 0) {
+    pp <- paste(object@op, object@value)
+  } else if (symbol == "-") {
     pp <- paste0("in {", object@value, symbol, object@extent, "}")
   } else if (symbol == "!-") {
     pp <- paste0("not in {", object@value, "-", object@extent, "}")
@@ -79,13 +82,43 @@ setClass("opAttributeDate",
                           value = lubridate::NA_Date_,
                           extent = lubridate::NA_Date_))
 
+
+## opAttributeCharacter ----
+
+#' An S4 class for a op attribute that is a character 
+#' @slot
+#' name the name of the attribute
+#' @slot
+#' op the operator one of: eq, contains, exact, startsWith, endsWith
+#' @slot
+#' value a value or pattern for comparison
+#' @slot
+#' extent unused for character attributes
+setClass("opAttributeCharacter",
+         contains = "opAttributeSuper",
+         slots = c(name = "character", op = "character", value = "character", extent = "character"),
+
+         prototype = list(name = NA_character_,
+                          op = NA_character_,
+                          value = NA_character_,
+                          extent = NA_character_))
+
+
+
+
+
 # Helpers --------------------
 
 opToPrint <- function(x) {
-  tibble::tibble(symbol = c("<", "<=", ">", ">=", "==", "-", "!-"), op = c("lt", "lte", "gt", "gte",
-                                                                           "eq", "bt", "!bt")) |>
+  mappings <- tibble::tibble(
+    symbol = c("<", "<=", ">", ">=", "==", "-", "!-"),
+    op = c("lt", "lte", "gt", "gte", "eq", "bt", "!bt")
+  )
+  result <- mappings |>
     dplyr::filter(.data$op == x) |>
     dplyr::pull(.data$symbol)
+  # Return NA for operators not in the mapping (e.g., string operators)
+  if (length(result) == 0) return(NA_character_) else return(result)
 }
 
 ## lt --------
@@ -250,6 +283,81 @@ setMethod("eq", "Date", function(x) {
   methods::new("opAttributeDate", op = "eq", value = x)
 })
 
+#' @rdname
+#' eq
+#' @aliases
+#' eq,character-method
+setMethod("eq", "character", function(x) {
+  methods::new("opAttributeCharacter", op = "eq", value = x)
+})
+
+## contains --------
+#' String contains operator
+#' @description
+#' function that builds an opAttribute based on substring containment logic
+#' @param x   the substring to search for
+#' @export
+#' @docType methods
+setGeneric("contains", function(x) standardGeneric("contains"))
+
+#' @rdname
+#' contains
+#' @aliases
+#' contains,character-method
+setMethod("contains", "character", function(x) {
+  methods::new("opAttributeCharacter", op = "contains", value = x)
+})
+
+## exact --------
+#' String exact match operator
+#' @description
+#' function that builds an opAttribute based on exact string match logic
+#' @param x   the exact string to match
+#' @export
+#' @docType methods
+setGeneric("exact", function(x) standardGeneric("exact"))
+
+#' @rdname
+#' exact
+#' @aliases
+#' exact,character-method
+setMethod("exact", "character", function(x) {
+  methods::new("opAttributeCharacter", op = "eq", value = x)
+})
+
+## startsWith --------
+#' String starts with operator
+#' @description
+#' function that builds an opAttribute based on string prefix logic
+#' @param x   the prefix string to search for
+#' @export
+#' @docType methods
+setGeneric("startsWith", function(x) standardGeneric("startsWith"))
+
+#' @rdname
+#' startsWith
+#' @aliases
+#' startsWith,character-method
+setMethod("startsWith", "character", function(x) {
+  methods::new("opAttributeCharacter", op = "startsWith", value = x)
+})
+
+## endsWith --------
+#' String ends with operator
+#' @description
+#' function that builds an opAttribute based on string suffix logic
+#' @param x   the suffix string to search for
+#' @export
+#' @docType methods
+setGeneric("endsWith", function(x) standardGeneric("endsWith"))
+
+#' @rdname
+#' endsWith
+#' @aliases
+#' endsWith,character-method
+setMethod("endsWith", "character", function(x) {
+  methods::new("opAttributeCharacter", op = "endsWith", value = x)
+})
 
 ## bt --------
 #' Between operator
@@ -554,6 +662,31 @@ rangeHighRatio <- function(op) {
                extent = op@extent)
 }
 
+## Character Constructors ----
+
+#' Lot number attribute for DrugExposure
+#'
+#' Filter drug exposure criteria by lot number (e.g. \code{contains("LOT123")} for lot numbers containing "LOT123").
+#' Used only in a drug exposure query.
+#' @param op   an opAttribute object (character) that defines the logical operation and value
+#'             (e.g. \code{contains("LOT")} for lot numbers containing "LOT")
+#' @return An attribute for use in \code{\link{drugExposure}()}
+#' @export
+lotNumber <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) {
+    stop("Input must be an opAttributeCharacter.")
+  }
+  if (!methods::is(op, "opAttributeCharacter")) {
+    stop("Input must be an opAttributeCharacter.")
+  }
+  methods::new("opAttributeCharacter",
+               name = "LotNumber",
+               op = op@op,
+               value = op@value,
+               extent = op@extent)
+}
+
 ## Date Constructors ----
 
 #' Function that creates a start date attribute
@@ -635,3 +768,13 @@ listOpAttribute <- function(x) {
 
 ## Coerce Numeric ----
 setMethod("as.list", "opAttributeSuper", listOpAttribute)
+
+# For character attributes (e.g., LotNumber), use "Text" instead of "Value" (Atlas convention)
+listOpAttributeCharacter <- function(x) {
+  atr <- list(Text = x@value, Op = x@op) |>
+    purrr::discard(is.na)
+
+  tibble::lst(`:=`(!!x@name, atr))
+}
+
+setMethod("as.list", "opAttributeCharacter", listOpAttributeCharacter)

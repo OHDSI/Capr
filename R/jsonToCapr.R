@@ -597,6 +597,11 @@ opAttributeToCode <- function(opObj, integersAsNumeric = FALSE) {
     return(sprintf("%s(%s)", op, fmt(value)))
   }
 
+  # String operators (contains, startsWith, endsWith, exact)
+  if (op %in% c("contains", "startsWith", "endsWith", "exact")) {
+    return(sprintf("%s(%s)", op, deparse(as.character(value))))
+  }
+
   stop("Unsupported op: ", op, call. = FALSE)
 }
 
@@ -655,7 +660,7 @@ getSupportedKeysForDomain <- function(domainKey) {
     VisitOccurrence = c("ProviderSpecialty"),
     Measurement     = c("ValueAsNumber", "RangeLow", "RangeHigh", "RangeHighRatio", "Unit", "ValueAsConcept", "MeasurementSourceConcept"),
     Observation     = c("ValueAsNumber", "Unit", "ValueAsConcept", "ValueAsString"),
-    DrugExposure    = c("DaysSupply", "Refills", "Quantity"),
+    DrugExposure    = c("DaysSupply", "Refills", "Quantity", "LotNumber"),
     DrugEra         = c("EraLength"),
     DoseEra         = c("Unit", "DoseValue", "EraLength"),
     ConditionEra    = c("OccurrenceCount"),
@@ -913,6 +918,7 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     if (!is.null(domainVal$DaysSupply)) attributeCalls <- c(attributeCalls, sprintf("daysOfSupply(%s)", opAttributeToCode(domainVal$DaysSupply)))
     if (!is.null(domainVal$Refills))    attributeCalls <- c(attributeCalls, sprintf("drugRefills(%s)", opAttributeToCode(domainVal$Refills)))
     if (!is.null(domainVal$Quantity))   attributeCalls <- c(attributeCalls, sprintf("drugQuantity(%s)", opAttributeToCode(domainVal$Quantity)))
+    if (!is.null(domainVal$LotNumber))  attributeCalls <- c(attributeCalls, sprintf("lotNumber(%s)", opAttributeToCode(domainVal$LotNumber)))
   }
 
   supportedKeySet <- getSupportedKeysForDomain(domainKey)
