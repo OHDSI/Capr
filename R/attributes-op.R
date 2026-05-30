@@ -89,7 +89,7 @@ setClass("opAttributeDate",
 #' @slot
 #' name the name of the attribute
 #' @slot
-#' op the operator one of: eq, contains, exact, startsWith, endsWith
+#' op the operator one of: startsWith, contains, endsWith, !startsWith, !contains, !endsWith
 #' @slot
 #' value a value or pattern for comparison
 #' @slot
@@ -308,23 +308,6 @@ setMethod("contains", "character", function(x) {
   methods::new("opAttributeCharacter", op = "contains", value = x)
 })
 
-## exact --------
-#' String exact match operator
-#' @description
-#' function that builds an opAttribute based on exact string match logic
-#' @param x   the exact string to match
-#' @export
-#' @docType methods
-setGeneric("exact", function(x) standardGeneric("exact"))
-
-#' @rdname
-#' exact
-#' @aliases
-#' exact,character-method
-setMethod("exact", "character", function(x) {
-  methods::new("opAttributeCharacter", op = "eq", value = x)
-})
-
 ## startsWith --------
 #' String starts with operator
 #' @description
@@ -357,6 +340,57 @@ setGeneric("endsWith", function(x) standardGeneric("endsWith"))
 #' endsWith,character-method
 setMethod("endsWith", "character", function(x) {
   methods::new("opAttributeCharacter", op = "endsWith", value = x)
+})
+
+## notStartsWith --------
+#' String does not start with operator
+#' @description
+#' function that builds an opAttribute based on negated string prefix logic
+#' @param x   the prefix string to NOT match
+#' @export
+#' @docType methods
+setGeneric("notStartsWith", function(x) standardGeneric("notStartsWith"))
+
+#' @rdname
+#' notStartsWith
+#' @aliases
+#' notStartsWith,character-method
+setMethod("notStartsWith", "character", function(x) {
+  methods::new("opAttributeCharacter", op = "!startsWith", value = x)
+})
+
+## notContains --------
+#' String does not contain operator
+#' @description
+#' function that builds an opAttribute based on negated substring containment logic
+#' @param x   the substring to NOT search for
+#' @export
+#' @docType methods
+setGeneric("notContains", function(x) standardGeneric("notContains"))
+
+#' @rdname
+#' notContains
+#' @aliases
+#' notContains,character-method
+setMethod("notContains", "character", function(x) {
+  methods::new("opAttributeCharacter", op = "!contains", value = x)
+})
+
+## notEndsWith --------
+#' String does not end with operator
+#' @description
+#' function that builds an opAttribute based on negated string suffix logic
+#' @param x   the suffix string to NOT match
+#' @export
+#' @docType methods
+setGeneric("notEndsWith", function(x) standardGeneric("notEndsWith"))
+
+#' @rdname
+#' notEndsWith
+#' @aliases
+#' notEndsWith,character-method
+setMethod("notEndsWith", "character", function(x) {
+  methods::new("opAttributeCharacter", op = "!endsWith", value = x)
 })
 
 ## bt --------

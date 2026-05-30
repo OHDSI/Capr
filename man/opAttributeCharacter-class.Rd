@@ -12,7 +12,7 @@ An S4 class for a op attribute that is a character
 \describe{
 \item{\code{name}}{the name of the attribute}
 
-\item{\code{op}}{the operator one of: eq, contains, exact, startsWith, endsWith}
+\item{\code{op}}{the operator one of: startsWith, contains, endsWith, !startsWith, !contains, !endsWith}
 
 \item{\code{value}}{a value or pattern for comparison}
 
