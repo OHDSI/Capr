@@ -85,7 +85,7 @@ setClass("opAttributeDate",
 
 ## opAttributeCharacter ----
 
-#' An S4 class for a op attribute that is a character 
+#' An S4 class for a op attribute that is a character
 #' @slot
 #' name the name of the attribute
 #' @slot
@@ -298,13 +298,13 @@ setMethod("eq", "character", function(x) {
 #' @param x   the substring to search for
 #' @export
 #' @docType methods
-setGeneric("contains", function(x) standardGeneric("contains"))
+setGeneric("stringContains", function(x) standardGeneric("stringContains"))
 
 #' @rdname
-#' contains
+#' stringContains
 #' @aliases
-#' contains,character-method
-setMethod("contains", "character", function(x) {
+#' stringContains,character-method
+setMethod("stringContains", "character", function(x) {
   methods::new("opAttributeCharacter", op = "contains", value = x)
 })
 
@@ -315,13 +315,13 @@ setMethod("contains", "character", function(x) {
 #' @param x   the prefix string to search for
 #' @export
 #' @docType methods
-setGeneric("startsWith", function(x) standardGeneric("startsWith"))
+setGeneric("stringStartsWith", function(x) standardGeneric("stringStartsWith"))
 
 #' @rdname
-#' startsWith
+#' stringStartsWith
 #' @aliases
-#' startsWith,character-method
-setMethod("startsWith", "character", function(x) {
+#' stringStartsWith,character-method
+setMethod("stringStartsWith", "character", function(x) {
   methods::new("opAttributeCharacter", op = "startsWith", value = x)
 })
 
@@ -332,13 +332,13 @@ setMethod("startsWith", "character", function(x) {
 #' @param x   the suffix string to search for
 #' @export
 #' @docType methods
-setGeneric("endsWith", function(x) standardGeneric("endsWith"))
+setGeneric("stringEndsWith", function(x) standardGeneric("stringEndsWith"))
 
 #' @rdname
-#' endsWith
+#' stringEndsWith
 #' @aliases
-#' endsWith,character-method
-setMethod("endsWith", "character", function(x) {
+#' stringEndsWith,character-method
+setMethod("stringEndsWith", "character", function(x) {
   methods::new("opAttributeCharacter", op = "endsWith", value = x)
 })
 
@@ -349,13 +349,13 @@ setMethod("endsWith", "character", function(x) {
 #' @param x   the prefix string to NOT match
 #' @export
 #' @docType methods
-setGeneric("notStartsWith", function(x) standardGeneric("notStartsWith"))
+setGeneric("stringNotStartsWith", function(x) standardGeneric("stringNotStartsWith"))
 
 #' @rdname
-#' notStartsWith
+#' stringNotStartsWith
 #' @aliases
-#' notStartsWith,character-method
-setMethod("notStartsWith", "character", function(x) {
+#' stringNotStartsWith,character-method
+setMethod("stringNotStartsWith", "character", function(x) {
   methods::new("opAttributeCharacter", op = "!startsWith", value = x)
 })
 
@@ -366,13 +366,13 @@ setMethod("notStartsWith", "character", function(x) {
 #' @param x   the substring to NOT search for
 #' @export
 #' @docType methods
-setGeneric("notContains", function(x) standardGeneric("notContains"))
+setGeneric("stringNotContains", function(x) standardGeneric("stringNotContains"))
 
 #' @rdname
-#' notContains
+#' stringNotContains
 #' @aliases
-#' notContains,character-method
-setMethod("notContains", "character", function(x) {
+#' stringNotContains,character-method
+setMethod("stringNotContains", "character", function(x) {
   methods::new("opAttributeCharacter", op = "!contains", value = x)
 })
 
@@ -383,13 +383,13 @@ setMethod("notContains", "character", function(x) {
 #' @param x   the suffix string to NOT match
 #' @export
 #' @docType methods
-setGeneric("notEndsWith", function(x) standardGeneric("notEndsWith"))
+setGeneric("stringNotEndsWith", function(x) standardGeneric("stringNotEndsWith"))
 
 #' @rdname
-#' notEndsWith
+#' stringNotEndsWith
 #' @aliases
-#' notEndsWith,character-method
-setMethod("notEndsWith", "character", function(x) {
+#' stringNotEndsWith,character-method
+setMethod("stringNotEndsWith", "character", function(x) {
   methods::new("opAttributeCharacter", op = "!endsWith", value = x)
 })
 
