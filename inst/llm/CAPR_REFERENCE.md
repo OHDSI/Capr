@@ -468,11 +468,19 @@ observationPeriod(startDate(eq(as.Date("2017-01-01"))))                        #
 observationPeriod(startDate(bt(as.Date("2017-01-01"), as.Date("2017-06-30")))) # fixed date range
 ```
 
-### Query Attributes — Type / Status (no database needed)
+### Query Attributes — Type / Status
 
 Restrict events by their `*_type_concept_id` or status concept (record provenance, e.g. EHR vs.
 claims). All share one signature and return a `conceptAttribute`. Only use type filters when the
 user explicitly asks for provenance restriction.
+
+**Concept IDs are inputs, not knowledge.** The ids passed to these functions (and to
+`measurementUnit()`, `valueAsConcept()`, `providerSpecialtyConcepts()`) must come from the user.
+Do not supply concept ids from memory — vocabularies change and a plausible-but-wrong id
+generates a silently wrong cohort. If the user asks for e.g. "inpatient visits only" without
+giving an id, ask for it or use a clearly marked placeholder with a comment telling the user to
+look up the current id in ATHENA. (Ids in this document's examples were verified at the time of
+writing.)
 
 | Param | Type | Default | Notes |
 |---|---|---|---|
