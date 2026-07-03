@@ -4,12 +4,17 @@
 \alias{measurementUnit}
 \title{Add unit attribute to a query}
 \usage{
-measurementUnit(x)
+measurementUnit(ids, connection = NULL, vocabularyDatabaseSchema = NULL)
 }
 \arguments{
-\item{x}{A concept set that identifies units, built with \code{cs()}. This is the only
-supported input type - see \code{getConceptSetDetails()} if you want the concept
-set to carry real concept names/domain/vocabulary for display in Atlas.}
+\item{ids}{integer concept ids for the attribute}
+
+\item{connection}{an optional connection to an OMOP CDM database, used only to look up
+concept names for display (e.g. in Atlas). When NULL (default) the attribute is built
+from the ids alone, which produces identical SQL.}
+
+\item{vocabularyDatabaseSchema}{the schema of the OMOP vocabulary tables; only used
+when `connection` is supplied}
 }
 \value{
 An attribute that can be used in a query function

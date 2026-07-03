@@ -59,7 +59,7 @@ To have a coding agent use it, add a pointer to your project's agent instruction
 Before writing any Capr code, locate and read the bundled API reference:
 `Rscript -e 'cat(system.file("llm", "CAPR_REFERENCE.md", package = "Capr"))'`
 Concept sets are pre-built ConceptSet objects; do not generate code that constructs them.
-After generating code, execute it in R (no database connection is needed) and fix any errors.
+After generating code, execute it in R and fix any errors.
 ```
 
 # Support

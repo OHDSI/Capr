@@ -118,24 +118,27 @@ A single file: `CAPR_REFERENCE.md` — ready to be used as a skill/system-prompt
 
 # Notes: After Testing — Building the Skill Package (Phases 4–5)
 
-*Status as of 2026-07-02: Steps 1–6 above are complete. The reference lives at
+*Status as of 2026-07-03: Steps 1–6 above are complete. The reference lives at
 `inst/llm/CAPR_REFERENCE.md` (ships with the package; `system.file("llm", "CAPR_REFERENCE.md",
-package = "Capr")` resolves it). The intermediate artifacts remain in `extras/` (build-ignored)
-and are the source of truth: `CAPR_API_INVENTORY.md`, `CAPR_EXAMPLES.md`, `CAPR_ANTIPATTERNS.md`.
-The README has a "Using Capr with LLM Coding Agents" section with the `system.file()` one-liner
-and a CLAUDE.md/AGENTS.md pointer snippet. The reference currently includes an "Agent Workflow"
+package = "Capr")` resolves it). The intermediate artifacts (`extras/CAPR_API_INVENTORY.md`,
+`CAPR_EXAMPLES.md`, `CAPR_ANTIPATTERNS.md`) were consolidated into the reference and deleted —
+the reference is now the single source of truth and is edited directly (see Maintenance policy
+below; their non-re-derivable verification evidence is preserved there too). The README has a
+"Using Capr with LLM Coding Agents" section with the `system.file()` one-liner and a
+CLAUDE.md/AGENTS.md pointer snippet. The reference currently includes an "Agent Workflow"
 section (clarifying questions + Capr/Circe fit flags) as a temporary home for Layer-1 behavioral
 guidance.*
 
 ## During Phase 4 testing (10–15 real-world cohort definitions)
 
-Iterate on the **intermediates**, then regenerate the reference — never edit the reference alone:
+Iterate on `inst/llm/CAPR_REFERENCE.md` directly:
 
-- **New failure modes → the right intermediate.** Hallucinated names / wrong arguments that
-  errored and self-corrected via the validation loop need no documentation. Only add to
-  `CAPR_ANTIPATTERNS.md` what `compile()` accepts silently — that file's admission rule.
-  Recurring *correct* patterns the model struggled to find go in `CAPR_EXAMPLES.md` as new
-  worked examples (validate each by executing it, per that file's conventions).
+- **New failure modes → the right section of the reference.** Hallucinated names / wrong
+  arguments that errored and self-corrected via the validation loop need no documentation. Only
+  add to the "Anti-Patterns & Common Mistakes" section what `compile()` accepts silently — that
+  section's admission rule. Recurring *correct* patterns the model struggled to find go in
+  "Worked Examples" as new entries (validate each by executing it against the current package
+  source before adding; keep the Intent / code / Demonstrates structure).
 - **Tune the Agent Workflow section** in the reference against observed behavior: cases where
   the agent guessed when it should have asked (add to the clarifying-questions checklist), or
   forced a fit when it should have flagged (add to the fit-flag signals). The "more than about
@@ -171,10 +174,37 @@ Once testing stabilizes the content, package the three-layer skill:
 
 ## Maintenance policy (applies from now on)
 
-- `inst/llm/CAPR_REFERENCE.md` is **generated output**; `extras/CAPR_*.md` are **source**. Edit
-  source, then re-run the assembly (Step 5 above) and spot-check (Step 6). Keep the version/
-  commit stamp in the reference header current.
-- When the Capr API changes, refresh `CAPR_API_INVENTORY.md` from `R/` first, then propagate.
-- Keep `CAPR_ANTIPATTERNS.md` and the verification evidence in `CAPR_EXAMPLES.md` even if the
-  other intermediates are ever consolidated — the Atlas-import and Eunomia-equivalence findings
-  are not re-derivable from source and justify the reference's claims.
+- `inst/llm/CAPR_REFERENCE.md` is the **single source of truth** — edit it directly. (The
+  `extras/CAPR_*.md` intermediates it was assembled from were folded in and deleted on
+  2026-07-03.) Every signature/enum/example claim must stay verified against `R/` source;
+  execute new or changed examples before committing. Keep the version/commit stamp in the
+  reference header current.
+- When the Capr API changes, re-verify the affected signatures in the reference against `R/`
+  and update them in place.
+
+## Verification evidence (preserved from the deleted intermediates)
+
+The reference asserts several claims that are **not re-derivable from source** — they were
+established empirically. Record of how, so they aren't re-litigated or accidentally weakened:
+
+- **Bare `Criteria` as an attrition rule (Anti-Pattern #1):** `as.list()` on a bare `Criteria`
+  produces the shape of a `CriteriaList` *item* (`{Criteria, StartWindow, Occurrence}`), not the
+  `{Type, CriteriaList, DemographicCriteriaList, Groups}` shape Atlas expects for
+  `InclusionRules[].expression`. Confirmed by importing the compiled JSON into Atlas: the
+  malformed rule silently didn't render in the UI.
+- **`additionalCriteria` ≡ `attrition` (Anti-Pattern #2):** verified byte-for-byte equivalent —
+  same SQL from `CirceR::buildCohortQuery()` and the exact same 479 cohort rows
+  (subject/start/end date) on Eunomia (GI bleed + inpatient visit), in both the "strict"
+  (`primaryCriteriaLimit = "First"`) and "permissive" (`"All"` + limit `"First"`) configurations.
+- **`qualifiedLimit` no-op without `additionalCriteria` (Anti-Pattern #3):** verified by
+  inspecting `CirceR::buildCohortQuery()` output — the "qualified events" ordinal column is
+  computed but never filtered on. (If omitted, `entry()` internally defaults it to
+  `primaryCriteriaLimit`; see `R/cohort.R`.)
+- **`observationPeriod()` + `startDate()` → `UserDefinedPeriod`:** the `as.list,Query` method in
+  `R/query.R` special-cases `x@domain == "ObservationPeriod"`, converting the
+  `OccurrenceStartDate` op to `UserDefinedPeriod` at serialization; confirmed in `compile()`
+  output.
+- **`measurementUnit()` legacy signatures:** older Capr versions accepted a raw integer concept
+  ID or a unit string (`"%"`, `"mmol/mol"`) — see `git log -p R/attributes-concept.R` — which is
+  why the reference explicitly warns against those forms (an LLM could reproduce them from
+  training data).

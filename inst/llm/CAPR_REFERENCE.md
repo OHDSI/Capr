@@ -1,7 +1,7 @@
 # Capr R Package — LLM Reference
 
 Reference for generating OHDSI cohort definitions with the **Capr** R package.
-Verified against Capr **2.1.1** (commit `ed45caa`). Every signature, enum value, and example in
+Verified against Capr **2.1.1**. Every signature, enum value, and example in
 this document was checked against the package source; do not use functions or arguments not
 listed here.
 
@@ -43,8 +43,9 @@ constructs concept sets. Concept sets are referenced by passing the object itsel
 argument (`conceptSet`) of a domain query constructor, as `conceptSet` in `drugExit()`, or as the
 argument of a source-concept / value-as-concept-set attribute.
 
-No database connection is needed to build and serialize a cohort definition (the few attribute
-functions that do require a live OMOP connection are flagged below).
+No database connection is needed to build and serialize a cohort definition. A connection is
+optional everywhere it appears, used only to fill in concept names for Atlas display (see
+"Recommend hydrating concept sets" below).
 
 **Code-generation conventions.** Always make defaults explicit rather than relying on fallbacks:
 
@@ -104,14 +105,14 @@ portions once they agree.
 
 ### Recommend hydrating concept sets when the user has a database connection
 
-A `ConceptSet` built directly with `cs()` (e.g. `cs(8713L, name = "gram per deciliter")` for a
-measurement unit) only has `concept_id` populated — `concept_name`, `domain_id`, `vocabulary_id`,
-etc. are left blank. The generated cohort JSON is still fully valid and produces correct SQL, but
-Atlas's UI has nothing to display for those blank fields, which makes the cohort harder for a
-human to read/review there. This comes up most for small inline concept sets — e.g. the unit
-argument to `measurementUnit()`, or a `ConceptSet` passed to `valueAsConceptSet()`/`visitTypeSet()`
-— since larger, pre-built concept sets (see Prerequisites) are usually already sourced from Atlas
-or ATHENA and already carry full concept details.
+A `ConceptSet` built directly with `cs()` only has `concept_id` populated — `concept_name`,
+`domain_id`, `vocabulary_id`, etc. are left blank. The same applies to ids-based attributes like
+`measurementUnit()`, `visitType()`, and the other type/provenance filters when called without a
+connection. The generated cohort JSON is still fully valid and produces correct SQL, but Atlas's
+UI has nothing to display for those blank fields, which makes the cohort harder for a human to
+read/review there. This comes up most for small inline concept sets and attribute ids — larger,
+pre-built concept sets (see Prerequisites) are usually already sourced from Atlas or ATHENA and
+already carry full concept details.
 
 If the user has (or can get) a live OMOP CDM database connection, tell them they can "hydrate" any
 `ConceptSet` with real vocabulary details before compiling:
@@ -119,6 +120,9 @@ If the user has (or can get) a live OMOP CDM database connection, tell them they
 ```r
 conceptSet <- getConceptSetDetails(conceptSet, con, vocabularyDatabaseSchema = "cdm_schema")
 ```
+
+For the ids-based attributes (`measurementUnit()`, `visitType()`, etc.), pass
+`connection`/`vocabularyDatabaseSchema` directly to the attribute function instead.
 
 This fills in the blank fields from the `concept` table so Atlas shows real names. It's optional —
 don't insist on it or block on generating code without it — but mention it whenever you build a
@@ -135,6 +139,14 @@ don't insist on it or block on generating code without it — but mention it whe
 `opAttributeDate` variants.
 
 ### Top-Level Assembly
+
+| Function | Description |
+|---|---|
+| `cohort(entry, attrition, exit, era)` | Assemble a complete `Cohort` object from its four components |
+| `entry(..., observationWindow, primaryCriteriaLimit, additionalCriteria, qualifiedLimit)` | Define the index event(s) and qualifying conditions |
+| `attrition(..., expressionLimit)` | Define named inclusion/exclusion rule groups |
+| `exit(endStrategy, censor)` | Wrap an end strategy and optional censoring criteria |
+| `era(eraDays, studyStartDate, studyEndDate)` | Set era-collapse padding and optional study date window |
 
 #### `cohort(entry, attrition = NULL, exit = NULL, era = NULL)`
 
@@ -195,22 +207,37 @@ don't insist on it or block on generating code without it — but mention it whe
 
 #### End strategies
 
-- **`observationExit()`** — exit at end of continuous observation. No parameters. Returns
-  `ObservationExit`.
-- **`fixedExit(index = c("startDate", "endDate"), offsetDays)`** — exit `offsetDays` days after
-  the event start or end date. `index`: `"startDate"` or `"endDate"`. `offsetDays`: integer,
-  **required, no default**. Returns `FixedDurationExit`.
-- **`drugExit(conceptSet, persistenceWindow = 0L, surveillanceWindow = 0L, daysSupplyOverride = NULL)`**
-  — exit at end of continuous drug era.
+Passed as `endStrategy` to `exit()`.
 
-  | Param | Type | Default | Notes |
-  |---|---|---|---|
-  | `conceptSet` | `ConceptSet` | — | Drug ingredient concept set |
-  | `persistenceWindow` | `integer` | `0L` | Max gap in days between drug records when building the era |
-  | `surveillanceWindow` | `integer` | `0L` | Days added to end of era before exit |
-  | `daysSupplyOverride` | `integer` or `NULL` | `NULL` | Force a fixed days supply; `NULL` = use actual |
+| Function | Description |
+|---|---|
+| `observationExit()` | Exit at end of continuous observation (default) |
+| `fixedExit(index, offsetDays)` | Exit `offsetDays` days after event start or end |
+| `drugExit(conceptSet, persistenceWindow, surveillanceWindow, daysSupplyOverride)` | Exit at end of continuous drug era |
 
-  Returns `DrugExposureExit`.
+##### `observationExit()`
+
+No parameters. **Returns:** `ObservationExit` (serializes as an empty `EndStrategy` in JSON).
+
+##### `fixedExit(index = c("startDate", "endDate"), offsetDays)`
+
+| Param | Type | Default | Notes |
+|---|---|---|---|
+| `index` | `character` | `"startDate"` | `"startDate"` or `"endDate"` |
+| `offsetDays` | `numeric` | **Required — no default** | Coerced to `integer` |
+
+**Returns:** `FixedDurationExit`.
+
+##### `drugExit(conceptSet, persistenceWindow = 0L, surveillanceWindow = 0L, daysSupplyOverride = NULL)`
+
+| Param | Type | Default | Notes |
+|---|---|---|---|
+| `conceptSet` | `ConceptSet` | — | Drug ingredient concept set |
+| `persistenceWindow` | `integer` | `0L` | Max gap in days between drug records when building the era |
+| `surveillanceWindow` | `integer` | `0L` | Days added to end of era before exit |
+| `daysSupplyOverride` | `integer` or `NULL` | `NULL` | Force a fixed days supply; `NULL` = use actual |
+
+**Returns:** `DrugExposureExit`.
 
 #### `censoringEvents(...)`
 
@@ -260,7 +287,15 @@ error. Match the constructor to the concept set's domain.
 
 ### Criteria Constructors
 
-Wrap a Query with an occurrence count and an assessment window. All three share one signature:
+Wrap a Query with an occurrence count and an assessment window.
+
+| Function | Description |
+|---|---|
+| `exactly(x, query, aperture, distinct, countColumn)` | Require exactly `x` occurrences of `query` within `aperture` |
+| `atLeast(x, query, aperture, distinct, countColumn)` | Require at least `x` occurrences |
+| `atMost(x, query, aperture, distinct, countColumn)` | Require at most `x` occurrences |
+
+All three share one signature:
 
 #### `exactly(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)), distinct = NA, countColumn = NA_character_)`
 #### `atLeast(x, query, aperture = ..., distinct = NA, countColumn = NA_character_)`
@@ -375,30 +410,54 @@ must be the same type.
 Pattern: `f(op)` where `op` is an `opAttribute` from a comparison operator. Pass via `...` in a
 domain query constructor. Each errors immediately if `op` is not an `opAttribute`.
 
-| Function | Recommended domain | CDM column |
-|---|---|---|
-| `age(op)` | Any (also usable as a demographic in Groups) | age at event date |
-| `daysOfSupply(op)` | `drugExposure` | `days_supply` |
-| `drugRefills(op)` | `drugExposure` | `refills` |
-| `drugQuantity(op)` | `drugExposure` | `quantity` |
-| `valueAsNumber(op)` | `measurement`, `observation` | `value_as_number` |
-| `rangeHigh(op)` | `measurement` | `range_high` |
-| `rangeLow(op)` | `measurement` | `range_low` |
-| `rangeHighRatio(op)` | `measurement` | `value_as_number / range_high` |
-| `occurrenceCount(op)` | `conditionEra`, `drugEra` | rows rolled up into the era |
-| `eraLength(op)` | `drugEra` | era length in days |
-| `doseValue(op)` | `doseEra` | dose value |
+| Function | Returns `name =` | Recommended domain | CDM column |
+|---|---|---|---|
+| `age(op)` | `"Age"` | Any (also usable as a demographic in Groups) | age at event date |
+| `daysOfSupply(op)` | `"DaysSupply"` | `drugExposure` | `days_supply` |
+| `drugRefills(op)` | `"Refills"` | `drugExposure` | `refills` |
+| `drugQuantity(op)` | `"Quantity"` | `drugExposure` | `quantity` |
+| `valueAsNumber(op)` | `"ValueAsNumber"` | `measurement`, `observation` | `value_as_number` |
+| `rangeHigh(op)` | `"RangeHigh"` | `measurement` | `range_high` |
+| `rangeLow(op)` | `"RangeLow"` | `measurement` | `range_low` |
+| `rangeHighRatio(op)` | `"RangeHighRatio"` | `measurement` | `value_as_number / range_high` |
+| `occurrenceCount(op)` | `"OccurrenceCount"` | `conditionEra`, `drugEra` | rows rolled up into the era |
+| `eraLength(op)` | `"EraLength"` | `drugEra` | era length in days |
+| `doseValue(op)` | `"DoseValue"` | `doseEra` | dose value |
+
+Each returns an `opAttributeInteger` or `opAttributeNumeric` matching the type of `op`.
 
 ### Query Attributes — Date
 
-- **`startDate(op, type = "occurrence")`** / **`endDate(op, type = "occurrence")`** — filter by
-  event start/end date. `op` must be a **date** `opAttribute` (built from an `as.Date()` value);
-  `type` is `"occurrence"` or `"era"`. Example: `startDate(gt(as.Date("2010-01-01")))`.
-- **`dateAdjustment(startWith = "START_DATE", startOffset = 0L, endWith = "END_DATE", endOffset = 0L)`**
-  — shift the event's effective dates before criteria matching. `startWith`/`endWith` are each
-  `"START_DATE"` or `"END_DATE"`; offsets are integer days.
-- **`firstOccurrence()`** — no parameters; restrict to the first occurrence of the event in the
-  patient's history.
+| Function | Description |
+|---|---|
+| `startDate(op, type)` | Filter by event start date; `type = "occurrence"` (default) or `"era"` |
+| `endDate(op, type)` | Filter by event end date; same `type` options |
+| `dateAdjustment(startWith, startOffset, endWith, endOffset)` | Shift the event's effective dates before criteria matching |
+| `firstOccurrence()` | Restrict to the first occurrence of the event in the patient's history |
+
+#### `startDate(op, type = "occurrence")` / `endDate(op, type = "occurrence")`
+
+| Param | Type | Default | Notes |
+|---|---|---|---|
+| `op` | `opAttributeDate` | — | Must be a **date** `opAttribute`; use `lt/lte/gt/gte/eq/bt/nbt` on an `as.Date()` value |
+| `type` | `character` | `"occurrence"` | `"occurrence"` or `"era"` |
+
+`startDate`: `"occurrence"` → `name = "OccurrenceStartDate"`; `"era"` → `name = "EraStartDate"`.
+`endDate`: `"occurrence"` → `name = "OccurrenceEndDate"`; `"era"` → `name = "EraEndDate"`.
+**Usage:** `startDate(gt(as.Date("2010-01-01")))`.
+
+#### `dateAdjustment(startWith = "START_DATE", startOffset = 0L, endWith = "END_DATE", endOffset = 0L)`
+
+| Param | Type | Default | Notes |
+|---|---|---|---|
+| `startWith` | `character` | `"START_DATE"` | `"START_DATE"` or `"END_DATE"` |
+| `startOffset` | `integer` | `0L` | Days to add to `startWith` |
+| `endWith` | `character` | `"END_DATE"` | `"START_DATE"` or `"END_DATE"` |
+| `endOffset` | `integer` | `0L` | Days to add to `endWith` |
+
+#### `firstOccurrence()`
+
+No parameters. **Returns:** `logicAttribute` (`name = "First"`).
 
 **Fixed calendar-date entry:** attaching `startDate()` to `observationPeriod()` produces what
 Atlas calls a *user-defined period* — entry at a fixed calendar date instead of a clinical event.
@@ -409,20 +468,38 @@ observationPeriod(startDate(eq(as.Date("2017-01-01"))))                        #
 observationPeriod(startDate(bt(as.Date("2017-01-01"), as.Date("2017-06-30")))) # fixed date range
 ```
 
-### Query Attributes — Type / Status (require a database connection)
+### Query Attributes — Type / Status (no database needed)
 
-Restrict events by their `*_type_concept_id` or status concept. All share the signature
-`f(ids, connection, vocabularyDatabaseSchema)` where `ids` is an integer vector of concept IDs,
-`connection` is a live DBI connection to an OMOP CDM, and `vocabularyDatabaseSchema` is the
-schema holding the `concept` table. **These are the only builder functions that need a database**
-— avoid them unless the user has a connection and asks for type filtering.
+Restrict events by their `*_type_concept_id` or status concept (record provenance, e.g. EHR vs.
+claims). All share one signature and return a `conceptAttribute`. Only use type filters when the
+user explicitly asks for provenance restriction.
 
-`conditionType()`, `conditionStatus()`, `drugType()`, `visitType()`, `measurementType()`,
-`observationType()`, `procedureType()`, `observationPeriodType()`.
+| Param | Type | Default | Notes |
+|---|---|---|---|
+| `ids` | `integer` vector | — | Type/status concept IDs |
+| `connection` | DatabaseConnector connection or `NULL` | `NULL` | Optional — used only to look up concept names for Atlas display. Without it the attribute is built from the ids alone, which produces identical SQL |
+| `vocabularyDatabaseSchema` | `character` or `NULL` | `NULL` | Schema containing the `concept` table; only used with `connection` |
 
-Exclude flags (pass alongside the matching type attribute to invert it into an exclusion;
-`exclude = TRUE` to activate): `conditionTypeExclude()`, `measurementTypeExclude()`,
-`deathTypeExclude()`, `specimenTypeExclude()`.
+| Function | Returns `conceptAttribute` with `name =` | CDM column filtered |
+|---|---|---|
+| `conditionType(ids, ...)` | `"ConditionType"` | `condition_type_concept_id` |
+| `conditionStatus(ids, ...)` | `"ConditionStatus"` | `condition_status_concept_id` |
+| `drugType(ids, ...)` | `"DrugType"` | `drug_type_concept_id` |
+| `visitType(ids, ...)` | `"VisitType"` | `visit_type_concept_id` |
+| `measurementType(ids, ...)` | `"MeasurementType"` | `measurement_type_concept_id` |
+| `observationType(ids, ...)` | `"ObservationType"` | `observation_type_concept_id` |
+| `procedureType(ids, ...)` | `"ProcedureType"` | `procedure_type_concept_id` |
+| `deathType(ids, ...)` | `"DeathType"` | `death_type_concept_id` |
+| `deviceType(ids, ...)` | `"DeviceType"` | `device_type_concept_id` |
+| `specimenType(ids, ...)` | `"SpecimenType"` | `specimen_type_concept_id` |
+| `observationPeriodType(ids, ...)` | `"PeriodType"` | `period_type_concept_id` |
+
+**Exclude flags** — pass alongside the matching type attribute to invert it into an exclusion:
+
+#### `conditionTypeExclude(exclude = FALSE)` / `measurementTypeExclude(exclude = FALSE)` / `deathTypeExclude(exclude = FALSE)` / `specimenTypeExclude(exclude = FALSE)`
+
+`exclude`: `logical`. `FALSE` = include the listed types (default); `TRUE` = exclude them.
+**Returns:** `keyValueAttribute`.
 
 ### Query Attributes — Source Concepts (no database needed)
 
@@ -430,43 +507,80 @@ Restrict an event by `*_source_concept_id` — used when standard-concept mappin
 the cohort must match source codes (e.g. ICD-10-CM) directly. Each takes a single `ConceptSet`
 and errors if given anything else.
 
-`conditionSourceConcept(conceptSet)`, `drugSourceConcept(conceptSet)`,
-`procedureSourceConcept(conceptSet)`, `observationSourceConcept(conceptSet)`,
-`measurementSourceConcept(conceptSet)`, `visitSourceConcept(conceptSet)`,
-`visitDetailSourceConcept(conceptSet)`.
+| Function | Returns `conceptSetAttribute` with `name =` | CDM source column |
+|---|---|---|
+| `conditionSourceConcept(conceptSet)` | `"ConditionSourceConcept"` | `condition_source_concept_id` |
+| `drugSourceConcept(conceptSet)` | `"DrugSourceConcept"` | `drug_source_concept_id` |
+| `procedureSourceConcept(conceptSet)` | `"ProcedureSourceConcept"` | `procedure_source_concept_id` |
+| `observationSourceConcept(conceptSet)` | `"ObservationSourceConcept"` | `observation_source_concept_id` |
+| `measurementSourceConcept(conceptSet)` | `"MeasurementSourceConcept"` | `measurement_source_concept_id` |
+| `visitSourceConcept(conceptSet)` | `"VisitSourceConcept"` | `visit_source_concept_id` |
+| `visitDetailSourceConcept(conceptSet)` | `"VisitDetailSourceConcept"` | `visit_detail_source_concept_id` |
 
 ### Query Attributes — Measurement / Observation Values
 
-- **`valueAsNumber(op)`** — filter `value_as_number` (see numeric table above).
-- **`valueAsConceptSet(conceptSet)`** — filter `value_as_concept_id` using a `ConceptSet`. No
-  database needed. Prefer this over `valueAsConcept()`.
-- **`valueAsConcept(ids, connection, vocabularyDatabaseSchema)`** — filter `value_as_concept_id`
-  by raw concept IDs; requires a database connection.
-- **`valueAsString(text, op = "contains")`** — filter `observation.value_as_string`. `op` is one
-  of `"contains"`, `"starts"`, `"ends"`, `"equals"`. Use with `observation()`.
-- **`measurementUnit(x)`** — filter measurement unit concept; `x` must be a `ConceptSet` (build one
-  with `cs()`). This is the only supported input — no raw concept IDs, no unit strings (e.g.
-  `measurementUnit(8713L)`, `measurementUnit("%")`), even though older Capr versions accepted
-  those; errors on anything else. No database needed, but this only populates `concept_id` in the
-  JSON, leaving name/domain/vocabulary blank (SQL is correct, but Atlas shows no display name for
-  the unit) — use `getConceptSetDetails()` beforehand if the user has a database connection and
-  wants Atlas to display the real concept name (see "Recommend hydrating concept sets" above).
-  Use with `measurement()`.
+Measurement and observation values may present in the database as numeric values
+(`value_as_number`), strings (`value_as_string`), or concept IDs (`value_as_concept_id`).
+Measurements may also be filtered by unit of measure.
+
+| Function | Description |
+|---|---|
+| `valueAsNumber(op)` | Filter by `value_as_number` (see numeric table above) |
+| `valueAsConcept(ids, ...)` | Filter by `value_as_concept_id` using raw concept IDs |
+| `valueAsConceptSet(conceptSet)` | Filter by `value_as_concept_id` using a `ConceptSet` |
+| `valueAsString(text, op)` | Filter `observation.value_as_string` |
+| `measurementUnit(ids, ...)` | Filter by unit concept |
+
+#### `valueAsConcept(ids, connection = NULL, vocabularyDatabaseSchema = NULL)`
+
+Same optional-connection signature as the Type / Status attributes above.
+**Returns:** `conceptAttribute` with `name = "ValueAsConcept"`.
+
+#### `valueAsConceptSet(conceptSet)`
+
+`conceptSet`: `ConceptSet` object.
+**Returns:** `conceptSetAttribute` with `name = "ValueAsConcept"`. Serializes as an array of
+Concept objects in JSON (not a `CodesetId`).
+
+#### `valueAsString(text, op = "contains")`
+
+| Param | Type | Default | Notes |
+|---|---|---|---|
+| `text` | `character` | — | String to match against `value_as_string` |
+| `op` | `character` | `"contains"` | One of `"contains"` (LIKE `%text%`), `"starts"`, `"ends"`, `"equals"` |
+
+**Returns:** `valueAsStringAttribute`. Use with `observation()`.
+
+#### `measurementUnit(ids, connection = NULL, vocabularyDatabaseSchema = NULL)`
+
+Same optional-connection signature as the Type / Status attributes above. `ids` is an integer
+vector of unit concept IDs (e.g. `measurementUnit(8554L)` for percent) and is the only supported
+input — no `ConceptSet`, no unit strings (e.g. `measurementUnit("%")`), even though older Capr
+versions accepted those; errors on anything else.
+**Returns:** `conceptAttribute` with `name = "Unit"`. Use with `measurement()`.
 
 ### Query Attributes — Visit
 
-- **`providerSpecialtyConcepts(...)`** — restrict a `visit()` by provider specialty;
-  `...` = integer concept IDs.
+#### `providerSpecialtyConcepts(...)`
+
+Restrict a `visit()` by the specialty of the provider conducting the visit.
+`...`: integer concept IDs for the desired provider specialties.
+**Returns:** `conceptAttribute` with `name = "ProviderSpecialty"`. Use inside `visit()`.
 
 ### Demographics
 
 Used **directly inside a Group** (typically in `attrition()`) to express demographic inclusion
 rules, or via `...` in a query constructor to filter a specific event by patient age/gender.
 
-- **`age(op)`** — patient age; `op` from a comparison operator, e.g. `age(gte(18L))`.
-- **`male()`** — male patients (gender concept 8507). No parameters.
-- **`female()`** — female patients (gender concept 8532). No parameters.
-- **`genderConcepts(...)`** — one or more gender concept IDs (integers).
+| Function | Description |
+|---|---|
+| `age(op)` | Patient age; `op` from a comparison operator, e.g. `age(gte(18L))` |
+| `male()` | Male patients (gender concept 8507). No parameters |
+| `female()` | Female patients (gender concept 8532). No parameters |
+| `genderConcepts(...)` | One or more gender concept IDs (integers, coerced with `as.integer()`) |
+
+`male()`, `female()`, and `genderConcepts()` each return a `conceptAttribute` with
+`name = "Gender"`.
 
 ```r
 attrition(
@@ -506,8 +620,8 @@ are no inclusion rules, `expressionLimit` still explicit).
 ### 2. Entry + required inclusion criteria (prior observation + lab value)
 
 **Intent:** Persons with type 2 diabetes, entering at their first T2DM diagnosis, restricted to
-those with at least 365 days of prior continuous observation and an abnormal HbA1c value
-(< 13 g/dL) recorded any time before index; exit at end of continuous observation.
+those with at least 365 days of prior continuous observation and an HbA1c value below 5.7%
+recorded any time before index; exit at end of continuous observation.
 
 ```r
 cd <- cohort(
@@ -527,7 +641,7 @@ cd <- cohort(
               measurement(
                 cs_hba1c,
                 valueAsNumber(lt(5.7)),
-                measurementUnit(cs_percentUnit)),
+                measurementUnit(8554L)),  # percent
               duringInterval(eventStarts(-Inf, -1))
       )
     ),
@@ -731,10 +845,10 @@ cd <- cohort(
     # in the preceding 365 days (i.e. "2 outpatient" occurrences)
     conditionOccurrence(
       cs_COPD,
-      visitType(c(9202), connection = con, vocabularyDatabaseSchema = "cdm_schema"), # standard concept for OP visit
+      visitType(9202L), # standard concept for OP visit
       nestedWithAll(
         atLeast(1,
-          conditionOccurrence(cs_COPD, visitType(c(9202), connection = con, vocabularyDatabaseSchema = "cdm_schema")),
+          conditionOccurrence(cs_COPD, visitType(9202L)),
           aperture = duringInterval(
             startWindow = eventStarts(-365, -1, index = "startDate")
           )
@@ -744,8 +858,8 @@ cd <- cohort(
     # entry path (b): a single inpatient COPD dx ("1 inpatient")
     conditionOccurrence(
       cs_COPD,
-      visitType(c(9201), connection = con, vocabularyDatabaseSchema = "cdm_schema"), # standard concept for IP visit
-      conditionStatus(c(32901, 32902), connection = con, vocabularyDatabaseSchema = "cdm_schema") # primary diagnosis / primary admission diagnosis
+      visitType(9201L), # standard concept for IP visit
+      conditionStatus(c(32901L, 32902L)) # primary diagnosis / primary admission diagnosis
     ),
     primaryCriteriaLimit = "First"
   ),
@@ -760,10 +874,8 @@ cd <- cohort(
 
 **Demonstrates:** multiple entry Queries OR'd as alternative qualifying paths; nested criteria
 inside an entry Query; `visitType()` / `conditionStatus()` to restrict a query to a care setting.
-Both require a live OMOP CDM database connection (`connection`/`vocabularyDatabaseSchema` — no
-defaults, so omitting them errors) to look up concept names, unlike most other query attributes —
-confirm the user has a connection before generating code like this (see "Query Attributes —
-Type / Status" above).
+No database connection is needed — pass `connection`/`vocabularyDatabaseSchema` only if the user
+wants concept names displayed in Atlas (see "Query Attributes — Type / Status" above).
 
 ### 10. Fixed-date yearly denominator cohort
 
@@ -962,8 +1074,9 @@ duringInterval(eventStarts(a, b, index = "startDate" | "endDate"),
 lt(x) lte(x) gt(x) gte(x) eq(x) bt(x, y) nbt(x, y)
 
 # Common attributes (pass via ... in a Query):
-age(op)  valueAsNumber(op)  measurementUnit(cs)  valueAsConceptSet(cs)  startDate(op)  endDate(op)
+age(op)  valueAsNumber(op)  measurementUnit(ids)  valueAsConceptSet(cs)  startDate(op)  endDate(op)
 firstOccurrence()  conditionSourceConcept(cs)  drugSourceConcept(cs)  nestedWithAll(<Criteria>, ...)
+visitType(ids)  conditionType(ids)  conditionStatus(ids)   # provenance/type filters, ids = integer concept ids
 
 # Demographics (inside a Group, typically in attrition):
 male()  female()  genderConcepts(<ids>)  age(op)

@@ -652,6 +652,7 @@ getSupportedKeysForDomain <- function(domainKey) {
   )
   domainExtra <- switch(
     domainKey,
+    ConditionOccurrence = c("ConditionStatus"),
     VisitOccurrence = c("ProviderSpecialty"),
     Measurement     = c("ValueAsNumber", "RangeLow", "RangeHigh", "RangeHighRatio", "Unit", "ValueAsConcept", "MeasurementSourceConcept"),
     Observation     = c("ValueAsNumber", "Unit", "ValueAsConcept", "ValueAsString"),
@@ -688,6 +689,21 @@ detectUnsupportedKeys <- function(domainKey, domainVal, supportedKeySet, emitter
   }
 }
 
+# Type/provenance attribute JSON keys that decompile to ids-based Capr constructors
+# (see attributes-concept.R). VisitType is handled separately via visitTypeSet().
+typeAttributeConstructorMap <- c(
+  ConditionType = "conditionType",
+  ConditionStatus = "conditionStatus",
+  DrugType = "drugType",
+  MeasurementType = "measurementType",
+  ObservationType = "observationType",
+  ProcedureType = "procedureType",
+  DeathType = "deathType",
+  DeviceType = "deviceType",
+  SpecimenType = "specimenType",
+  PeriodType = "observationPeriodType"
+)
+
 stopIfTypeExcludeOrTypeLists <- function(domainVal, emitter, jsonContextPath = "") {
   pathPrefix <- if (nzchar(jsonContextPath)) paste0(jsonContextPath, ".") else ""
   excludeKeys <- grep("TypeExclude$", names(domainVal), value = TRUE)
@@ -699,9 +715,9 @@ stopIfTypeExcludeOrTypeLists <- function(domainVal, emitter, jsonContextPath = "
 
   typeKeys <- grep("Type$", names(domainVal), value = TRUE)
   for (k in typeKeys) {
-    if (k == "VisitType") next  # Handled in domainAttributesToCapr via visitTypeSet(conceptSet)
+    if (k %in% c("VisitType", names(typeAttributeConstructorMap))) next  # Handled in domainAttributesToCapr
     if (is.list(domainVal[[k]]) && length(domainVal[[k]]) > 0) {
-      emitter$skipOrStop(paste0("Type attribute lists require vocabulary lookup: ", pathPrefix, k, " (Capr visitType/measurementType etc. need connection, vocabularyDatabaseSchema)"))
+      emitter$skipOrStop(paste0("Unsupported type attribute: ", pathPrefix, k))
     }
   }
 }
@@ -837,6 +853,17 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     }
   }
 
+  # Provenance/type attributes (concept lists -> ids-based constructors)
+  for (jsonKey in names(typeAttributeConstructorMap)) {
+    val <- domainVal[[jsonKey]]
+    if (is.null(val) || !is.list(val) || length(val) == 0) next
+    ids <- conceptListToIds(val)
+    if (length(ids) == 0) next
+    attributeCalls <- c(attributeCalls,
+                        sprintf("%s(c(%s))", typeAttributeConstructorMap[[jsonKey]],
+                                paste0(ids, "L", collapse = ", ")))
+  }
+
   # VisitType (filter by visit_concept_id): list of concepts or CodesetId
   if (!is.null(domainVal[["VisitType"]]) && length(domainVal[["VisitType"]]) > 0) {
     val <- domainVal[["VisitType"]]
@@ -860,9 +887,9 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     if (!is.null(domainVal[["RangeHigh"]]))     attributeCalls <- c(attributeCalls, sprintf("rangeHigh(%s)", opAttributeToCode(domainVal[["RangeHigh"]], integersAsNumeric = TRUE)))
 
     if (!is.null(domainVal[["Unit"]])) {
-      csInline <- conceptListToInlineConceptSet(domainVal[["Unit"]], name = "Unit")
-      if (!is.null(csInline)) {
-        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", csInline))
+      unitIds <- conceptListToIds(domainVal[["Unit"]])
+      if (length(unitIds) > 0) {
+        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(c(%s))", paste0(unitIds, "L", collapse = ", ")))
       }
     }
 
@@ -881,9 +908,9 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
   if (domainKey == "Observation") {
     if (!is.null(domainVal[["ValueAsNumber"]])) attributeCalls <- c(attributeCalls, sprintf("valueAsNumber(%s)", opAttributeToCode(domainVal[["ValueAsNumber"]], integersAsNumeric = TRUE)))
     if (!is.null(domainVal[["Unit"]])) {
-      csInline <- conceptListToInlineConceptSet(domainVal[["Unit"]], name = "Unit")
-      if (!is.null(csInline)) {
-        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", csInline))
+      unitIds <- conceptListToIds(domainVal[["Unit"]])
+      if (length(unitIds) > 0) {
+        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(c(%s))", paste0(unitIds, "L", collapse = ", ")))
       }
     }
     if (!is.null(domainVal[["ValueAsConcept"]])) {

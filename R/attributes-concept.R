@@ -133,54 +133,54 @@ providerSpecialtyConcepts <- function(...) {
 }
 
 
-findConceptInVocabulary <- function(id, connection, vocabularyDatabaseSchema) {
+buildConceptAttribute <- function(ids, attributeName, connection = NULL,
+                                  vocabularyDatabaseSchema = NULL, fnName = attributeName) {
 
-  detailedConceptSet <- cs(id, name = glue::glue("{id}")) |>
-    getConceptSetDetails(con = connection,
-                         vocabularyDatabaseSchema = vocabularyDatabaseSchema)
-  return(detailedConceptSet)
-}
+  if (methods::is(ids, "ConceptSet")) {
+    rlang::abort(paste0(fnName, " requires a vector of concept ids, not a ConceptSet"))
+  }
+  checkmate::assertIntegerish(ids, min.len = 1, any.missing = FALSE, lower = 0)
+  ids <- as.integer(ids)
 
-pullConceptClass <- function(detailedConceptSet) {
-  conceptClass <- detailedConceptSet@Expression[[1]]@Concept
-  return(conceptClass)
-}
+  if (is.null(connection)) {
+    # Concept ids alone are sufficient for SQL generation; names are display-only in Atlas.
+    concepts <- purrr::map(ids, ~methods::new("Concept", concept_id = .x,
+                                              concept_name = NA_character_))
+  } else {
+    detailedConceptSet <- getConceptSetDetails(cs(ids, name = attributeName),
+                                               con = connection,
+                                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+    concepts <- purrr::map(detailedConceptSet@Expression, ~.@Concept)
+  }
 
-buildConceptAttribute <- function(ids, attributeName, connection, vocabularyDatabaseSchema) {
-
-  # get concepts from vocabulary table
-  conceptsForAttributes <- purrr::map(
-    ids,
-    ~findConceptInVocabulary(id = .x, connection = connection, vocabularyDatabaseSchema = vocabularyDatabaseSchema) |>
-      pullConceptClass()
-  )
-
-  attr_concept <- methods::new("conceptAttribute",
-                               name = attributeName,
-                               conceptSet = conceptsForAttributes)
-  return(attr_concept)
+  methods::new("conceptAttribute",
+               name = attributeName,
+               conceptSet = concepts)
 }
 
 
 #' Add a value as concept attribute
-#' @param ids the concept ids for the attribute
-#' @param connection a connection to an OMOP dbms to get vocab info about the concept
-#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @param ids integer concept ids for the attribute
+#' @param connection an optional connection to an OMOP CDM database, used only to look up
+#'   concept names for display (e.g. in Atlas). When NULL (default) the attribute is built
+#'   from the ids alone, which produces identical SQL.
+#' @param vocabularyDatabaseSchema the schema of the OMOP vocabulary tables; only used
+#'   when `connection` is supplied
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
-valueAsConcept <- function(ids, connection, vocabularyDatabaseSchema) {
-  res <- buildConceptAttribute(ids = ids, attributeName = "ValueAsConcept",
-                               connection = connection,
-                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
-  return(res)
+valueAsConcept <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "ValueAsConcept",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "valueAsConcept")
 }
 
 #' ValueAsConcept attribute from a concept set (for round-trip without DB)
 #'
 #' Filter Measurement or Observation by value_as_concept_id using a concept set.
-#' Use this when building from JSON (CodesetId reference); use \code{valueAsConcept(ids, connection, ...)} with a DB for ad-hoc concept ids.
+#' Use this when building from JSON (CodesetId reference); use \code{valueAsConcept(ids)} for ad-hoc concept ids.
 #' @param conceptSet A ConceptSet object (e.g. from \code{cs()} or decompiled JSON).
 #' @return An attribute for use in \code{\link{measurement}()} or \code{\link{observation}()}.
 #' @export
@@ -192,113 +192,138 @@ valueAsConceptSet <- function(conceptSet) {
 }
 
 #' Add a drug type attribute to determine the provenance of the record
-#' @param ids the concept ids for the attribute
-#' @param connection a connection to an OMOP dbms to get vocab info about the concept
-#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @inheritParams valueAsConcept
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
-drugType <- function(ids, connection, vocabularyDatabaseSchema) {
-  res <- buildConceptAttribute(ids = ids, attributeName = "DrugType",
+drugType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "DrugType",
                         connection = connection,
-                        vocabularyDatabaseSchema = vocabularyDatabaseSchema)
-  return(res)
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "drugType")
 }
 
 #' Add a condition type attribute to determine the provenance of the record
-#' @param ids the concept ids for the attribute
-#' @param connection a connection to an OMOP dbms to get vocab info about the concept
-#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @inheritParams valueAsConcept
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
-conditionType <- function(ids, connection, vocabularyDatabaseSchema) {
-  res <- buildConceptAttribute(ids = ids, attributeName = "ConditionType",
-                               connection = connection,
-                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
-  return(res)
+conditionType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "ConditionType",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "conditionType")
 }
 
 
 
 #' Add a visit type attribute to determine the provenance of the record
-#' @param ids the concept ids for the attribute
-#' @param connection a connection to an OMOP dbms to get vocab info about the concept
-#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @inheritParams valueAsConcept
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
-visitType <- function(ids, connection, vocabularyDatabaseSchema) {
-  res <- buildConceptAttribute(ids = ids, attributeName = "VisitType",
-                               connection = connection,
-                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
-  return(res)
+visitType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "VisitType",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "visitType")
 }
 
 
 #' Add a measurement type attribute to determine the provenance of the record
-#' @param ids the concept ids for the attribute
-#' @param connection a connection to an OMOP dbms to get vocab info about the concept
-#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @inheritParams valueAsConcept
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
-measurementType <- function(ids, connection, vocabularyDatabaseSchema) {
-  res <- buildConceptAttribute(ids = ids, attributeName = "measurementType",
-                               connection = connection,
-                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
-  return(res)
+measurementType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "MeasurementType",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "measurementType")
 }
 
 #' Add a observation type attribute to determine the provenance of the record
-#' @param ids the concept ids for the attribute
-#' @param connection a connection to an OMOP dbms to get vocab info about the concept
-#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @inheritParams valueAsConcept
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
-observationType <- function(ids, connection, vocabularyDatabaseSchema) {
-  res <- buildConceptAttribute(ids = ids, attributeName = "observationType",
-                               connection = connection,
-                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
-  return(res)
+observationType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "ObservationType",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "observationType")
 }
 
 
 #' Add a procedure type attribute to determine the provenance of the record
-#' @param ids the concept ids for the attribute
-#' @param connection a connection to an OMOP dbms to get vocab info about the concept
-#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @inheritParams valueAsConcept
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
-procedureType <- function(ids, connection, vocabularyDatabaseSchema) {
-  res <- buildConceptAttribute(ids = ids, attributeName = "procedureType",
-                               connection = connection,
-                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
-  return(res)
+procedureType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "ProcedureType",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "procedureType")
+}
+
+#' Add a death type attribute to determine the provenance of the record
+#' @inheritParams valueAsConcept
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+deathType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "DeathType",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "deathType")
+}
+
+#' Add a device type attribute to determine the provenance of the record
+#' @inheritParams valueAsConcept
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+deviceType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "DeviceType",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "deviceType")
+}
+
+#' Add a specimen type attribute to determine the provenance of the record
+#' @inheritParams valueAsConcept
+#' @return
+#' An attribute that can be used in a query function
+#' @export
+#'
+specimenType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "SpecimenType",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "specimenType")
 }
 
 #' Add a condition status attribute
-#' @param ids the concept ids for the attribute
-#' @param connection a connection to an OMOP dbms to get vocab info about the concept
-#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @inheritParams valueAsConcept
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
 
-conditionStatus <- function(ids, connection, vocabularyDatabaseSchema) {
-  res <- buildConceptAttribute(ids = ids, attributeName = "ConditionStatus",
-                               connection = connection,
-                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
-  return(res)
+conditionStatus <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "ConditionStatus",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "conditionStatus")
 }
 
 #' Add a condition source concept attribute
@@ -435,41 +460,34 @@ visitDetailSourceConcept <- function(conceptSet) {
 }
 
 #' Add a observation period type attribute to determine the provenance of the record
-#' @param ids the concept ids for the attribute
-#' @param connection a connection to an OMOP dbms to get vocab info about the concept
-#' @param vocabularyDatabaseSchema the database schema for the vocabularies
+#' @inheritParams valueAsConcept
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
 
-observationPeriodType <- function(ids, connection, vocabularyDatabaseSchema) {
-  res <- buildConceptAttribute(ids = ids, attributeName = "observationPeriodType",
-                               connection = connection,
-                               vocabularyDatabaseSchema = vocabularyDatabaseSchema)
-  return(res)
+observationPeriodType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  # Circe expects the key "PeriodType" on ObservationPeriod criteria
+  buildConceptAttribute(ids, attributeName = "PeriodType",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "observationPeriodType")
 }
 
 #' Add unit attribute to a query
-#' @param x   A concept set that identifies units, built with \code{cs()}. This is the only
-#'            supported input type - see \code{getConceptSetDetails()} if you want the concept
-#'            set to carry real concept names/domain/vocabulary for display in Atlas.
+#' @inheritParams valueAsConcept
 #' @return
 #' An attribute that can be used in a query function
 #' @export
 #'
-measurementUnit <- function(x) {
-  if (missing(x)) {
+measurementUnit <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  if (missing(ids)) {
     rlang::abort("Unit must be specified")
   }
-
-  if (!methods::is(x, "ConceptSet")) {
-    rlang::abort("`x` must be a ConceptSet (built with cs())")
-  }
-
-  conceptSet <- purrr::map(x@Expression, ~.@Concept)
-  res <- methods::new("conceptAttribute", name = "Unit", conceptSet = conceptSet)
-  return(res)
+  buildConceptAttribute(ids, attributeName = "Unit",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "measurementUnit")
 }
 
 # Coercion ------------------
