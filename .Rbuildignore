@@ -19,3 +19,4 @@ compare_versions
 ^CLAUDE_CODE_INSTRUCTIONS\.md
 ^CLAUDE_PLAN\.md
 ^CLAUDE\.md
+^\.claude$

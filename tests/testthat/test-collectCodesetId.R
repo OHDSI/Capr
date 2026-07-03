@@ -39,6 +39,35 @@ test_that("listConceptSets - Entry", {
   expect_true(all(purrr::map_lgl(conceptSets, ~all(names(.) == c("id", "name", "expression")))))
 })
 
+test_that("listConceptSets - Entry with multiple entryEvents that each have nested criteria", {
+  # Regression test: previously, listConceptSets(CohortEntry) only flattened
+  # across entryEvents when their per-entryEvent concept-set counts weren't
+  # all equal to a hardcoded 3 - so 2+ entryEvents that each happened to
+  # contribute exactly 3 (e.g. one query + 2 nestedWithAny alternatives)
+  # silently produced a nested (unflattened) list, and every concept set was
+  # then dropped downstream by listConceptSets(Cohort)'s `$id` filter.
+  cs_a <- cs(1, name = "a")
+  e <- entry(
+    conditionOccurrence(cs_a, nestedWithAny(
+      atLeast(1, conditionOccurrence(cs_a)),
+      atLeast(1, observation(cs_a))
+    )),
+    observation(cs_a, nestedWithAny(
+      atLeast(1, conditionOccurrence(cs_a)),
+      atLeast(1, observation(cs_a))
+    )),
+    primaryCriteriaLimit = "First"
+  )
+  conceptSets <- listConceptSets(e)
+  expect_true(all(purrr::map_lgl(conceptSets, ~all(names(.) == c("id", "name", "expression")))))
+  expect_true(length(conceptSets) > 0)
+
+  cd <- cohort(entry = e, attrition = attrition(expressionLimit = "First"),
+               exit = exit(endStrategy = observationExit()))
+  compiledConceptSets <- jsonlite::fromJSON(compile(cd), simplifyVector = FALSE)$ConceptSets
+  expect_length(compiledConceptSets, 1)
+})
+
 test_that("listConceptSets - Attrition", {
   x <- attrition(withAll(
     atLeast(1, conditionOccurrence(cs(1, name = "test"))),

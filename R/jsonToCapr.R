@@ -730,10 +730,9 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
   # DoseEra: Unit, DoseValue, EraLength
   if (domainKey == "DoseEra") {
     if (!is.null(domainVal[["Unit"]])) {
-      ids <- conceptListToIds(domainVal[["Unit"]])
-      if (length(ids) > 0) {
-        unitArg <- if (length(ids) == 1L) paste0(ids[1], "L") else sprintf("c(%s)", paste0(ids, "L", collapse = ", "))
-        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", unitArg))
+      csInline <- conceptListToInlineConceptSet(domainVal[["Unit"]], name = "Unit")
+      if (!is.null(csInline)) {
+        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", csInline))
       }
     }
     if (!is.null(domainVal$DoseValue)) attributeCalls <- c(attributeCalls, sprintf("doseValue(%s)", opAttributeToCode(domainVal$DoseValue, integersAsNumeric = TRUE)))
@@ -861,10 +860,9 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
     if (!is.null(domainVal[["RangeHigh"]]))     attributeCalls <- c(attributeCalls, sprintf("rangeHigh(%s)", opAttributeToCode(domainVal[["RangeHigh"]], integersAsNumeric = TRUE)))
 
     if (!is.null(domainVal[["Unit"]])) {
-      ids <- conceptListToIds(domainVal[["Unit"]])
-      if (length(ids) > 0) {
-        unitArg <- if (length(ids) == 1L) paste0(ids[1], "L") else sprintf("c(%s)", paste0(ids, "L", collapse = ", "))
-        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", unitArg))
+      csInline <- conceptListToInlineConceptSet(domainVal[["Unit"]], name = "Unit")
+      if (!is.null(csInline)) {
+        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", csInline))
       }
     }
 
@@ -883,10 +881,9 @@ domainAttributesToCapr <- function(domainKey, domainVal, emitter, jsonContextPat
   if (domainKey == "Observation") {
     if (!is.null(domainVal[["ValueAsNumber"]])) attributeCalls <- c(attributeCalls, sprintf("valueAsNumber(%s)", opAttributeToCode(domainVal[["ValueAsNumber"]], integersAsNumeric = TRUE)))
     if (!is.null(domainVal[["Unit"]])) {
-      ids <- conceptListToIds(domainVal[["Unit"]])
-      if (length(ids) > 0) {
-        unitArg <- if (length(ids) == 1L) paste0(ids[1], "L") else sprintf("c(%s)", paste0(ids, "L", collapse = ", "))
-        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", unitArg))
+      csInline <- conceptListToInlineConceptSet(domainVal[["Unit"]], name = "Unit")
+      if (!is.null(csInline)) {
+        attributeCalls <- c(attributeCalls, sprintf("measurementUnit(%s)", csInline))
       }
     }
     if (!is.null(domainVal[["ValueAsConcept"]])) {

@@ -7,7 +7,9 @@
 measurementUnit(x)
 }
 \arguments{
-\item{x}{A a concept set that identifies units}
+\item{x}{A concept set that identifies units, built with \code{cs()}. This is the only
+supported input type - see \code{getConceptSetDetails()} if you want the concept
+set to carry real concept names/domain/vocabulary for display in Atlas.}
 }
 \value{
 An attribute that can be used in a query function

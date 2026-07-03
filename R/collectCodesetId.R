@@ -362,16 +362,16 @@ setMethod("listConceptSets", "Group", function(x) {
 
 setMethod("listConceptSets", "CohortEntry", function(x) {
 
-  ce <- purrr::map(x@entryEvents, ~listConceptSets(.x))
-  check <- purrr::map_int(ce, ~length(.x))
-  if (!all(check == 3)) {
-    ce <- ce |>
-      purrr::flatten()
-  }
+  # listConceptSets() on each entryEvent (Query/Group) already returns a flat
+  # list of id-lists, so flatten unconditionally across entryEvents rather than
+  # guessing from list length (a per-entryEvent length coincidentally matching
+  # some other entryEvent's length previously caused this to skip flattening
+  # entirely, silently dropping every concept set - see test-collectCodesetId.R).
+  ce <- purrr::map(x@entryEvents, ~listConceptSets(.x)) |>
+    purrr::flatten()
 
   ce |>
     append(listConceptSets(x@additionalCriteria))
-  # TODO may need a flatten here with additional criteria
 })
 
 setMethod("listConceptSets", "CohortAttrition", function(x) {

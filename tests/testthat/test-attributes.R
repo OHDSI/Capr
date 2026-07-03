@@ -260,6 +260,10 @@ test_that("concept attributes build", {
   expect_s4_class(tt, "conceptAttribute")
   expect_equal(tt@name, "Unit")
   expect_equal(tt@conceptSet[[1]]@concept_id, 8554L)
+
+  # ConceptSet is the only supported input - everything else errors
+  expect_error(measurementUnit(8554L), "ConceptSet")
+  expect_error(measurementUnit("%"), "ConceptSet")
 })
 
 test_that("conceptSetAttribute builds", {

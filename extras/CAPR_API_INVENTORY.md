@@ -43,7 +43,7 @@ Package version: **2.1.1**
 
 ## Cohort Entry
 
-### `entry(..., observationWindow = continuousObservation(0L, 0L), primaryCriteriaLimit = c("First", "All", "Last"), additionalCriteria = NULL, qualifiedLimit = c("First", "All", "Last"))`
+### `entry(..., observationWindow = continuousObservation(0L, 0L), primaryCriteriaLimit = c("First", "All", "Last"), additionalCriteria = NULL, qualifiedLimit = NULL)`
 
 | Param | Type | Default | Notes |
 |---|---|---|---|
@@ -51,10 +51,10 @@ Package version: **2.1.1**
 | `observationWindow` | `ObservationWindow` | `continuousObservation(0L, 0L)` | The number of days of required observation time before and after index. From `continuousObservation()` |
 | `primaryCriteriaLimit` | `character` | `"First"` | Whether the first, last, or all events qualifying for index event Query should be included in the cohort. One of `"First"`, `"All"`, `"Last"` |
 | `additionalCriteria` | `Group` or `NULL` | `NULL` | Restricts qualifying events with a Group of Criteria before applying `qualifiedLimit` |
-| `qualifiedLimit` | `character` | - | Whether the first, last, or all events qualifying for index event Query **and** additionalCriteria should be included in the cohort. One of `"First"`, `"All"`, `"Last"`. |
+| `qualifiedLimit` | `character` or `NULL` | `NULL` | Whether the first, last, or all events qualifying for index event Query **and additionalCriteria** should be included in the cohort. One of `"First"`, `"All"`, `"Last"`. **Required when `additionalCriteria` is non-`NULL`.** |
 
 **Returns:** `CohortEntry` S4 object.
-**Validation:** `primaryCriteriaLimit` and `qualifiedLimit` matched via `checkmate::matchArg()`.
+**Validation:** `primaryCriteriaLimit` matched via `checkmate::matchArg()`. `qualifiedLimit`, if provided, also matched via `checkmate::matchArg()`.
 
 ### `continuousObservation(priorDays = 0L, postDays = 0L)`
 
@@ -352,6 +352,21 @@ All return an `opAttributeInteger` or `opAttributeNumeric` depending on the func
 **Validation:** `stop()` if `op` is not `opAttributeDate`.
 **Usage:** `startDate(gt(as.Date("2010-01-01")))`.
 
+**Special case — `observationPeriod()` + fixed calendar dates:** When `startDate()` is attached
+to `observationPeriod()` (rather than a clinical event query), Capr serializes it as
+`UserDefinedPeriod` instead of `OccurrenceStartDate`/`OccurrenceEndDate` — this is what Atlas
+calls a fixed-date entry event (e.g. "enter the cohort on 2017-01-01" regardless of any clinical
+event). There is no separate `userDefinedPeriod()` constructor; it's produced automatically by
+this combination:
+- `startDate(eq(as.Date("2017-01-01")))` → `UserDefinedPeriod` with `StartDate` == `EndDate`
+  (a single fixed date)
+- `startDate(bt(as.Date("2017-01-01"), as.Date("2017-06-30")))` → `UserDefinedPeriod` with
+  distinct `StartDate`/`EndDate` (a fixed date range)
+
+Verified against `R/query.R:387-397` (`as.list,Query-method`), which special-cases
+`x@domain == "ObservationPeriod"` to convert the `OccurrenceStartDate` op into `UserDefinedPeriod`
+at serialization time, and against generated JSON via `compile()`.
+
 ---
 
 ##### `dateAdjustment(startWith = "START_DATE", startOffset = 0L, endWith = "END_DATE", endOffset = 0L)`
@@ -488,7 +503,8 @@ Same DB-required signature as Type / Status attributes above.
 
 | `x` type | Behavior |
 |---|---|
-| `ConceptSet` | Extracts concept IDs from the concept set |
+| `ConceptSet` | The only supported input. Extracts concepts from the concept set as-is — only `concept_id` is populated unless the `ConceptSet` was already enriched (e.g. via `getConceptSetDetails()`); name/domain/vocabulary are blank otherwise. No DB required. |
+| anything else (raw concept id, unit string, etc.) | Errors. `x` must be a `ConceptSet` — no other input type is supported, deliberately (fewer ways to do the same thing). |
 
 **Returns:** `conceptAttribute` with `name = "Unit"`. Use with `measurement()`.
 

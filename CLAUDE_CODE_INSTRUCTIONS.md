@@ -77,12 +77,22 @@ What must be loaded/available (library calls, pre-built concept sets, etc.)
 
 ## API Reference
 Grouped by category. Each function gets: signature, parameter table, return type, and a minimal usage snippet.
+Scope this to functions used to *build* a cohort definition (entry, attrition, exit, era, queries,
+criteria, groups, attributes). Do not include concept-set construction or JSON serialization functions
+here — those get one line each in "Output," below.
 
 ## Worked Examples
 The 5–10 examples from Step 3, each with intent + code.
 
 ## Anti-Patterns & Common Mistakes
 The "DO NOT / DO" list from Step 4.
+
+## Output
+Once the `Cohort` object is fully built (via `cohort()`), tell the LLM exactly what to do with it —
+this is the last step of every generation, so keep it to a few lines, not full API docs:
+- `compile(cohortObject)` → JSON string
+- `writeCohort(cohortObject, path)` → writes JSON straight to a `.json` file
+Don't document `toCirce()` or `as.json()` here — they're redundant with `compile()`/`writeCohort()` for this workflow.
 
 ## Quick Reference Card
 A compact cheat-sheet of the most-used functions and patterns.
@@ -103,3 +113,68 @@ After writing the reference document, **spot-check at least 5 function signature
 ## Deliverable
 
 A single file: `CAPR_REFERENCE.md` — ready to be used as a skill/system-prompt for any LLM coding agent.
+
+---
+
+# Notes: After Testing — Building the Skill Package (Phases 4–5)
+
+*Status as of 2026-07-02: Steps 1–6 above are complete. The reference lives at
+`inst/llm/CAPR_REFERENCE.md` (ships with the package; `system.file("llm", "CAPR_REFERENCE.md",
+package = "Capr")` resolves it). The intermediate artifacts remain in `extras/` (build-ignored)
+and are the source of truth: `CAPR_API_INVENTORY.md`, `CAPR_EXAMPLES.md`, `CAPR_ANTIPATTERNS.md`.
+The README has a "Using Capr with LLM Coding Agents" section with the `system.file()` one-liner
+and a CLAUDE.md/AGENTS.md pointer snippet. The reference currently includes an "Agent Workflow"
+section (clarifying questions + Capr/Circe fit flags) as a temporary home for Layer-1 behavioral
+guidance.*
+
+## During Phase 4 testing (10–15 real-world cohort definitions)
+
+Iterate on the **intermediates**, then regenerate the reference — never edit the reference alone:
+
+- **New failure modes → the right intermediate.** Hallucinated names / wrong arguments that
+  errored and self-corrected via the validation loop need no documentation. Only add to
+  `CAPR_ANTIPATTERNS.md` what `compile()` accepts silently — that file's admission rule.
+  Recurring *correct* patterns the model struggled to find go in `CAPR_EXAMPLES.md` as new
+  worked examples (validate each by executing it, per that file's conventions).
+- **Tune the Agent Workflow section** in the reference against observed behavior: cases where
+  the agent guessed when it should have asked (add to the clarifying-questions checklist), or
+  forced a fit when it should have flagged (add to the fit-flag signals). The "more than about
+  two levels of nesting" threshold is a placeholder judgment — replace it with whatever the
+  testing shows.
+- **Verify the Circe-limitation claims.** Unlike the API sections, the fit-flag bullets (no
+  cohort-to-cohort references, no cross-event arithmetic, ordinal logic limits) were written
+  from general OHDSI knowledge, not verified against source. Confirm or correct them during
+  testing.
+
+## Phase 2/5: the skill package
+
+Once testing stabilizes the content, package the three-layer skill:
+
+1. **Create `inst/skills/capr-cohorts/SKILL.md`** (Agent Skills format: YAML frontmatter with
+   `name` and a `description` that triggers on cohort-definition tasks). SKILL.md is Layer 1 and
+   should hold: role framing, the code-generation conventions, the **Agent Workflow section
+   lifted out of `CAPR_REFERENCE.md`** (move it — the reference then reverts to pure API
+   content), the validation-loop instruction (execute generated code in R with Capr loaded, no
+   DB needed; fix errors and re-run), and the Output instructions (`compile()`/`writeCohort()`).
+   It references `CAPR_REFERENCE.md` as a supporting file to read before writing code.
+2. **Layer 2 (concept-set inventory):** SKILL.md instructs the agent to look for a
+   `concept_sets.R` (or similar) in the working project listing available `cs_*` objects, and to
+   ask the user for the inventory if none is found. Provide a template file in the skill
+   directory.
+3. **Exported helper:** add something like `installAgentSkill(path = ".")` to Capr that copies
+   the skill directory from `system.file("skills", ...)` into the project's `.claude/skills/`
+   and prints the suggested AGENTS.md/CLAUDE.md pointer snippet. Keep the README's
+   `system.file()` pointer approach documented as the agent-agnostic fallback.
+4. **Check with HADES maintainers** whether the skill packaging belongs in the package `inst/`
+   or a companion repo — the reference itself should stay in `inst/llm/` regardless, because
+   installing with the package is what pins it to the installed API version.
+
+## Maintenance policy (applies from now on)
+
+- `inst/llm/CAPR_REFERENCE.md` is **generated output**; `extras/CAPR_*.md` are **source**. Edit
+  source, then re-run the assembly (Step 5 above) and spot-check (Step 6). Keep the version/
+  commit stamp in the reference header current.
+- When the Capr API changes, refresh `CAPR_API_INVENTORY.md` from `R/` first, then propagate.
+- Keep `CAPR_ANTIPATTERNS.md` and the verification evidence in `CAPR_EXAMPLES.md` even if the
+  other intermediates are ever consolidated — the Atlas-import and Eunomia-equivalence findings
+  are not re-derivable from source and justify the reference's claims.

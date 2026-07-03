@@ -40,6 +40,28 @@ PDF versions of the documentation are also available:
 -   [Design Document](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_design.pdf)
 -   [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
 
+# Using Capr with LLM Coding Agents
+
+Capr ships with a compact API reference (`CAPR_REFERENCE.md`) designed to be loaded into the
+context of an LLM coding agent (Claude Code, Cursor, Copilot, etc.) so it can generate correct
+cohort definitions from natural-language descriptions. The reference is installed with the
+package, so it always matches the Capr version you have installed. Locate it with:
+
+``` r
+system.file("llm", "CAPR_REFERENCE.md", package = "Capr")
+```
+
+To have a coding agent use it, add a pointer to your project's agent instruction file
+(`CLAUDE.md`, `AGENTS.md`, or your agent's equivalent):
+
+``` markdown
+## Capr cohort definitions
+Before writing any Capr code, locate and read the bundled API reference:
+`Rscript -e 'cat(system.file("llm", "CAPR_REFERENCE.md", package = "Capr"))'`
+Concept sets are pre-built ConceptSet objects; do not generate code that constructs them.
+After generating code, execute it in R (no database connection is needed) and fix any errors.
+```
+
 # Support
 
 -   Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a>

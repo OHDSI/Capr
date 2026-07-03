@@ -451,7 +451,9 @@ observationPeriodType <- function(ids, connection, vocabularyDatabaseSchema) {
 }
 
 #' Add unit attribute to a query
-#' @param x   A a concept set that identifies units
+#' @param x   A concept set that identifies units, built with \code{cs()}. This is the only
+#'            supported input type - see \code{getConceptSetDetails()} if you want the concept
+#'            set to carry real concept names/domain/vocabulary for display in Atlas.
 #' @return
 #' An attribute that can be used in a query function
 #' @export
@@ -461,10 +463,11 @@ measurementUnit <- function(x) {
     rlang::abort("Unit must be specified")
   }
 
-  stopifnot(methods::is(x, "ConceptSet"))
+  if (!methods::is(x, "ConceptSet")) {
+    rlang::abort("`x` must be a ConceptSet (built with cs())")
+  }
 
   conceptSet <- purrr::map(x@Expression, ~.@Concept)
-
   res <- methods::new("conceptAttribute", name = "Unit", conceptSet = conceptSet)
   return(res)
 }
