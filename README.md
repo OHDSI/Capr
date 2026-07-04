@@ -42,24 +42,41 @@ PDF versions of the documentation are also available:
 
 # Using Capr with LLM Coding Agents
 
-Capr ships with a compact API reference (`CAPR_REFERENCE.md`) designed to be loaded into the
-context of an LLM coding agent (Claude Code, Cursor, Copilot, etc.) so it can generate correct
-cohort definitions from natural-language descriptions. The reference is installed with the
-package, so it always matches the Capr version you have installed. Locate it with:
+Capr ships with a self-contained skill bundle for LLM coding agents (Claude Code, GitHub
+Copilot, Cursor, etc.) that generates validated cohort definitions from natural-language
+descriptions — no MCP servers, no network infrastructure, no database connection. The bundle
+is installed with the package, so it always matches the Capr version you have installed:
+
+- `SKILL.md` — the agent workflow: confirm the design questions, generate a cohort-template
+  function, execute to validate, deliver.
+- `CAPR_REFERENCE.md` — the compact API reference the skill depends on (signatures, valid
+  values, worked examples).
+- `validate.R` — standalone checker that executes a generated script and confirms CirceR can
+  compile its JSON to SQL.
+- `README.md` — per-agent setup instructions and design notes.
+
+There are two ways to wire it up:
+
+**Copy the bundle into your project** (recommended — works with every agent, including ones
+that can only read files inside the workspace, such as GitHub Copilot):
 
 ``` r
-system.file("llm", "CAPR_REFERENCE.md", package = "Capr")
+file.copy(system.file("llm", package = "Capr"), "docs/", recursive = TRUE)
 ```
 
-To have a coding agent use it, add a pointer to your project's agent instruction file
-(`CLAUDE.md`, `AGENTS.md`, or your agent's equivalent):
+Then follow the per-agent setup instructions in the copied `docs/llm/README.md`. Re-run the
+copy when you upgrade Capr — `CAPR_REFERENCE.md` states the Capr version it was verified
+against, so a stale copy is detectable.
+
+**Or point the agent at the installed copy** (for agents that can run commands and read files
+outside the workspace, such as Claude Code) — add to your project's agent instruction file
+(`CLAUDE.md`, `AGENTS.md`, or equivalent):
 
 ``` markdown
 ## Capr cohort definitions
-Before writing any Capr code, locate and read the bundled API reference:
-`Rscript -e 'cat(system.file("llm", "CAPR_REFERENCE.md", package = "Capr"))'`
-Concept sets are pre-built ConceptSet objects; do not generate code that constructs them.
-After generating code, execute it in R and fix any errors.
+When asked to build an OHDSI cohort definition, follow the workflow in SKILL.md and use only
+the API documented in CAPR_REFERENCE.md, both found under:
+`Rscript -e 'cat(system.file("llm", package = "Capr"))'`
 ```
 
 # Support

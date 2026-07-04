@@ -95,6 +95,11 @@ query <- function(domain, conceptSet = NULL, ...) {
 
   # bundle attributes as a list
   atb <- list(...)
+  checkCaprDots(atb,
+                c("conceptSetAttribute", "conceptAttribute", "valueAsStringAttribute",
+                  "opAttributeSuper", "logicAttribute", "keyValueAttribute",
+                  "dateAdjustmentAttribute", "nestedAttribute"),
+                "query", "Capr attribute objects", "conceptSet")
 
   if (is.null(conceptSet)) {
     query <- methods::new("Query",

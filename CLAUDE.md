@@ -72,7 +72,7 @@ The `collectCodesetId()` step replaces GUID references with sequential integers,
 
 ## Ongoing Work: LLM-Assisted Cohort Generation
 
-There is an active project to build a self-contained LLM skill for generating Capr code from natural language. See:
+There is an active project to build a self-contained LLM skill for generating Capr code from natural language. The shippable bundle lives in `inst/llm/` (`SKILL.md`, `CAPR_REFERENCE.md`, `validate.R`, `README.md`). See:
 
 - `CLAUDE_CODE_INSTRUCTIONS.md` — step-by-step instructions for building `CAPR_REFERENCE.md` (a compact API reference for LLM in-context use, ~10–15K tokens)
 - `CLAUDE_PLAN.md` — overall strategy: reference doc → skill prompt → validation loop → portability packaging

@@ -52,44 +52,93 @@ optional everywhere it appears, used only to fill in concept names for Atlas dis
 - Always pass `primaryCriteriaLimit` to `entry()` (don't rely on the `"First"` default).
 - Always pass `attrition` to `cohort()`, with an explicit `expressionLimit` — even when there are
   no inclusion rules, use `attrition(expressionLimit = "First")`.
+- **`expressionLimit` follows `primaryCriteriaLimit`.** When `primaryCriteriaLimit = "All"`
+  (multiple episodes per person), set `expressionLimit = "All"` as well — leaving it `"First"`
+  silently collapses the cohort back to one event per person after the inclusion rules run,
+  defeating the point of `"All"` entry. Diverge only when the user explicitly asks for it (e.g.
+  "of all qualifying events, keep each person's first that passes the inclusion rules").
 - Always pass `exit` to `cohort()`, even when it's just `exit(endStrategy = observationExit())`.
 
-## Agent Workflow: Clarify Scope Before Writing Code
+## Agent Workflow
 
-### Ask clarifying questions when the request is underspecified
+The scope-question checklist (index event, domains, entry limit, washout, windows, exit) lives in
+`SKILL.md` Step 1, which requires sending it to the user before writing any code. The subsections
+below cover the design decisions that follow from those answers.
 
-Cohort descriptions are often ambiguous in ways that materially change cohort membership. Before
-generating code, check that the request answers the questions below. If any are unanswered and
-not clearly implied, **ask the user** — batched into a single message — rather than guessing:
+When the definition involves more than one clinical event: events that must co-occur with,
+precede, or follow the index, and that would disqualify a candidate if absent, belong as nested
+criteria (`nestedWithAll()`/`nestedWithAny()`) on the entry Query (see "Fully define the index
+event in entry()" below); events only evaluated after entry is already fixed belong in
+`attrition()`.
 
-1. **Entry event limit** — should a person enter at their *first* qualifying event only
-   (`primaryCriteriaLimit = "First"`, one episode per person) or at *every* qualifying event
-   (`"All"`, possibly many episodes per person)? "Patients with X" alone does not answer this.
-2. **Prior observation / washout** — how many days of continuous observation are required before
-   index? (365 is a common convention, but confirm rather than assume.)
-3. **Index-day boundary** — do "prior to index" windows include the index day
-   (`eventStarts(..., 0)`) or exclude it (`eventStarts(..., -1)`)? This matters most for
-   exclusion criteria, where a same-day diagnosis may or may not disqualify.
-4. **Exit strategy** — end of continuous observation, a fixed number of days after entry, or end
-   of drug exposure? If drug exposure: what persistence gap between records still counts as
-   continuous?
-5. **Exclusion windows** — does "no prior Y" mean any time in history, or within a specific
-   window before index?
+### Fully define the index event in entry()
 
-Don't re-ask what the user's phrasing already answers (e.g. "first diagnosis of..." settles
-question 1). If the user declines to specify, proceed with conventional choices and record each
-assumption as a comment on the relevant line of the generated code.
+Every restriction that determines *which event can serve as the index* belongs inside `entry()`,
+on the entry Query itself — as query attributes (`visitType()`, `valueAsNumber()`, `age()`, ...)
+or as correlated events via nested criteria (`nestedWithAll()` / `nestedWithAny()`). Attrition
+rules are not an alternative place to define the index event: each rule is evaluated against the
+candidate events that *survive* `primaryCriteriaLimit`, relative to each candidate's date — so
+what a rule means depends on which events are still in play when it runs. Use `attrition()` to
+screen those candidates (demographics, prior-history exclusions, washout conditions); use the
+entry Query to define what qualifies as an index event in the first place.
+
+Why this matters: Circe applies limits in sequence — `primaryCriteriaLimit` selects among the
+raw entry events first, and only then are the attrition rules applied (with `expressionLimit`
+selecting among the survivors). So with `primaryCriteriaLimit = "First"` and a qualifying
+restriction in `attrition()`, a person whose *first* raw event fails the restriction is dropped
+from the cohort entirely — even if a later event would have qualified. With the restriction on
+the entry Query, that person correctly enters at their first *qualifying* event. Both
+constructions compile, run, and look similar, but they define different cohorts.
+
+```r
+# Intent: index on the first stroke diagnosis that occurs during an inpatient visit
+
+# DO NOT — "First" picks the person's first raw dx before the rule runs; persons whose
+# first dx was outpatient are dropped entirely instead of indexing on a later inpatient dx
+entry(conditionOccurrence(cs_stroke), primaryCriteriaLimit = "First")
+# ... with an "inpatient visit at index" rule in attrition()
+
+# DO — the index event itself is "stroke dx during an inpatient visit";
+# "First" now selects the first event satisfying the full definition
+entry(
+  conditionOccurrence(
+    cs_stroke,
+    nestedWithAll(
+      atLeast(1, visit(cs_ipVisit),
+              duringInterval(eventStarts(-Inf, 0), endWindow = eventEnds(0, Inf)))
+    )
+  ),
+  primaryCriteriaLimit = "First"
+)
+```
+
+The deliberate exception is screening a fixed index event: "first-ever diagnosis, and exclude
+the person if that first diagnosis wasn't inpatient" — there the index is the first-ever event
+(`firstOccurrence()` on the entry Query), it is each person's only candidate, and the inpatient
+requirement is correctly an attrition rule that accepts or rejects it. If the user's wording is
+ambiguous between "first qualifying event" and "first event, which must qualify", **ask** — it
+changes cohort membership.
+
+`entry()`'s `additionalCriteria`/`qualifiedLimit` can express event-level filtering too, but it
+is never needed: nested criteria on the entry Query cover the same logic with clearer semantics
+(see Anti-Patterns #2).
 
 ### Flag when Capr/Circe is the wrong tool
 
 Capr compiles to Circe, which defines a single self-contained cohort. Some requests cannot — or
-should not — be forced into one Circe definition. Flag the mismatch to the user instead of
-generating an approximation. Signals:
+should not — be forced into one Circe definition. **This is a hard rule, not a tip: check every
+request against the signals below before writing any code, and when one matches, stop and tell
+the user which part of their definition is not expressible — never silently deliver an
+approximation.** A cohort that compiles and runs but means something different from what the
+user asked for is the worst possible outcome, because nothing will ever error. Signals:
 
 - **Set operations between cohorts** — "in cohort A but never in cohort B", overlap or union of
   two populations. A Circe cohort cannot reference another cohort.
-- **Cross-event calculations** — change from baseline, cumulative dose, or any comparison
-  between values of two different events. Attribute filters apply to one event at a time.
+- **Cross-event calculations** — change from baseline, cumulative dose, dose tapering, or any
+  comparison between values of two different events. Attribute filters apply to one event at a
+  time.
+- **Aggregate arithmetic across events** — sums, averages, min/max, or rates over a person's 
+  events ("mean HbA1c above 8", "total days supply over 90 in the year"). Criteria can *count* events (`atLeast`/`exactly`/`atMost`), but cannot aggregate their values.
 - **Ordinal/sequential event logic** beyond first occurrence — "the second treatment era",
   "the third hospitalization within a year". Nested criteria can sometimes approximate these;
   verify the logic carefully and say so if the translation is approximate.
@@ -122,7 +171,11 @@ conceptSet <- getConceptSetDetails(conceptSet, con, vocabularyDatabaseSchema = "
 ```
 
 For the ids-based attributes (`measurementUnit()`, `visitType()`, etc.), pass
-`connection`/`vocabularyDatabaseSchema` directly to the attribute function instead.
+`connection`/`vocabularyDatabaseSchema` directly to the attribute function instead. When the
+generated cohort uses any ids-based attribute and the user wants hydration, don't just mention
+it — update the code: add optional `connection = NULL, vocabularyDatabaseSchema = NULL`
+parameters to the cohort function and pass them through to those attribute calls (concept-set
+parameters need no code change; the user hydrates them at the call site).
 
 This fills in the blank fields from the `concept` table so Atlas shows real names. It's optional —
 don't insist on it or block on generating code without it — but mention it whenever you build a
@@ -168,7 +221,7 @@ don't insist on it or block on generating code without it — but mention it whe
 | `...` | `Query` | — | One or more index event Queries. Multiple Queries are OR'd — each is an alternative qualifying entry path |
 | `observationWindow` | `ObservationWindow` | `continuousObservation(0L, 0L)` | Required continuous observation before/after index |
 | `primaryCriteriaLimit` | `character` | `"First"` | Which qualifying events enter the cohort. One of `"First"`, `"All"`, `"Last"` |
-| `additionalCriteria` | `Group` or `NULL` | `NULL` | Avoid — use `attrition()` instead (see Anti-Patterns #2) |
+| `additionalCriteria` | `Group` or `NULL` | `NULL` | Avoid — restrict the entry Query itself with attributes/nested criteria instead (see Anti-Patterns #2) |
 | `qualifiedLimit` | `character` or `NULL` | `NULL` | One of `"First"`, `"All"`, `"Last"`. Required when `additionalCriteria` is non-`NULL`; a no-op otherwise (see Anti-Patterns #3) |
 
 **Returns:** `CohortEntry`.
@@ -273,7 +326,7 @@ or more attribute objects via `...`. `conceptSet` is **required with no default*
 | `measurement(conceptSet, ...)` | MEASUREMENT | Required | |
 | `observation(conceptSet, ...)` | OBSERVATION | Required | |
 | `procedure(conceptSet, ...)` | PROCEDURE | Required | |
-| `visit(conceptSet, ...)` | VISIT_OCCURRENCE | Required | |
+| `visit(conceptSet, ...)` | VISIT_OCCURRENCE | Required | The *kind* of visit (inpatient, outpatient, ER) is the ConceptSet (`visit_concept_id`) — never `visitType()`, which is provenance here (see "Query Attributes — Type / Status") |
 | `visitDetail(conceptSet, ...)` | VISIT_DETAIL | Required | Prefer `visit` unless the user asks for visit detail |
 | `deviceExposure(conceptSet, ...)` | DEVICE_EXPOSURE | Required | |
 | `specimen(conceptSet, ...)` | SPECIMEN | Required | |
@@ -345,6 +398,20 @@ duringInterval(eventStarts(-365, -1))      # within 365 days before index, exclu
 duringInterval(eventStarts(0, Inf))        # on index or any time after
 duringInterval(eventStarts(-Inf, Inf))     # all time (the default)
 ```
+
+**Occurrence in a window vs. actual overlap.** A `startWindow` alone only constrains where the
+related event *starts* — it says nothing about the event's end date. To require the related
+event to genuinely overlap the index event (its interval covers the index date, e.g. "during an
+inpatient stay"), combine both windows:
+
+```r
+# related event starts on/before index AND ends on/after index = overlaps the index date
+duringInterval(startWindow = eventStarts(-Inf, 0), endWindow = eventEnds(0, Inf))
+```
+
+These are different cohorts: "visit starting in the 30 days before index" admits a visit that
+ended before index; "visit overlapping index" does not. `SKILL.md`'s checklist requires asking
+the user which one they mean whenever a criterion is anchored to another event.
 
 ### Group Constructors
 
@@ -433,7 +500,7 @@ Each returns an `opAttributeInteger` or `opAttributeNumeric` matching the type o
 | `startDate(op, type)` | Filter by event start date; `type = "occurrence"` (default) or `"era"` |
 | `endDate(op, type)` | Filter by event end date; same `type` options |
 | `dateAdjustment(startWith, startOffset, endWith, endOffset)` | Shift the event's effective dates before criteria matching |
-| `firstOccurrence()` | Restrict to the first occurrence of the event in the patient's history |
+| `firstOccurrence()` | Restrict to the first occurrence of the event in the patient's history — the correct tool for incident / new-user / first-ever entry events |
 
 #### `startDate(op, type = "occurrence")` / `endDate(op, type = "occurrence")`
 
@@ -458,6 +525,10 @@ Each returns an `opAttributeInteger` or `opAttributeNumeric` matching the type o
 #### `firstOccurrence()`
 
 No parameters. **Returns:** `logicAttribute` (`name = "First"`).
+For **incident / new-user cohorts** ("first ever diagnosis of X", "new users of Y"), put
+`firstOccurrence()` on the entry Query — `primaryCriteriaLimit = "First"` alone is not enough,
+because it takes the first event *matching the criteria* rather than the first in the patient's
+history.
 
 **Fixed calendar-date entry:** attaching `startDate()` to `observationPeriod()` produces what
 Atlas calls a *user-defined period* — entry at a fixed calendar date instead of a clinical event.
@@ -493,7 +564,7 @@ writing.)
 | `conditionType(ids, ...)` | `"ConditionType"` | `condition_type_concept_id` |
 | `conditionStatus(ids, ...)` | `"ConditionStatus"` | `condition_status_concept_id` |
 | `drugType(ids, ...)` | `"DrugType"` | `drug_type_concept_id` |
-| `visitType(ids, ...)` | `"VisitType"` | `visit_type_concept_id` |
+| `visitType(ids, ...)` | `"VisitType"` | `visit_type_concept_id` on `visit()` queries; the linked visit's `visit_concept_id` on other domains — see note below |
 | `measurementType(ids, ...)` | `"MeasurementType"` | `measurement_type_concept_id` |
 | `observationType(ids, ...)` | `"ObservationType"` | `observation_type_concept_id` |
 | `procedureType(ids, ...)` | `"ProcedureType"` | `procedure_type_concept_id` |
@@ -501,6 +572,20 @@ writing.)
 | `deviceType(ids, ...)` | `"DeviceType"` | `device_type_concept_id` |
 | `specimenType(ids, ...)` | `"SpecimenType"` | `specimen_type_concept_id` |
 | `observationPeriodType(ids, ...)` | `"PeriodType"` | `period_type_concept_id` |
+
+**`visitType()` means different things on different queries — never use it for care setting on
+a `visit()` query.** Verified against generated Circe SQL:
+
+- On a **`visit()` query**, the ConceptSet filters `visit_concept_id` — the kind of visit
+  (inpatient, outpatient, ER, ...). `visitType()` filters `visit_type_concept_id`, which is
+  *provenance* (how the record was sourced, e.g. "Visit derived from EHR"), not care setting.
+  So "inpatient visit" is `visit(cs_ipVisit)` with the inpatient concept in the ConceptSet —
+  putting it in `visitType()` instead filters the wrong column and returns zero rows.
+- On a **non-visit domain query** (`conditionOccurrence()`, `drugExposure()`, ...),
+  `visitType()` joins to the event's linked visit and filters that visit's `visit_concept_id` —
+  there it *is* the care-setting filter ("diagnosis recorded during an outpatient visit"; see
+  Example 9). The alternative nested-criteria form (`nestedWithAll(atLeast(1, visit(cs), ...))`)
+  expresses temporal overlap with a visit rather than the record's own visit link.
 
 **Exclude flags** — pass alongside the matching type attribute to invert it into an exclusion:
 
@@ -807,9 +892,11 @@ cd <- cohort(
 ```
 
 **Demonstrates:** `primaryCriteriaLimit = "All"` + attrition with `expressionLimit` to filter
-*and* select among entry events (the preferred alternative to `entry()`'s `additionalCriteria` —
-see Anti-Patterns #2); `startWindow` + `endWindow` together to express "event overlaps index";
-`era(eraDays = 180L)` to merge nearby episodes.
+among entry events — safe *here* because both limits are `"All"`, so no selection happens before
+the rule runs; when the intent is "first qualifying event", define the qualifier on the entry
+Query itself instead (see "Fully define the index event in entry()" and Anti-Patterns #2);
+`startWindow` + `endWindow` together to express "event overlaps index"; `era(eraDays = 180L)` to
+merge nearby episodes.
 
 ### 8. Source concept filtering
 
@@ -881,7 +968,10 @@ cd <- cohort(
 ```
 
 **Demonstrates:** multiple entry Queries OR'd as alternative qualifying paths; nested criteria
-inside an entry Query; `visitType()` / `conditionStatus()` to restrict a query to a care setting.
+inside an entry Query; `visitType()` / `conditionStatus()` to restrict a *condition* query to a
+care setting — this works only on non-visit domains, where `visitType()` filters the linked
+visit's `visit_concept_id`; on a `visit()` query the care setting goes in the ConceptSet instead
+(see "Query Attributes — Type / Status" above).
 No database connection is needed — pass `connection`/`vocabularyDatabaseSchema` only if the user
 wants concept names displayed in Atlas (see "Query Attributes — Type / Status" above).
 
@@ -1002,26 +1092,35 @@ Every named attrition rule must be a `Group` (`withAll()` / `withAny()` / `withA
 shape for an inclusion rule — `compile()` will not error, the JSON is well-formed, but Atlas
 cannot render the rule (it silently disappears in the UI).
 
-### 2. Using `entry()`'s `additionalCriteria`/`qualifiedLimit` instead of `attrition()`
+### 2. Qualifying the index event outside the entry Query
 
 ```r
-# DO NOT (works, but redundant and less familiar)
-entry(
-  conditionOccurrence(cs_stroke),
-  primaryCriteriaLimit = "All",
-  additionalCriteria = withAny(atLeast(1, visit(cs_ipVisit), ...)),
-  qualifiedLimit = "All"
-)
+# DO NOT — index-event restriction as an attrition rule: with primaryCriteriaLimit = "First",
+# the person's first raw dx is chosen BEFORE the rule runs; persons whose first dx fails it
+# are dropped entirely instead of entering at their first qualifying event
+entry(conditionOccurrence(cs_stroke), primaryCriteriaLimit = "First")
+# ... plus an "inpatient at index" rule in attrition()
 
-# DO
-entry(conditionOccurrence(cs_stroke), primaryCriteriaLimit = "All")
-# ...then filter/select in attrition() with expressionLimit — see Worked Example 7
+# DO — make the restriction part of the index event definition (attributes / nested criteria)
+entry(
+  conditionOccurrence(
+    cs_stroke,
+    nestedWithAll(
+      atLeast(1, visit(cs_ipVisit),
+              duringInterval(eventStarts(-Inf, 0), endWindow = eventEnds(0, Inf)))
+    )
+  ),
+  primaryCriteriaLimit = "First"
+)
 ```
 
-The two forms were verified equivalent — same generated SQL and identical cohort membership on
-real data, in both "strict" (`primaryCriteriaLimit = "First"`) and "permissive"
-(`primaryCriteriaLimit = "All"` + limit `"First"`) configurations. Prefer `attrition()`; it is
-the more general, more familiar tool.
+Both versions compile and run; they define **different cohorts** (see "Fully define the index
+event in entry()" in the Agent Workflow section for the order-of-operations explanation). The
+forms only coincide when the limits are matched to the same semantics (e.g.
+`primaryCriteriaLimit = "All"` with `expressionLimit` doing the selection — see Worked
+Example 7); do not rely on that. The same goes for `entry()`'s
+`additionalCriteria`/`qualifiedLimit`: it can express event-level filtering, but nested criteria
+on the entry Query cover the same logic with clearer semantics — avoid it.
 
 ### 3. Expecting `qualifiedLimit` to do something on its own
 

@@ -31,10 +31,12 @@ test_that("listConceptSets - Group", {
 })
 
 test_that("listConceptSets - Entry", {
-  e <- entry(withAll(
+  # constructed via new(): entry() only accepts Query objects in `...`, but
+  # listConceptSets must still recurse over group-shaped entry contents
+  e <- methods::new("CohortEntry", entryEvents = list(withAll(
     atLeast(1, conditionOccurrence(cs(1, name = "test"))),
     exactly(0, conditionOccurrence(cs(2, name = "test")))
-  ))
+  )))
   conceptSets <- listConceptSets(e)
   expect_true(all(purrr::map_lgl(conceptSets, ~all(names(.) == c("id", "name", "expression")))))
 })

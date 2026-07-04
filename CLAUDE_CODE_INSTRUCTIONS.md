@@ -160,10 +160,9 @@ Once testing stabilizes the content, package the three-layer skill:
    content), the validation-loop instruction (execute generated code in R with Capr loaded, no
    DB needed; fix errors and re-run), and the Output instructions (`compile()`/`writeCohort()`).
    It references `CAPR_REFERENCE.md` as a supporting file to read before writing code.
-2. **Layer 2 (concept-set inventory):** SKILL.md instructs the agent to look for a
-   `concept_sets.R` (or similar) in the working project listing available `cs_*` objects, and to
-   ask the user for the inventory if none is found. Provide a template file in the skill
-   directory.
+2. **Layer 2 (concept-set inventory):** superseded — the function-form output (concept sets as
+   `ConceptSet` parameters) makes a session inventory optional rather than required; see
+   `CLAUDE_PLAN.md`'s Phase 2 status notes.
 3. **Exported helper:** add something like `installAgentSkill(path = ".")` to Capr that copies
    the skill directory from `system.file("skills", ...)` into the project's `.claude/skills/`
    and prints the suggested AGENTS.md/CLAUDE.md pointer snippet. Keep the README's
