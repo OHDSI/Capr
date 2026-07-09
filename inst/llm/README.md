@@ -63,9 +63,11 @@ The pattern is always the same: make `SKILL.md` part of the agent's instructions
 ## Design notes (why it works this way)
 
 - **Concept ids are inputs, not model knowledge.** Agents are forbidden from writing concept ids
-  from memory; unknown concept sets become executable placeholders
-  (`cs(0L, name = "... [PLACEHOLDER]")`) that you replace. Look ids up in
-  [ATHENA](https://athena.ohdsi.org).
+  from memory; unknown concept sets become executable placeholders with distinct, incrementing
+  ids (`cs(0L, name = "... [PLACEHOLDER]")`, `cs(1L, ...)`, ...) that you replace. Ids must differ
+  across concept sets — Capr collapses concept sets with identical expressions into one,
+  regardless of name, so a repeated placeholder id silently drops all but one name from the
+  compiled JSON. Look ids up in [ATHENA](https://athena.ohdsi.org).
 - **The function form is the contract.** Cohort logic is separated from concept-set acquisition,
   which also makes batch generation trivial: `lapply(conceptSetList, createMyCohort)`.
 - **Everything runs without a database.** Capr builds and serializes cohort JSON in memory; a

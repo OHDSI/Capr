@@ -43,6 +43,30 @@ stage1 <- tryCatch(
 if (!stage1) quit(status = 1)
 message("OK  (execution): ", scriptPath, " ran without error")
 
+# --- Stage 1b: catch accidental placeholder id collisions -------------------
+# cs() derives its auto id from the concept expression alone, ignoring `name`, so two concept
+# sets meant to be different (e.g. two placeholders) that end up with the same id collapse into
+# a single named entry in the compiled JSON. Scan every ConceptSet object left in the script's
+# environment and fail if any two share an id but have different names.
+conceptSets <- Filter(function(x) methods::is(x, "ConceptSet"), as.list(env))
+if (length(conceptSets) > 1) {
+  ids   <- vapply(conceptSets, function(x) as.character(x@id), character(1))
+  nms   <- vapply(conceptSets, function(x) x@Name, character(1))
+  collided <- FALSE
+  for (d in unique(ids[duplicated(ids)])) {
+    nmsForId <- unique(nms[ids == d])
+    if (length(nmsForId) > 1) {
+      collided <- TRUE
+      message("FAIL (concept set collision): ", paste(nmsForId, collapse = " / "),
+              " share the same underlying concept set id and will collapse into a single ",
+              "named entry in the compiled JSON. Give each concept set a distinct placeholder id.")
+    }
+  }
+  if (collided) quit(status = 1)
+}
+message("OK  (concept sets): no placeholder id collisions among ", length(conceptSets),
+        " concept set(s)")
+
 # --- Stage 2: Circe accepts the emitted JSON --------------------------------
 if (length(jsonPaths) == 0) {
   scriptDir <- dirname(normalizePath(scriptPath))

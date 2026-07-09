@@ -35,6 +35,8 @@ OHDSI (Circe/Atlas-compatible) cohort JSON.
 4. **Never write a concept ID from memory.** This includes clinical concepts and type / unit /
    status / provider-specialty IDs. Concept IDs come from the user or are placeholders. If you
    know a likely candidate ID, put it in a comment marked `verify in ATHENA` — never in the code.
+   **Every placeholder concept set needs its own distinct placeholder ID** — see the placeholder
+   pattern in Step 2. Reusing one id across concept sets makes Capr silently merge them.
 5. **Always produce the function-form output** described below, even for a one-off cohort.
 6. **Always execute the generated file before delivering it.** Code that has not run is not done.
 7. **Say so when the cohort is not expressible in Capr/Circe.** Check every request against the
@@ -164,8 +166,12 @@ createT2dmCohort <- function(t2dmCs, insulinCs) {
 # Replace the placeholder concept sets with real ones before generating the
 # cohort: build with cs(<concept ids>, name = ...), import an Atlas export with
 # readConceptSet(<path>), or use ConceptSet objects already in your session.
+# Placeholder ids count up (0L, 1L, 2L, ...) and must be distinct across every concept set in
+# the file -- cs() derives its internal id from the concept expression alone, ignoring `name`,
+# so reusing an id for every placeholder makes Capr treat the concept sets as identical and
+# collapse them to one name in the compiled JSON.
 t2dmCs    <- cs(0L, name = "Type 2 diabetes mellitus [PLACEHOLDER]")  # TODO: real concept set
-insulinCs <- cs(0L, name = "Insulin [PLACEHOLDER]")                   # TODO: real concept set
+insulinCs <- cs(1L, name = "Insulin [PLACEHOLDER]")                   # TODO: real concept set
 
 cohortDef <- createT2dmCohort(t2dmCs, insulinCs)
 writeCohort(cohortDef, "t2dm_cohort.json")
@@ -199,9 +205,14 @@ Contract:
   `Scope check` block — do not add knob parameters unless the user asks for variants over
   that knob.
 - **Return the `Cohort` object.** Serialization happens in the example block, not in the function.
-- **Placeholders are `cs(0L, name = "<name> [PLACEHOLDER]")`** — executable (so validation works)
-  but impossible to mistake for a real definition. Skip placeholders only when the user has told
-  you the real variable names, file paths, or concept ids to use.
+- **Placeholders are `cs(<n>L, name = "<name> [PLACEHOLDER]")`**, where `<n>` counts up (`0L`,
+  `1L`, `2L`, ...) and is unique for every placeholder concept set in the file — executable (so
+  validation works), and the `[PLACEHOLDER]` name suffix plus the `# TODO` comment make it
+  impossible to mistake for a real definition despite the small id. Never reuse a placeholder id
+  across concept sets: `cs()` derives its internal id from the concept expression alone, ignoring
+  `name`, so two placeholders sharing an id are treated as one concept set and silently collapse
+  to a single name in the compiled JSON. Skip placeholders only when the user has told you the
+  real variable names, file paths, or concept ids to use.
 - If the user wants **many structurally identical cohorts**, show the batch pattern after the
   single example:
 
