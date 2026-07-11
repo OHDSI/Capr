@@ -6,6 +6,7 @@
 \alias{eq,integer-method}
 \alias{eq,numeric-method}
 \alias{eq,Date-method}
+\alias{eq,character-method}
 \title{Equal to operator}
 \usage{
 eq(x)
@@ -15,6 +16,8 @@ eq(x)
 \S4method{eq}{numeric}(x)
 
 \S4method{eq}{Date}(x)
+
+\S4method{eq}{character}(x)
 }
 \arguments{
 \item{x}{the value to used as a bound in the op logic. This can either be an integer, numeric, or

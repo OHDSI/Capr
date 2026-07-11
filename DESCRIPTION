@@ -65,5 +65,5 @@ Collate:
     'cohort.R'
     'collectCodesetId.R'
     'jsonToCapr.R'
-Remotes:  
+Remotes: 
     ohdsi/PhenotypeLibrary
