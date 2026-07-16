@@ -40,6 +40,45 @@ PDF versions of the documentation are also available:
 -   [Design Document](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_design.pdf)
 -   [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
 
+# Using Capr with LLM Coding Agents
+
+Capr ships with a self-contained skill bundle for LLM coding agents (Claude Code, GitHub
+Copilot, Cursor, etc.) that generates validated cohort definitions from natural-language
+descriptions — no MCP servers, no network infrastructure, no database connection. The bundle
+is installed with the package, so it always matches the Capr version you have installed:
+
+- `SKILL.md` — the agent workflow: confirm the design questions, generate a cohort-template
+  function, execute to validate, deliver.
+- `CAPR_REFERENCE.md` — the compact API reference the skill depends on (signatures, valid
+  values, worked examples).
+- `validate.R` — standalone checker that executes a generated script and confirms CirceR can
+  compile its JSON to SQL.
+- `README.md` — per-agent setup instructions and design notes.
+
+There are two ways to wire it up:
+
+**Copy the bundle into your project** (recommended — works with every agent, including ones
+that can only read files inside the workspace, such as GitHub Copilot):
+
+``` r
+file.copy(system.file("llm", package = "Capr"), "docs/", recursive = TRUE)
+```
+
+Then follow the per-agent setup instructions in the copied `docs/llm/README.md`. Re-run the
+copy when you upgrade Capr — `CAPR_REFERENCE.md` states the Capr version it was verified
+against, so a stale copy is detectable.
+
+**Or point the agent at the installed copy** (for agents that can run commands and read files
+outside the workspace, such as Claude Code) — add to your project's agent instruction file
+(`CLAUDE.md`, `AGENTS.md`, or equivalent):
+
+``` markdown
+## Capr cohort definitions
+When asked to build an OHDSI cohort definition, follow the workflow in SKILL.md and use only
+the API documented in CAPR_REFERENCE.md, both found under:
+`Rscript -e 'cat(system.file("llm", package = "Capr"))'`
+```
+
 # Support
 
 -   Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a>

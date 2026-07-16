@@ -251,16 +251,85 @@ test_that("concept attributes build", {
 
 
   #test units
-  tt <- measurementUnit(8713L) #gram per deciliter
+  tt <- measurementUnit(8713L)
   expect_s4_class(tt, "conceptAttribute")
   expect_equal(tt@name, "Unit")
   expect_equal(tt@conceptSet[[1]]@concept_id, 8713L)
 
-  tt <- measurementUnit("%") #gram per deciliter
+  tt <- measurementUnit(c(8554L, 8713L))
   expect_s4_class(tt, "conceptAttribute")
   expect_equal(tt@name, "Unit")
-  expect_equal(tt@conceptSet[[1]]@concept_id, 8554L)
-  expect_equal(tt@conceptSet[[1]]@concept_name, "%")
+  expect_equal(purrr::map_int(tt@conceptSet, ~.@concept_id), c(8554L, 8713L))
+
+  # Concept ids are the only supported input - everything else errors
+  expect_error(measurementUnit(cs(8554L, name = "%")), "concept ids")
+  expect_error(measurementUnit("%"))
+})
+
+test_that("type attributes build from ids without a connection", {
+
+  # attribute names must match the Circe JSON keys exactly (case-sensitive)
+  expected <- c(
+    conditionType = "ConditionType",
+    conditionStatus = "ConditionStatus",
+    drugType = "DrugType",
+    visitType = "VisitType",
+    measurementType = "MeasurementType",
+    observationType = "ObservationType",
+    procedureType = "ProcedureType",
+    deathType = "DeathType",
+    deviceType = "DeviceType",
+    specimenType = "SpecimenType",
+    observationPeriodType = "PeriodType",
+    valueAsConcept = "ValueAsConcept"
+  )
+
+  for (fn in names(expected)) {
+    tt <- do.call(fn, list(32817L))
+    expect_s4_class(tt, "conceptAttribute")
+    expect_equal(tt@name, expected[[fn]])
+    expect_equal(tt@conceptSet[[1]]@concept_id, 32817L)
+    expect_true(is.na(tt@conceptSet[[1]]@concept_name))
+  }
+
+  # multiple ids
+  tt <- conditionType(c(32817L, 32810L))
+  expect_equal(purrr::map_int(tt@conceptSet, ~.@concept_id), c(32817L, 32810L))
+
+  # serialization keys the attribute by its Circe name
+  jj <- as.list(measurementType(32817L))
+  expect_named(jj, "MeasurementType")
+  expect_equal(jj$MeasurementType[[1]]$CONCEPT_ID, 32817L)
+
+  # invalid inputs error
+  expect_error(conditionType(cs(32817L, name = "EHR")), "concept ids")
+  expect_error(drugType("EHR"))
+})
+
+test_that("type attributes survive Circe SQL generation", {
+  skip_if_not_installed("CirceR")
+
+  ch <- cohort(
+    entry = entry(
+      measurement(cs(3004410L, name = "hba1c"), measurementType(32817L), measurementUnit(8554L))
+    )
+  )
+  sql <- CirceR::cohortExpressionFromJson(as.json(ch)) |>
+    CirceR::buildCohortQuery(CirceR::createGenerateOptions(generateStats = FALSE))
+  expect_true(grepl("measurement_type_concept_id", sql))
+  expect_true(grepl("32817", sql))
+  expect_true(grepl("unit_concept_id", sql))
+  expect_true(grepl("8554", sql))
+
+  ch <- cohort(
+    entry = entry(
+      observationPeriod(observationPeriodType(32817L))
+    )
+  )
+  sql <- CirceR::cohortExpressionFromJson(as.json(ch)) |>
+    CirceR::buildCohortQuery(CirceR::createGenerateOptions(generateStats = FALSE))
+  expect_true(grepl("period_type_concept_id", sql))
+  expect_true(grepl("32817", sql))
 })
 
 test_that("conceptSetAttribute builds", {

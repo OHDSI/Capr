@@ -77,13 +77,36 @@ setClass("Cohort",
 
 # Constructors --------------------
 
+# Guard for constructors that collect objects via `...`: without it, a misspelled
+# named argument (e.g. `primaryCriterialimit = "All"`) is silently swallowed into
+# the dots and the real parameter reverts to its default.
+checkCaprDots <- function(dots, allowedClasses, fnName, expected, namedArgs) {
+  for (i in seq_along(dots)) {
+    ok <- any(vapply(allowedClasses, function(cl) methods::is(dots[[i]], cl), logical(1)))
+    if (!ok) {
+      nm <- names(dots)[i]
+      hint <- if (!is.null(nm) && nzchar(nm) && !(nm %in% c("", NA))) {
+        paste0(" The argument is named '", nm, "' - did you misspell one of ", fnName,
+               "()'s parameters (", paste(namedArgs, collapse = ", "), ")?")
+      } else {
+        ""
+      }
+      rlang::abort(paste0("Arguments passed to `...` in ", fnName, "() must be ", expected,
+                          "; argument ", i, " is <", class(dots[[i]])[1], ">.", hint))
+    }
+  }
+  invisible(dots)
+}
+
 #' Create a cohort entry criteria
 #'
 #' @param ... Capr Queries
 #' @param observationWindow a time specifying the minimal time a person is observed
 #' @param primaryCriteriaLimit Which primary criteria matches should be considered for inclusion? "First", "Last" or "All"
 #' @param additionalCriteria a Capr group that adds restriction to the entry event
-#' @param qualifiedLimit Which criteria matches should be considered for inclusion? "First", "Last" or "All"
+#' @param qualifiedLimit Which criteria matches should be considered for inclusion? One of `"First"`,
+#'   `"Last"`, or `"All"`. Required when `additionalCriteria` is non-`NULL`. When `additionalCriteria`
+#'   is `NULL` and `qualifiedLimit` is omitted, it defaults to `primaryCriteriaLimit`.
 #'
 #' @return A cohort entry Capr object
 #' @export
@@ -91,10 +114,19 @@ entry <- function(...,
                   observationWindow = continuousObservation(0L, 0L),
                   primaryCriteriaLimit = c("First", "All", "Last"),
                   additionalCriteria = NULL,
-                  qualifiedLimit = c("First", "All", "Last")) {
+                  qualifiedLimit = NULL) {
 
+  checkCaprDots(list(...), "Query", "entry", "Capr Query objects",
+                c("observationWindow", "primaryCriteriaLimit", "additionalCriteria", "qualifiedLimit"))
   primaryCriteriaLimit <- checkmate::matchArg(primaryCriteriaLimit, c("First", "All", "Last"))
-  qualifiedLimit <- checkmate::matchArg(qualifiedLimit, c("First", "All", "Last"))
+  if (!is.null(additionalCriteria) && is.null(qualifiedLimit)) {
+    stop("qualifiedLimit must be provided when additionalCriteria is used.", call. = FALSE)
+  }
+  if (is.null(qualifiedLimit)) {
+    qualifiedLimit <- primaryCriteriaLimit
+  } else {
+    qualifiedLimit <- checkmate::matchArg(qualifiedLimit, c("First", "All", "Last"))
+  }
 
   cohort_entry <- methods::new("CohortEntry",
                       entryEvents = list(...),
@@ -118,6 +150,9 @@ entry <- function(...,
 #' @export
 attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
 
+  checkCaprDots(list(...), c("Group", "Criteria"), "attrition",
+                "Capr Group objects (from withAll/withAny/withAtLeast/withAtMost) or Criteria",
+                "expressionLimit")
   expressionLimit <- checkmate::matchArg(expressionLimit, c("First", "All", "Last"))
 
   methods::new("CohortAttrition",

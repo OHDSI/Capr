@@ -14,5 +14,5 @@ An attribute for use in \code{\link{measurement}()} or \code{\link{observation}(
 }
 \description{
 Filter Measurement or Observation by value_as_concept_id using a concept set.
-Use this when building from JSON (CodesetId reference); use \code{valueAsConcept(ids, connection, ...)} with a DB for ad-hoc concept ids.
+Use this when building from JSON (CodesetId reference); use \code{valueAsConcept(ids)} for ad-hoc concept ids.
 }

@@ -11,3 +11,4 @@ hidden/
 .vscode/
 diff*
 sql_failures.rds
+.cursor/

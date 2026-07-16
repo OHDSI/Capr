@@ -465,3 +465,11 @@ test_that("VisitOccurrence ProviderSpecialty produces providerSpecialtyConcepts 
   code <- jsonToCapr(jsonPath, mode = "strict")
   expect_true(any(grepl("providerSpecialtyConcepts\\(", code)), info = "providerSpecialtyConcepts(...) for ProviderSpecialty round-trip")
 })
+
+test_that("Measurement.Unit produces measurementUnit(c(...)) and the generated code evaluates without error", {
+  jsonPath <- test_path("resources", "measurementUnit.json")
+  skip_if(!file.exists(jsonPath))
+  code <- jsonToCapr(jsonPath, mode = "strict")
+  expect_true(any(grepl("measurementUnit\\(c\\(", code)), info = "measurementUnit(...) must take a vector of unit concept ids")
+  expect_no_error(eval(parse(text = paste(code, collapse = "\n"))))
+})

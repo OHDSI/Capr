@@ -9,7 +9,7 @@ entry(
   observationWindow = continuousObservation(0L, 0L),
   primaryCriteriaLimit = c("First", "All", "Last"),
   additionalCriteria = NULL,
-  qualifiedLimit = c("First", "All", "Last")
+  qualifiedLimit = NULL
 )
 }
 \arguments{
@@ -21,7 +21,9 @@ entry(
 
 \item{additionalCriteria}{a Capr group that adds restriction to the entry event}
 
-\item{qualifiedLimit}{Which criteria matches should be considered for inclusion? "First", "Last" or "All"}
+\item{qualifiedLimit}{Which criteria matches should be considered for inclusion? One of `"First"`,
+`"Last"`, or `"All"`. Required when `additionalCriteria` is non-`NULL`. When `additionalCriteria`
+is `NULL` and `qualifiedLimit` is omitted, it defaults to `primaryCriteriaLimit`.}
 }
 \value{
 A cohort entry Capr object

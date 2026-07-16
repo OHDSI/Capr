@@ -153,6 +153,32 @@ test_that("VisitOccurrence with ProviderSpecialty round-trips", {
   )
 })
 
+test_that("Type/provenance attribute lists decompile to ids-based constructors", {
+  # ConditionType/ConditionStatus on entry, MeasurementType/Unit on an inclusion rule.
+  # These previously hit skipOrStop ("require vocabulary lookup"); now DB-free.
+  jsonPath <- test_path("resources", "typeAttributes.json")
+  skip_if(!file.exists(jsonPath), message = "typeAttributes.json not found")
+
+  code <- jsonToCapr(jsonPath, mode = "strict")
+  expect_true(any(grepl("conditionType\\(c\\(32817L, 32810L\\)\\)", code)))
+  expect_true(any(grepl("conditionStatus\\(c\\(32901L\\)\\)", code)))
+  expect_true(any(grepl("measurementType\\(c\\(32817L\\)\\)", code)))
+  expect_true(any(grepl("measurementUnit\\(c\\(8554L\\)\\)", code)))
+
+  env <- new.env(parent = .GlobalEnv)
+  expect_error(eval(parse(text = code), envir = env), NA)
+  expect_false(is.null(env$cohortDef))
+
+  rtJson <- compile(env$cohortDef)
+  rt <- jsonlite::fromJSON(rtJson, simplifyVector = FALSE)
+  co <- rt$PrimaryCriteria$CriteriaList[[1]]$ConditionOccurrence
+  expect_equal(purrr::map_int(co$ConditionType, ~.$CONCEPT_ID), c(32817L, 32810L))
+  expect_equal(co$ConditionStatus[[1]]$CONCEPT_ID, 32901L)
+  ms <- rt$InclusionRules[[1]]$expression$CriteriaList[[1]]$Criteria$Measurement
+  expect_equal(ms$MeasurementType[[1]]$CONCEPT_ID, 32817L)
+  expect_equal(ms$Unit[[1]]$CONCEPT_ID, 8554L)
+})
+
 test_that("Edge-case fixtures are valid Atlas schema (minItems 0, etc.)", {
   skip_if_not_installed("jsonvalidate")
   schemaPath <- system.file("atlas-cohort-schema.json", package = "Capr", mustWork = TRUE)
@@ -163,7 +189,8 @@ test_that("Edge-case fixtures are valid Atlas schema (minItems 0, etc.)", {
     "primaryNoCodesetId.json",
     "inclusionRuleOccurrenceStartDate.json",
     "censoringDeathNoCodesetId.json",
-    "observationPeriodUserDefined.json"
+    "observationPeriodUserDefined.json",
+    "typeAttributes.json"
   )
   for (f in fixtures) {
     jsonPath <- test_path("resources", f)
@@ -181,7 +208,8 @@ test_that("Edge-case fixtures round-trip and produce valid Circe SQL", {
     "primaryNoCodesetId.json",
     "inclusionRuleOccurrenceStartDate.json",
     "censoringDeathNoCodesetId.json",
-    "observationPeriodUserDefined.json"
+    "observationPeriodUserDefined.json",
+    "typeAttributes.json"
   )
   for (f in fixtures) {
     jsonPath <- test_path("resources", f)
