@@ -29,7 +29,7 @@ OHDSI (Circe/Atlas-compatible) cohort JSON.
    index-day boundary, windows, sequencing, exit strategy). A line is tagged
    `(confirmed by user -- "<their answer>")` only when the user answered it in reply to *this*
    request's Step 1 message; everything else is `(ASSUMED -- <why>)`. A script missing this
-   block is an incomplete deliverable, exactly like one missing `writeCohort()`.
+   block is an incomplete deliverable, exactly like one missing `cohort()`.
 3. **Use only functions and arguments documented in `CAPR_REFERENCE.md`.** If something seems
    missing, say so — do not improvise API.
 4. **Never write a concept ID from memory.** This includes clinical concepts and type / unit /
@@ -38,7 +38,7 @@ OHDSI (Circe/Atlas-compatible) cohort JSON.
    **Every placeholder concept set needs its own distinct placeholder ID** — see the placeholder
    pattern in Step 2. Reusing one id across concept sets makes Capr silently merge them.
 5. **Always produce the function-form output** described below, even for a one-off cohort.
-6. **Always execute the generated file before delivering it.** Code that has not run is not done.
+6. **Always execute the generated code before delivering it.** Code that has not run is not done.
 7. **Say so when the cohort is not expressible in Capr/Circe.** Check every request against the
    wrong-tool signals in `CAPR_REFERENCE.md` before writing code. A definition that compiles but
    means something different from what the user asked for is worse than no code — never deliver
@@ -86,8 +86,8 @@ Format of the message:
 
 **The checklist:**
 
-1. **Which event is the index** — the event the observation window, exit strategy, and cohort
-   start date all anchor to. Always name your proposed index. When the description names two or
+1. **Which event is the index** — the anchor event for the observation window, exit strategy, and 
+   cohort start date. Always name your proposed index. When the description names two or
    more clinical events ("diagnosis confirmed by a lab result", "X and then Y"), phrasing order
    is not a reliable signal — this needs explicit confirmation.
 2. **OMOP domain of each criterion** — never inferred from clinical phrasing alone. "Diagnosis"
@@ -95,7 +95,7 @@ Format of the message:
    elsewhere: lab results → Measurement; history-of / family-history / status concepts →
    Observation; some findings → Procedure or Device. A domain mismatch returns zero rows, not an
    error.
-3. **Entry event limit** — enter at the *first* qualifying event only
+3. **Entry event limit** — enter the cohort at the *first* qualifying event only
    (`primaryCriteriaLimit = "First"`) or at *every* qualifying event (`"All"`)? "Patients with X"
    alone does not answer this. An **incident / new-user / first-ever** cohort additionally needs
    `firstOccurrence()` on the entry Query. When the entry event carries qualifying restrictions,

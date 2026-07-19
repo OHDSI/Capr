@@ -19,13 +19,14 @@ loaded into your agent's context.
   it.
 - The agent must be able to run `Rscript` (or you run the validation steps yourself).
 
-If Capr is installed, this bundle is on disk at `system.file("llm", package = "Capr")`. Copy it
-into your project (`file.copy(system.file("llm", package = "Capr"), "docs/", recursive = TRUE)`)
-— most agents, GitHub Copilot in particular, can only read files inside the workspace. Agents
-that can run commands and read outside the workspace (e.g. Claude Code) can alternatively be
-pointed at the installed copy directly; see the package README. Re-copy when you upgrade Capr.
+If Capr is installed, this bundle is on disk at `system.file("llm", package = "Capr")`. 
+You have 2 options for accessing it with your agent:
 
-## Setup per agent
+- Point the agent at it directly with `Rscript -e 'cat(system.file("llm", package = "Capr"))'`
+  - This will only work if your agent can read files outside the repository it's working in
+- Copy it into your project manually (`file.copy(system.file("llm", package = "Capr"), "docs/", recursive = TRUE)`)
+
+## Setup per agent (manual file copy)
 
 The pattern is always the same: make `SKILL.md` part of the agent's instructions, and keep
 `CAPR_REFERENCE.md` somewhere the agent can read it (same directory is simplest).
@@ -64,10 +65,10 @@ The pattern is always the same: make `SKILL.md` part of the agent's instructions
 
 - **Concept ids are inputs, not model knowledge.** Agents are forbidden from writing concept ids
   from memory; unknown concept sets become executable placeholders with distinct, incrementing
-  ids (`cs(0L, name = "... [PLACEHOLDER]")`, `cs(1L, ...)`, ...) that you replace. Ids must differ
-  across concept sets — Capr collapses concept sets with identical expressions into one,
-  regardless of name, so a repeated placeholder id silently drops all but one name from the
-  compiled JSON. Look ids up in [ATHENA](https://athena.ohdsi.org).
+  ids (`cs(0L, name = "... [PLACEHOLDER]")`, `cs(1L, ...)`, ...) that you replace with relevant
+  Capr concept set expressions. Ids must differ across concept sets — Capr collapses concept sets 
+  with identical expressions into one, regardless of name, so a repeated placeholder id silently 
+  drops all but one name from the compiled JSON.
 - **The function form is the contract.** Cohort logic is separated from concept-set acquisition,
   which also makes batch generation trivial: `lapply(conceptSetList, createMyCohort)`.
 - **Everything runs without a database.** Capr builds and serializes cohort JSON in memory; a

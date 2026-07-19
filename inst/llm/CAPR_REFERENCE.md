@@ -1,9 +1,8 @@
 # Capr R Package — LLM Reference
 
 Reference for generating OHDSI cohort definitions with the **Capr** R package.
-Verified against Capr **2.1.1**. Every signature, enum value, and example in
-this document was checked against the package source; do not use functions or arguments not
-listed here.
+Every signature, enum value, and example in this document was checked against 
+the package source; do not use functions or arguments not listed here.
 
 ## Overview
 
@@ -138,7 +137,8 @@ user asked for is the worst possible outcome, because nothing will ever error. S
   comparison between values of two different events. Attribute filters apply to one event at a
   time.
 - **Aggregate arithmetic across events** — sums, averages, min/max, or rates over a person's 
-  events ("mean HbA1c above 8", "total days supply over 90 in the year"). Criteria can *count* events (`atLeast`/`exactly`/`atMost`), but cannot aggregate their values.
+  events ("mean HbA1c above 8", "total days supply over 90 in the year"). Criteria can *count* events 
+  (`atLeast`/`exactly`/`atMost`), but cannot aggregate their values.
 - **Ordinal/sequential event logic** beyond first occurrence — "the second treatment era",
   "the third hospitalization within a year". Nested criteria can sometimes approximate these;
   verify the logic carefully and say so if the translation is approximate.
@@ -685,7 +685,7 @@ attrition(
 ## Worked Examples
 
 All examples assume concept sets named `cs_*` already exist in the session as `ConceptSet`
-objects. Every example runs without error against Capr 2.1.1.
+objects.
 
 ### 1. Simple entry event (single concept set, single domain)
 
@@ -751,7 +751,7 @@ require prior observation; `measurement()` with `valueAsNumber()` + `measurement
 
 ### 3. Entry + absence criteria (no prior related diagnosis)
 
-**Intent:** Persons with new type 2 diabetes: enter at first T2DM diagnosis, require ≥365 days of
+**Intent:** Persons with type 2 diabetes, entering at their first T2DM diagnosis, require ≥365 days of
 prior observation, exclude anyone with a type 1 or secondary diabetes diagnosis at any time on or
 before index; exit at end of continuous observation.
 
@@ -989,8 +989,7 @@ cd <- cohort(
     observationPeriod(startDate(eq(as.Date("2018-01-01")))),
     observationPeriod(startDate(eq(as.Date("2019-01-01")))),
     observationWindow = continuousObservation(365L, 0L),
-    primaryCriteriaLimit = "All",
-    qualifiedLimit = "First"
+    primaryCriteriaLimit = "All"
   ),
   attrition = attrition(
     expressionLimit = "All"
@@ -1005,9 +1004,7 @@ cd <- cohort(
 **Demonstrates:** `observationPeriod()` + `startDate(eq(...))` to anchor entry to fixed calendar
 dates rather than a clinical event; one entry Query per year; `primaryCriteriaLimit = "All"` +
 `expressionLimit = "All"` to keep every qualifying year per person; `era(eraDays = 0L)` so
-back-to-back yearly episodes stay separate rather than merging. (The `qualifiedLimit` here is
-carried over from the source Atlas JSON only — it has no effect without `additionalCriteria`;
-see Anti-Patterns #3.)
+back-to-back yearly episodes stay separate rather than merging.
 
 ### 11. Multi-domain "2 qualifying diagnoses" cohort (condition and/or observation)
 
