@@ -72,3 +72,9 @@ The pattern is always the same: make `SKILL.md` part of the agent's instructions
   which also makes batch generation trivial: `lapply(conceptSetList, createMyCohort)`.
 - **Everything runs without a database.** Capr builds and serializes cohort JSON in memory; a
   CDM connection is only ever an optional nicety to fill in display names for Atlas.
+- **The delivery step is overridable by host frameworks.** The generation contract (clarify,
+  function form, Scope check, validate) always applies, but a host project's own instructions
+  may redirect where the code lands and how it is serialized — e.g. the
+  [picard](https://github.com/OHDSI/picard) framework appends definitions to its builder
+  scripts and registers them via its manifest API instead of `writeCohort()`. See *Delivery
+  Integration* in `SKILL.md`.

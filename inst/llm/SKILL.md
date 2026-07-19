@@ -44,6 +44,26 @@ OHDSI (Circe/Atlas-compatible) cohort JSON.
    means something different from what the user asked for is worse than no code — never deliver
    a silent approximation; state the mismatch and propose the decomposition pattern instead.
 
+## Delivery Integration (host frameworks)
+
+The generation contract is invariant: the Step 1 clarification message, the function-form
+output with its `Scope check` block, validation by execution, and every Non-Negotiable Rule
+above apply in every context. Where the deliverable *lives* and how it is *serialized* are
+not: when the project you are working in supplies its own instructions for integrating Capr
+definitions — another skill, an `AGENTS.md`/`CLAUDE.md`, or framework documentation (e.g. a
+Picard/Ulysses study repository) — follow those instructions for the delivery step instead of
+the default one-file-per-cohort with a `writeCohort()` example block. Typical overrides:
+
+- **Target**: appending the cohort function and its invocation to an existing project script
+  rather than creating a standalone file.
+- **Serialization**: replacing the `writeCohort()` call with a framework registration call
+  that serializes the JSON internally.
+
+If the host instructions prevent executing the deliverable in place (e.g. the target script
+has side effects the user must control), still perform Step 3 by executing a scratch copy —
+the cohort function plus a placeholder example block with a temporary `writeCohort()` —
+outside the project, and say in the Step 4 report that validation ran on a scratch copy.
+
 ## Workflow
 
 ### Step 1 — Ask the scope questions (every request)
@@ -136,13 +156,15 @@ library(Capr)
 #     (confirmed by user -- "follow until they leave the database")
 # ------------------------------------------------------------------------------
 
-#' Build the <phenotype> cohort definition
-#'
-#' <one-paragraph restatement of the cohort logic in plain English>
-#'
-#' @param t2dmCs  ConceptSet for type 2 diabetes (entry event)
-#' @param insulinCs ConceptSet for insulin exposures (exclusion)
-#' @return A Capr Cohort object; serialize with writeCohort() or compile()
+# Build the <phenotype> cohort definition
+#
+# <one-paragraph restatement of the cohort logic in plain English>
+#
+# Params:
+#   t2dmCs    - ConceptSet for type 2 diabetes (entry event)
+#   insulinCs - ConceptSet for insulin exposures (exclusion)
+# Returns:
+#   A Capr Cohort object; serialize with writeCohort() or compile()
 createT2dmCohort <- function(t2dmCs, insulinCs) {
   cohort(
     entry = entry(
@@ -179,7 +201,7 @@ writeCohort(cohortDef, "t2dm_cohort.json")
 
 Contract:
 
-- **The `Scope check` block is mandatory and always first**, before the roxygen header, in every
+- **The `Scope check` block is mandatory and always first**, before the header comment, in every
   delivered file — including one-criterion cohorts. Fill in one index-event line, one domain
   line per criterion (the entry event and every attrition criterion), and one `Design choices`
   line per applicable Step 1 checklist item (entry limit, washout, index-day boundary, windows,
