@@ -58,7 +58,7 @@ is installed with the package, so it always matches the Capr version you have in
 There are two ways to wire it up:
 
 **Copy the bundle into your project** (recommended — works with every agent, including ones
-that can only read files inside the workspace, such as GitHub Copilot):
+that can only read files inside the workspace):
 
 ``` r
 file.copy(system.file("llm", package = "Capr"), "docs/", recursive = TRUE)
@@ -69,7 +69,7 @@ copy when you upgrade Capr — `CAPR_REFERENCE.md` states the Capr version it wa
 against, so a stale copy is detectable.
 
 **Or point the agent at the installed copy** (for agents that can run commands and read files
-outside the workspace, such as Claude Code) — add to your project's agent instruction file
+outside the workspace) — add to your project's agent instruction file
 (`CLAUDE.md`, `AGENTS.md`, or equivalent):
 
 ``` markdown

@@ -29,7 +29,7 @@ OHDSI (Circe/Atlas-compatible) cohort JSON.
    index-day boundary, windows, sequencing, exit strategy). A line is tagged
    `(confirmed by user -- "<their answer>")` only when the user answered it in reply to *this*
    request's Step 1 message; everything else is `(ASSUMED -- <why>)`. A script missing this
-   block is an incomplete deliverable, exactly like one missing `writeCohort()`.
+   block is an incomplete deliverable, exactly like one missing `cohort()`.
 3. **Use only functions and arguments documented in `CAPR_REFERENCE.md`.** If something seems
    missing, say so — do not improvise API.
 4. **Never write a concept ID from memory.** This includes clinical concepts and type / unit /
@@ -38,11 +38,31 @@ OHDSI (Circe/Atlas-compatible) cohort JSON.
    **Every placeholder concept set needs its own distinct placeholder ID** — see the placeholder
    pattern in Step 2. Reusing one id across concept sets makes Capr silently merge them.
 5. **Always produce the function-form output** described below, even for a one-off cohort.
-6. **Always execute the generated file before delivering it.** Code that has not run is not done.
+6. **Always execute the generated code before delivering it.** Code that has not run is not done.
 7. **Say so when the cohort is not expressible in Capr/Circe.** Check every request against the
    wrong-tool signals in `CAPR_REFERENCE.md` before writing code. A definition that compiles but
    means something different from what the user asked for is worse than no code — never deliver
    a silent approximation; state the mismatch and propose the decomposition pattern instead.
+
+## Delivery Integration (host frameworks)
+
+The generation contract is invariant: the Step 1 clarification message, the function-form
+output with its `Scope check` block, validation by execution, and every Non-Negotiable Rule
+above apply in every context. Where the deliverable *lives* and how it is *serialized* are
+not: when the project you are working in supplies its own instructions for integrating Capr
+definitions — another skill, an `AGENTS.md`/`CLAUDE.md`, or framework documentation (e.g. a
+Picard/Ulysses study repository) — follow those instructions for the delivery step instead of
+the default one-file-per-cohort with a `writeCohort()` example block. Typical overrides:
+
+- **Target**: appending the cohort function and its invocation to an existing project script
+  rather than creating a standalone file.
+- **Serialization**: replacing the `writeCohort()` call with a framework registration call
+  that serializes the JSON internally.
+
+If the host instructions prevent executing the deliverable in place (e.g. the target script
+has side effects the user must control), still perform Step 3 by executing a scratch copy —
+the cohort function plus a placeholder example block with a temporary `writeCohort()` —
+outside the project, and say in the Step 4 report that validation ran on a scratch copy.
 
 ## Workflow
 
@@ -66,8 +86,8 @@ Format of the message:
 
 **The checklist:**
 
-1. **Which event is the index** — the event the observation window, exit strategy, and cohort
-   start date all anchor to. Always name your proposed index. When the description names two or
+1. **Which event is the index** — the anchor event for the observation window, exit strategy, and 
+   cohort start date. Always name your proposed index. When the description names two or
    more clinical events ("diagnosis confirmed by a lab result", "X and then Y"), phrasing order
    is not a reliable signal — this needs explicit confirmation.
 2. **OMOP domain of each criterion** — never inferred from clinical phrasing alone. "Diagnosis"
@@ -75,7 +95,7 @@ Format of the message:
    elsewhere: lab results → Measurement; history-of / family-history / status concepts →
    Observation; some findings → Procedure or Device. A domain mismatch returns zero rows, not an
    error.
-3. **Entry event limit** — enter at the *first* qualifying event only
+3. **Entry event limit** — enter the cohort at the *first* qualifying event only
    (`primaryCriteriaLimit = "First"`) or at *every* qualifying event (`"All"`)? "Patients with X"
    alone does not answer this. An **incident / new-user / first-ever** cohort additionally needs
    `firstOccurrence()` on the entry Query. When the entry event carries qualifying restrictions,
@@ -136,13 +156,15 @@ library(Capr)
 #     (confirmed by user -- "follow until they leave the database")
 # ------------------------------------------------------------------------------
 
-#' Build the <phenotype> cohort definition
-#'
-#' <one-paragraph restatement of the cohort logic in plain English>
-#'
-#' @param t2dmCs  ConceptSet for type 2 diabetes (entry event)
-#' @param insulinCs ConceptSet for insulin exposures (exclusion)
-#' @return A Capr Cohort object; serialize with writeCohort() or compile()
+# Build the <phenotype> cohort definition
+#
+# <one-paragraph restatement of the cohort logic in plain English>
+#
+# Params:
+#   t2dmCs    - ConceptSet for type 2 diabetes (entry event)
+#   insulinCs - ConceptSet for insulin exposures (exclusion)
+# Returns:
+#   A Capr Cohort object; serialize with writeCohort() or compile()
 createT2dmCohort <- function(t2dmCs, insulinCs) {
   cohort(
     entry = entry(
@@ -179,7 +201,7 @@ writeCohort(cohortDef, "t2dm_cohort.json")
 
 Contract:
 
-- **The `Scope check` block is mandatory and always first**, before the roxygen header, in every
+- **The `Scope check` block is mandatory and always first**, before the header comment, in every
   delivered file — including one-criterion cohorts. Fill in one index-event line, one domain
   line per criterion (the entry event and every attrition criterion), and one `Design choices`
   line per applicable Step 1 checklist item (entry limit, washout, index-day boundary, windows,
