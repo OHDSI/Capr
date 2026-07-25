@@ -18,6 +18,12 @@ loaded into your agent's context.
 - R with the Capr package installed (`remotes::install_github("OHDSI/Capr")`); CirceR comes with
   it.
 - The agent must be able to run `Rscript` (or you run the validation steps yourself).
+- **A reasoning-capable, frontier-tier model.** In tools with automatic model selection (e.g.,
+  GitHub Copilot's "Auto"), explicitly pick a frontier model — Claude Sonnet/Opus-class,
+  GPT-5-class, Gemini Pro-class or better — before invoking the skill. This is a setup choice
+  you make before the agent starts, not something the agent can fix for itself: model selection
+  happens above the agent loop, so text inside `SKILL.md` can't influence it. Lightweight
+  "mini" / "flash" / non-reasoning tiers may produce cohort definitions that pass `validate.R` but are clinically wrong — validation checks API usage, not clinical intent.
 
 If Capr is installed, this bundle is on disk at `system.file("llm", package = "Capr")`. 
 You have 2 options for accessing it with your agent:

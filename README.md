@@ -55,6 +55,12 @@ is installed with the package, so it always matches the Capr version you have in
   compile its JSON to SQL.
 - `README.md` — per-agent setup instructions and design notes.
 
+**Requires a reasoning-capable, frontier-tier model.** In tools with automatic model selection
+(e.g., GitHub Copilot's "Auto"), explicitly pick a frontier model — Claude Sonnet/Opus-class,
+GPT-5-class, Gemini Pro-class or better — before invoking the skill. Lightweight "mini" /
+"flash" / non-reasoning tiers may produce cohort definitions that pass validation but are
+clinically wrong, and this is not fixable by refining the skill instructions.
+
 There are two ways to wire it up:
 
 **Copy the bundle into your project** (recommended — works with every agent, including ones
