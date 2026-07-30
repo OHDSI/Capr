@@ -130,14 +130,100 @@ the corresponding `Scope check` lines `ASSUMED`. Micro-decisions below the quest
 (e.g. exact window endpoints implied by convention) stay out of the message: decide
 conventionally and record each one as an `# ASSUMPTION:` comment on the relevant line.
 
-### Step 2 — Generate the cohort function
+### Step 2 — Match to a phenotype archetype first, then generate
 
-Every deliverable is one R file with this structure:
+**Archetype check (before writing custom code):**
+
+The package exports phenotype archetype functions (documented in `CAPR_REFERENCE.md` § *Phenotype
+Archetypes*). Each encodes a common clinical pattern as a callable R function that returns a
+`Cohort` object. Before generating custom code from primitives, match the description to the
+closest archetype.
+
+**When the archetype covers the definition:**
+
+The deliverable is a **thin wrapper function** — one that calls the archetype directly. The
+Scope check block records the archetype choice and any parameter overrides; the function body is
+one line. Sensitivity/specificity tuning is handled by adjusting the archetype's parameters
+(washout, era gap, exit days, etc.) or by falling back to custom code when the user wants
+type/status/visit-concept restrictions.
 
 ```r
 library(Capr)
 
 # ---- Scope check ------------------------------------------------------------
+# Archetype: chronicCohort (prevalent chronic condition)
+#   (ASSUMED -- "hypertension diagnosis" matches chronic disease pattern)
+# Index event: hypertension diagnosis
+#   (confirmed by user -- "index on first HTN diagnosis")
+# Criteria -> OMOP domain:
+#   hypertension -> conditionOccurrence
+#     (confirmed by user -- "hypertension recorded as condition")
+# Design choices:
+#   Entry event limit -> first qualifying diagnosis (archetype default: First)
+#     (confirmed by user -- "one episode per person")
+#   Prior observation -> 365 days continuous observation before index
+#     (ASSUMED -- user accepted default convention)
+#   Exit strategy -> end of continuous observation (archetype default)
+#     (ASSUMED -- user accepted default)
+#   Era collapse -> 180-day gap between episodes merged into one era
+#     (ASSUMED -- common chronic-disease convention)
+# ------------------------------------------------------------------------------
+
+# Build the hypertension cohort definition
+#
+# Prevalent hypertension: persons with a recorded HTN diagnosis, entering at
+# their first qualifying diagnosis with ≥365 days prior observation. Exit at
+# end of continuous observation. Neighboring episodes ≤180 days apart are
+# collapsed into a single era.
+#
+# Params:
+#   htnCs - ConceptSet for hypertension
+# Returns:
+#   A Capr Cohort object
+createHtnCohort <- function(htnCs) {
+  chronicCohort(htnCs, washoutDays = 365L, eraGapDays = 180L)
+}
+
+# ---- Example usage ----------------------------------------------------------
+htnCs <- cs(0L, name = "Hypertension [PLACEHOLDER]")  # TODO: real concept set
+
+cohortDef <- createHtnCohort(htnCs)
+writeCohort(cohortDef, "htn_cohort.json")
+```
+
+**Archetype match but needs minor customizations:**
+
+If the closest archetype covers the structure but the user wants one or two additions (e.g.,
+an extra demographic rule, a different exit strategy, a prior-history exclusion), fall back to
+custom `cohort()` code — do not try to mutate the archetype's return value. Use the archetype's
+source code in `CAPR_REFERENCE.md` as a reference pattern: start from the archetype's `cohort()`
+call, adapt the parameters, and add the custom rules. The `Scope check` block records both:
+`# Archetype: <name> (used as reference pattern)` plus `# Reason: <what diverged>`.
+
+**When no archetype fits:**
+
+Generate a custom function from primitives as described below. The archetype source code in
+`CAPR_REFERENCE.md` still serves as a reference pattern for the closest match.
+
+**Sensitivity/specificity tuning (documented pattern, not a special parameter):**
+
+When the user asks for a "sensitive" or "specific" definition, adjust the archetype parameters
+or add custom attrition rules per the table in `CAPR_REFERENCE.md` § *Tuning Sensitivity and
+Specificity*. No archetype has a `sensitivity` parameter — tune by modifying washout, occurrence
+count, era gap, or by layering type/status/visit-concept restrictions (which require concept
+IDs from the user).
+
+---
+
+### Custom code path (no matching archetype)
+
+Every custom deliverable is one R file with this structure:
+
+```r
+library(Capr)
+
+# ---- Scope check ------------------------------------------------------------
+# Archetype: none (multi-criterion definition -- no single archetype covers this)
 # Index event: T2DM diagnosis
 #   (confirmed by user -- "index on the diabetes diagnosis, not the insulin fill")
 # Criteria -> OMOP domain:
@@ -202,10 +288,13 @@ writeCohort(cohortDef, "t2dm_cohort.json")
 Contract:
 
 - **The `Scope check` block is mandatory and always first**, before the header comment, in every
-  delivered file — including one-criterion cohorts. Fill in one index-event line, one domain
-  line per criterion (the entry event and every attrition criterion), and one `Design choices`
-  line per applicable Step 1 checklist item (entry limit, washout, index-day boundary, windows,
-  sequencing, exit strategy). Tag each line
+  delivered file — including one-criterion cohorts. **When a phenotype archetype was used** (Step
+  2), include an `Archetype:` line naming the archetype function and why it matches. **When a
+  custom definition started from an archetype reference pattern**, include
+  `# Archetype: <name> (used as reference pattern)` plus `# Reason: <what diverged>`. Fill in
+  one index-event line, one domain line per criterion (the entry event and every attrition
+  criterion), and one `Design choices` line per applicable Step 1 checklist item (entry limit,
+  washout, index-day boundary, windows, sequencing, exit strategy). Tag each line
   `(confirmed by user -- "<short quote of their Step 1 answer>")` when the reply to this
   request's clarification message settled it, or `(ASSUMED -- <one clause on what and why>)`
   when it didn't. Never omit a line. Decisions recorded here are not repeated as inline

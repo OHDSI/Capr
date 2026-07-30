@@ -1062,6 +1062,151 @@ alternatives each = N² combinations to cover, not N. Ask the user which domains
 interest can appear in before generating code like this — don't assume a single domain just
 because one was mentioned first.
 
+## Phenotype Archetypes
+
+The package exports **archetype functions** that encode common clinical/epidemiological cohort
+patterns. Each returns a ready-to-compile `Cohort` object parameterized by concept set(s) and
+optional tuning knobs (washout, era gap, exit duration, etc.).
+
+When generating a cohort, match the user's description to the closest archetype. If one covers
+the definition, call it directly — a thin wrapper function with concept-set parameters is the
+entire deliverable. When the definition needs additions or modifications the archetype doesn't
+support (extra attrition rules, different exit strategy, visit-type restrictions, multi-domain
+event, etc.), fall back to custom code using the package primitives.
+
+### Archetype Reference Table
+
+| Function | Domain | Use Case | Entry Limit | Exit | Era |
+|---|---|---|---|---|---|
+| `chronicCohort(cs, washoutDays, eraGapDays)` | condition | Prevalent chronic condition | `"First"` | Observation | configurable |
+| `incidentCohort(cs, washoutDays, eraGapDays)` | condition | First-ever diagnosis (new onset) | `"First"` | Observation | configurable |
+| `acuteCohort(cs, washoutDays, exitDays, exitAt)` | condition | Short-duration event | `"All"` | Fixed (default 30d) | `0` |
+| `newUserCohort(cs, washoutDays, persistenceWindow, surveillanceWindow)` | drug | First-time drug exposure | `"First"` | Drug era | `0` |
+| `allDrugCohort(cs, washoutDays)` | drug | Any drug exposure episode | `"All"` | Observation | `0` |
+| `measurementCohort(cs, valueFilter, unitConceptIds, washoutDays)` | measurement | Lab value threshold | `"First"` | Observation | `0` |
+| `procedureCohort(cs, washoutDays, eraGapDays)` | procedure | Procedure occurrence | `"First"` | Observation | configurable |
+| `observationCohort(cs, washoutDays, eraGapDays)` | observation | Observation record | `"First"` | Observation | configurable |
+
+### `chronicCohort(conditionConceptSet, washoutDays = 365L, eraGapDays = 0L)`
+
+Prevalent chronic condition. First condition diagnosis per person with a minimum prior observation
+window, exiting at end of continuous observation.
+
+```r
+createHtnCohort <- function(htnCs) {
+  chronicCohort(htnCs, washoutDays = 365L, eraGapDays = 180L)
+}
+```
+
+### `incidentCohort(conditionConceptSet, washoutDays = 365L, eraGapDays = 0L)`
+
+First-ever (new-onset) condition. Uses `firstOccurrence()` on the entry query to select only the
+first recorded diagnosis in each person's history. Combined with the observation window, this
+excludes prevalent cases: a person enters at their first-ever recorded diagnosis, and only if
+that event has sufficient prior observation.
+
+```r
+createNewOnsetAfib <- function(afibCs) {
+  incidentCohort(afibCs, washoutDays = 365L)
+}
+```
+
+### `acuteCohort(conditionConceptSet, washoutDays = 180L, exitDays = 30L, exitAt = c("startDate", "endDate"))`
+
+Short-duration acute event. Each qualifying event enters the cohort independently (`"All"` limit)
+and exits after a fixed number of days. No era collapsing — episodes stay distinct.
+
+```r
+createMiCohort <- function(miCs) {
+  acuteCohort(miCs, exitDays = 30L)
+}
+```
+
+### `newUserCohort(drugConceptSet, washoutDays = 365L, persistenceWindow = 30L, surveillanceWindow = 0L)`
+
+First-time drug exposure. Uses `firstOccurrence()` to select each person's first recorded exposure,
+exiting at the end of the resulting continuous drug era (`drugExit()`). Standard new-user design
+for pharmacoepidemiology.
+
+```r
+createMetforminUsers <- function(metforminCs) {
+  newUserCohort(metforminCs, washoutDays = 365L)
+}
+```
+
+### `allDrugCohort(drugConceptSet, washoutDays = 0L)`
+
+All drug exposure episodes. Every qualifying exposure enters the cohort independently (`"All"`),
+exiting at end of continuous observation. Useful for prevalence and utilization studies.
+
+```r
+createAceiExposures <- function(aceiCs) {
+  allDrugCohort(aceiCs)
+}
+```
+
+### `measurementCohort(measurementConceptSet, valueFilter, unitConceptIds = NULL, washoutDays = 365L)`
+
+Measurement value threshold. First qualifying measurement per person, filtered by `valueFilter`
+(from `valueAsNumber()`, `rangeHigh()`, or `rangeLow()`) and optional `unitConceptIds`.
+
+```r
+createUncontrolledHbA1c <- function(hba1cCs) {
+  measurementCohort(
+    hba1cCs,
+    valueFilter = valueAsNumber(gt(6.5)),
+    unitConceptIds = 8554L
+  )
+}
+```
+
+### `procedureCohort(procedureConceptSet, washoutDays = 365L, eraGapDays = 0L)`
+
+First procedure occurrence per person with minimum prior observation. Same pattern as
+`chronicCohort()` but queries the procedure domain.
+
+### `observationCohort(observationConceptSet, washoutDays = 365L, eraGapDays = 0L)`
+
+First observation record per person with minimum prior observation. Same pattern as
+`chronicCohort()` but queries the observation domain.
+
+### Tuning Sensitivity and Specificity
+
+When a user needs a broader (sensitive) or narrower (specific) variant, adjust the archetype call
+or fall back to custom code. Archetypes cover the "balanced" default; the table below describes how
+an LLM should modify the definition to shift sensitivity:
+
+| Axis | More sensitive (catch more) | More specific (higher precision) |
+|---|---|---|
+| **Washout** | Reduce or zero out `washoutDays` | Keep or increase `washoutDays` |
+| **Occurrence count** | Keep the archetype's default (1 event) | Add `atLeast(2, ...)` in attrition with a time window |
+| **Concept set scope** | Use broad concept sets (descendants, mapped) | Use narrow concept sets (specific codes only) |
+| **Event provenance** | Accept any `*_type_concept_id` (no filter) | Filter by type: `conditionType()`, `drugType()`, `measurementType()` — restricts to EHR-derived, prescription-only, etc. |
+| **Diagnosis status** | Accept any diagnosis | Add `conditionStatus()` with primary-diagnosis IDs — requires the user to supply the IDs |
+| **Visit context** | Any care setting | Add `visitType()` or nested `visit()` criteria to require inpatient/ED setting |
+| **Episode definition** | Merge nearby events into eras (increase `eraGapDays`) | Keep episodes distinct (`eraGapDays = 0L`); require multiple occurrences within a window |
+
+**When to add these adjustments vs. falling back to custom code:** If the user only asks for
+"sensitive" or "specific" without giving specific concept IDs, adjust the structural defaults
+(washout, occurrence count, era gap). If they specify particular type/status/visit restrictions,
+fall back to custom `cohort()` code with the archetype's source as a reference pattern.
+
+### When to Fall Back to Custom Code
+
+The archetypes handle simple, single-domain definitions. Generate a custom `cohort()` call from
+primitives when the definition involves:
+
+- **Multi-domain index events** ("diagnosis confirmed by a lab result")
+- **Co-occurring events** ("stroke during an inpatient visit")
+- **Extra attrition rules beyond the archetype** (demographics, additional exclusions, prior-history checks)
+- **Non-standard exit** (censoring events, custom fixed duration, different exit from archetype default)
+- **Sequenced events** ("X followed by Y within N days")
+- **Source-concept filtering**
+- **Multi-domain criteria** ("diagnosis recorded as condition OR observation")
+
+In these cases, use the closest archetype's source code as a reference pattern, adapt the logic
+with the required primitives, and deliver as described in SKILL.md Step 2.
+
 ## Anti-Patterns & Common Mistakes
 
 Most hallucinated function names or wrong argument types throw an immediate R error and are
