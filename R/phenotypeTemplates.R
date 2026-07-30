@@ -9,17 +9,20 @@
 # points for cohort generation. For definitions that diverge from all archetypes,
 # compose a custom cohort() call from the package primitives instead.
 
-#' Chronic prevalent condition cohort
+#' Chronic condition cohort
 #'
-#' Build a cohort for a prevalent chronic condition: first condition diagnosis
-#' per person with a minimum prior observation requirement, exiting at end of
-#' continuous observation. Optionally collapse close episodes into eras.
+#' Build a cohort that captures every qualified condition occurrence per person,
+#' exiting at each event's end date. Nearby episodes can be collapsed into eras
+#' via `eraGapDays`. Matches the OHDSI Phenotype Library convention: all qualifying
+#' events are preserved, era collapse merges adjacent episodes.
 #'
 #' @param conditionConceptSet A `ConceptSet` for the chronic condition.
 #' @param washoutDays Minimum days of continuous observation required before
-#'   the index event. Default 365.
+#'   each index event. Default 365.
+#' @param exitOffsetDays Days added after each event's end date before the
+#'   cohort episode exits. Default 0 (exit at event end).
 #' @param eraGapDays Maximum gap in days between episodes to collapse into one
-#'   era. Default 0 (no collapsing).
+#'   era. Default 1 (merge back-to-back episodes).
 #'
 #' @return A `Cohort` object.
 #' @export
@@ -31,15 +34,16 @@
 #' }
 chronicCohort <- function(conditionConceptSet,
                           washoutDays = 365L,
-                          eraGapDays = 0L) {
+                          exitOffsetDays = 0L,
+                          eraGapDays = 1L) {
   cohort(
     entry = entry(
       conditionOccurrence(conditionConceptSet),
       observationWindow = continuousObservation(priorDays = washoutDays),
-      primaryCriteriaLimit = "First"
+      primaryCriteriaLimit = "All"
     ),
-    attrition = attrition(expressionLimit = "First"),
-    exit = exit(endStrategy = observationExit()),
+    attrition = attrition(expressionLimit = "All"),
+    exit = exit(endStrategy = fixedExit(index = "endDate", offsetDays = exitOffsetDays)),
     era = era(eraDays = eraGapDays)
   )
 }
@@ -87,18 +91,17 @@ incidentCohort <- function(conditionConceptSet,
 
 #' Acute event cohort
 #'
-#' Build a cohort for an acute event: short-duration condition episodes with a
-#' fixed-length exit. Each qualifying event enters the cohort independently
-#' (multiple episodes per person are preserved) and no era collapsing is applied.
-#' Useful for events like myocardial infarction, ischemic stroke, or UTI.
+#' Build a cohort for an acute event: short-duration condition episodes exiting
+#' a fixed number of days after each event's end date. Each qualifying event
+#' enters the cohort independently (multiple episodes per person are preserved)
+#' and no era collapsing is applied. Useful for events like myocardial infarction,
+#' ischemic stroke, or UTI.
 #'
 #' @param conditionConceptSet A `ConceptSet` for the acute condition.
 #' @param washoutDays Minimum days of continuous observation required before
 #'   each index event. Default 180.
-#' @param exitDays Days after index that each episode ends. Default 30.
-#' @param exitAt When to anchor the exit offset. Either `"startDate"` (exit
-#'   from cohort start) or `"endDate"` (exit from cohort end). Default
-#'   `"startDate"`.
+#' @param exitDays Days after each event's end date that the episode exits.
+#'   Default 14 (matches OHDSI Phenotype Library convention for acute events).
 #'
 #' @return A `Cohort` object.
 #' @export
@@ -106,13 +109,11 @@ incidentCohort <- function(conditionConceptSet,
 #' @examples
 #' \dontrun{
 #' miCs <- cs(descendants(4329847), name = "Myocardial Infarction")
-#' miCohort <- acuteCohort(miCs, washoutDays = 180L, exitDays = 30L)
+#' miCohort <- acuteCohort(miCs, washoutDays = 180L, exitDays = 14L)
 #' }
 acuteCohort <- function(conditionConceptSet,
                         washoutDays = 180L,
-                        exitDays = 30L,
-                        exitAt = c("startDate", "endDate")) {
-  exitAt <- match.arg(exitAt)
+                        exitDays = 14L) {
   cohort(
     entry = entry(
       conditionOccurrence(conditionConceptSet),
@@ -120,7 +121,7 @@ acuteCohort <- function(conditionConceptSet,
       primaryCriteriaLimit = "All"
     ),
     attrition = attrition(expressionLimit = "All"),
-    exit = exit(endStrategy = fixedExit(index = exitAt, offsetDays = exitDays)),
+    exit = exit(endStrategy = fixedExit(index = "endDate", offsetDays = exitDays)),
     era = era(eraDays = 0L)
   )
 }
@@ -257,15 +258,17 @@ measurementCohort <- function(measurementConceptSet,
 
 #' Procedure-based cohort
 #'
-#' Build a cohort based on a procedure occurrence: first qualifying procedure
-#' per person with a minimum prior observation requirement, exiting at end of
-#' continuous observation.
+#' Build a cohort that captures every qualified procedure occurrence per person,
+#' exiting at each event's end date. Nearby episodes can be collapsed into eras
+#' via `eraGapDays`.
 #'
 #' @param procedureConceptSet A `ConceptSet` for the procedure of interest.
 #' @param washoutDays Minimum days of continuous observation required before
-#'   the index event. Default 365.
+#'   each index event. Default 365.
+#' @param exitOffsetDays Days added after each event's end date before the
+#'   cohort episode exits. Default 0 (exit at event end).
 #' @param eraGapDays Maximum gap in days between episodes to collapse into one
-#'   era. Default 0 (no collapsing).
+#'   era. Default 1 (merge back-to-back episodes).
 #'
 #' @return A `Cohort` object.
 #' @export
@@ -277,30 +280,33 @@ measurementCohort <- function(measurementConceptSet,
 #' }
 procedureCohort <- function(procedureConceptSet,
                             washoutDays = 365L,
-                            eraGapDays = 0L) {
+                            exitOffsetDays = 0L,
+                            eraGapDays = 1L) {
   cohort(
     entry = entry(
       procedure(procedureConceptSet),
       observationWindow = continuousObservation(priorDays = washoutDays),
-      primaryCriteriaLimit = "First"
+      primaryCriteriaLimit = "All"
     ),
-    attrition = attrition(expressionLimit = "First"),
-    exit = exit(endStrategy = observationExit()),
+    attrition = attrition(expressionLimit = "All"),
+    exit = exit(endStrategy = fixedExit(index = "endDate", offsetDays = exitOffsetDays)),
     era = era(eraDays = eraGapDays)
   )
 }
 
 #' Observation-based cohort
 #'
-#' Build a cohort based on an observation record: first qualifying observation
-#' per person with a minimum prior observation requirement, exiting at end of
-#' continuous observation.
+#' Build a cohort that captures every qualified observation record per person,
+#' exiting at each event's end date. Nearby episodes can be collapsed into eras
+#' via `eraGapDays`.
 #'
 #' @param observationConceptSet A `ConceptSet` for the observation of interest.
 #' @param washoutDays Minimum days of continuous observation required before
-#'   the index event. Default 365.
+#'   each index event. Default 365.
+#' @param exitOffsetDays Days added after each event's end date before the
+#'   cohort episode exits. Default 0 (exit at event end).
 #' @param eraGapDays Maximum gap in days between episodes to collapse into one
-#'   era. Default 0 (no collapsing).
+#'   era. Default 1 (merge back-to-back episodes).
 #'
 #' @return A `Cohort` object.
 #' @export
@@ -312,15 +318,16 @@ procedureCohort <- function(procedureConceptSet,
 #' }
 observationCohort <- function(observationConceptSet,
                               washoutDays = 365L,
-                              eraGapDays = 0L) {
+                              exitOffsetDays = 0L,
+                              eraGapDays = 1L) {
   cohort(
     entry = entry(
       observation(observationConceptSet),
       observationWindow = continuousObservation(priorDays = washoutDays),
-      primaryCriteriaLimit = "First"
+      primaryCriteriaLimit = "All"
     ),
-    attrition = attrition(expressionLimit = "First"),
-    exit = exit(endStrategy = observationExit()),
+    attrition = attrition(expressionLimit = "All"),
+    exit = exit(endStrategy = fixedExit(index = "endDate", offsetDays = exitOffsetDays)),
     era = era(eraDays = eraGapDays)
   )
 }

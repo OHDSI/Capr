@@ -14,13 +14,19 @@ test_that("chronicCohort returns a Cohort and compiles to valid Circe JSON", {
   expect_type(sql, "character")
 })
 
-test_that("chronicCohort uses First limit and observation exit", {
+test_that("chronicCohort uses All limits and fixed exit at endDate", {
   cs_test <- cs(1L, name = "test")
   cd <- chronicCohort(cs_test)
 
-  expect_equal(cd@entry@primaryCriteriaLimit, "First")
-  expect_equal(cd@attrition@expressionLimit, "First")
-  expect_s4_class(cd@exit@endStrategy, "ObservationExit")
+  expect_equal(cd@entry@primaryCriteriaLimit, "All")
+  expect_equal(cd@attrition@expressionLimit, "All")
+  expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
+})
+
+test_that("chronicCohort default era gap is 1", {
+  cs_test <- cs(1L, name = "test")
+  cd <- chronicCohort(cs_test)
+  expect_equal(cd@era@eraDays, 1L)
 })
 
 test_that("chronicCohort custom era gap is applied", {
@@ -79,9 +85,9 @@ test_that("acuteCohort uses All limits and fixed exit", {
   expect_equal(cd@era@eraDays, 0L)
 })
 
-test_that("acuteCohort exitAt endDate works", {
+test_that("acuteCohort uses endDate-based exit", {
   cs_test <- cs(1L, name = "test")
-  cd <- acuteCohort(cs_test, exitAt = "endDate")
+  cd <- acuteCohort(cs_test)
   expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
 })
 
@@ -218,7 +224,6 @@ test_that("acuteCohort default parameters are sensible", {
   cs_test <- cs(1L, name = "test")
   cd <- acuteCohort(cs_test)
 
-  # Default should be startDate exit, 30 days
   expect_equal(cd@era@eraDays, 0L)
   expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
 })
@@ -227,4 +232,47 @@ test_that("chronicCohort with zero washout works", {
   cs_test <- cs(1L, name = "test")
   cd <- chronicCohort(cs_test, washoutDays = 0L)
   expect_s4_class(cd, "Cohort")
+})
+
+test_that("chronicCohort exitOffsetDays parameter is applied", {
+  cs_test <- cs(1L, name = "test")
+  cd <- chronicCohort(cs_test, exitOffsetDays = 90L)
+  expect_s4_class(cd, "Cohort")
+  expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
+})
+
+test_that("procedureCohort uses All limits and fixed exit", {
+  cs_test <- cs(1L, name = "test")
+  cd <- procedureCohort(cs_test)
+
+  expect_equal(cd@entry@primaryCriteriaLimit, "All")
+  expect_equal(cd@attrition@expressionLimit, "All")
+  expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
+})
+
+test_that("procedureCohort default era gap is 1", {
+  cs_test <- cs(1L, name = "test")
+  cd <- procedureCohort(cs_test)
+  expect_equal(cd@era@eraDays, 1L)
+})
+
+test_that("observationCohort uses All limits and fixed exit", {
+  cs_test <- cs(1L, name = "test")
+  cd <- observationCohort(cs_test)
+
+  expect_equal(cd@entry@primaryCriteriaLimit, "All")
+  expect_equal(cd@attrition@expressionLimit, "All")
+  expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
+})
+
+test_that("observationCohort default era gap is 1", {
+  cs_test <- cs(1L, name = "test")
+  cd <- observationCohort(cs_test)
+  expect_equal(cd@era@eraDays, 1L)
+})
+
+test_that("acuteCohort default exitDays is 14", {
+  cs_test <- cs(1L, name = "test")
+  cd <- acuteCohort(cs_test)
+  expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
 })

@@ -4,12 +4,7 @@
 \alias{acuteCohort}
 \title{Acute event cohort}
 \usage{
-acuteCohort(
-  conditionConceptSet,
-  washoutDays = 180L,
-  exitDays = 30L,
-  exitAt = c("startDate", "endDate")
-)
+acuteCohort(conditionConceptSet, washoutDays = 180L, exitDays = 14L)
 }
 \arguments{
 \item{conditionConceptSet}{A `ConceptSet` for the acute condition.}
@@ -17,24 +12,22 @@ acuteCohort(
 \item{washoutDays}{Minimum days of continuous observation required before
 each index event. Default 180.}
 
-\item{exitDays}{Days after index that each episode ends. Default 30.}
-
-\item{exitAt}{When to anchor the exit offset. Either `"startDate"` (exit
-from cohort start) or `"endDate"` (exit from cohort end). Default
-`"startDate"`.}
+\item{exitDays}{Days after each event's end date that the episode exits.
+Default 14 (matches OHDSI Phenotype Library convention for acute events).}
 }
 \value{
 A `Cohort` object.
 }
 \description{
-Build a cohort for an acute event: short-duration condition episodes with a
-fixed-length exit. Each qualifying event enters the cohort independently
-(multiple episodes per person are preserved) and no era collapsing is applied.
-Useful for events like myocardial infarction, ischemic stroke, or UTI.
+Build a cohort for an acute event: short-duration condition episodes exiting
+a fixed number of days after each event's end date. Each qualifying event
+enters the cohort independently (multiple episodes per person are preserved)
+and no era collapsing is applied. Useful for events like myocardial infarction,
+ischemic stroke, or UTI.
 }
 \examples{
 \dontrun{
 miCs <- cs(descendants(4329847), name = "Myocardial Infarction")
-miCohort <- acuteCohort(miCs, washoutDays = 180L, exitDays = 30L)
+miCohort <- acuteCohort(miCs, washoutDays = 180L, exitDays = 14L)
 }
 }

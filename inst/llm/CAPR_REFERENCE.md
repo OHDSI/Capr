@@ -1077,20 +1077,23 @@ event, etc.), fall back to custom code using the package primitives.
 ### Archetype Reference Table
 
 | Function | Domain | Use Case | Entry Limit | Exit | Era |
-|---|---|---|---|---|---|
-| `chronicCohort(cs, washoutDays, eraGapDays)` | condition | Prevalent chronic condition | `"First"` | Observation | configurable |
+|---|---|---|---|---|---|---|
+| `chronicCohort(cs, washoutDays, exitOffsetDays, eraGapDays)` | condition | Prevalent chronic condition | `"All"` | Fixed (event end, default 0d) | `1` |
 | `incidentCohort(cs, washoutDays, eraGapDays)` | condition | First-ever diagnosis (new onset) | `"First"` | Observation | configurable |
-| `acuteCohort(cs, washoutDays, exitDays, exitAt)` | condition | Short-duration event | `"All"` | Fixed (default 30d) | `0` |
+| `acuteCohort(cs, washoutDays, exitDays)` | condition | Short-duration event | `"All"` | Fixed (event end + 14d) | `0` |
 | `newUserCohort(cs, washoutDays, persistenceWindow, surveillanceWindow)` | drug | First-time drug exposure | `"First"` | Drug era | `0` |
 | `allDrugCohort(cs, washoutDays)` | drug | Any drug exposure episode | `"All"` | Observation | `0` |
 | `measurementCohort(cs, valueFilter, unitConceptIds, washoutDays)` | measurement | Lab value threshold | `"First"` | Observation | `0` |
-| `procedureCohort(cs, washoutDays, eraGapDays)` | procedure | Procedure occurrence | `"First"` | Observation | configurable |
-| `observationCohort(cs, washoutDays, eraGapDays)` | observation | Observation record | `"First"` | Observation | configurable |
+| `procedureCohort(cs, washoutDays, exitOffsetDays, eraGapDays)` | procedure | Procedure occurrence | `"All"` | Fixed (event end, default 0d) | `1` |
+| `observationCohort(cs, washoutDays, exitOffsetDays, eraGapDays)` | observation | Observation record | `"All"` | Fixed (event end, default 0d) | `1` |
 
-### `chronicCohort(conditionConceptSet, washoutDays = 365L, eraGapDays = 0L)`
+### `chronicCohort(conditionConceptSet, washoutDays = 365L, exitOffsetDays = 0L, eraGapDays = 1L)`
 
-Prevalent chronic condition. First condition diagnosis per person with a minimum prior observation
-window, exiting at end of continuous observation.
+All qualifying condition occurrences per person, exiting at each event's end date. Nearby episodes
+are collapsed into eras (`eraGapDays`). Matches the OHDSI Phenotype Library convention — all events
+are preserved, era collapse merges adjacent episodes. For person-level analysis (one entry per
+person), switch to `primaryCriteriaLimit = "First"` + `expressionLimit = "First"` via a custom
+`cohort()` call.
 
 ```r
 createHtnCohort <- function(htnCs) {
@@ -1111,14 +1114,15 @@ createNewOnsetAfib <- function(afibCs) {
 }
 ```
 
-### `acuteCohort(conditionConceptSet, washoutDays = 180L, exitDays = 30L, exitAt = c("startDate", "endDate"))`
+### `acuteCohort(conditionConceptSet, washoutDays = 180L, exitDays = 14L)`
 
 Short-duration acute event. Each qualifying event enters the cohort independently (`"All"` limit)
-and exits after a fixed number of days. No era collapsing — episodes stay distinct.
+and exits `exitDays` after the event's end date. No era collapsing — episodes stay distinct.
+The default 14-day exit offset matches the OHDSI Phenotype Library convention for acute events.
 
 ```r
 createMiCohort <- function(miCs) {
-  acuteCohort(miCs, exitDays = 30L)
+  acuteCohort(miCs, exitDays = 14L)
 }
 ```
 
@@ -1160,14 +1164,14 @@ createUncontrolledHbA1c <- function(hba1cCs) {
 }
 ```
 
-### `procedureCohort(procedureConceptSet, washoutDays = 365L, eraGapDays = 0L)`
+### `procedureCohort(procedureConceptSet, washoutDays = 365L, exitOffsetDays = 0L, eraGapDays = 1L)`
 
-First procedure occurrence per person with minimum prior observation. Same pattern as
+All qualifying procedure occurrences per person, exiting at each event's end date. Same pattern as
 `chronicCohort()` but queries the procedure domain.
 
-### `observationCohort(observationConceptSet, washoutDays = 365L, eraGapDays = 0L)`
+### `observationCohort(observationConceptSet, washoutDays = 365L, exitOffsetDays = 0L, eraGapDays = 1L)`
 
-First observation record per person with minimum prior observation. Same pattern as
+All qualifying observation records per person, exiting at each event's end date. Same pattern as
 `chronicCohort()` but queries the observation domain.
 
 ### Tuning Sensitivity and Specificity

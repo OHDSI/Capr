@@ -4,24 +4,32 @@
 \alias{procedureCohort}
 \title{Procedure-based cohort}
 \usage{
-procedureCohort(procedureConceptSet, washoutDays = 365L, eraGapDays = 0L)
+procedureCohort(
+  procedureConceptSet,
+  washoutDays = 365L,
+  exitOffsetDays = 0L,
+  eraGapDays = 1L
+)
 }
 \arguments{
 \item{procedureConceptSet}{A `ConceptSet` for the procedure of interest.}
 
 \item{washoutDays}{Minimum days of continuous observation required before
-the index event. Default 365.}
+each index event. Default 365.}
+
+\item{exitOffsetDays}{Days added after each event's end date before the
+cohort episode exits. Default 0 (exit at event end).}
 
 \item{eraGapDays}{Maximum gap in days between episodes to collapse into one
-era. Default 0 (no collapsing).}
+era. Default 1 (merge back-to-back episodes).}
 }
 \value{
 A `Cohort` object.
 }
 \description{
-Build a cohort based on a procedure occurrence: first qualifying procedure
-per person with a minimum prior observation requirement, exiting at end of
-continuous observation.
+Build a cohort that captures every qualified procedure occurrence per person,
+exiting at each event's end date. Nearby episodes can be collapsed into eras
+via `eraGapDays`.
 }
 \examples{
 \dontrun{
