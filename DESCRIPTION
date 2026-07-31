@@ -65,6 +65,7 @@ Collate:
     'exit.R'
     'cohort.R'
     'collectCodesetId.R'
+    'conceptSearch.R'
     'jsonToCapr.R'
     'phenotypeTemplates.R'
 Remotes: 
