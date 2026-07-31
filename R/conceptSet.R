@@ -175,7 +175,6 @@ newConcept <- function(id,
 #' Calls to helper functions "exclude", "descendants", or "mapped". Negative
 #' integers will be marked as excluded from the concept set.
 #' @param name A name for the concept set
-#' @param id An id for the concept set
 #'
 #' @return A Capr Concept Set Object
 #' @export
@@ -188,7 +187,7 @@ newConcept <- function(id,
 #' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), name = "concepts")
 #' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9), name = "concepts")
 #' cs(descendants(1, 2, 3),  exclude(descendants(8, 9)), name = "concepts")
-cs <- function(..., name, id = NULL) {
+cs <- function(..., name) {
   dots <- unlist(list(...), recursive = F)
 
   conceptList <- lapply(dots, function(x) {
@@ -211,16 +210,14 @@ cs <- function(..., name, id = NULL) {
 
   # TODO decide how to handle duplicate ids in `cs`. For now we throw warning.
 
-  if (is.null(id)) {
-    id <- purrr::map_chr(conceptList, ~paste0(.@Concept@concept_id,
-                                              .@isExcluded,
-                                              .@includeDescendants,
-                                              .@includeMapped)) |>
-      sort() |>
-      paste0(collapse = "") |>
-      digest::digest(algo = "md5") |>
-      as.character()
-  }
+  id <- purrr::map_chr(conceptList, ~paste0(.@Concept@concept_id,
+                                            .@isExcluded,
+                                            .@includeDescendants,
+                                            .@includeMapped)) |>
+    sort() |>
+    paste0(collapse = "") |>
+    digest::digest(algo = "md5") |>
+    as.character()
 
   methods::new("ConceptSet",
                id = id,
@@ -424,7 +421,6 @@ writeConceptSet <- function(x, path, format = "auto", ...) {
 #'
 #' @param path Name of concept set file to read in csv or json format. (e.g. "concepts.json")
 #' @param name the name of the concept set
-#' @param id the id for the concept set (keep?)
 #' @importFrom rlang %||%
 #'
 #' @examples
@@ -436,7 +432,7 @@ writeConceptSet <- function(x, path, format = "auto", ...) {
 #' concepts <- readConceptSet(path)
 #'
 #' @export
-readConceptSet <- function(path, name, id = NULL) {
+readConceptSet <- function(path, name) {
 
   checkmate::assertFileExists(path)
 
@@ -506,7 +502,7 @@ readConceptSet <- function(path, name, id = NULL) {
     conceptList <- purrr::pmap(conceptDf, newConcept)
   }
 
-  rlang::inject(cs(!!!conceptList, name = name, id = id))
+  rlang::inject(cs(!!!conceptList, name = name))
 }
 
 # Other ----

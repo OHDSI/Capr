@@ -11,9 +11,22 @@ This release focuses on making Capr easier to integrate into real cohort-develop
   Added broader attribute coverage (including key-value and type-exclude style attributes), plus improved
   serialization behavior to better match Circe expectations and support reliable round-trip workflows.
 
-- **Improved round-trip and compile behavior**
-  Added `includeConceptSets` support in `compile.Cohort()` and multiple decompilation/compilation fixes to
+- **Improved round-trip fidelity**
+  Added `includeConceptSets` support in `toCohortJson()` and multiple decompilation fixes to
   better preserve concept set handling and generated JSON fidelity.
+
+- **Cleaner JSON serialization API**
+  Added `toCohortJson()` and `toConceptSetJson()` as the primary user-facing serialization
+  functions. `compile()` is soft-deprecated in favor of these explicit replacements.
+
+- **Concept set identity is now always content-derived**
+  Removed the `id` parameter from `cs()`. Concept set IDs are always an md5 hash of the
+  concept set contents, decoupling them from any specific cohort definition or Atlas context.
+
+- **Phenotype archetype template renames**
+  Renamed built-in templates for clarity: `acuteCohort()` → `acuteOutcomeCohort()`,
+  `chronicCohort()` → `chronicOutcomeCohort()`, `incidentCohort()` → `firstEverDiagnosisCohort()`,
+  `newUser()` → `newUserDrugCohort()`.
 
 - **LLM skills bundle included and improved**
   Expanded the bundled LLM guidance under `inst/llm` to support validated local generation of Capr cohort

@@ -255,12 +255,12 @@ test_that("listConceptSets - Cohort 2", {
 
 # Tests for conditionSourceConcept attribute and conceptSetAttribute class
 test_that("conditionSourceConcept creates conceptSetAttribute", {
-  test_cs <- cs(c(123, 456), name = "test source concepts", id = "test-id-123")
+  test_cs <- cs(c(123, 456), name = "test source concepts")
   attr <- conditionSourceConcept(test_cs)
 
   expect_s4_class(attr, "conceptSetAttribute")
   expect_equal(attr@name, "ConditionSourceConcept")
-  expect_equal(attr@conceptSet@id, "test-id-123")
+  expect_equal(attr@conceptSet@id, test_cs@id)
 })
 
 test_that("conditionSourceConcept requires ConceptSet", {
@@ -271,23 +271,22 @@ test_that("conditionSourceConcept requires ConceptSet", {
 })
 
 test_that("collectGuid works with conceptSetAttribute", {
-  test_cs <- cs(c(123, 456), name = "test source concepts", id = "test-id-123")
+  test_cs <- cs(c(123, 456), name = "test source concepts")
   attr <- conditionSourceConcept(test_cs)
 
   guid_result <- collectGuid(attr)
 
   expect_s3_class(guid_result, "data.frame")
-  expect_equal(guid_result$guid, "test-id-123")
+  expect_equal(guid_result$guid, test_cs@id)
   expect_equal(nrow(guid_result), 1)
 })
 
 test_that("replaceCodesetId works with conceptSetAttribute", {
-  test_cs <- cs(c(123, 456), name = "test source concepts", id = "test-guid-456")
+  test_cs <- cs(c(123, 456), name = "test source concepts")
   attr <- conditionSourceConcept(test_cs)
 
-  # Create a guide table for replacement
   guide_table <- data.frame(
-    guid = "test-guid-456",
+    guid = test_cs@id,
     codesetId = 42L
   )
 
@@ -298,29 +297,29 @@ test_that("replaceCodesetId works with conceptSetAttribute", {
 })
 
 test_that("listConceptSets works with conceptSetAttribute", {
-  test_cs <- cs(c(123, 456), name = "test source concepts", id = "test-id-789")
+  test_cs <- cs(c(123, 456), name = "test source concepts")
   attr <- conditionSourceConcept(test_cs)
 
   concept_sets <- listConceptSets(attr)
 
   expect_true(is.list(concept_sets))
-  expect_equal(concept_sets$id, "test-id-789")
+  expect_equal(concept_sets$id, test_cs@id)
   expect_equal(concept_sets$name, "test source concepts")
 })
 
 test_that("as.list works with conceptSetAttribute", {
-  test_cs <- cs(c(123, 456), name = "test source concepts", id = "test-id-999")
+  test_cs <- cs(c(123, 456), name = "test source concepts")
   attr <- conditionSourceConcept(test_cs)
 
   list_result <- as.list(attr)
 
   expect_true(is.list(list_result))
-  expect_equal(list_result$ConditionSourceConcept, "test-id-999")
+  expect_equal(list_result$ConditionSourceConcept, test_cs@id)
 })
 
 test_that("conceptSetAttribute integrates with Query attributes", {
   # Test that conditionSourceConcept can be used as an attribute in a query
-  test_cs <- cs(c(123, 456), name = "source concepts", id = "source-id-123")
+  test_cs <- cs(c(123, 456), name = "source concepts")
   source_attr <- conditionSourceConcept(test_cs)
 
   # Create a query with the conditionSourceConcept attribute
@@ -333,17 +332,16 @@ test_that("conceptSetAttribute integrates with Query attributes", {
 })
 
 test_that("collectGuid works with Query containing conceptSetAttribute", {
-  test_cs <- cs(c(123, 456), name = "source concepts", id = "source-id-456")
+  test_cs <- cs(c(123, 456), name = "source concepts")
   source_attr <- conditionSourceConcept(test_cs)
 
-  main_cs <- cs(c(789, 101112), name = "main condition", id = "main-id-789")
+  main_cs <- cs(c(789, 101112), name = "main condition")
   query <- conditionOccurrence(main_cs, source_attr)
 
   guid_result <- collectGuid(query)
 
   expect_s3_class(guid_result, "data.frame")
-  expect_equal(sort(guid_result$guid), sort(c("main-id-789", "source-id-456")))
-  # Query collectGuid now collects both the main conceptSet ID and attribute IDs
+  expect_equal(sort(guid_result$guid), sort(c(main_cs@id, test_cs@id)))
 })
 
 test_that("conditionOccurrence gives clear error when conceptSet is missing", {

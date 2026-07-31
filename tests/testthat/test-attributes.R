@@ -333,19 +333,18 @@ test_that("type attributes survive Circe SQL generation", {
 })
 
 test_that("conceptSetAttribute builds", {
-  # Test the new conceptSetAttribute class
-  test_cs <- cs(c(123, 456), name = "test source concepts", id = "test-id-123")
+  test_cs <- cs(c(123, 456), name = "test source concepts")
   attr <- conditionSourceConcept(test_cs)
   
   expect_s4_class(attr, "conceptSetAttribute")
   expect_equal(attr@name, "ConditionSourceConcept")
   expect_s4_class(attr@conceptSet, "ConceptSet")
-  expect_equal(attr@conceptSet@id, "test-id-123")
+  expect_equal(attr@conceptSet@id, test_cs@id)
   
   # Test as.list conversion
   as_list <- as.list(attr)
   expect_named(as_list, "ConditionSourceConcept")
-  expect_equal(as_list$ConditionSourceConcept, "test-id-123")
+  expect_equal(as_list$ConditionSourceConcept, test_cs@id)
 })
 
 test_that("logical attributes build", {

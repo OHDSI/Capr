@@ -437,20 +437,21 @@ conceptSetToCode <- function(conceptSet) {
   varName <- makeConceptSetVarName(conceptSet$name, conceptSet$id)
 
   if (is.null(items) || length(items) == 0) {
-    line <- sprintf("%s <- cs(name = %s, id = %s)", varName, deparse(conceptSet$name), conceptSet$id)
-    return(list(varName = varName, lines = line))
+    line <- sprintf("%s <- cs(name = %s)", varName, deparse(conceptSet$name))
+    id_line <- sprintf("%s@id <- %iL", varName, conceptSet$id)
+    return(list(varName = varName, lines = c(line, id_line)))
   }
 
   parts <- conceptSetItemsToParts(items)
   line <- sprintf(
-    "%s <- cs(%s, name = %s, id = %s)",
+    "%s <- cs(%s, name = %s)",
     varName,
     paste(parts, collapse = ", "),
-    deparse(conceptSet$name),
-    conceptSet$id
+    deparse(conceptSet$name)
   )
+  id_line <- sprintf("%s@id <- %iL", varName, conceptSet$id)
 
-  list(varName = varName, lines = line)
+  list(varName = varName, lines = c(line, id_line))
 }
 
 # =============================================================================

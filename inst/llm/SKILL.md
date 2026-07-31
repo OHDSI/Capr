@@ -120,7 +120,7 @@ Format of the message:
 8. **Exit strategy** — end of continuous observation, fixed days after entry, or end of drug
    exposure? If drug exposure: what persistence gap still counts as continuous?
 
-Also check the request against the wrong-tool signals in `CAPR_REFERENCE.md` § *Flag when
+Also check the request against the wrong-tool signals in `CAPR_REFERENCE.md` section *Flag when
 Capr/Circe is the wrong tool* (cohort set operations, cross-event arithmetic, value aggregation,
 ordinal logic beyond first occurrence). If one matches, raise it in the same message and propose
 the decomposition pattern instead of a proposed answer.
@@ -134,7 +134,7 @@ conventionally and record each one as an `# ASSUMPTION:` comment on the relevant
 
 **Archetype check (before writing custom code):**
 
-The package exports phenotype archetype functions (documented in `CAPR_REFERENCE.md` § *Phenotype
+The package exports phenotype archetype functions (documented in `CAPR_REFERENCE.md` section *Phenotype
 Archetypes*). Each encodes a common clinical pattern as a callable R function that returns a
 `Cohort` object. Before generating custom code from primitives, match the description to the
 closest archetype.
@@ -208,7 +208,7 @@ Generate a custom function from primitives as described below. The archetype sou
 **Sensitivity/specificity tuning (documented pattern, not a special parameter):**
 
 When the user asks for a "sensitive" or "specific" definition, adjust the archetype parameters
-or add custom attrition rules per the table in `CAPR_REFERENCE.md` § *Tuning Sensitivity and
+or add custom attrition rules per the table in `CAPR_REFERENCE.md` section *Tuning Sensitivity and
 Specificity*. No archetype has a `sensitivity` parameter — tune by modifying washout, occurrence
 count, era gap, or by layering type/status/visit-concept restrictions (which require concept
 IDs from the user).
