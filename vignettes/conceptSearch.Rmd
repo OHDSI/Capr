@@ -130,7 +130,7 @@ rankedSearchConcepts(
   connection,
   vocabularyDatabaseSchema = vocabularyDatabaseSchema,
   limit = 20L,
-  offset = 20L
+  offset = 0L
 )
 ```
 

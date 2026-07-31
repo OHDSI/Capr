@@ -8,18 +8,21 @@
 # rankedSearchConcepts() - two-phase ranked search with dialect-specific similarity:
 #                          postgresql -> pg_trgm similarity()
 #                          snowflake  -> JAROWINKLER_SIMILARITY()
-#                          spark      -> levenshtein() normalized
 #                          all others -> positional boost only (same structure)
+
+# Read a SQL file from inst/sql/{dbms}/ with fallback to inst/sql/sql_server/.
+.readSql <- function(name, dbms = "sql_server") {
+  dialectPath <- fs::path_package("Capr", "sql", dbms, paste0(name, ".sql"))
+  if (fs::file_exists(dialectPath)) return(readr::read_file(dialectPath))
+  readr::read_file(fs::path_package("Capr", "sql", "sql_server", paste0(name, ".sql")))
+}
 
 # Queries vocabulary.vocabulary_id = 'None' row for the OMOP vocabulary version string.
 .informVocabularyVersion <- function(connection, vocabularyDatabaseSchema) {
   tryCatch({
-    sql <- SqlRender::loadRenderTranslateSql(
-      sqlFilename = "getVocabularyVersion.sql",
-      packageName = "Capr",
-      dbms = DatabaseConnector::dbms(connection),
-      schema = vocabularyDatabaseSchema
-    )
+    sql <- .readSql("getVocabularyVersion") |>
+      SqlRender::render(schema = vocabularyDatabaseSchema) |>
+      SqlRender::translate(targetDialect = DatabaseConnector::dbms(connection))
     result <- DatabaseConnector::querySql(connection, sql)
     version <- result[[1]][1]
     if (!is.na(version) && nzchar(version)) {
@@ -64,16 +67,15 @@ searchConcepts <- function(keyword, connection, vocabularyDatabaseSchema,
 
   standardFilter <- if (standardOnly) "AND standard_concept = 'S'" else ""
   .informVocabularyVersion(connection, vocabularyDatabaseSchema)
-  sql <- SqlRender::loadRenderTranslateSql(
-      sqlFilename = "searchConcepts.sql",
-      packageName = "Capr",
-      dbms = DatabaseConnector::dbms(connection),
+  sql <- .readSql("searchConcepts") |>
+    SqlRender::render(
       limit = as.integer(limit),
       schema = vocabularyDatabaseSchema,
       keyword = keyword,
       domainFilter = domainFilter,
       standardFilter = standardFilter
-  )
+    ) |>
+    SqlRender::translate(targetDialect = DatabaseConnector::dbms(connection))
   tb <- DatabaseConnector::querySql(connection, sql) |> 
     tibble::as_tibble() |> 
     dplyr::rename_all(tolower)
@@ -103,15 +105,14 @@ getConceptDescendants <- function(conceptIds, connection, vocabularyDatabaseSche
   checkmate::assertTRUE(DBI::dbIsValid(connection))
   .informVocabularyVersion(connection, vocabularyDatabaseSchema)
   maxLevelsSql <- if (is.infinite(maxLevels)) 99999L else as.integer(maxLevels)
-  sql <- SqlRender::loadRenderTranslateSql(
-      sqlFilename = "getConceptDescendants.sql",
-      packageName = "Capr",
-      dbms = DatabaseConnector::dbms(connection),
+  sql <- .readSql("getConceptDescendants") |>
+    SqlRender::render(
       schema = vocabularyDatabaseSchema,
       conceptIds = as.integer(conceptIds),
       minLevels = as.integer(minLevels),
       maxLevels = maxLevelsSql
-  )
+    ) |>
+    SqlRender::translate(targetDialect = DatabaseConnector::dbms(connection))
   tb <- DatabaseConnector::querySql(connection, sql) |>
     tibble::as_tibble() |>
     dplyr::rename_all(tolower)
@@ -148,14 +149,13 @@ mapSourceToStandard <- function(sourceCodes, connection, vocabularyDatabaseSchem
     vocabFilter <- ""
   }
 
-  sql <- SqlRender::loadRenderTranslateSql(
-      sqlFilename = "mapSourceToStandard.sql",
-      packageName = "Capr",
-      dbms = DatabaseConnector::dbms(connection),
+  sql <- .readSql("mapSourceToStandard") |>
+    SqlRender::render(
       schema = vocabularyDatabaseSchema,
       sourceCodes = paste0("'", toupper(sourceCodes), "'"),
       vocabFilter = vocabFilter
-  )
+    ) |>
+    SqlRender::translate(targetDialect = DatabaseConnector::dbms(connection))
   tb <- DatabaseConnector::querySql(connection, sql) |>
     tibble::as_tibble() |>
     dplyr::rename_all(tolower)
@@ -181,13 +181,12 @@ getConceptInfo <- function(conceptIds, connection, vocabularyDatabaseSchema) {
   checkmate::assertIntegerish(conceptIds, min.len = 1)
   checkmate::assertTRUE(DBI::dbIsValid(connection))
   .informVocabularyVersion(connection, vocabularyDatabaseSchema)
-  sql <- SqlRender::loadRenderTranslateSql(
-      sqlFilename = "getConceptInfo.sql",
-      packageName = "Capr",
-      dbms = DatabaseConnector::dbms(connection),
+  sql <- .readSql("getConceptInfo") |>
+    SqlRender::render(
       schema = vocabularyDatabaseSchema,
       conceptIds = as.integer(conceptIds)
-  )
+    ) |>
+    SqlRender::translate(targetDialect = DatabaseConnector::dbms(connection))
   tb <- DatabaseConnector::querySql(connection, sql) |>
     tibble::as_tibble() |>
     dplyr::rename_all(tolower)
@@ -266,17 +265,16 @@ rankedSearchConcepts <- function(keyword, connection, vocabularyDatabaseSchema,
     standardFilter <- ""
   }
 
-  sql <- SqlRender::loadRenderTranslateSql(
-      sqlFilename = "rankedSearchConcepts.sql",
-      packageName = "Capr",
-      dbms = DatabaseConnector::dbms(connection),
+  sql <- .readSql("rankedSearchConcepts", dbms = dbms) |>
+    SqlRender::render(
       schema = vocabularyDatabaseSchema,
       keyword = keyword,
       domainFilter = domainFilter,
       standardFilter = standardFilter,
       limit = as.integer(limit),
       offset = as.integer(offset)
-  )
+    ) |>
+    SqlRender::translate(targetDialect = dbms)
   tb <- DatabaseConnector::querySql(connection, sql) |>
     tibble::as_tibble() |>
     dplyr::rename_all(tolower)
