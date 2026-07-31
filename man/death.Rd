@@ -7,13 +7,21 @@
 death(conceptSet = NULL, ...)
 }
 \arguments{
-\item{conceptSet}{A death domain, with rare exceptions this is always NULL}
+\item{conceptSet}{A \code{ConceptSet} for the death cause concept, or \code{NULL} (most common —
+death records are typically matched without a concept set).}
 
-\item{...}{optional attributes}
+\item{...}{Optional attributes: \code{startDate()}, \code{deathType()}, \code{age()}, etc.}
 }
 \value{
-A Capr Query
+A \code{Query} object.
 }
 \description{
 Query the death domain
+}
+\examples{
+# Any death (no concept set)
+death(NULL)
+}
+\seealso{
+\code{\link{censoringEvents}}, \code{\link{exit}}
 }

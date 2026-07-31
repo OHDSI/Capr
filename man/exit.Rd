@@ -2,18 +2,28 @@
 % Please edit documentation in R/cohort.R
 \name{exit}
 \alias{exit}
-\title{Function that creates a cohort exit object}
+\title{Define cohort exit strategy}
 \usage{
 exit(endStrategy, censor = NULL)
 }
 \arguments{
-\item{endStrategy}{the endStrategy object to specify for the exit}
+\item{endStrategy}{An end strategy object: \code{\link{observationExit}},
+\code{\link{fixedExit}}, or \code{\link{drugExit}}.}
 
-\item{censor}{the censoring criteria to specify for the exit}
+\item{censor}{Optional \code{\link{censoringEvents}} object of queries that end the cohort
+early if they occur after the index date.}
 }
 \value{
-A cohort exit object that can be used in a cohort definition
+A \code{CohortExit} object.
 }
 \description{
-Function that creates a cohort exit object
+Define cohort exit strategy
+}
+\examples{
+exit(endStrategy = observationExit())
+exit(endStrategy = fixedExit(offsetDays = 30L))
+}
+\seealso{
+\code{\link{observationExit}}, \code{\link{fixedExit}}, \code{\link{drugExit}},
+  \code{\link{censoringEvents}}, \code{\link{cohort}}
 }

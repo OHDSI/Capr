@@ -117,6 +117,36 @@ genderConcepts <- function(...) {
   methods::new("conceptAttribute", name = "Gender", conceptSet = concepts)
 }
 
+#' Add race filter to a demographic criteria group
+#'
+#' @param ... Integer OMOP race concept IDs (e.g. \code{8527L} White, \code{8516L} Black or African American,
+#'   \code{8515L} Asian, \code{38003614L} Native Hawaiian or Other Pacific Islander, \code{8557L} Native American).
+#' @return A conceptAttribute with name \code{Race} for use in \code{withAll()}/\code{withAny()} attrition groups.
+#' @export
+#' @describeIn attributes race demographic attribute
+raceConcepts <- function(...) {
+  ids <- as.integer(c(...))
+  concepts <- lapply(ids, function(id) {
+    methods::new("Concept", concept_id = id, concept_name = NA_character_)
+  })
+  methods::new("conceptAttribute", name = "Race", conceptSet = concepts)
+}
+
+#' Add ethnicity filter to a demographic criteria group
+#'
+#' @param ... Integer OMOP ethnicity concept IDs (e.g. \code{38003563L} Hispanic or Latino,
+#'   \code{38003564L} Not Hispanic or Latino).
+#' @return A conceptAttribute with name \code{Ethnicity} for use in \code{withAll()}/\code{withAny()} attrition groups.
+#' @export
+#' @describeIn attributes ethnicity demographic attribute
+ethnicityConcepts <- function(...) {
+  ids <- as.integer(c(...))
+  concepts <- lapply(ids, function(id) {
+    methods::new("Concept", concept_id = id, concept_name = NA_character_)
+  })
+  methods::new("conceptAttribute", name = "Ethnicity", conceptSet = concepts)
+}
+
 #' Add provider specialty filter to a visit (round-trip from Atlas JSON)
 #'
 #' When JSON has \code{VisitOccurrence.ProviderSpecialty: [{ CONCEPT_ID: ... }]}, use this
@@ -193,10 +223,8 @@ valueAsConceptSet <- function(conceptSet) {
 
 #' Add a drug type attribute to determine the provenance of the record
 #' @inheritParams valueAsConcept
-#' @return
-#' An attribute that can be used in a query function
+#' @return An attribute for use in \code{drugExposure()}.
 #' @export
-#'
 drugType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
   buildConceptAttribute(ids, attributeName = "DrugType",
                         connection = connection,
@@ -221,8 +249,7 @@ conditionType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NUL
 
 #' Add a visit type attribute to determine the provenance of the record
 #' @inheritParams valueAsConcept
-#' @return
-#' An attribute that can be used in a query function
+#' @return An attribute for use in any domain query that has a visit context filter.
 #' @export
 #'
 visitType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
@@ -235,8 +262,7 @@ visitType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
 
 #' Add a measurement type attribute to determine the provenance of the record
 #' @inheritParams valueAsConcept
-#' @return
-#' An attribute that can be used in a query function
+#' @return An attribute for use in \code{measurement()}.
 #' @export
 #'
 measurementType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
@@ -246,10 +272,9 @@ measurementType <- function(ids, connection = NULL, vocabularyDatabaseSchema = N
                         fnName = "measurementType")
 }
 
-#' Add a observation type attribute to determine the provenance of the record
+#' Add an observation type attribute to determine the provenance of the record
 #' @inheritParams valueAsConcept
-#' @return
-#' An attribute that can be used in a query function
+#' @return An attribute for use in \code{observation()}.
 #' @export
 #'
 observationType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
@@ -262,8 +287,7 @@ observationType <- function(ids, connection = NULL, vocabularyDatabaseSchema = N
 
 #' Add a procedure type attribute to determine the provenance of the record
 #' @inheritParams valueAsConcept
-#' @return
-#' An attribute that can be used in a query function
+#' @return An attribute for use in \code{procedure()}.
 #' @export
 #'
 procedureType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
@@ -275,8 +299,7 @@ procedureType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NUL
 
 #' Add a death type attribute to determine the provenance of the record
 #' @inheritParams valueAsConcept
-#' @return
-#' An attribute that can be used in a query function
+#' @return An attribute for use in \code{death()}.
 #' @export
 #'
 deathType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
@@ -288,8 +311,7 @@ deathType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
 
 #' Add a device type attribute to determine the provenance of the record
 #' @inheritParams valueAsConcept
-#' @return
-#' An attribute that can be used in a query function
+#' @return An attribute for use in \code{deviceExposure()}.
 #' @export
 #'
 deviceType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
@@ -301,8 +323,7 @@ deviceType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) 
 
 #' Add a specimen type attribute to determine the provenance of the record
 #' @inheritParams valueAsConcept
-#' @return
-#' An attribute that can be used in a query function
+#' @return An attribute for use in \code{specimen()}.
 #' @export
 #'
 specimenType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
@@ -314,16 +335,102 @@ specimenType <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL
 
 #' Add a condition status attribute
 #' @inheritParams valueAsConcept
-#' @return
-#' An attribute that can be used in a query function
+#' @return An attribute for use in \code{conditionOccurrence()}.
 #' @export
-#'
 
 conditionStatus <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
   buildConceptAttribute(ids, attributeName = "ConditionStatus",
                         connection = connection,
                         vocabularyDatabaseSchema = vocabularyDatabaseSchema,
                         fnName = "conditionStatus")
+}
+
+#' Route concept attribute for drug exposure
+#' @inheritParams valueAsConcept
+#' @return An attribute for use in \code{drugExposure()}.
+#' @export
+routeConcept <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "RouteConcept",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "routeConcept")
+}
+
+#' Dose unit attribute for drug exposure
+#' @inheritParams valueAsConcept
+#' @return An attribute for use in \code{drugExposure()}.
+#' @export
+doseUnit <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "DoseUnit",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "doseUnit")
+}
+
+#' Measurement operator attribute (e.g. equal to, less than)
+#' @inheritParams valueAsConcept
+#' @return An attribute for use in \code{measurement()}.
+#' @export
+measurementOperator <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "Operator",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "measurementOperator")
+}
+
+#' Observation qualifier attribute
+#' @inheritParams valueAsConcept
+#' @return An attribute for use in \code{observation()}.
+#' @export
+observationQualifier <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "Qualifier",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "observationQualifier")
+}
+
+#' Procedure modifier attribute
+#' @inheritParams valueAsConcept
+#' @return An attribute for use in \code{procedure()}.
+#' @export
+procedureModifier <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "Modifier",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "procedureModifier")
+}
+
+#' Place of service attribute for visit occurrence
+#' @inheritParams valueAsConcept
+#' @return An attribute for use in \code{visit()}.
+#' @export
+placeOfService <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "PlaceOfService",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "placeOfService")
+}
+
+#' Specimen anatomic site attribute
+#' @inheritParams valueAsConcept
+#' @return An attribute for use in \code{specimen()}.
+#' @export
+specimenAnatomicSite <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "AnatomicSite",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "specimenAnatomicSite")
+}
+
+#' Specimen disease status attribute
+#' @inheritParams valueAsConcept
+#' @return An attribute for use in \code{specimen()}.
+#' @export
+specimenDiseaseStatus <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {
+  buildConceptAttribute(ids, attributeName = "DiseaseStatus",
+                        connection = connection,
+                        vocabularyDatabaseSchema = vocabularyDatabaseSchema,
+                        fnName = "specimenDiseaseStatus")
 }
 
 #' Add a condition source concept attribute
@@ -459,6 +566,81 @@ visitDetailSourceConcept <- function(conceptSet) {
   return(res)
 }
 
+# PayerPlanPeriod integer concept reference attributes -----
+# These fields take an integer CodesetId referencing a concept set, same as source concept fields.
+
+#' Payer concept attribute for PayerPlanPeriod
+#' @param conceptSet A ConceptSet for the payer concept filter.
+#' @return An attribute for use in \code{payerPlanPeriod()}.
+#' @export
+payerConcept <- function(conceptSet) {
+  checkmate::assertClass(conceptSet, "ConceptSet")
+  methods::new("conceptSetAttribute", name = "PayerConcept", conceptSet = conceptSet)
+}
+
+#' Plan concept attribute for PayerPlanPeriod
+#' @param conceptSet A ConceptSet for the plan concept filter.
+#' @return An attribute for use in \code{payerPlanPeriod()}.
+#' @export
+planConcept <- function(conceptSet) {
+  checkmate::assertClass(conceptSet, "ConceptSet")
+  methods::new("conceptSetAttribute", name = "PlanConcept", conceptSet = conceptSet)
+}
+
+#' Sponsor concept attribute for PayerPlanPeriod
+#' @param conceptSet A ConceptSet for the sponsor concept filter.
+#' @return An attribute for use in \code{payerPlanPeriod()}.
+#' @export
+sponsorConcept <- function(conceptSet) {
+  checkmate::assertClass(conceptSet, "ConceptSet")
+  methods::new("conceptSetAttribute", name = "SponsorConcept", conceptSet = conceptSet)
+}
+
+#' Stop reason concept attribute for PayerPlanPeriod
+#' @param conceptSet A ConceptSet for the stop reason concept filter.
+#' @return An attribute for use in \code{payerPlanPeriod()}.
+#' @export
+stopReasonConcept <- function(conceptSet) {
+  checkmate::assertClass(conceptSet, "ConceptSet")
+  methods::new("conceptSetAttribute", name = "StopReasonConcept", conceptSet = conceptSet)
+}
+
+#' Payer source concept attribute for PayerPlanPeriod
+#' @param conceptSet A ConceptSet for the payer source concept filter.
+#' @return An attribute for use in \code{payerPlanPeriod()}.
+#' @export
+payerSourceConcept <- function(conceptSet) {
+  checkmate::assertClass(conceptSet, "ConceptSet")
+  methods::new("conceptSetAttribute", name = "PayerSourceConcept", conceptSet = conceptSet)
+}
+
+#' Plan source concept attribute for PayerPlanPeriod
+#' @param conceptSet A ConceptSet for the plan source concept filter.
+#' @return An attribute for use in \code{payerPlanPeriod()}.
+#' @export
+planSourceConcept <- function(conceptSet) {
+  checkmate::assertClass(conceptSet, "ConceptSet")
+  methods::new("conceptSetAttribute", name = "PlanSourceConcept", conceptSet = conceptSet)
+}
+
+#' Sponsor source concept attribute for PayerPlanPeriod
+#' @param conceptSet A ConceptSet for the sponsor source concept filter.
+#' @return An attribute for use in \code{payerPlanPeriod()}.
+#' @export
+sponsorSourceConcept <- function(conceptSet) {
+  checkmate::assertClass(conceptSet, "ConceptSet")
+  methods::new("conceptSetAttribute", name = "SponsorSourceConcept", conceptSet = conceptSet)
+}
+
+#' Stop reason source concept attribute for PayerPlanPeriod
+#' @param conceptSet A ConceptSet for the stop reason source concept filter.
+#' @return An attribute for use in \code{payerPlanPeriod()}.
+#' @export
+stopReasonSourceConcept <- function(conceptSet) {
+  checkmate::assertClass(conceptSet, "ConceptSet")
+  methods::new("conceptSetAttribute", name = "StopReasonSourceConcept", conceptSet = conceptSet)
+}
+
 #' Add a observation period type attribute to determine the provenance of the record
 #' @inheritParams valueAsConcept
 #' @return
@@ -474,10 +656,14 @@ observationPeriodType <- function(ids, connection = NULL, vocabularyDatabaseSche
                         fnName = "observationPeriodType")
 }
 
-#' Add unit attribute to a query
+#' Unit attribute for a query
+#'
+#' Filters by unit concept id (serializes to Circe \code{Unit} field).
+#' Applies to \code{measurement()}, \code{observation()}, \code{doseEra()}, and \code{specimen()}.
+#'
+#' Named \code{measurementUnit} (not \code{unit}) to avoid masking \code{dplyr::unit}.
 #' @inheritParams valueAsConcept
-#' @return
-#' An attribute that can be used in a query function
+#' @return An attribute for use in \code{measurement()}, \code{observation()}, \code{doseEra()}, or \code{specimen()}.
 #' @export
 #'
 measurementUnit <- function(ids, connection = NULL, vocabularyDatabaseSchema = NULL) {

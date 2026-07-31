@@ -2,7 +2,7 @@
 % Please edit documentation in R/criteria.R
 \name{atLeast}
 \alias{atLeast}
-\title{Function to enumerate an minimal count of occurrences}
+\title{Require at least N occurrences of a query within a window}
 \usage{
 atLeast(
   x,
@@ -13,20 +13,27 @@ atLeast(
 )
 }
 \arguments{
-\item{x}{the integer counting the number of occurrences}
+\item{x}{Minimum integer count of required occurrences.}
 
-\item{query}{a query object that provides context to the clinical event of interest}
+\item{query}{A \code{Query} object (e.g. from \code{conditionOccurrence()}).}
 
-\item{aperture}{an eventAperture object that shows the temporal span where the event is to be observed
-relative to the index event}
+\item{aperture}{An \code{EventAperture} built with \code{\link{duringInterval}}. Defaults to all time.}
 
-\item{distinct}{optional logical; if TRUE, count distinct (e.g. by countColumn)}
+\item{distinct}{If \code{TRUE}, count distinct values of \code{countColumn}.}
 
-\item{countColumn}{optional character; when counting, use this column for distinct (e.g. "DOMAIN_CONCEPT")}
+\item{countColumn}{Column to use for distinct counting (e.g. \code{"DOMAIN_CONCEPT"}).}
 }
 \value{
-A criteria that can be used in a cohort definition specifying satisfaction of at least x instances of a query
+A \code{Criteria} object for use in \code{\link{withAll}}, \code{\link{withAny}}, etc.
 }
 \description{
-Function to enumerate an minimal count of occurrences
+Require at least N occurrences of a query within a window
+}
+\examples{
+metformin <- cs(descendants(1503297L), name = "Metformin")
+# At least 2 metformin fills in the 365 days before index
+atLeast(2, drugExposure(metformin), duringInterval(eventStarts(-365, 0)))
+}
+\seealso{
+\code{\link{exactly}}, \code{\link{atMost}}, \code{\link{duringInterval}}
 }

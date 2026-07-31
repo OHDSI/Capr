@@ -2,18 +2,23 @@
 % Please edit documentation in R/query.R
 \name{procedure}
 \alias{procedure}
-\title{Query the procedure domain}
+\title{Query the procedure occurrence domain}
 \usage{
 procedure(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A procedure concept set (optional)}
+\item{conceptSet}{A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any procedure.}
 
-\item{...}{optional attributes}
+\item{...}{Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{age()},
+\code{procedureType()}, \code{procedureModifier()}, \code{quantityValue()},
+\code{procedureSourceConcept()}, etc.}
 }
 \value{
-A Capr Query
+A \code{Query} object.
 }
 \description{
-Query the procedure domain
+Query the procedure occurrence domain
+}
+\seealso{
+\code{\link{entry}}, \code{\link{cs}}
 }

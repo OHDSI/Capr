@@ -11,8 +11,14 @@ stringNotStartsWith(x)
 \S4method{stringNotStartsWith}{character}(x)
 }
 \arguments{
-\item{x}{the prefix string to NOT match}
+\item{x}{Character prefix to exclude.}
+}
+\value{
+An opAttributeCharacter for use inside text attribute functions.
 }
 \description{
-function that builds an opAttribute based on negated string prefix logic
+String does not start with operator
+}
+\seealso{
+\code{\link{stringNotContains}}, \code{\link{stringNotEndsWith}}
 }

@@ -123,10 +123,18 @@ opToPrint <- function(x) {
 
 ## lt --------
 #' Less than operator
-#' @description
-#' function that builds an opAttribute based on less than logic
-#' @param x   the value to used as a bound in the op logic. This can either be an integer, numeric, or
-#'            Date data type. Different data types will return the appropriate opAttribute type
+#'
+#' Builds a comparison operator for use inside attribute functions such as \code{\link{age}},
+#' \code{\link{valueAsNumber}}, \code{\link{startDate}}, etc.
+#' Accepts integer, numeric, or Date inputs; returns the matching opAttribute type.
+#'
+#' @param x Comparison bound (integer, numeric, or Date).
+#' @return An opAttribute for use inside attribute constructor functions.
+#' @seealso \code{\link{gt}}, \code{\link{gte}}, \code{\link{lte}}, \code{\link{eq}},
+#'   \code{\link{bt}}, \code{\link{age}}, \code{\link{valueAsNumber}}
+#' @examples
+#' # Patients under 18
+#' conditionOccurrence(cs(1L, name = "test"), age(lt(18L)))
 #' @export
 #' @docType methods
 setGeneric("lt", function(x) standardGeneric("lt"))
@@ -157,10 +165,17 @@ setMethod("lt", "Date", function(x) {
 
 ## gt --------
 #' Greater than operator
-#' @description
-#' function that builds an opAttribute based on greater than logic
-#' @param x   the value to used as a bound in the op logic. This can either be an integer, numeric, or
-#'            Date data type. Different data types will return the appropriate opAttribute type
+#'
+#' Builds a comparison operator for use inside attribute functions such as \code{\link{age}},
+#' \code{\link{valueAsNumber}}, \code{\link{startDate}}, etc.
+#' Accepts integer, numeric, or Date inputs; returns the matching opAttribute type.
+#'
+#' @param x Comparison bound (integer, numeric, or Date).
+#' @return An opAttribute for use inside attribute constructor functions.
+#' @seealso \code{\link{lt}}, \code{\link{gte}}, \code{\link{lte}}, \code{\link{eq}}, \code{\link{bt}}
+#' @examples
+#' # HbA1c > 6.5
+#' measurement(cs(1L, name = "HbA1c"), valueAsNumber(gt(6.5)))
 #' @export
 #' @docType methods
 setGeneric("gt", function(x) standardGeneric("gt"))
@@ -189,10 +204,17 @@ setMethod("gt", "Date", function(x) {
 
 ## lte --------
 #' Less than or equal to operator
-#' @description
-#' function that builds an opAttribute based on less than or equal to than logic
-#' @param x   the value to used as a bound in the op logic. This can either be an integer, numeric, or
-#'            Date data type. Different data types will return the appropriate opAttribute type
+#'
+#' Builds a comparison operator for use inside attribute functions such as \code{\link{age}},
+#' \code{\link{valueAsNumber}}, \code{\link{startDate}}, etc.
+#' Accepts integer, numeric, or Date inputs; returns the matching opAttribute type.
+#'
+#' @param x Comparison bound (integer, numeric, or Date).
+#' @return An opAttribute for use inside attribute constructor functions.
+#' @seealso \code{\link{lt}}, \code{\link{gt}}, \code{\link{gte}}, \code{\link{eq}}, \code{\link{bt}}
+#' @examples
+#' # Age 65 or younger
+#' conditionOccurrence(cs(1L, name = "test"), age(lte(65L)))
 #' @export
 #' @docType methods
 setGeneric("lte", function(x) standardGeneric("lte"))
@@ -221,10 +243,17 @@ setMethod("lte", "Date", function(x) {
 
 ## gte --------
 #' Greater than or equal to operator
-#' @description
-#' function that builds an opAttribute based on greater than or equal to logic
-#' @param x   the value to used as a bound in the op logic. This can either be an integer, numeric, or
-#'            Date data type. Different data types will return the appropriate opAttribute type
+#'
+#' Builds a comparison operator for use inside attribute functions such as \code{\link{age}},
+#' \code{\link{valueAsNumber}}, \code{\link{startDate}}, etc.
+#' Accepts integer, numeric, or Date inputs; returns the matching opAttribute type.
+#'
+#' @param x Comparison bound (integer, numeric, or Date).
+#' @return An opAttribute for use inside attribute constructor functions.
+#' @seealso \code{\link{lt}}, \code{\link{gt}}, \code{\link{lte}}, \code{\link{eq}}, \code{\link{bt}}
+#' @examples
+#' # Age 18 or older
+#' conditionOccurrence(cs(1L, name = "test"), age(gte(18L)))
 #' @export
 #' @docType methods
 setGeneric("gte", function(x) standardGeneric("gte"))
@@ -253,10 +282,17 @@ setMethod("gte", "Date", function(x) {
 
 ## eq --------
 #' Equal to operator
-#' @description
-#' function that builds an opAttribute based on equal to logic
-#' @param x   the value to used as a bound in the op logic. This can either be an integer, numeric, or
-#'            Date data type. Different data types will return the appropriate opAttribute type
+#'
+#' Builds a comparison operator for use inside attribute functions such as \code{\link{age}},
+#' \code{\link{valueAsNumber}}, \code{\link{startDate}}, etc.
+#' Accepts integer, numeric, Date, or character inputs.
+#'
+#' @param x Comparison value (integer, numeric, Date, or character).
+#' @return An opAttribute for use inside attribute constructor functions.
+#' @seealso \code{\link{lt}}, \code{\link{gt}}, \code{\link{lte}}, \code{\link{gte}}, \code{\link{bt}}
+#' @examples
+#' # Exactly 2 refills
+#' drugExposure(cs(1L, name = "drug"), drugRefills(eq(2L)))
 #' @export
 #' @docType methods
 setGeneric("eq", function(x) standardGeneric("eq"))
@@ -293,9 +329,17 @@ setMethod("eq", "character", function(x) {
 
 ## contains --------
 #' String contains operator
-#' @description
-#' function that builds an opAttribute based on substring containment logic
-#' @param x   the substring to search for
+#'
+#' Builds a text-match operator for use with text filter attribute functions such as
+#' \code{\link{lotNumber}}, \code{\link{stopReason}}, \code{\link{uniqueDeviceId}}.
+#'
+#' @param x Character substring to match.
+#' @return An opAttributeCharacter for use inside text attribute functions.
+#' @seealso \code{\link{stringStartsWith}}, \code{\link{stringEndsWith}},
+#'   \code{\link{stringNotContains}}, \code{\link{lotNumber}}, \code{\link{stopReason}}
+#' @examples
+#' # Drug exposures where lot number contains "LOT"
+#' drugExposure(cs(1L, name = "drug"), lotNumber(stringContains("LOT")))
 #' @export
 #' @docType methods
 setGeneric("stringContains", function(x) standardGeneric("stringContains"))
@@ -310,9 +354,10 @@ setMethod("stringContains", "character", function(x) {
 
 ## startsWith --------
 #' String starts with operator
-#' @description
-#' function that builds an opAttribute based on string prefix logic
-#' @param x   the prefix string to search for
+#'
+#' @param x Character prefix to match.
+#' @return An opAttributeCharacter for use inside text attribute functions.
+#' @seealso \code{\link{stringContains}}, \code{\link{stringEndsWith}}, \code{\link{lotNumber}}
 #' @export
 #' @docType methods
 setGeneric("stringStartsWith", function(x) standardGeneric("stringStartsWith"))
@@ -327,9 +372,10 @@ setMethod("stringStartsWith", "character", function(x) {
 
 ## endsWith --------
 #' String ends with operator
-#' @description
-#' function that builds an opAttribute based on string suffix logic
-#' @param x   the suffix string to search for
+#'
+#' @param x Character suffix to match.
+#' @return An opAttributeCharacter for use inside text attribute functions.
+#' @seealso \code{\link{stringContains}}, \code{\link{stringStartsWith}}, \code{\link{lotNumber}}
 #' @export
 #' @docType methods
 setGeneric("stringEndsWith", function(x) standardGeneric("stringEndsWith"))
@@ -344,9 +390,10 @@ setMethod("stringEndsWith", "character", function(x) {
 
 ## notStartsWith --------
 #' String does not start with operator
-#' @description
-#' function that builds an opAttribute based on negated string prefix logic
-#' @param x   the prefix string to NOT match
+#'
+#' @param x Character prefix to exclude.
+#' @return An opAttributeCharacter for use inside text attribute functions.
+#' @seealso \code{\link{stringNotContains}}, \code{\link{stringNotEndsWith}}
 #' @export
 #' @docType methods
 setGeneric("stringNotStartsWith", function(x) standardGeneric("stringNotStartsWith"))
@@ -361,9 +408,10 @@ setMethod("stringNotStartsWith", "character", function(x) {
 
 ## notContains --------
 #' String does not contain operator
-#' @description
-#' function that builds an opAttribute based on negated substring containment logic
-#' @param x   the substring to NOT search for
+#'
+#' @param x Character substring to exclude.
+#' @return An opAttributeCharacter for use inside text attribute functions.
+#' @seealso \code{\link{stringNotStartsWith}}, \code{\link{stringNotEndsWith}}
 #' @export
 #' @docType methods
 setGeneric("stringNotContains", function(x) standardGeneric("stringNotContains"))
@@ -378,9 +426,10 @@ setMethod("stringNotContains", "character", function(x) {
 
 ## notEndsWith --------
 #' String does not end with operator
-#' @description
-#' function that builds an opAttribute based on negated string suffix logic
-#' @param x   the suffix string to NOT match
+#'
+#' @param x Character suffix to exclude.
+#' @return An opAttributeCharacter for use inside text attribute functions.
+#' @seealso \code{\link{stringNotStartsWith}}, \code{\link{stringNotContains}}
 #' @export
 #' @docType methods
 setGeneric("stringNotEndsWith", function(x) standardGeneric("stringNotEndsWith"))
@@ -395,12 +444,18 @@ setMethod("stringNotEndsWith", "character", function(x) {
 
 ## bt --------
 #' Between operator
-#' @description
-#' function that builds an opAttribute based on between logic
-#' @param x   the left side bound of the between logic This can either be an integer, numeric, or Date
-#'            data type. Different data types will return the appropriate opAttribute type
-#' @param y   the right side bound of the between logic. This can either be an integer, numeric, or
-#'            Date data type. Different data types will return the appropriate opAttribute type
+#'
+#' Builds a range comparison for use inside attribute functions such as \code{\link{age}},
+#' \code{\link{valueAsNumber}}, \code{\link{startDate}}, etc.
+#' Accepts integer, numeric, or Date inputs.
+#'
+#' @param x Lower bound (integer, numeric, or Date).
+#' @param y Upper bound; must match type of \code{x}.
+#' @return An opAttribute for use inside attribute constructor functions.
+#' @seealso \code{\link{nbt}}, \code{\link{lt}}, \code{\link{gt}}, \code{\link{age}}
+#' @examples
+#' # Age between 18 and 65
+#' conditionOccurrence(cs(1L, name = "test"), age(bt(18L, 65L)))
 #' @export
 #' @docType methods
 setGeneric("bt", function(x, y) standardGeneric("bt"))
@@ -431,12 +486,17 @@ setMethod("bt", "Date", function(x, y) {
 
 ## nbt --------
 #' Not between operator
-#' @description
-#' function that builds an opAttribute based on not between logic
-#' @param x   the left side bound of the between logic This can either be an integer, numeric, or Date
-#'            data type. Different data types will return the appropriate opAttribute type
-#' @param y   the right side bound of the between logic. This can either be an integer, numeric, or
-#'            Date data type. Different data types will return the appropriate opAttribute type
+#'
+#' Builds an exclusion range comparison for use inside attribute functions.
+#' Accepts integer, numeric, or Date inputs.
+#'
+#' @param x Lower bound (integer, numeric, or Date).
+#' @param y Upper bound; must match type of \code{x}.
+#' @return An opAttribute for use inside attribute constructor functions.
+#' @seealso \code{\link{bt}}, \code{\link{lt}}, \code{\link{gt}}
+#' @examples
+#' # Age outside 18-65
+#' conditionOccurrence(cs(1L, name = "test"), age(nbt(18L, 65L)))
 #' @export
 #' @docType methods
 setGeneric("nbt", function(x, y) standardGeneric("nbt"))
@@ -467,10 +527,21 @@ setMethod("nbt", "Date", function(x, y) {
 
 ## Integer Constructors -----
 
-#' Function to create age attribute
-#' @param op   an opAttribute object that is either numeric or integer that defines the logical
-#'             operation used to determine eligible patient age
-#' @return An age attribute that can be used in a cohort definition
+#' Age attribute for a query
+#'
+#' Filters criteria by the person's age at the event date. Pass any comparison operator
+#' (\code{\link{lt}}, \code{\link{gt}}, \code{\link{gte}}, \code{\link{lte}}, \code{\link{eq}},
+#' \code{\link{bt}}, \code{\link{nbt}}).
+#'
+#' @param op An opAttribute built with \code{lt()}, \code{gt()}, \code{bt()}, etc.
+#' @return An integer opAttribute with \code{name = "Age"} for use in any domain query.
+#' @seealso \code{\link{ageAtStart}}, \code{\link{ageAtEnd}}, \code{\link{lt}}, \code{\link{gt}},
+#'   \code{\link{gte}}, \code{\link{bt}}
+#' @examples
+#' # Age 18 or older at index
+#' conditionOccurrence(cs(1L, name = "test"), age(gte(18L)))
+#' # Age between 18 and 65
+#' conditionOccurrence(cs(1L, name = "test"), age(bt(18L, 65L)))
 #' @export
 age <- function(op) {
 
@@ -483,6 +554,39 @@ age <- function(op) {
                op = op@op,
                value = as.integer(op@value),
                extent = as.integer(op@extent))
+}
+
+#' Age at era start attribute (for era and period domains)
+#' @param op an opAttribute object (numeric or integer) defining the age comparison
+#' @return An attribute for use in \code{conditionEra()}, \code{drugEra()}, \code{doseEra()}, \code{observationPeriod()}.
+#' @export
+ageAtStart <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  methods::new("opAttributeInteger", name = "AgeAtStart", op = op@op,
+               value = as.integer(op@value), extent = as.integer(op@extent))
+}
+
+#' Age at era end attribute (for era and period domains)
+#' @param op an opAttribute object (numeric or integer) defining the age comparison
+#' @return An attribute for use in \code{conditionEra()}, \code{drugEra()}, \code{doseEra()}, \code{observationPeriod()}.
+#' @export
+ageAtEnd <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  methods::new("opAttributeInteger", name = "AgeAtEnd", op = op@op,
+               value = as.integer(op@value), extent = as.integer(op@extent))
+}
+
+#' Visit length attribute for VisitOccurrence
+#' @param op an opAttribute object (numeric or integer) defining the length comparison in days
+#' @return An attribute for use in \code{visit()}.
+#' @export
+visitLength <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  methods::new("opAttributeInteger", name = "VisitLength", op = op@op,
+               value = as.integer(op@value), extent = as.integer(op@extent))
 }
 
 #' Function to create days supply attribute
@@ -619,6 +723,16 @@ drugQuantity <- function(op) {
                extent = op@extent)
 }
 
+#' Quantity attribute — ProcedureOccurrence, DeviceExposure, Specimen
+#' @param op an opAttribute object (numeric or integer) defining the quantity comparison.
+#' @return An attribute for use in \code{procedure()}, \code{deviceExposure()}, or \code{specimen()}.
+#' @export
+quantityValue <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  methods::new("opAttributeNumeric", name = "Quantity", op = op@op, value = op@value, extent = op@extent)
+}
+
 #' Occurrence count attribute for ConditionEra
 #'
 #' Filter condition era criteria by the number of condition eras (e.g. occurrence count = 0
@@ -656,6 +770,17 @@ eraLength <- function(op) {
                op = op@op,
                value = as.integer(op@value),
                extent = as.integer(op@extent))
+}
+
+#' Period length attribute — ObservationPeriod, PayerPlanPeriod
+#' @param op an opAttribute object (integer or numeric) defining the length comparison in days.
+#' @return An attribute for use in \code{observationPeriod()} or \code{payerPlanPeriod()}.
+#' @export
+periodLength <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  methods::new("opAttributeInteger", name = "PeriodLength", op = op@op,
+               value = as.integer(op@value), extent = as.integer(op@extent))
 }
 
 #' Dose value attribute for DoseEra
@@ -719,6 +844,33 @@ lotNumber <- function(op) {
                op = op@op,
                value = op@value,
                extent = op@extent)
+}
+
+#' Filter by stop reason text — ConditionOccurrence or DrugExposure
+#' @param op an \code{opAttributeCharacter} built with e.g. \code{stringContains("reason")}.
+#' @return An attribute for use in \code{conditionOccurrence()} or \code{drugExposure()}.
+#' @export
+stopReason <- function(op) {
+  if (!methods::is(op, "opAttributeCharacter")) stop("Input must be an opAttributeCharacter.")
+  methods::new("opAttributeCharacter", name = "StopReason", op = op@op, value = op@value, extent = op@extent)
+}
+
+#' Filter by unique device ID text — DeviceExposure
+#' @param op an \code{opAttributeCharacter} built with e.g. \code{stringContains("DV")}.
+#' @return An attribute for use in \code{deviceExposure()}.
+#' @export
+uniqueDeviceId <- function(op) {
+  if (!methods::is(op, "opAttributeCharacter")) stop("Input must be an opAttributeCharacter.")
+  methods::new("opAttributeCharacter", name = "UniqueDeviceId", op = op@op, value = op@value, extent = op@extent)
+}
+
+#' Filter by specimen source ID text — Specimen
+#' @param op an \code{opAttributeCharacter} built with e.g. \code{stringContains("src")}.
+#' @return An attribute for use in \code{specimen()}.
+#' @export
+specimenSourceId <- function(op) {
+  if (!methods::is(op, "opAttributeCharacter")) stop("Input must be an opAttributeCharacter.")
+  methods::new("opAttributeCharacter", name = "SourceId", op = op@op, value = op@value, extent = op@extent)
 }
 
 ## Date Constructors ----

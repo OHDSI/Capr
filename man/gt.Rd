@@ -17,9 +17,20 @@ gt(x)
 \S4method{gt}{Date}(x)
 }
 \arguments{
-\item{x}{the value to used as a bound in the op logic. This can either be an integer, numeric, or
-Date data type. Different data types will return the appropriate opAttribute type}
+\item{x}{Comparison bound (integer, numeric, or Date).}
+}
+\value{
+An opAttribute for use inside attribute constructor functions.
 }
 \description{
-function that builds an opAttribute based on greater than logic
+Builds a comparison operator for use inside attribute functions such as \code{\link{age}},
+\code{\link{valueAsNumber}}, \code{\link{startDate}}, etc.
+Accepts integer, numeric, or Date inputs; returns the matching opAttribute type.
+}
+\examples{
+# HbA1c > 6.5
+measurement(cs(1L, name = "HbA1c"), valueAsNumber(gt(6.5)))
+}
+\seealso{
+\code{\link{lt}}, \code{\link{gte}}, \code{\link{lte}}, \code{\link{eq}}, \code{\link{bt}}
 }

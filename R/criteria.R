@@ -77,14 +77,19 @@ is.Group <- function(x) {
 
 ## Criteria ----------------
 
-#' Function to enumerate an exact count of occurrences
-#' @param x the integer counting the number of occurrences
-#' @param query a query object that provides context to the clinical event of interest
-#' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
-#' relative to the index event
-#' @param distinct optional logical; if TRUE, count distinct (e.g. by countColumn)
-#' @param countColumn optional character; when counting, use this column for distinct (e.g. "DOMAIN_CONCEPT")
-#' @return A criteria that can be used in a cohort definition specifying satisfaction of exactly x instances of a query
+#' Require exactly N occurrences of a query within a window
+#'
+#' @param x Integer count of required occurrences.
+#' @param query A \code{Query} object (e.g. from \code{conditionOccurrence()}).
+#' @param aperture An \code{EventAperture} built with \code{\link{duringInterval}}. Defaults to all time.
+#' @param distinct If \code{TRUE}, count distinct values of \code{countColumn}.
+#' @param countColumn Column to use for distinct counting (e.g. \code{"DOMAIN_CONCEPT"}).
+#' @return A \code{Criteria} object for use in \code{\link{withAll}}, \code{\link{withAny}}, etc.
+#' @seealso \code{\link{atLeast}}, \code{\link{atMost}}, \code{\link{duringInterval}}
+#' @examples
+#' t2dm <- cs(descendants(201826L), name = "T2DM")
+#' # No prior T2DM diagnosis at any time before index
+#' exactly(0, conditionOccurrence(t2dm), duringInterval(eventStarts(-Inf, 0)))
 #' @export
 exactly <- function(x,
                     query,
@@ -112,15 +117,19 @@ exactly <- function(x,
   return(res)
 }
 
-#' Function to enumerate an minimal count of occurrences
+#' Require at least N occurrences of a query within a window
 #'
-#' @param x the integer counting the number of occurrences
-#' @param query a query object that provides context to the clinical event of interest
-#' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
-#' relative to the index event
-#' @param distinct optional logical; if TRUE, count distinct (e.g. by countColumn)
-#' @param countColumn optional character; when counting, use this column for distinct (e.g. "DOMAIN_CONCEPT")
-#' @return A criteria that can be used in a cohort definition specifying satisfaction of at least x instances of a query
+#' @param x Minimum integer count of required occurrences.
+#' @param query A \code{Query} object (e.g. from \code{conditionOccurrence()}).
+#' @param aperture An \code{EventAperture} built with \code{\link{duringInterval}}. Defaults to all time.
+#' @param distinct If \code{TRUE}, count distinct values of \code{countColumn}.
+#' @param countColumn Column to use for distinct counting (e.g. \code{"DOMAIN_CONCEPT"}).
+#' @return A \code{Criteria} object for use in \code{\link{withAll}}, \code{\link{withAny}}, etc.
+#' @seealso \code{\link{exactly}}, \code{\link{atMost}}, \code{\link{duringInterval}}
+#' @examples
+#' metformin <- cs(descendants(1503297L), name = "Metformin")
+#' # At least 2 metformin fills in the 365 days before index
+#' atLeast(2, drugExposure(metformin), duringInterval(eventStarts(-365, 0)))
 #' @export
 atLeast <- function(x,
                     query,
@@ -148,14 +157,19 @@ atLeast <- function(x,
   return(res)
 }
 
-#' Function to enumerate a maximum count of occurrences
-#' @param x the integer counting the number of occurrences
-#' @param query a query object that provides context to the clinical event of interest
-#' @param aperture an eventAperture object that shows the temporal span where the event
-#' is to be observed relative to the index event
-#' @param distinct optional logical; if TRUE, count distinct (e.g. by countColumn)
-#' @param countColumn optional character; when counting, use this column for distinct (e.g. "DOMAIN_CONCEPT")
-#' @return A criteria that can be used in a cohort definition specifying satisfaction of at most x instances of a query
+#' Require at most N occurrences of a query within a window
+#'
+#' @param x Maximum integer count of allowed occurrences.
+#' @param query A \code{Query} object (e.g. from \code{conditionOccurrence()}).
+#' @param aperture An \code{EventAperture} built with \code{\link{duringInterval}}. Defaults to all time.
+#' @param distinct If \code{TRUE}, count distinct values of \code{countColumn}.
+#' @param countColumn Column to use for distinct counting (e.g. \code{"DOMAIN_CONCEPT"}).
+#' @return A \code{Criteria} object for use in \code{\link{withAll}}, \code{\link{withAny}}, etc.
+#' @seealso \code{\link{exactly}}, \code{\link{atLeast}}, \code{\link{duringInterval}}
+#' @examples
+#' t2dm <- cs(descendants(201826L), name = "T2DM")
+#' # At most 1 T2DM diagnosis before index
+#' atMost(1, conditionOccurrence(t2dm), duringInterval(eventStarts(-365, 0)))
 #' @export
 atMost <- function(x,
                    query,

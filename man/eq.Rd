@@ -20,9 +20,20 @@ eq(x)
 \S4method{eq}{character}(x)
 }
 \arguments{
-\item{x}{the value to used as a bound in the op logic. This can either be an integer, numeric, or
-Date data type. Different data types will return the appropriate opAttribute type}
+\item{x}{Comparison value (integer, numeric, Date, or character).}
+}
+\value{
+An opAttribute for use inside attribute constructor functions.
 }
 \description{
-function that builds an opAttribute based on equal to logic
+Builds a comparison operator for use inside attribute functions such as \code{\link{age}},
+\code{\link{valueAsNumber}}, \code{\link{startDate}}, etc.
+Accepts integer, numeric, Date, or character inputs.
+}
+\examples{
+# Exactly 2 refills
+drugExposure(cs(1L, name = "drug"), drugRefills(eq(2L)))
+}
+\seealso{
+\code{\link{lt}}, \code{\link{gt}}, \code{\link{lte}}, \code{\link{gte}}, \code{\link{bt}}
 }

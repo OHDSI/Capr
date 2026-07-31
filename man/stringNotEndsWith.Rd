@@ -11,8 +11,14 @@ stringNotEndsWith(x)
 \S4method{stringNotEndsWith}{character}(x)
 }
 \arguments{
-\item{x}{the suffix string to NOT match}
+\item{x}{Character suffix to exclude.}
+}
+\value{
+An opAttributeCharacter for use inside text attribute functions.
 }
 \description{
-function that builds an opAttribute based on negated string suffix logic
+String does not end with operator
+}
+\seealso{
+\code{\link{stringNotStartsWith}}, \code{\link{stringNotContains}}
 }

@@ -11,8 +11,20 @@ stringContains(x)
 \S4method{stringContains}{character}(x)
 }
 \arguments{
-\item{x}{the substring to search for}
+\item{x}{Character substring to match.}
+}
+\value{
+An opAttributeCharacter for use inside text attribute functions.
 }
 \description{
-function that builds an opAttribute based on substring containment logic
+Builds a text-match operator for use with text filter attribute functions such as
+\code{\link{lotNumber}}, \code{\link{stopReason}}, \code{\link{uniqueDeviceId}}.
+}
+\examples{
+# Drug exposures where lot number contains "LOT"
+drugExposure(cs(1L, name = "drug"), lotNumber(stringContains("LOT")))
+}
+\seealso{
+\code{\link{stringStartsWith}}, \code{\link{stringEndsWith}},
+  \code{\link{stringNotContains}}, \code{\link{lotNumber}}, \code{\link{stopReason}}
 }

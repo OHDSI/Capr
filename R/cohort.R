@@ -81,34 +81,50 @@ setClass("Cohort",
 # named argument (e.g. `primaryCriterialimit = "All"`) is silently swallowed into
 # the dots and the real parameter reverts to its default.
 checkCaprDots <- function(dots, allowedClasses, fnName, expected, namedArgs) {
+  attributeClasses <- c("logicAttribute", "opAttributeSuper", "conceptAttribute",
+                        "nestedAttribute", "dateAdjustmentAttribute", "keyValueAttribute",
+                        "conceptSetAttribute")
   for (i in seq_along(dots)) {
     ok <- any(vapply(allowedClasses, function(cl) methods::is(dots[[i]], cl), logical(1)))
     if (!ok) {
       nm <- names(dots)[i]
-      hint <- if (!is.null(nm) && nzchar(nm) && !(nm %in% c("", NA))) {
-        paste0(" The argument is named '", nm, "' - did you misspell one of ", fnName,
-               "()'s parameters (", paste(namedArgs, collapse = ", "), ")?")
-      } else {
-        ""
+      isAttr <- any(vapply(attributeClasses, function(cl) methods::is(dots[[i]], cl), logical(1)))
+      cls <- class(dots[[i]])[1]
+      msg <- c(
+        "Arguments passed to {.fn {fnName}} must be {expected}; argument {i} is {.cls {cls}}."
+      )
+      if (isAttr) {
+        msg <- c(msg, "i" = "{.cls {cls}} is a query attribute \\u2014 pass it inside the query call, e.g. {.code conditionOccurrence(cs, {cls}(...))}.")
+      } else if (!is.null(nm) && nzchar(nm) && !(nm %in% c("", NA))) {
+        msg <- c(msg, "i" = "The argument is named {.val {nm}} \\u2014 did you misspell one of {.fn {fnName}}'s parameters ({.code {paste(namedArgs, collapse = ', ')}})?")
       }
-      rlang::abort(paste0("Arguments passed to `...` in ", fnName, "() must be ", expected,
-                          "; argument ", i, " is <", class(dots[[i]])[1], ">.", hint))
+      cli::cli_abort(msg)
     }
   }
   invisible(dots)
 }
 
-#' Create a cohort entry criteria
+#' Create a cohort entry definition
 #'
-#' @param ... Capr Queries
-#' @param observationWindow a time specifying the minimal time a person is observed
-#' @param primaryCriteriaLimit Which primary criteria matches should be considered for inclusion? "First", "Last" or "All"
-#' @param additionalCriteria a Capr group that adds restriction to the entry event
-#' @param qualifiedLimit Which criteria matches should be considered for inclusion? One of `"First"`,
-#'   `"Last"`, or `"All"`. Required when `additionalCriteria` is non-`NULL`. When `additionalCriteria`
-#'   is `NULL` and `qualifiedLimit` is omitted, it defaults to `primaryCriteriaLimit`.
+#' Defines the index event(s) and required observation window for a cohort. Each query passed
+#' as \code{...} is a candidate index event; a person enters the cohort at the first (or all,
+#' depending on \code{primaryCriteriaLimit}) qualifying event.
 #'
-#' @return A cohort entry Capr object
+#' @param ... One or more \code{Query} objects (e.g. \code{conditionOccurrence()}, \code{drugExposure()}).
+#' @param observationWindow Minimum continuous observation before and after index.
+#'   See \code{\link{continuousObservation}}. Default \code{continuousObservation(0L, 0L)}.
+#' @param primaryCriteriaLimit Whether to index on \code{"First"}, \code{"Last"}, or \code{"All"}
+#'   qualifying events per person.
+#' @param additionalCriteria An optional \code{Group} (\code{withAll}/\code{withAny}) further
+#'   restricting which events qualify as the index. See \code{\link{withAll}}.
+#' @param qualifiedLimit Result limit after applying \code{additionalCriteria}. Required when
+#'   \code{additionalCriteria} is non-\code{NULL}; defaults to \code{primaryCriteriaLimit}.
+#' @return A \code{CohortEntry} object.
+#' @seealso \code{\link{cohort}}, \code{\link{attrition}}, \code{\link{exit}},
+#'   \code{\link{continuousObservation}}, \code{\link{withAll}}
+#' @examples
+#' t2dm <- cs(descendants(201826L), name = "T2DM")
+#' entry(conditionOccurrence(t2dm), primaryCriteriaLimit = "First")
 #' @export
 entry <- function(...,
                   observationWindow = continuousObservation(0L, 0L),
@@ -142,11 +158,25 @@ entry <- function(...,
   return(cohort_entry)
 }
 
-#' Create a cohort attrition object
+#' Define cohort inclusion/exclusion rules (attrition)
 #'
-#' @param ... Capr groups
-#' @param expressionLimit how to limit initial events per person either First, All, or Last
-#' @return A cohort attrition object that can be used in a cohort definition
+#' Each named argument is one attrition rule — a \code{Group} built with
+#' \code{\link{withAll}}, \code{\link{withAny}}, \code{\link{withAtLeast}}, or
+#' \code{\link{withAtMost}}. Rules are applied in order after the index event is selected.
+#'
+#' @param ... Named \code{Group} objects, each representing one inclusion or exclusion rule.
+#' @param expressionLimit Which qualifying events per person survive attrition —
+#'   \code{"First"} (default), \code{"All"}, or \code{"Last"}. Should align with
+#'   \code{primaryCriteriaLimit} in \code{\link{entry}}.
+#' @return A \code{CohortAttrition} object.
+#' @seealso \code{\link{cohort}}, \code{\link{entry}}, \code{\link{withAll}}, \code{\link{withAny}}
+#' @examples
+#' t2dm <- cs(descendants(201826L), name = "T2DM")
+#' attrition(
+#'   noT2DM = withAll(exactly(0, conditionOccurrence(t2dm),
+#'                            duringInterval(eventStarts(-Inf, 0)))),
+#'   expressionLimit = "First"
+#' )
 #' @export
 attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
 
@@ -161,10 +191,18 @@ attrition <- function(..., expressionLimit = c("First", "All", "Last")) {
 
 }
 
-#' Function that creates a cohort exit object
-#' @param endStrategy the endStrategy object to specify for the exit
-#' @param censor the censoring criteria to specify for the exit
-#' @return A cohort exit object that can be used in a cohort definition
+#' Define cohort exit strategy
+#'
+#' @param endStrategy An end strategy object: \code{\link{observationExit}},
+#'   \code{\link{fixedExit}}, or \code{\link{drugExit}}.
+#' @param censor Optional \code{\link{censoringEvents}} object of queries that end the cohort
+#'   early if they occur after the index date.
+#' @return A \code{CohortExit} object.
+#' @seealso \code{\link{observationExit}}, \code{\link{fixedExit}}, \code{\link{drugExit}},
+#'   \code{\link{censoringEvents}}, \code{\link{cohort}}
+#' @examples
+#' exit(endStrategy = observationExit())
+#' exit(endStrategy = fixedExit(offsetDays = 30L))
 #' @export
 exit <- function(endStrategy, censor = NULL){
   if (is.null(censor)) {
@@ -178,16 +216,20 @@ exit <- function(endStrategy, censor = NULL){
 
   return(ee)
 }
-#' Create a Cohort Era class object
+#' Define cohort era collapse settings
 #'
-#' The Cohort Era depicts the time span of the cohort. The Censor Window includes
-#' the date window for which we register events. The Collapse Settings identify the era padding
-#' between events before exiting a cohort.
+#' Controls how adjacent cohort episodes are collapsed (merged) and optionally constrains
+#' the study window. Episodes separated by fewer than \code{eraDays} days are merged.
 #'
-#' @param eraDays a numeric that specifies the number of days for the era padding
-#' @param studyStartDate a date string that specifies the starting date of registration
-#' @param studyEndDate a date string that specifies the end date of registration
-#' @return a S4 CohortEra class object defining the eras of the cohort definition
+#' @param eraDays Gap in days between consecutive episodes below which they are collapsed
+#'   into a single era. Default \code{0L} (no collapse).
+#' @param studyStartDate Optional date to truncate cohort membership before this date.
+#' @param studyEndDate Optional date to truncate cohort membership after this date.
+#' @return A \code{CohortEra} object.
+#' @seealso \code{\link{cohort}}
+#' @examples
+#' era(eraDays = 30L)
+#' era(eraDays = 99999L)  # Occ cohort: collapse all episodes into one long era
 #' @export
 era <- function(eraDays = 0L,
                       studyStartDate = NULL,
@@ -206,12 +248,25 @@ era <- function(eraDays = 0L,
 }
 
 
-#' Function that creates a cohort object
-#' @param entry the index event of the cohort
-#' @param attrition rules that restrict the cohort further, developing attrition
-#' @param exit the event where the person exits the cohort
-#' @param era Cohort era (collapse) logic created with the `cohortEra` function
-#' @return an S4 Cohort class object describing the cohort definiton
+#' Build a cohort definition
+#'
+#' Assembles the four components of an OHDSI cohort definition into a single
+#' \code{Cohort} object that can be serialized to Circe-compatible JSON via
+#' \code{\link{toCohortJson}} or written to disk with \code{\link{writeCohort}}.
+#'
+#' @param entry A \code{CohortEntry} from \code{\link{entry}()}.
+#' @param attrition Optional \code{CohortAttrition} from \code{\link{attrition}()}.
+#' @param exit Optional \code{CohortExit} from \code{\link{exit}()}. Defaults to observation exit.
+#' @param era Optional \code{CohortEra} from \code{\link{era}()}. Defaults to no era collapse.
+#' @return A \code{Cohort} S4 object.
+#' @seealso \code{\link{entry}}, \code{\link{attrition}}, \code{\link{exit}}, \code{\link{era}},
+#'   \code{\link{toCohortJson}}, \code{\link{writeCohort}}
+#' @examples
+#' giBleed <- cs(descendants(192671L), name = "GI Bleed")
+#' ch <- cohort(
+#'   entry = entry(conditionOccurrence(giBleed), primaryCriteriaLimit = "First"),
+#'   exit  = exit(endStrategy = observationExit())
+#' )
 #' @export
 cohort <- function(entry,
                    attrition = NULL,

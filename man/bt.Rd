@@ -17,12 +17,22 @@ bt(x, y)
 \S4method{bt}{Date}(x, y)
 }
 \arguments{
-\item{x}{the left side bound of the between logic This can either be an integer, numeric, or Date
-data type. Different data types will return the appropriate opAttribute type}
+\item{x}{Lower bound (integer, numeric, or Date).}
 
-\item{y}{the right side bound of the between logic. This can either be an integer, numeric, or
-Date data type. Different data types will return the appropriate opAttribute type}
+\item{y}{Upper bound; must match type of \code{x}.}
+}
+\value{
+An opAttribute for use inside attribute constructor functions.
 }
 \description{
-function that builds an opAttribute based on between logic
+Builds a range comparison for use inside attribute functions such as \code{\link{age}},
+\code{\link{valueAsNumber}}, \code{\link{startDate}}, etc.
+Accepts integer, numeric, or Date inputs.
+}
+\examples{
+# Age between 18 and 65
+conditionOccurrence(cs(1L, name = "test"), age(bt(18L, 65L)))
+}
+\seealso{
+\code{\link{nbt}}, \code{\link{lt}}, \code{\link{gt}}, \code{\link{age}}
 }

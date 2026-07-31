@@ -2,18 +2,28 @@
 % Please edit documentation in R/query.R
 \name{conditionOccurrence}
 \alias{conditionOccurrence}
-\title{Query the condition domain}
+\title{Query the condition occurrence domain}
 \usage{
 conditionOccurrence(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A condition concept set (optional)}
+\item{conceptSet}{A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any condition.}
 
-\item{...}{optional attributes}
+\item{...}{Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+\code{age()}, \code{male()}/\code{female()}, \code{conditionType()}, \code{conditionStatus()},
+\code{conditionSourceConcept()}, \code{nestedWithAll()}, \code{dateAdjustment()}, etc.}
 }
 \value{
-A Capr Query
+A \code{Query} object.
 }
 \description{
-Query the condition domain
+Query the condition occurrence domain
+}
+\examples{
+t2dm <- cs(descendants(201826L), name = "T2DM")
+conditionOccurrence(t2dm)
+conditionOccurrence(t2dm, firstOccurrence(), age(gte(18L)))
+}
+\seealso{
+\code{\link{entry}}, \code{\link{atLeast}}, \code{\link{cs}}
 }

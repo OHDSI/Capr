@@ -3,27 +3,49 @@
 \name{male}
 \alias{male}
 \alias{female}
+\alias{raceConcepts}
+\alias{ethnicityConcepts}
 \title{Add male attribute to a query}
 \usage{
 male()
 
 female()
+
+raceConcepts(...)
+
+ethnicityConcepts(...)
+}
+\arguments{
+\item{...}{Integer OMOP ethnicity concept IDs (e.g. \code{38003563L} Hispanic or Latino,
+\code{38003564L} Not Hispanic or Latino).}
 }
 \value{
 An attribute that can be used in a query function
 
 An attribute that can be used in a query function
+
+A conceptAttribute with name \code{Race} for use in \code{withAll()}/\code{withAny()} attrition groups.
+
+A conceptAttribute with name \code{Ethnicity} for use in \code{withAll()}/\code{withAny()} attrition groups.
 }
 \description{
 Add male attribute to a query
 
 Add female attribute to a query
+
+Add race filter to a demographic criteria group
+
+Add ethnicity filter to a demographic criteria group
 }
 \section{Functions}{
 \itemize{
 \item \code{male()}: male demographic attribute
 
 \item \code{female()}: female demographic attribute
+
+\item \code{raceConcepts()}: race demographic attribute
+
+\item \code{ethnicityConcepts()}: ethnicity demographic attribute
 
 }}
 \examples{

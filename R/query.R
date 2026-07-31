@@ -116,12 +116,18 @@ query <- function(domain, conceptSet = NULL, ...) {
   return(query)
 }
 
-#' Query the condition domain
+#' Query the condition occurrence domain
 #'
-#' @param conceptSet A condition concept set (optional)
-#' @param ... optional attributes
-#'
-#' @return A Capr Query
+#' @param conceptSet A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any condition.
+#' @param ... Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+#'   \code{age()}, \code{male()}/\code{female()}, \code{conditionType()}, \code{conditionStatus()},
+#'   \code{conditionSourceConcept()}, \code{nestedWithAll()}, \code{dateAdjustment()}, etc.
+#' @return A \code{Query} object.
+#' @seealso \code{\link{entry}}, \code{\link{atLeast}}, \code{\link{cs}}
+#' @examples
+#' t2dm <- cs(descendants(201826L), name = "T2DM")
+#' conditionOccurrence(t2dm)
+#' conditionOccurrence(t2dm, firstOccurrence(), age(gte(18L)))
 #' @export
 conditionOccurrence <- function(conceptSet, ...) {
 
@@ -135,15 +141,21 @@ conditionOccurrence <- function(conceptSet, ...) {
         ...)
 }
 
-#' Query the drug domain
+#' Query the drug exposure domain
 #'
-#' @param conceptSet A drug concept set (optional)
-#' @param ... optional attributes
-#'
-#' @return A Capr Query
-#' @export
+#' @param conceptSet A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any drug.
+#' @param ... Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+#'   \code{age()}, \code{drugType()}, \code{drugRefills()}, \code{drugQuantity()},
+#'   \code{daysOfSupply()}, \code{lotNumber()}, \code{stopReason()}, \code{routeConcept()},
+#'   \code{drugSourceConcept()}, \code{nestedWithAll()}, etc.
+#' @return A \code{Query} object.
+#' @seealso \code{\link{drugEra}}, \code{\link{entry}}, \code{\link{cs}}
+#' @examples
+#' metformin <- cs(descendants(1503297L), name = "Metformin")
+#' drugExposure(metformin)
+#' drugExposure(metformin, firstOccurrence(), daysOfSupply(gte(90L)))
+#' @export 
 drugExposure <- function(conceptSet, ...) {
-
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
     stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
@@ -155,15 +167,15 @@ drugExposure <- function(conceptSet, ...) {
 }
 
 
-#' Query the drug domain
+#' Query the device exposure domain
 #'
-#' @param conceptSet A drug concept set (optional)
-#' @param ... optional attributes
-#'
-#' @return A Capr Query
-#' @export
+#' @param conceptSet A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any device.
+#' @param ... Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+#'   \code{age()}, \code{deviceType()}, \code{uniqueDeviceId()}, \code{quantityValue()}, etc.
+#' @return A \code{Query} object.
+#' @seealso \code{\link{entry}}, \code{\link{cs}}
+#' @export 
 deviceExposure <- function(conceptSet, ...) {
-
   # Check if conceptSet argument is missing
   if (missing(conceptSet)) {
     stop("conceptSet argument is required. If you don't want to specify a concept set use: conceptSet = NULL")
@@ -176,10 +188,16 @@ deviceExposure <- function(conceptSet, ...) {
 
 #' Query the measurement domain
 #'
-#' @param conceptSet A measurement concept set (optional)
-#' @param ... optional attributes
-#'
-#' @return A Capr Query
+#' @param conceptSet A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any measurement.
+#' @param ... Optional attributes: \code{firstOccurrence()}, \code{startDate()},
+#'   \code{valueAsNumber()}, \code{valueAsConcept()}, \code{measurementUnit()},
+#'   \code{measurementType()}, \code{rangeLow()}, \code{rangeHigh()},
+#'   \code{measurementSourceConcept()}, \code{age()}, etc.
+#' @return A \code{Query} object.
+#' @seealso \code{\link{valueAsNumber}}, \code{\link{measurementUnit}}, \code{\link{entry}}
+#' @examples
+#' hba1c <- cs(descendants(4184637L), name = "HbA1c")
+#' measurement(hba1c, valueAsNumber(gt(6.5)), measurementUnit(8554L))
 #' @export
 measurement <- function(conceptSet, ...) {
 
@@ -193,12 +211,14 @@ measurement <- function(conceptSet, ...) {
         ...)
 }
 
-#' Query the procedure domain
+#' Query the procedure occurrence domain
 #'
-#' @param conceptSet A procedure concept set (optional)
-#' @param ... optional attributes
-#'
-#' @return A Capr Query
+#' @param conceptSet A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any procedure.
+#' @param ... Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{age()},
+#'   \code{procedureType()}, \code{procedureModifier()}, \code{quantityValue()},
+#'   \code{procedureSourceConcept()}, etc.
+#' @return A \code{Query} object.
+#' @seealso \code{\link{entry}}, \code{\link{cs}}
 #' @export
 procedure <- function(conceptSet, ...) {
 
@@ -214,10 +234,11 @@ procedure <- function(conceptSet, ...) {
 
 #' Query the drug era domain
 #'
-#' @param conceptSet A drug ingredient concept set (optional)
-#' @param ... optional attributes
-#'
-#' @return A Capr Query
+#' @param conceptSet A \code{ConceptSet} for the drug ingredient.
+#' @param ... Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+#'   \code{eraLength()}, \code{occurrenceCount()}, \code{ageAtStart()}, \code{ageAtEnd()}, etc.
+#' @return A \code{Query} object.
+#' @seealso \code{\link{drugExposure}}, \code{\link{drugExit}}, \code{\link{entry}}
 #' @export
 drugEra <- function(conceptSet, ...) {
 
@@ -252,10 +273,11 @@ doseEra <- function(conceptSet, ...) {
 
 #' Query the condition era domain
 #'
-#' @param conceptSet A condition concept set (optional)
-#' @param ... optional attributes
-#'
-#' @return A Capr Query
+#' @param conceptSet A \code{ConceptSet} for the condition.
+#' @param ... Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+#'   \code{eraLength()}, \code{occurrenceCount()}, \code{ageAtStart()}, \code{ageAtEnd()}, etc.
+#' @return A \code{Query} object.
+#' @seealso \code{\link{conditionOccurrence}}, \code{\link{entry}}
 #' @export
 conditionEra <- function(conceptSet, ...) {
 
@@ -271,10 +293,15 @@ conditionEra <- function(conceptSet, ...) {
 
 #' Query the visit occurrence domain
 #'
-#' @param conceptSet A condition concept set (optional)
-#' @param ... optional attributes
-#'
-#' @return A Capr Query
+#' @param conceptSet A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any visit.
+#' @param ... Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+#'   \code{visitType()}, \code{visitLength()}, \code{visitSourceConcept()}, \code{placeOfService()},
+#'   \code{age()}, \code{nestedWithAll()}, etc.
+#' @return A \code{Query} object.
+#' @seealso \code{\link{entry}}, \code{\link{cs}}
+#' @examples
+#' ip <- cs(descendants(9201L, 262L), name = "Inpatient")
+#' visit(ip)
 #' @export
 visit <- function(conceptSet, ...) {
 
@@ -290,10 +317,14 @@ visit <- function(conceptSet, ...) {
 
 #' Query the death domain
 #'
-#' @param conceptSet A death domain, with rare exceptions this is always NULL
-#' @param ... optional attributes
-#'
-#' @return A Capr Query
+#' @param conceptSet A \code{ConceptSet} for the death cause concept, or \code{NULL} (most common —
+#'   death records are typically matched without a concept set).
+#' @param ... Optional attributes: \code{startDate()}, \code{deathType()}, \code{age()}, etc.
+#' @return A \code{Query} object.
+#' @seealso \code{\link{censoringEvents}}, \code{\link{exit}}
+#' @examples
+#' # Any death (no concept set)
+#' death(NULL)
 #' @export
 death <- function(conceptSet = NULL, ...) {
 
@@ -304,10 +335,13 @@ death <- function(conceptSet = NULL, ...) {
 
 #' Query the observation domain
 #'
-#' @param conceptSet A condition concept set (optional)
-#' @param ... optional attributes
-#'
-#' @return A Capr Query
+#' @param conceptSet A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any observation.
+#' @param ... Optional attributes: \code{firstOccurrence()}, \code{startDate()},
+#'   \code{valueAsNumber()}, \code{valueAsString()}, \code{valueAsConcept()},
+#'   \code{observationType()}, \code{observationQualifier()}, \code{observationSourceConcept()},
+#'   \code{age()}, etc.
+#' @return A \code{Query} object.
+#' @seealso \code{\link{entry}}, \code{\link{cs}}
 #' @export
 observation <- function(conceptSet, ...) {
 
@@ -367,6 +401,16 @@ visitDetail <- function(conceptSet, ...) {
 #' @export
 observationPeriod <- function(...) {
   query(domain = "ObservationPeriod", conceptSet = NULL, ...)
+}
+
+#' Query the payer plan period domain (CDM ≥ 5.3)
+#'
+#' @param ... optional attributes (e.g. \code{firstOccurrence()}, \code{startDate()},
+#'   \code{periodLength()}, \code{ageAtStart()}, \code{ageAtEnd()}, \code{genderCS()})
+#' @return A Capr Query of domain PayerPlanPeriod
+#' @export
+payerPlanPeriod <- function(...) {
+  query(domain = "PayerPlanPeriod", conceptSet = NULL, ...)
 }
 
 # Coercion -----

@@ -17,7 +17,7 @@ from the ids alone, which produces identical SQL.}
 when `connection` is supplied}
 }
 \value{
-An attribute that can be used in a query function
+An attribute for use in \code{conditionOccurrence()}.
 }
 \description{
 Add a condition status attribute

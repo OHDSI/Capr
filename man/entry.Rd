@@ -2,7 +2,7 @@
 % Please edit documentation in R/cohort.R
 \name{entry}
 \alias{entry}
-\title{Create a cohort entry criteria}
+\title{Create a cohort entry definition}
 \usage{
 entry(
   ...,
@@ -13,21 +13,33 @@ entry(
 )
 }
 \arguments{
-\item{...}{Capr Queries}
+\item{...}{One or more \code{Query} objects (e.g. \code{conditionOccurrence()}, \code{drugExposure()}).}
 
-\item{observationWindow}{a time specifying the minimal time a person is observed}
+\item{observationWindow}{Minimum continuous observation before and after index.
+See \code{\link{continuousObservation}}. Default \code{continuousObservation(0L, 0L)}.}
 
-\item{primaryCriteriaLimit}{Which primary criteria matches should be considered for inclusion? "First", "Last" or "All"}
+\item{primaryCriteriaLimit}{Whether to index on \code{"First"}, \code{"Last"}, or \code{"All"}
+qualifying events per person.}
 
-\item{additionalCriteria}{a Capr group that adds restriction to the entry event}
+\item{additionalCriteria}{An optional \code{Group} (\code{withAll}/\code{withAny}) further
+restricting which events qualify as the index. See \code{\link{withAll}}.}
 
-\item{qualifiedLimit}{Which criteria matches should be considered for inclusion? One of `"First"`,
-`"Last"`, or `"All"`. Required when `additionalCriteria` is non-`NULL`. When `additionalCriteria`
-is `NULL` and `qualifiedLimit` is omitted, it defaults to `primaryCriteriaLimit`.}
+\item{qualifiedLimit}{Result limit after applying \code{additionalCriteria}. Required when
+\code{additionalCriteria} is non-\code{NULL}; defaults to \code{primaryCriteriaLimit}.}
 }
 \value{
-A cohort entry Capr object
+A \code{CohortEntry} object.
 }
 \description{
-Create a cohort entry criteria
+Defines the index event(s) and required observation window for a cohort. Each query passed
+as \code{...} is a candidate index event; a person enters the cohort at the first (or all,
+depending on \code{primaryCriteriaLimit}) qualifying event.
+}
+\examples{
+t2dm <- cs(descendants(201826L), name = "T2DM")
+entry(conditionOccurrence(t2dm), primaryCriteriaLimit = "First")
+}
+\seealso{
+\code{\link{cohort}}, \code{\link{attrition}}, \code{\link{exit}},
+  \code{\link{continuousObservation}}, \code{\link{withAll}}
 }

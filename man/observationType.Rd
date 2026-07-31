@@ -2,7 +2,7 @@
 % Please edit documentation in R/attributes-concept.R
 \name{observationType}
 \alias{observationType}
-\title{Add a observation type attribute to determine the provenance of the record}
+\title{Add an observation type attribute to determine the provenance of the record}
 \usage{
 observationType(ids, connection = NULL, vocabularyDatabaseSchema = NULL)
 }
@@ -17,8 +17,8 @@ from the ids alone, which produces identical SQL.}
 when `connection` is supplied}
 }
 \value{
-An attribute that can be used in a query function
+An attribute for use in \code{observation()}.
 }
 \description{
-Add a observation type attribute to determine the provenance of the record
+Add an observation type attribute to determine the provenance of the record
 }

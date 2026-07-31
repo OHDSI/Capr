@@ -11,8 +11,14 @@ stringStartsWith(x)
 \S4method{stringStartsWith}{character}(x)
 }
 \arguments{
-\item{x}{the prefix string to search for}
+\item{x}{Character prefix to match.}
+}
+\value{
+An opAttributeCharacter for use inside text attribute functions.
 }
 \description{
-function that builds an opAttribute based on string prefix logic
+String starts with operator
+}
+\seealso{
+\code{\link{stringContains}}, \code{\link{stringEndsWith}}, \code{\link{lotNumber}}
 }

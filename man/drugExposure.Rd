@@ -2,18 +2,29 @@
 % Please edit documentation in R/query.R
 \name{drugExposure}
 \alias{drugExposure}
-\title{Query the drug domain}
+\title{Query the drug exposure domain}
 \usage{
 drugExposure(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A drug concept set (optional)}
+\item{conceptSet}{A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any drug.}
 
-\item{...}{optional attributes}
+\item{...}{Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+\code{age()}, \code{drugType()}, \code{drugRefills()}, \code{drugQuantity()},
+\code{daysOfSupply()}, \code{lotNumber()}, \code{stopReason()}, \code{routeConcept()},
+\code{drugSourceConcept()}, \code{nestedWithAll()}, etc.}
 }
 \value{
-A Capr Query
+A \code{Query} object.
 }
 \description{
-Query the drug domain
+Query the drug exposure domain
+}
+\examples{
+metformin <- cs(descendants(1503297L), name = "Metformin")
+drugExposure(metformin)
+drugExposure(metformin, firstOccurrence(), daysOfSupply(gte(90L)))
+}
+\seealso{
+\code{\link{drugEra}}, \code{\link{entry}}, \code{\link{cs}}
 }

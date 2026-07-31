@@ -84,3 +84,48 @@ specimenTypeExclude <- function(exclude = FALSE) {
   k <- "SpecimenTypeExclude"
   methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
 }
+
+#' DrugTypeExclude query attribute
+#' @param exclude logical; FALSE = include all types (default), TRUE = exclude
+#' @return An attribute for use in \code{drugExposure()}
+#' @export
+drugTypeExclude <- function(exclude = FALSE) {
+  k <- "DrugTypeExclude"
+  methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
+}
+
+#' DeviceTypeExclude query attribute
+#' @param exclude logical; FALSE = include all types (default), TRUE = exclude
+#' @return An attribute for use in \code{deviceExposure()}
+#' @export
+deviceTypeExclude <- function(exclude = FALSE) {
+  k <- "DeviceTypeExclude"
+  methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
+}
+
+#' ObservationTypeExclude query attribute
+#' @param exclude logical; FALSE = include all types (default), TRUE = exclude
+#' @return An attribute for use in \code{observation()}
+#' @export
+observationTypeExclude <- function(exclude = FALSE) {
+  k <- "ObservationTypeExclude"
+  methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
+}
+
+#' ProcedureTypeExclude query attribute
+#' @param exclude logical; FALSE = include all types (default), TRUE = exclude
+#' @return An attribute for use in \code{procedure()}
+#' @export
+procedureTypeExclude <- function(exclude = FALSE) {
+  k <- "ProcedureTypeExclude"
+  methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
+}
+
+#' VisitTypeExclude query attribute
+#' @param exclude logical; FALSE = include all types (default), TRUE = exclude
+#' @return An attribute for use in \code{visit()}
+#' @export
+visitTypeExclude <- function(exclude = FALSE) {
+  k <- "VisitTypeExclude"
+  methods::new("keyValueAttribute", key = k, value = as.logical(exclude)[1L], name = k)
+}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/attributes-concept.R
 \name{measurementUnit}
 \alias{measurementUnit}
-\title{Add unit attribute to a query}
+\title{Unit attribute for a query}
 \usage{
 measurementUnit(ids, connection = NULL, vocabularyDatabaseSchema = NULL)
 }
@@ -17,8 +17,12 @@ from the ids alone, which produces identical SQL.}
 when `connection` is supplied}
 }
 \value{
-An attribute that can be used in a query function
+An attribute for use in \code{measurement()}, \code{observation()}, \code{doseEra()}, or \code{specimen()}.
 }
 \description{
-Add unit attribute to a query
+Filters by unit concept id (serializes to Circe \code{Unit} field).
+Applies to \code{measurement()}, \code{observation()}, \code{doseEra()}, and \code{specimen()}.
+}
+\details{
+Named \code{measurementUnit} (not \code{unit}) to avoid masking \code{dplyr::unit}.
 }

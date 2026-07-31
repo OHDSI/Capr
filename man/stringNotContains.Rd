@@ -11,8 +11,14 @@ stringNotContains(x)
 \S4method{stringNotContains}{character}(x)
 }
 \arguments{
-\item{x}{the substring to NOT search for}
+\item{x}{Character substring to exclude.}
+}
+\value{
+An opAttributeCharacter for use inside text attribute functions.
 }
 \description{
-function that builds an opAttribute based on negated substring containment logic
+String does not contain operator
+}
+\seealso{
+\code{\link{stringNotStartsWith}}, \code{\link{stringNotEndsWith}}
 }

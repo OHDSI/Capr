@@ -2,22 +2,35 @@
 % Please edit documentation in R/cohort.R
 \name{cohort}
 \alias{cohort}
-\title{Function that creates a cohort object}
+\title{Build a cohort definition}
 \usage{
 cohort(entry, attrition = NULL, exit = NULL, era = NULL)
 }
 \arguments{
-\item{entry}{the index event of the cohort}
+\item{entry}{A \code{CohortEntry} from \code{\link{entry}()}.}
 
-\item{attrition}{rules that restrict the cohort further, developing attrition}
+\item{attrition}{Optional \code{CohortAttrition} from \code{\link{attrition}()}.}
 
-\item{exit}{the event where the person exits the cohort}
+\item{exit}{Optional \code{CohortExit} from \code{\link{exit}()}. Defaults to observation exit.}
 
-\item{era}{Cohort era (collapse) logic created with the `cohortEra` function}
+\item{era}{Optional \code{CohortEra} from \code{\link{era}()}. Defaults to no era collapse.}
 }
 \value{
-an S4 Cohort class object describing the cohort definiton
+A \code{Cohort} S4 object.
 }
 \description{
-Function that creates a cohort object
+Assembles the four components of an OHDSI cohort definition into a single
+\code{Cohort} object that can be serialized to Circe-compatible JSON via
+\code{\link{toCohortJson}} or written to disk with \code{\link{writeCohort}}.
+}
+\examples{
+giBleed <- cs(descendants(192671L), name = "GI Bleed")
+ch <- cohort(
+  entry = entry(conditionOccurrence(giBleed), primaryCriteriaLimit = "First"),
+  exit  = exit(endStrategy = observationExit())
+)
+}
+\seealso{
+\code{\link{entry}}, \code{\link{attrition}}, \code{\link{exit}}, \code{\link{era}},
+  \code{\link{toCohortJson}}, \code{\link{writeCohort}}
 }

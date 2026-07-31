@@ -115,3 +115,19 @@ test_that("compile concept set to json", {
   expect_gt(nchar(compile(giBleed)), 5)
 })
 
+test_that("integer64 concept ids are coerced correctly", {
+  skip_if_not_installed("bit64")
+  ids64 <- bit64::as.integer64(c(1L, 2L, 3L))
+
+  result <- cs(ids64, name = "test")
+  expect_s4_class(result, "ConceptSet")
+  expect_equal(sort(purrr::map_int(result@Expression, ~.@Concept@concept_id)), c(1L, 2L, 3L))
+
+  result_desc <- cs(descendants(ids64), name = "test")
+  expect_equal(sort(purrr::map_int(result_desc@Expression, ~.@Concept@concept_id)), c(1L, 2L, 3L))
+  expect_true(all(purrr::map_lgl(result_desc@Expression, ~.@includeDescendants)))
+
+  result_excl <- cs(exclude(ids64), name = "test")
+  expect_true(all(purrr::map_lgl(result_excl@Expression, ~.@isExcluded)))
+})
+

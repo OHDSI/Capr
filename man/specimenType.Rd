@@ -17,7 +17,7 @@ from the ids alone, which produces identical SQL.}
 when `connection` is supplied}
 }
 \value{
-An attribute that can be used in a query function
+An attribute for use in \code{specimen()}.
 }
 \description{
 Add a specimen type attribute to determine the provenance of the record

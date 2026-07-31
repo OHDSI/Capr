@@ -11,8 +11,14 @@ stringEndsWith(x)
 \S4method{stringEndsWith}{character}(x)
 }
 \arguments{
-\item{x}{the suffix string to search for}
+\item{x}{Character suffix to match.}
+}
+\value{
+An opAttributeCharacter for use inside text attribute functions.
 }
 \description{
-function that builds an opAttribute based on string suffix logic
+String ends with operator
+}
+\seealso{
+\code{\link{stringContains}}, \code{\link{stringStartsWith}}, \code{\link{lotNumber}}
 }

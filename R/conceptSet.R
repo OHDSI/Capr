@@ -188,7 +188,7 @@ newConcept <- function(id,
 #' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9), name = "concepts")
 #' cs(descendants(1, 2, 3),  exclude(descendants(8, 9)), name = "concepts")
 cs <- function(..., name) {
-  dots <- unlist(list(...), recursive = F)
+  dots <- unlist(lapply(list(...), function(x) if (inherits(x, "integer64")) as.integer(x) else x), recursive = F)
 
   conceptList <- lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
@@ -238,7 +238,7 @@ cs <- function(..., name) {
 #' @export
 #' @describeIn cs exclude concepts
 exclude <- function(...) {
-  dots <- unlist(list(...), recursive = F)
+  dots <- unlist(lapply(list(...), function(x) if (inherits(x, "integer64")) as.integer(x) else x), recursive = F)
 
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
@@ -261,7 +261,7 @@ exclude <- function(...) {
 #' @export
 #' @describeIn cs Include mapped concepts
 mapped <- function(...) {
-  dots <- unlist(list(...), recursive = F)
+  dots <- unlist(lapply(list(...), function(x) if (inherits(x, "integer64")) as.integer(x) else x), recursive = F)
 
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
@@ -284,7 +284,7 @@ mapped <- function(...) {
 #' @export
 #' @describeIn cs Include descendants
 descendants <- function(...) {
-  dots <- unlist(list(...), recursive = F)
+  dots <- unlist(lapply(list(...), function(x) if (inherits(x, "integer64")) as.integer(x) else x), recursive = F)
 
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {

@@ -2,17 +2,28 @@
 % Please edit documentation in R/attributes-op.R
 \name{age}
 \alias{age}
-\title{Function to create age attribute}
+\title{Age attribute for a query}
 \usage{
 age(op)
 }
 \arguments{
-\item{op}{an opAttribute object that is either numeric or integer that defines the logical
-operation used to determine eligible patient age}
+\item{op}{An opAttribute built with \code{lt()}, \code{gt()}, \code{bt()}, etc.}
 }
 \value{
-An age attribute that can be used in a cohort definition
+An integer opAttribute with \code{name = "Age"} for use in any domain query.
 }
 \description{
-Function to create age attribute
+Filters criteria by the person's age at the event date. Pass any comparison operator
+(\code{\link{lt}}, \code{\link{gt}}, \code{\link{gte}}, \code{\link{lte}}, \code{\link{eq}},
+\code{\link{bt}}, \code{\link{nbt}}).
+}
+\examples{
+# Age 18 or older at index
+conditionOccurrence(cs(1L, name = "test"), age(gte(18L)))
+# Age between 18 and 65
+conditionOccurrence(cs(1L, name = "test"), age(bt(18L, 65L)))
+}
+\seealso{
+\code{\link{ageAtStart}}, \code{\link{ageAtEnd}}, \code{\link{lt}}, \code{\link{gt}},
+  \code{\link{gte}}, \code{\link{bt}}
 }
