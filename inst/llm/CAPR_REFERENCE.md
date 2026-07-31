@@ -1078,16 +1078,16 @@ event, etc.), fall back to custom code using the package primitives.
 
 | Function | Domain | Use Case | Entry Limit | Exit | Era |
 |---|---|---|---|---|---|---|
-| `chronicCohort(cs, washoutDays, exitOffsetDays, eraGapDays)` | condition | Prevalent chronic condition | `"All"` | Fixed (event end, default 0d) | `1` |
-| `incidentCohort(cs, washoutDays, eraGapDays)` | condition | First-ever diagnosis (new onset) | `"First"` | Observation | configurable |
-| `acuteCohort(cs, washoutDays, exitDays)` | condition | Short-duration event | `"All"` | Fixed (event end + 14d) | `0` |
-| `newUserCohort(cs, washoutDays, persistenceWindow, surveillanceWindow)` | drug | First-time drug exposure | `"First"` | Drug era | `0` |
+| `chronicOutcomeCohort(cs, washoutDays, exitOffsetDays, eraGapDays)` | condition | Prevalent chronic condition | `"All"` | Fixed (event end, default 0d) | `1` |
+| `firstEverDiagnosisCohort(cs, washoutDays, eraGapDays)` | condition | First-ever diagnosis (new onset) | `"First"` | Observation | configurable |
+| `acuteOutcomeCohort(cs, washoutDays, exitDays)` | condition | Short-duration event | `"All"` | Fixed (event end + 14d) | `0` |
+| `newUserDrugCohort(cs, washoutDays, persistenceWindow, surveillanceWindow)` | drug | First-time drug exposure | `"First"` | Drug era | `0` |
 | `allDrugCohort(cs, washoutDays)` | drug | Any drug exposure episode | `"All"` | Observation | `0` |
 | `measurementCohort(cs, valueFilter, unitConceptIds, washoutDays)` | measurement | Lab value threshold | `"First"` | Observation | `0` |
 | `procedureCohort(cs, washoutDays, exitOffsetDays, eraGapDays)` | procedure | Procedure occurrence | `"All"` | Fixed (event end, default 0d) | `1` |
 | `observationCohort(cs, washoutDays, exitOffsetDays, eraGapDays)` | observation | Observation record | `"All"` | Fixed (event end, default 0d) | `1` |
 
-### `chronicCohort(conditionConceptSet, washoutDays = 365L, exitOffsetDays = 0L, eraGapDays = 1L)`
+### `chronicOutcomeCohort(conditionConceptSet, washoutDays = 365L, exitOffsetDays = 0L, eraGapDays = 1L)`
 
 All qualifying condition occurrences per person, exiting at each event's end date. Nearby episodes
 are collapsed into eras (`eraGapDays`). Matches the OHDSI Phenotype Library convention — all events
@@ -1097,11 +1097,11 @@ person), switch to `primaryCriteriaLimit = "First"` + `expressionLimit = "First"
 
 ```r
 createHtnCohort <- function(htnCs) {
-  chronicCohort(htnCs, washoutDays = 365L, eraGapDays = 180L)
+  chronicOutcomeCohort(htnCs, washoutDays = 365L, eraGapDays = 180L)
 }
 ```
 
-### `incidentCohort(conditionConceptSet, washoutDays = 365L, eraGapDays = 0L)`
+### `firstEverDiagnosisCohort(conditionConceptSet, washoutDays = 365L, eraGapDays = 0L)`
 
 First-ever (new-onset) condition. Uses `firstOccurrence()` on the entry query to select only the
 first recorded diagnosis in each person's history. Combined with the observation window, this
@@ -1110,11 +1110,11 @@ that event has sufficient prior observation.
 
 ```r
 createNewOnsetAfib <- function(afibCs) {
-  incidentCohort(afibCs, washoutDays = 365L)
+  firstEverDiagnosisCohort(afibCs, washoutDays = 365L)
 }
 ```
 
-### `acuteCohort(conditionConceptSet, washoutDays = 180L, exitDays = 14L)`
+### `acuteOutcomeCohort(conditionConceptSet, washoutDays = 180L, exitDays = 14L)`
 
 Short-duration acute event. Each qualifying event enters the cohort independently (`"All"` limit)
 and exits `exitDays` after the event's end date. No era collapsing — episodes stay distinct.
@@ -1122,11 +1122,11 @@ The default 14-day exit offset matches the OHDSI Phenotype Library convention fo
 
 ```r
 createMiCohort <- function(miCs) {
-  acuteCohort(miCs, exitDays = 14L)
+  acuteOutcomeCohort(miCs, exitDays = 14L)
 }
 ```
 
-### `newUserCohort(drugConceptSet, washoutDays = 365L, persistenceWindow = 30L, surveillanceWindow = 0L)`
+### `newUserDrugCohort(drugConceptSet, washoutDays = 365L, persistenceWindow = 30L, surveillanceWindow = 0L)`
 
 First-time drug exposure. Uses `firstOccurrence()` to select each person's first recorded exposure,
 exiting at the end of the resulting continuous drug era (`drugExit()`). Standard new-user design
@@ -1134,7 +1134,7 @@ for pharmacoepidemiology.
 
 ```r
 createMetforminUsers <- function(metforminCs) {
-  newUserCohort(metforminCs, washoutDays = 365L)
+  newUserDrugCohort(metforminCs, washoutDays = 365L)
 }
 ```
 
@@ -1167,12 +1167,12 @@ createUncontrolledHbA1c <- function(hba1cCs) {
 ### `procedureCohort(procedureConceptSet, washoutDays = 365L, exitOffsetDays = 0L, eraGapDays = 1L)`
 
 All qualifying procedure occurrences per person, exiting at each event's end date. Same pattern as
-`chronicCohort()` but queries the procedure domain.
+`chronicOutcomeCohort()` but queries the procedure domain.
 
 ### `observationCohort(observationConceptSet, washoutDays = 365L, exitOffsetDays = 0L, eraGapDays = 1L)`
 
 All qualifying observation records per person, exiting at each event's end date. Same pattern as
-`chronicCohort()` but queries the observation domain.
+`chronicOutcomeCohort()` but queries the observation domain.
 
 ### Tuning Sensitivity and Specificity
 

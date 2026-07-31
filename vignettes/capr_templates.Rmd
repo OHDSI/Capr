@@ -25,7 +25,7 @@ library(Capr)
 
 Capr is at its most valuable when it is used as a tool for templating cohort definitions. In a study we may need multiple cohort definitions that use the same logic but vary by concept sets. For example, in a study we need to create cohort covariates for various conditions. The cohort logic is simple, as condition occurrence with at least 365 days of prior observation. The concept sets used could be various cardiovascular events like stroke, hypertension, acute myocardial infarction, heart failure, and atrial fibrillation. 
 
-To build all these cohorts using a template, we can easily define the logic in Capr. Capr templates are functions were the input is a concept set that differs in the logic.
+To build all these cohorts using a template, we can easily define the logic in Capr. Capr templates are functions where the input is a concept set that varies the logic.
 
 ```{r templateFn}
 cvEvents <- function(conceptSet) {
@@ -80,11 +80,7 @@ cvEvents2 <- function(conceptSet) {
     )
   )
   
-  #coerce cohort to json
-  cohortJson <- cd %>%
-    toCirce() %>%
-    jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE) %>%
-    as.character()
+  cohortJson <- toCohortJson(cd)
     
   return(cohortJson)
 }
@@ -100,7 +96,7 @@ cvEvents3 <- function(file) {
   # get file name
   name <- tools::file_path_sans_ext(basename(file))
   
-  #retreive concept set
+  # retrieve concept set
   conceptSet <- Capr::readConceptSet(path = file, name = name)
   
   #Capr template logic
@@ -114,11 +110,7 @@ cvEvents3 <- function(file) {
     )
   )
   
-  #coerce cohort to json
-  cohortJson <- cd %>%
-    toCirce() %>%
-    jsonlite::toJSON(pretty = TRUE, auto_unbox = TRUE) %>%
-    as.character()
+  cohortJson <- toCohortJson(cd)
     
   return(cohortJson)
 }
@@ -144,7 +136,7 @@ readr::write_file(miCohort, file = outputPath)
 
 ```
 
-To save multiple cohorts from a list we can functionalize the `readr::write_file` using `purrr::walk`. 
+To save multiple cohorts from a list, apply `writeCohort` across the list using `purrr::walk`. 
 
 ## Final thoughts
 

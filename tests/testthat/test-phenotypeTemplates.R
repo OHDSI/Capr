@@ -1,7 +1,7 @@
-test_that("chronicCohort returns a Cohort and compiles to valid Circe JSON", {
+test_that("chronicOutcomeCohort returns a Cohort and compiles to valid Circe JSON", {
   skip_if_not_installed("CirceR")
   cs_test <- cs(1L, name = "test")
-  cd <- chronicCohort(cs_test)
+  cd <- chronicOutcomeCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
   json <- compile(cd)
@@ -14,31 +14,31 @@ test_that("chronicCohort returns a Cohort and compiles to valid Circe JSON", {
   expect_type(sql, "character")
 })
 
-test_that("chronicCohort uses All limits and fixed exit at endDate", {
+test_that("chronicOutcomeCohort uses All limits and fixed exit at endDate", {
   cs_test <- cs(1L, name = "test")
-  cd <- chronicCohort(cs_test)
+  cd <- chronicOutcomeCohort(cs_test)
 
   expect_equal(cd@entry@primaryCriteriaLimit, "All")
   expect_equal(cd@attrition@expressionLimit, "All")
   expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
 })
 
-test_that("chronicCohort default era gap is 1", {
+test_that("chronicOutcomeCohort default era gap is 1", {
   cs_test <- cs(1L, name = "test")
-  cd <- chronicCohort(cs_test)
+  cd <- chronicOutcomeCohort(cs_test)
   expect_equal(cd@era@eraDays, 1L)
 })
 
-test_that("chronicCohort custom era gap is applied", {
+test_that("chronicOutcomeCohort custom era gap is applied", {
   cs_test <- cs(1L, name = "test")
-  cd <- chronicCohort(cs_test, eraGapDays = 180L)
+  cd <- chronicOutcomeCohort(cs_test, eraGapDays = 180L)
   expect_equal(cd@era@eraDays, 180L)
 })
 
-test_that("incidentCohort returns a Cohort and compiles to valid Circe JSON", {
+test_that("firstEverDiagnosisCohort returns a Cohort and compiles to valid Circe JSON", {
   skip_if_not_installed("CirceR")
   cs_test <- cs(1L, name = "test")
-  cd <- incidentCohort(cs_test)
+  cd <- firstEverDiagnosisCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
   json <- compile(cd)
@@ -51,18 +51,18 @@ test_that("incidentCohort returns a Cohort and compiles to valid Circe JSON", {
   expect_type(sql, "character")
 })
 
-test_that("incidentCohort uses firstOccurrence and observation exit", {
+test_that("firstEverDiagnosisCohort uses firstOccurrence and observation exit", {
   cs_test <- cs(1L, name = "test")
-  cd <- incidentCohort(cs_test)
+  cd <- firstEverDiagnosisCohort(cs_test)
 
   expect_equal(cd@entry@primaryCriteriaLimit, "First")
   expect_s4_class(cd@exit@endStrategy, "ObservationExit")
 })
 
-test_that("acuteCohort returns a Cohort and compiles to valid Circe JSON", {
+test_that("acuteOutcomeCohort returns a Cohort and compiles to valid Circe JSON", {
   skip_if_not_installed("CirceR")
   cs_test <- cs(1L, name = "test")
-  cd <- acuteCohort(cs_test)
+  cd <- acuteOutcomeCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
   json <- compile(cd)
@@ -75,9 +75,9 @@ test_that("acuteCohort returns a Cohort and compiles to valid Circe JSON", {
   expect_type(sql, "character")
 })
 
-test_that("acuteCohort uses All limits and fixed exit", {
+test_that("acuteOutcomeCohort uses All limits and fixed exit", {
   cs_test <- cs(1L, name = "test")
-  cd <- acuteCohort(cs_test)
+  cd <- acuteOutcomeCohort(cs_test)
 
   expect_equal(cd@entry@primaryCriteriaLimit, "All")
   expect_equal(cd@attrition@expressionLimit, "All")
@@ -85,16 +85,16 @@ test_that("acuteCohort uses All limits and fixed exit", {
   expect_equal(cd@era@eraDays, 0L)
 })
 
-test_that("acuteCohort uses endDate-based exit", {
+test_that("acuteOutcomeCohort uses endDate-based exit", {
   cs_test <- cs(1L, name = "test")
-  cd <- acuteCohort(cs_test)
+  cd <- acuteOutcomeCohort(cs_test)
   expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
 })
 
-test_that("newUserCohort returns a Cohort and compiles to valid Circe JSON", {
+test_that("newUserDrugCohort returns a Cohort and compiles to valid Circe JSON", {
   skip_if_not_installed("CirceR")
   cs_test <- cs(1L, name = "test")
-  cd <- newUserCohort(cs_test)
+  cd <- newUserDrugCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
   json <- compile(cd)
@@ -107,9 +107,9 @@ test_that("newUserCohort returns a Cohort and compiles to valid Circe JSON", {
   expect_type(sql, "character")
 })
 
-test_that("newUserCohort uses drugExit strategy", {
+test_that("newUserDrugCohort uses drugExit strategy", {
   cs_test <- cs(1L, name = "test")
-  cd <- newUserCohort(cs_test)
+  cd <- newUserDrugCohort(cs_test)
 
   expect_equal(cd@entry@primaryCriteriaLimit, "First")
   expect_s4_class(cd@exit@endStrategy, "DrugExposureExit")
@@ -204,39 +204,39 @@ test_that("observationCohort returns a Cohort and compiles to valid Circe JSON",
 test_that("all archetypes accept NULL conceptSet explicitly", {
   skip_if_not_installed("CirceR")
 
-  expect_s4_class(chronicCohort(NULL), "Cohort")
-  expect_s4_class(incidentCohort(NULL), "Cohort")
-  expect_s4_class(acuteCohort(NULL), "Cohort")
+  expect_s4_class(chronicOutcomeCohort(NULL), "Cohort")
+  expect_s4_class(firstEverDiagnosisCohort(NULL), "Cohort")
+  expect_s4_class(acuteOutcomeCohort(NULL), "Cohort")
   expect_s4_class(procedureCohort(NULL), "Cohort")
   expect_s4_class(observationCohort(NULL), "Cohort")
   expect_s4_class(allDrugCohort(NULL), "Cohort")
 })
 
-test_that("incidentCohort applies firstOccurrence on entry", {
+test_that("firstEverDiagnosisCohort applies firstOccurrence on entry", {
   cs_test <- cs(descendants(320128), name = "test")
-  cd <- incidentCohort(cs_test)
+  cd <- firstEverDiagnosisCohort(cs_test)
 
   json <- compile(cd)
   expect_match(json, "First", fixed = TRUE)
 })
 
-test_that("acuteCohort default parameters are sensible", {
+test_that("acuteOutcomeCohort default parameters are sensible", {
   cs_test <- cs(1L, name = "test")
-  cd <- acuteCohort(cs_test)
+  cd <- acuteOutcomeCohort(cs_test)
 
   expect_equal(cd@era@eraDays, 0L)
   expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
 })
 
-test_that("chronicCohort with zero washout works", {
+test_that("chronicOutcomeCohort with zero washout works", {
   cs_test <- cs(1L, name = "test")
-  cd <- chronicCohort(cs_test, washoutDays = 0L)
+  cd <- chronicOutcomeCohort(cs_test, washoutDays = 0L)
   expect_s4_class(cd, "Cohort")
 })
 
-test_that("chronicCohort exitOffsetDays parameter is applied", {
+test_that("chronicOutcomeCohort exitOffsetDays parameter is applied", {
   cs_test <- cs(1L, name = "test")
-  cd <- chronicCohort(cs_test, exitOffsetDays = 90L)
+  cd <- chronicOutcomeCohort(cs_test, exitOffsetDays = 90L)
   expect_s4_class(cd, "Cohort")
   expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
 })
@@ -271,8 +271,8 @@ test_that("observationCohort default era gap is 1", {
   expect_equal(cd@era@eraDays, 1L)
 })
 
-test_that("acuteCohort default exitDays is 14", {
+test_that("acuteOutcomeCohort default exitDays is 14", {
   cs_test <- cs(1L, name = "test")
-  cd <- acuteCohort(cs_test)
+  cd <- acuteOutcomeCohort(cs_test)
   expect_s4_class(cd@exit@endStrategy, "FixedDurationExit")
 })

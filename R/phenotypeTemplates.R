@@ -30,9 +30,9 @@
 #' @examples
 #' \dontrun{
 #' htnCs <- cs(descendants(320128), name = "Hypertension")
-#' htnCohort <- chronicCohort(htnCs, washoutDays = 365L, eraGapDays = 180L)
+#' htnCohort <- chronicOutcomeCohort(htnCs, washoutDays = 365L, eraGapDays = 180L)
 #' }
-chronicCohort <- function(conditionConceptSet,
+chronicOutcomeCohort <- function(conditionConceptSet,
                           washoutDays = 365L,
                           exitOffsetDays = 0L,
                           eraGapDays = 1L) {
@@ -48,7 +48,7 @@ chronicCohort <- function(conditionConceptSet,
   )
 }
 
-#' Incident (first-ever) condition cohort
+#' First-ever condition cohort
 #'
 #' Build a cohort for the first-ever occurrence of a condition in a person's
 #' history, with a minimum prior observation requirement. Useful for new-onset
@@ -72,9 +72,9 @@ chronicCohort <- function(conditionConceptSet,
 #' @examples
 #' \dontrun{
 #' afibCs <- cs(descendants(313217), name = "Atrial Fibrillation")
-#' newOnsetAfib <- incidentCohort(afibCs, washoutDays = 365L)
+#' newOnsetAfib <- firstEverDiagnosisCohort(afibCs, washoutDays = 365L)
 #' }
-incidentCohort <- function(conditionConceptSet,
+firstEverDiagnosisCohort <- function(conditionConceptSet,
                            washoutDays = 365L,
                            eraGapDays = 0L) {
   cohort(
@@ -109,9 +109,9 @@ incidentCohort <- function(conditionConceptSet,
 #' @examples
 #' \dontrun{
 #' miCs <- cs(descendants(4329847), name = "Myocardial Infarction")
-#' miCohort <- acuteCohort(miCs, washoutDays = 180L, exitDays = 14L)
+#' miCohort <- acuteOutcomeCohort(miCs, washoutDays = 180L, exitDays = 14L)
 #' }
-acuteCohort <- function(conditionConceptSet,
+acuteOutcomeCohort <- function(conditionConceptSet,
                         washoutDays = 180L,
                         exitDays = 14L) {
   cohort(
@@ -153,9 +153,9 @@ acuteCohort <- function(conditionConceptSet,
 #' @examples
 #' \dontrun{
 #' metforminCs <- cs(descendants(1503297), name = "Metformin")
-#' metforminUsers <- newUserCohort(metforminCs, washoutDays = 365L)
+#' metforminUsers <- newUserDrugCohort(metforminCs, washoutDays = 365L)
 #' }
-newUserCohort <- function(drugConceptSet,
+newUserDrugCohort <- function(drugConceptSet,
                           washoutDays = 365L,
                           persistenceWindow = 30L,
                           surveillanceWindow = 0L) {

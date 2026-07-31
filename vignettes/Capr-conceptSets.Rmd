@@ -18,12 +18,12 @@ knitr::opts_chunk$set(
 library(Capr)
 ```
 
-In version 2 of Capr, we have introduced a whole new way of building concept sets. Some highlights of this new system are, we no longer need a database connection, only need OMOP concept ids, and we provide functionality to improve how we map to the vocabulary (i.e. find descendants or exclude). The new interface makes it much easier to build and read information about a concept set. In this vignette we will demonstrate how the new AI works!
+Capr provides a simple interface for building concept sets from OMOP concept IDs — no database connection required. You can find descendants, exclude concepts, and include mapped terms directly in R. This vignette demonstrates how the concept set API works.
 
 
 ## Defining a concept set
 
-The new function `cs` is a binder function that collects integer OMOP ids into a set. The idea is for the function to look like `c()` which in R is use to formulate vectors. Say we found several ingredients that are all ace inhibitors. We can combine those OMOP concept ids into a set as follows:
+The `cs` function collects integer OMOP concept IDs into a set. The idea is for the function to look like `c()` which in R is use to formulate vectors. Say we found several ingredients that are all ace inhibitors. We can combine those OMOP concept ids into a set as follows:
 
 ```{r}
 ace1 <- cs(1335471, #benazepril

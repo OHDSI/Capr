@@ -151,7 +151,7 @@ type/status/visit-concept restrictions.
 library(Capr)
 
 # ---- Scope check ------------------------------------------------------------
-# Archetype: chronicCohort (prevalent chronic condition)
+# Archetype: chronicOutcomeCohort (prevalent chronic condition)
 #   (ASSUMED -- "hypertension diagnosis" matches chronic disease pattern)
 # Index event: hypertension diagnosis
 #   (confirmed by user -- "index on first HTN diagnosis")
@@ -181,7 +181,7 @@ library(Capr)
 # Returns:
 #   A Capr Cohort object
 createHtnCohort <- function(htnCs) {
-  chronicCohort(htnCs, washoutDays = 365L, eraGapDays = 180L)
+  chronicOutcomeCohort(htnCs, washoutDays = 365L, eraGapDays = 180L)
 }
 
 # ---- Example usage ----------------------------------------------------------

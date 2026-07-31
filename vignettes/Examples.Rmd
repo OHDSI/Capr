@@ -34,34 +34,6 @@ This vignette provides a number of example cohorts built with Capr from the OHDS
 https://atlas-phenotype.ohdsi.org/#/cohortdefinition/88/definition
 
 ```{r, eval=FALSE}
-
-# DRAFT version that uses observationPeriod Query type
-cs1 <- cs(descendants(443238, 201820, 442793), 
-          descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
-          name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
-
-ch <- cohort(
-  entry = conditionOccurrence(cs1),
-  attrition = attrition(
-    withAll(
-          atLeast(1, 
-          observationPeriod(),
-            duringInterval(eventStarts(-Inf, -365, "startDate"))
-    )
-    )
-  ),
-  exit = exit(
-    endStrategy = observationExit()
-  )
-)
-
-chJson <- toCohortJson(ch)
-```
-
-
-```{r, eval=FALSE}
-library(Capr)
-
 cs0 <- cs(descendants(443238, 201820, 442793), 
           descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
           name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
@@ -85,8 +57,6 @@ chJson <- toCohortJson(ch)
 https://atlas-phenotype.ohdsi.org/#/cohortdefinition/89/export
 
 ```{r, eval=FALSE}
-library(Capr)
-
 cs0 <- cs(descendants(443238, 201820, 442793), 
           descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
           name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
@@ -124,8 +94,6 @@ chJson <- toCohortJson(ch)
 https://atlas-phenotype.ohdsi.org/#/cohortdefinition/90
 
 ```{r, eval=FALSE}
-library(Capr)
-
 cs0 <- cs(descendants(443238, 201820, 442793), 
           descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
           name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
@@ -155,7 +123,7 @@ ch <- cohort(
     'no T1D' = withAll(
       exactly(0, conditionOccurrence(cs1), duringInterval(eventStarts(-Inf, 0)))
       ),
-    'no secondary diabettes' = withAll(
+    'no secondary diabetes' = withAll(
       exactly(0, conditionOccurrence(cs2), duringInterval(eventStarts(-Inf, 0)))
     )
   ),

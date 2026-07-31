@@ -10,7 +10,7 @@ Capr is part of [HADES](https://ohdsi.github.io/Hades/)
 
 # Introduction
 
-The goal of Capr, pronounced 'kay-pr' like the edible flower, is to provide a language for expressing OHDSI Cohort definitions in R code. OHDSI defines a cohort as "a set of persons who satisfy one or more inclusion criteria for a duration of time" and provides a standardized approach for defining them (Circe-be). Capr exposes the standardized approach to cohort building through a programmatic interface in R which is particularly helpful when creating a large number of similar cohorts. Capr version 2 introduces a new user interface designed for readability with the goal that Capr code being a human readable description of a cohort while also being executable on an OMOP Common Data Model.
+The goal of Capr, pronounced 'kay-pr' like the edible flower, is to provide a language for expressing OHDSI cohort definitions in R code. OHDSI defines a cohort as "a set of persons who satisfy one or more inclusion criteria for a duration of time" and provides a standardized approach for defining them (Circe). Capr exposes that standardized approach through a programmatic interface in R, making it easier to build, version, and reuse cohort definitions — particularly when creating a large number of similar cohorts. Capr code is designed to be human-readable while remaining directly executable against an OMOP Common Data Model.
 
 Learn more about the OHDSI approach to cohort building in the [cohorts chapter of the Book of OHDSI.](https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html)
 
@@ -29,16 +29,18 @@ devtools::install_github("ohdsi/Capr")
 
 Documentation can be found on the [package website](https://ohdsi.github.io/Capr/).
 
+**Start here** based on your goal:
 
-PDF versions of the documentation are also available:
+| Goal | Vignette |
+|---|---|
+| Build your first cohort | [Using Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Using-Capr.pdf) |
+| Understand queries, criteria, and groups | [Capr components](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_objects.pdf) |
+| Work with concept sets | [Working with Concept Sets](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Capr-conceptSets.pdf) |
+| Convert Atlas JSON to Capr code | [Decompiling Atlas JSON](https://ohdsi.github.io/Capr/articles/jsonToCapr.html) |
+| Build many cohorts from a template | [Capr for Templating](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_templates.pdf) |
+| See clinical cohort examples | [Cohort Definition Examples](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Examples.pdf) |
 
--   Vignette: [Using Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Using-Capr.pdf)
--   Vignette: [Capr Examples](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Examples.pdf)
--   Vignette: [Working with Concept Sets in Capr](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Capr-conceptSets.pdf)
--   Vignette: [Capr for Templating Cohort Definitions](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_templates.pdf)
--   Vignette: [Capr components](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_objects.pdf)
--   [Design Document](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_design.pdf)
--   [Package manual](https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf)
+PDF versions of the documentation are also available on the [package website](https://ohdsi.github.io/Capr/).
 
 # Using Capr with LLM Coding Agents
 
@@ -100,7 +102,7 @@ Capr is licensed under Apache License 2.0
 
 # Development
 
-Capr is being developed in R Studio.
+Capr is developed and maintained as part of the [HADES](https://ohdsi.github.io/Hades/) ecosystem.
 
 # Acknowledgements
 
