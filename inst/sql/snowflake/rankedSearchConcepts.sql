@@ -20,7 +20,7 @@ WITH name_matched AS (
       AND invalid_reason IS NULL
     @domainFilter
     @standardFilter
-    LIMIT 500
+    --LIMIT 500
 ),
 code_matched AS (
     SELECT concept_id
@@ -58,7 +58,7 @@ scored AS (
         + CASE
             WHEN LOWER(c.concept_name) = LOWER('@keyword')     THEN 0.5
             WHEN LOWER(c.concept_name) LIKE LOWER('@keyword%') THEN 0.3
-            WHEN c.concept_name RLIKE CONCAT('\\b@keyword')    THEN 0.15
+            WHEN RLIKE(c.concept_name, CONCAT('(^|\\s)', '@keyword'), 'i') THEN 0.15
             ELSE 0
           END
         + COALESCE(map_counts.mapping_count, 0) * 0.01        AS relevance,
