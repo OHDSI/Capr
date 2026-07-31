@@ -375,3 +375,198 @@ test_that("dateAdjustment attributes build", {
   expect_named(t2, "DateAdjustment")
   expect_equal(t2$DateAdjustment$StartOffset, 30L)
 })
+
+# --- New op integer attributes (era / period / visit) -------------------------
+
+test_that("ageAtStart, ageAtEnd, visitLength, periodLength build", {
+  tt <- ageAtStart(gte(18L))
+  expect_s4_class(tt, "opAttributeInteger")
+  expect_equal(tt@name, "AgeAtStart")
+  expect_equal(tt@op, "gte")
+  expect_equal(tt@value, 18L)
+
+  tt <- ageAtEnd(lte(65L))
+  expect_s4_class(tt, "opAttributeInteger")
+  expect_equal(tt@name, "AgeAtEnd")
+  expect_equal(tt@op, "lte")
+  expect_equal(tt@value, 65L)
+
+  tt <- visitLength(gt(1L))
+  expect_s4_class(tt, "opAttributeInteger")
+  expect_equal(tt@name, "VisitLength")
+  expect_equal(tt@op, "gt")
+  expect_equal(tt@value, 1L)
+
+  tt <- periodLength(bt(30L, 365L))
+  expect_s4_class(tt, "opAttributeInteger")
+  expect_equal(tt@name, "PeriodLength")
+  expect_equal(tt@op, "bt")
+  expect_equal(tt@value, 30L)
+  expect_equal(tt@extent, 365L)
+})
+
+# --- New op numeric attribute (quantityValue) ---------------------------------
+
+test_that("quantityValue builds as opAttributeNumeric", {
+  tt <- quantityValue(gt(0))
+  expect_s4_class(tt, "opAttributeNumeric")
+  expect_equal(tt@name, "Quantity")
+  expect_equal(tt@op, "gt")
+  expect_equal(tt@value, 0)
+
+  jj <- listOpAttribute(tt)
+  expect_named(jj, "Quantity")
+})
+
+# --- New text filter attributes (TextFilter / opAttributeCharacter) -----------
+
+test_that("stopReason, uniqueDeviceId, specimenSourceId build as opAttributeCharacter", {
+  tt <- stopReason(stringContains("adverse"))
+  expect_s4_class(tt, "opAttributeCharacter")
+  expect_equal(tt@name, "StopReason")
+  expect_equal(tt@op, "contains")
+  expect_equal(tt@value, "adverse")
+
+  tt <- uniqueDeviceId(stringStartsWith("DV"))
+  expect_s4_class(tt, "opAttributeCharacter")
+  expect_equal(tt@name, "UniqueDeviceId")
+  expect_equal(tt@op, "startsWith")
+
+  tt <- specimenSourceId(stringEndsWith("123"))
+  expect_s4_class(tt, "opAttributeCharacter")
+  expect_equal(tt@name, "SourceId")
+  expect_equal(tt@op, "endsWith")
+})
+
+# --- New demographic concept attributes (race, ethnicity) ---------------------
+
+test_that("raceConcepts and ethnicityConcepts build as conceptAttribute", {
+  tt <- raceConcepts(8527L)
+  expect_s4_class(tt, "conceptAttribute")
+  expect_equal(tt@name, "Race")
+  expect_equal(tt@conceptSet[[1]]@concept_id, 8527L)
+
+  tt <- raceConcepts(c(8527L, 8516L))
+  expect_equal(purrr::map_int(tt@conceptSet, ~.@concept_id), c(8527L, 8516L))
+
+  jj <- as.list(tt)
+  expect_named(jj, "Race")
+
+  tt <- ethnicityConcepts(38003563L)
+  expect_s4_class(tt, "conceptAttribute")
+  expect_equal(tt@name, "Ethnicity")
+  expect_equal(tt@conceptSet[[1]]@concept_id, 38003563L)
+
+  jj <- as.list(tt)
+  expect_named(jj, "Ethnicity")
+})
+
+# --- New concept array attributes (domain-specific) --------------------------
+
+test_that("new domain concept attributes build with correct Circe names", {
+  expected <- c(
+    routeConcept         = "RouteConcept",
+    doseUnit             = "DoseUnit",
+    measurementOperator  = "Operator",
+    observationQualifier = "Qualifier",
+    procedureModifier    = "Modifier",
+    placeOfService       = "PlaceOfService",
+    specimenAnatomicSite = "AnatomicSite",
+    specimenDiseaseStatus = "DiseaseStatus"
+  )
+  for (fn in names(expected)) {
+    tt <- do.call(fn, list(99999L))
+    expect_s4_class(tt, "conceptAttribute")
+    expect_equal(tt@name, expected[[fn]])
+    expect_equal(tt@conceptSet[[1]]@concept_id, 99999L)
+  }
+})
+
+# --- New TypeExclude boolean attributes ---------------------------------------
+
+test_that("TypeExclude keyValueAttributes build with correct names and values", {
+  expected <- c(
+    drugTypeExclude        = "DrugTypeExclude",
+    deviceTypeExclude      = "DeviceTypeExclude",
+    observationTypeExclude = "ObservationTypeExclude",
+    procedureTypeExclude   = "ProcedureTypeExclude",
+    visitTypeExclude       = "VisitTypeExclude"
+  )
+  for (fn in names(expected)) {
+    tt <- do.call(fn, list(FALSE))
+    expect_s4_class(tt, "keyValueAttribute")
+    expect_equal(tt@name, expected[[fn]])
+    expect_false(tt@value)
+
+    tt_true <- do.call(fn, list(TRUE))
+    expect_true(tt_true@value)
+
+    jj <- as.list(tt)
+    expect_named(jj, expected[[fn]])
+    expect_false(jj[[expected[[fn]]]])
+  }
+})
+
+# --- New conceptSetSelectionAttribute (TypeCS variants) -----------------------
+
+test_that("conditionTypeCS builds as conceptSetSelectionAttribute", {
+  cs1 <- cs(32817L, name = "EHR type")
+  tt <- conditionTypeCS(cs1)
+  expect_s4_class(tt, "conceptSetSelectionAttribute")
+  expect_equal(tt@name, "ConditionTypeCS")
+  expect_false(tt@isExclusion)
+
+  tt_excl <- conditionTypeCS(cs1, isExclusion = TRUE)
+  expect_true(tt_excl@isExclusion)
+
+  jj <- as.list(tt)
+  expect_named(jj, "ConditionTypeCS")
+  expect_false(jj$ConditionTypeCS$IsExclusion)
+  expect_equal(jj$ConditionTypeCS$CodesetId, cs1@id)
+})
+
+test_that("all TypeCS functions build with correct Circe names", {
+  cs1 <- cs(99999L, name = "test")
+  fns <- c("conditionTypeCS", "drugTypeCS", "measurementTypeCS",
+           "observationTypeCS", "procedureTypeCS", "deviceTypeCS",
+           "deathTypeCS", "specimenTypeCS", "visitTypeCS",
+           "periodTypeCS", "genderCS", "raceCS", "ethnicityCS",
+           "unitCS", "doseUnitCS", "routeConceptCS",
+           "measurementOperatorCS", "observationQualifierCS",
+           "procedureModifierCS", "placeOfServiceCS",
+           "providerSpecialtyCS", "conditionStatusCS",
+           "specimenAnatomicSiteCS", "specimenDiseaseStatusCS",
+           "visitDetailTypeCS")
+  for (fn in fns) {
+    tt <- do.call(fn, list(cs1))
+    expect_s4_class(tt, "conceptSetSelectionAttribute",
+                    label = paste(fn, "returns conceptSetSelectionAttribute"))
+    jj <- as.list(tt)
+    expect_true("CodesetId" %in% names(jj[[tt@name]]),
+                label = paste(fn, "serializes CodesetId"))
+    expect_true("IsExclusion" %in% names(jj[[tt@name]]),
+                label = paste(fn, "serializes IsExclusion"))
+  }
+})
+
+# --- PayerPlanPeriod concept attributes (integer CodesetId references) --------
+
+test_that("payerPlanPeriod concept reference attributes build", {
+  cs1 <- cs(99999L, name = "payer")
+  expected <- c(
+    payerConcept           = "PayerConcept",
+    planConcept            = "PlanConcept",
+    sponsorConcept         = "SponsorConcept",
+    stopReasonConcept      = "StopReasonConcept",
+    payerSourceConcept     = "PayerSourceConcept",
+    planSourceConcept      = "PlanSourceConcept",
+    sponsorSourceConcept   = "SponsorSourceConcept",
+    stopReasonSourceConcept = "StopReasonSourceConcept"
+  )
+  for (fn in names(expected)) {
+    tt <- do.call(fn, list(cs1))
+    expect_s4_class(tt, "conceptSetAttribute",
+                    label = paste(fn, "returns conceptSetAttribute"))
+    expect_equal(tt@name, expected[[fn]])
+  }
+})
