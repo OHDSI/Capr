@@ -1,10 +1,12 @@
--- getConceptInfo.sql
--- Retrieves full concept table details for a list of concept IDs.
--- Includes validity dates and invalid_reason so callers can detect deprecated concepts.
---
--- Parameters:
---   @schema     : vocabulary database schema
---   @conceptIds : comma-separated integer concept IDs
+/*
+   getConceptInfo.sql
+   Retrieves full concept table details for a list of concept IDs.
+   Includes validity dates and invalid_reason so callers can detect deprecated concepts.
+
+   Parameters:
+     @schema     : vocabulary database schema
+     @conceptIds : comma-separated integer concept IDs
+*/
 
 SELECT
     concept_id,

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Searching the OMOP Vocabulary with Capr"
 output: rmarkdown::html_vignette
 vignette: >
@@ -94,9 +94,9 @@ searchConcepts(
 
 ---
 
-## `fastSearchConcepts()` — ranked search
+## `rankedSearchConcepts()` — ranked search
 
-`fastSearchConcepts()` uses a two-phase approach: a fast ILIKE scan to
+`rankedSearchConcepts()` uses a two-phase approach: a fast ILIKE scan to
 identify candidates, then similarity-based ranking. It also scores against
 synonyms and counts available source-to-standard mappings.
 
@@ -110,7 +110,7 @@ The ranking algorithm is automatically selected based on the connected DBMS:
 | All others | positional boost (exact > prefix > contains) |
 
 ```{r fast-search}
-results <- fastSearchConcepts(
+results <- rankedSearchConcepts(
   "atrial fibrillation",
   connection,
   vocabularyDatabaseSchema = vocabularyDatabaseSchema,
@@ -125,7 +125,7 @@ The `relevance` column ranges from 0 to ~1.5 (higher is better). Use
 
 ```{r fast-search-page}
 # Second page
-fastSearchConcepts(
+rankedSearchConcepts(
   "atrial fibrillation",
   connection,
   vocabularyDatabaseSchema = vocabularyDatabaseSchema,
@@ -211,13 +211,13 @@ getConceptInfo(
 
 ## End-to-end: search → build concept set → build cohort
 
-The typical workflow is to use `searchConcepts()` or `fastSearchConcepts()`
+The typical workflow is to use `searchConcepts()` or `rankedSearchConcepts()`
 to identify concept IDs interactively, then use those IDs in `cs()` to build
 a concept set for a cohort definition.
 
 ```{r workflow}
 # 1. Find the right concept ID
-results <- fastSearchConcepts(
+results <- rankedSearchConcepts(
   "atrial fibrillation",
   connection,
   vocabularyDatabaseSchema = vocabularyDatabaseSchema,

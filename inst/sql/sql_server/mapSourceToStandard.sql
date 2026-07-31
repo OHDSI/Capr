@@ -1,12 +1,14 @@
--- mapSourceToStandard.sql
--- Maps non-standard (source) concept codes to their standard OMOP equivalents
--- via the concept_relationship 'Maps to' relationship.
--- Returns one row per source-code/standard-concept pair.
---
--- Parameters:
---   @schema      : vocabulary database schema
---   @sourceCodes : comma-separated quoted source codes (e.g. 'I48','I48.0')
---   @vocabFilter : optional AND clause restricting source vocabulary_id (built in R, "" if no filter)
+/*
+   mapSourceToStandard.sql
+   Maps non-standard (source) concept codes to their standard OMOP equivalents
+   via the concept_relationship 'Maps to' relationship.
+   Returns one row per source-code/standard-concept pair.
+
+   Parameters:
+     @schema      : vocabulary database schema
+     @sourceCodes : comma-separated quoted source codes (e.g. 'I48','I48.0')
+     @vocabFilter : optional AND clause restricting source vocabulary_id (built in R, "" if no filter)
+*/
 
 SELECT
     sc.concept_id       AS source_concept_id,

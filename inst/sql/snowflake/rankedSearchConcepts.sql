@@ -1,19 +1,18 @@
--- fastSearchConcepts.sql (spark)
---
--- Covers Databricks and Apache Spark SQL.
--- Uses levenshtein() for similarity: normalized to 0-1 as
---   1 - levenshtein(a, b) / GREATEST(LENGTH(a), LENGTH(b), 1)
--- RLIKE handles word-boundary boost. Delta Lake auto-optimizes LIKE scans.
--- Synonym scan is scoped to matched IDs only.
---
--- Parameters:
---   @schema          : vocabulary database schema (catalog.schema for Unity Catalog)
---   @keyword         : raw search term
---   @domainFilter    : optional AND clause for domain_id (built in R, "" if unused)
---   @standardFilter  : optional AND clause for standard_concept (built in R, "" if unused)
---   @limit           : max rows returned
---   @offset          : pagination offset
-
+﻿/*
+   rankedSearchConcepts.sql (snowflake)
+  
+   Uses JAROWINKLER_SIMILARITY (0 to 100, normalized to 0 to 1) for ranking.
+   Columnar storage and auto-clustering handle ILIKE performance.
+   Synonym scan is scoped to matched IDs only.
+  
+   Parameters:
+     @schema          : vocabulary database schema
+     @keyword         : raw search term
+     @domainFilter    : optional AND clause for domain_id (built in R, "" if unused)
+     @standardFilter  : optional AND clause for standard_concept (built in R, "" if unused)
+     @limit           : max rows returned
+     @offset          : pagination offset
+*/
 WITH name_matched AS (
     SELECT concept_id
     FROM @schema.concept
@@ -37,8 +36,7 @@ matched_ids AS (
 ),
 syn_scores AS (
     SELECT concept_id,
-           MAX(1.0 - levenshtein(LOWER(concept_synonym_name), LOWER('@keyword'))
-                     / GREATEST(LENGTH(concept_synonym_name), LENGTH('@keyword'), 1)) AS max_syn_sim
+           MAX(JAROWINKLER_SIMILARITY(concept_synonym_name, '@keyword') / 100.0) AS max_syn_sim
     FROM @schema.concept_synonym
     WHERE concept_id IN (SELECT concept_id FROM matched_ids)
     GROUP BY concept_id
@@ -53,18 +51,14 @@ scored AS (
         c.concept_class_id,
         c.standard_concept,
         GREATEST(
-            1.0 - levenshtein(LOWER(c.concept_name), LOWER('@keyword'))
-                  / GREATEST(LENGTH(c.concept_name), LENGTH('@keyword'), 1),
-            COALESCE(
-                1.0 - levenshtein(LOWER(c.concept_code), LOWER('@keyword'))
-                      / GREATEST(LENGTH(c.concept_code), LENGTH('@keyword'), 1),
-                0),
+            JAROWINKLER_SIMILARITY(c.concept_name, '@keyword') / 100.0,
+            COALESCE(JAROWINKLER_SIMILARITY(c.concept_code, '@keyword') / 100.0, 0),
             COALESCE(s.max_syn_sim, 0)
         )
         + CASE
             WHEN LOWER(c.concept_name) = LOWER('@keyword')     THEN 0.5
             WHEN LOWER(c.concept_name) LIKE LOWER('@keyword%') THEN 0.3
-            WHEN c.concept_name RLIKE CONCAT('(?i)\\b@keyword') THEN 0.15
+            WHEN c.concept_name RLIKE CONCAT('\\b@keyword')    THEN 0.15
             ELSE 0
           END
         + COALESCE(map_counts.mapping_count, 0) * 0.01        AS relevance,

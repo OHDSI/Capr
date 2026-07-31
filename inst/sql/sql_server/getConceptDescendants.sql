@@ -1,12 +1,14 @@
--- getConceptDescendants.sql
--- Traverses concept_ancestor to return all descendants of one or more seed concepts.
--- Seed concepts themselves are included when @minLevels = 0.
---
--- Parameters:
---   @schema    : vocabulary database schema
---   @conceptIds: comma-separated integer ancestor concept IDs
---   @minLevels : minimum levels of separation from the ancestor (0 includes the seed itself)
---   @maxLevels : maximum levels of separation (use a large number such as 99999 for all)
+/*
+   getConceptDescendants.sql
+   Traverses concept_ancestor to return all descendants of one or more seed concepts.
+   Seed concepts themselves are included when @minLevels = 0.
+
+   Parameters:
+     @schema    : vocabulary database schema
+     @conceptIds: comma-separated integer ancestor concept IDs
+     @minLevels : minimum levels of separation from the ancestor (0 includes the seed itself)
+     @maxLevels : maximum levels of separation (use a large number such as 99999 for all)
+*/
 
 SELECT
     c.concept_id,

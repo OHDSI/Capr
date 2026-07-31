@@ -1,4 +1,4 @@
-Capr 3.0.0 (draft)
+﻿Capr 3.0.0
 ==================
 
 This release focuses on making Capr easier to integrate into real cohort-development workflows.
@@ -27,6 +27,19 @@ This release focuses on making Capr easier to integrate into real cohort-develop
   Renamed built-in templates for clarity: `acuteCohort()` → `acuteOutcomeCohort()`,
   `chronicCohort()` → `chronicOutcomeCohort()`, `incidentCohort()` → `firstEverDiagnosisCohort()`,
   `newUser()` → `newUserDrugCohort()`.
+
+- **Vocabulary concept search functions**
+  Added `searchConcepts()`, `rankedSearchConcepts()`, `getConceptDescendants()`,
+  `mapSourceToStandard()`, and `getConceptInfo()` for interactive vocabulary exploration
+  from any OMOP CDM connection. `rankedSearchConcepts()` automatically uses dialect-specific
+  similarity ranking (pg_trgm on PostgreSQL, Jarowinkler on Snowflake, Levenshtein on Spark)
+  with a universal fallback. SQL lives in `inst/sql/sql_server/` following the HADES convention.
+
+- **Expanded Circe attribute coverage**
+  Added many previously missing attributes including `ageAtStart()`, `ageAtEnd()`, `visitLength()`,
+  `periodLength()`, `raceConcepts()`, `ethnicityConcepts()`, `quantityValue()`, `stopReason()`,
+  `uniqueDeviceId()`, `specimenSourceId()`, and the full set of `*TypeCS()` concept-set-selection
+  variants for every domain. Added `payerPlanPeriod()` query domain.
 
 - **LLM skills bundle included and improved**
   Expanded the bundled LLM guidance under `inst/llm` to support validated local generation of Capr cohort

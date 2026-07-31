@@ -1,16 +1,18 @@
--- fastSearchConcepts.sql (sql_server / universal fallback)
---
--- Two-phase approach: ILIKE narrows candidates, then boost-ranking scores them.
--- No dialect-specific similarity function; uses positional boost only.
--- Synonym and mapping-count enrichment are scoped to matched IDs for efficiency.
---
--- Parameters:
---   @schema          : vocabulary database schema
---   @keyword         : raw search term (used both as LIKE pattern and for boost checks)
---   @domainFilter    : optional AND clause for domain_id (built in R, "" if unused)
---   @standardFilter  : optional AND clause for standard_concept (built in R, "" if unused)
---   @limit           : max rows returned
---   @offset          : pagination offset
+﻿/*
+   rankedSearchConcepts.sql (sql_server / universal fallback)
+
+   Two-phase approach: ILIKE narrows candidates, then boost-ranking scores them.
+   No dialect-specific similarity function; uses positional boost only.
+   Synonym and mapping-count enrichment are scoped to matched IDs for efficiency.
+
+   Parameters:
+     @schema          : vocabulary database schema
+     @keyword         : raw search term (used both as LIKE pattern and for boost checks)
+     @domainFilter    : optional AND clause for domain_id (built in R, "" if unused)
+     @standardFilter  : optional AND clause for standard_concept (built in R, "" if unused)
+     @limit           : max rows returned
+     @offset          : pagination offset
+*/
 
 WITH name_matched AS (
     SELECT concept_id

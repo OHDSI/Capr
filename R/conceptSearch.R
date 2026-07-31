@@ -1,15 +1,32 @@
-# Vocabulary / Concept Search ----------------------------------------------------
+﻿# Vocabulary / Concept Search ----------------------------------------------------
 #
 # These functions require a live connection to an OMOP CDM vocabulary schema.
 # SQL is stored in inst/sql/sql_server/ following the OHDSI/HADES convention.
 # SqlRender::loadRenderTranslateSql() renders and translates in one call.
 #
 # searchConcepts()     - universal ILIKE search, works on all DBMS
-# fastSearchConcepts() - two-phase ranked search with dialect-specific similarity:
+# rankedSearchConcepts() - two-phase ranked search with dialect-specific similarity:
 #                          postgresql -> pg_trgm similarity()
 #                          snowflake  -> JAROWINKLER_SIMILARITY()
 #                          spark      -> levenshtein() normalized
 #                          all others -> positional boost only (same structure)
+
+# Queries vocabulary.vocabulary_id = 'None' row for the OMOP vocabulary version string.
+.informVocabularyVersion <- function(connection, vocabularyDatabaseSchema) {
+  tryCatch({
+    sql <- SqlRender::loadRenderTranslateSql(
+      sqlFilename = "getVocabularyVersion.sql",
+      packageName = "Capr",
+      dbms = DatabaseConnector::dbms(connection),
+      schema = vocabularyDatabaseSchema
+    )
+    result <- DatabaseConnector::querySql(connection, sql)
+    version <- result[[1]][1]
+    if (!is.na(version) && nzchar(version)) {
+      cli::cli_inform("Vocabulary: {.val {version}}")
+    }
+  }, error = function(e) invisible(NULL))  # silently skip if vocabulary table unavailable
+}
 
 #' Search the OMOP vocabulary by keyword
 #'
@@ -46,6 +63,7 @@ searchConcepts <- function(keyword, connection, vocabularyDatabaseSchema,
   }
 
   standardFilter <- if (standardOnly) "AND standard_concept = 'S'" else ""
+  .informVocabularyVersion(connection, vocabularyDatabaseSchema)
   sql <- SqlRender::loadRenderTranslateSql(
       sqlFilename = "searchConcepts.sql",
       packageName = "Capr",
@@ -83,6 +101,7 @@ getConceptDescendants <- function(conceptIds, connection, vocabularyDatabaseSche
                                   minLevels = 0L, maxLevels = Inf) {
   checkmate::assertIntegerish(conceptIds, min.len = 1)
   checkmate::assertTRUE(DBI::dbIsValid(connection))
+  .informVocabularyVersion(connection, vocabularyDatabaseSchema)
   maxLevelsSql <- if (is.infinite(maxLevels)) 99999L else as.integer(maxLevels)
   sql <- SqlRender::loadRenderTranslateSql(
       sqlFilename = "getConceptDescendants.sql",
@@ -121,6 +140,7 @@ mapSourceToStandard <- function(sourceCodes, connection, vocabularyDatabaseSchem
                                 vocabularyId = NULL) {
   checkmate::assertCharacter(sourceCodes, min.len = 1)
   checkmate::assertTRUE(DBI::dbIsValid(connection))
+  .informVocabularyVersion(connection, vocabularyDatabaseSchema)
 
   if (!is.null(vocabularyId)) {
     vocabFilter <- paste0("AND UPPER(sc.vocabulary_id) IN (", paste(paste0("'", toupper(vocabularyId), "'"), collapse = ", "), ")")
@@ -160,6 +180,7 @@ mapSourceToStandard <- function(sourceCodes, connection, vocabularyDatabaseSchem
 getConceptInfo <- function(conceptIds, connection, vocabularyDatabaseSchema) {
   checkmate::assertIntegerish(conceptIds, min.len = 1)
   checkmate::assertTRUE(DBI::dbIsValid(connection))
+  .informVocabularyVersion(connection, vocabularyDatabaseSchema)
   sql <- SqlRender::loadRenderTranslateSql(
       sqlFilename = "getConceptInfo.sql",
       packageName = "Capr",
@@ -203,12 +224,12 @@ getConceptInfo <- function(conceptIds, connection, vocabularyDatabaseSchema) {
 #' @examples
 #' \dontrun{
 #' connection <- DatabaseConnector::connect(Eunomia::getEunomiaConnectionDetails())
-#' fastSearchConcepts("atrial fibrillation", connection, vocabularyDatabaseSchema = "main")
-#' fastSearchConcepts("metformin", connection, vocabularyDatabaseSchema = "main",
+#' rankedSearchConcepts("atrial fibrillation", connection, vocabularyDatabaseSchema = "main")
+#' rankedSearchConcepts("metformin", connection, vocabularyDatabaseSchema = "main",
 #'                    domain = "Drug", limit = 20L)
 #' }
 #' @export
-fastSearchConcepts <- function(keyword, connection, vocabularyDatabaseSchema,
+rankedSearchConcepts <- function(keyword, connection, vocabularyDatabaseSchema,
                                domain = NULL, standardOnly = TRUE,
                                limit = 50L, offset = 0L) {
   checkmate::assertCharacter(keyword, len = 1, min.chars = 1)
@@ -217,6 +238,7 @@ fastSearchConcepts <- function(keyword, connection, vocabularyDatabaseSchema,
   checkmate::assertIntegerish(limit, len = 1, lower = 1L)
   checkmate::assertIntegerish(offset, len = 1, lower = 0L)
 
+  .informVocabularyVersion(connection, vocabularyDatabaseSchema)
   dbms <- DatabaseConnector::dbms(connection)
   optimized <- list(
     postgresql = "pg_trgm similarity()",
@@ -224,10 +246,10 @@ fastSearchConcepts <- function(keyword, connection, vocabularyDatabaseSchema,
     spark      = "normalized levenshtein()"
   )
   if (dbms %in% names(optimized)) {
-    cli::cli_inform("fastSearchConcepts: using {.strong {dbms}} route ({optimized[[dbms]]}).")
+    cli::cli_inform("rankedSearchConcepts: using {.strong {dbms}} route ({optimized[[dbms]]}).")
   } else {
     cli::cli_warn(c(
-      "fastSearchConcepts: no optimized SQL for dialect {.val {dbms}}.",
+      "rankedSearchConcepts: no optimized SQL for dialect {.val {dbms}}.",
       "i" = "Falling back to positional-boost ranking (sql_server). For simple search use {.fn searchConcepts}."
     ))
   }
@@ -238,10 +260,14 @@ fastSearchConcepts <- function(keyword, connection, vocabularyDatabaseSchema,
     domainFilter <- ""
   }
 
-  standardFilter <- if (standardOnly) "AND standard_concept = 'S'" else ""
+  if (standardOnly) {
+    standardFilter <- "AND standard_concept = 'S'"
+  } else {
+    standardFilter <- ""
+  }
 
   sql <- SqlRender::loadRenderTranslateSql(
-      sqlFilename = "fastSearchConcepts.sql",
+      sqlFilename = "rankedSearchConcepts.sql",
       packageName = "Capr",
       dbms = DatabaseConnector::dbms(connection),
       schema = vocabularyDatabaseSchema,

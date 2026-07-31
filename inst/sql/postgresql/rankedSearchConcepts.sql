@@ -1,21 +1,27 @@
--- fastSearchConcepts.sql (snowflake)
---
--- Uses JAROWINKLER_SIMILARITY (0-100, normalized to 0-1) for ranking.
--- Columnar storage and auto-clustering handle ILIKE performance.
--- Synonym scan is scoped to matched IDs only.
---
--- Parameters:
---   @schema          : vocabulary database schema
---   @keyword         : raw search term
---   @domainFilter    : optional AND clause for domain_id (built in R, "" if unused)
---   @standardFilter  : optional AND clause for standard_concept (built in R, "" if unused)
---   @limit           : max rows returned
---   @offset          : pagination offset
+﻿/*
+   rankedSearchConcepts.sql (postgresql)
+
+   Requires pg_trgm extension: CREATE EXTENSION IF NOT EXISTS pg_trgm;
+   For best performance, create GIN indexes:
+     CREATE INDEX ON concept USING GIN (concept_name gin_trgm_ops);
+     CREATE INDEX ON concept USING GIN (concept_code  gin_trgm_ops);
+
+   Two-phase approach: ILIKE retrieves candidates (GIN-accelerated),
+   similarity() ranks them. Synonym scan is scoped to matched IDs only.
+
+   Parameters:
+     @schema          : vocabulary database schema
+     @keyword         : raw search term
+     @domainFilter    : optional AND clause for domain_id (built in R, "" if unused)
+     @standardFilter  : optional AND clause for standard_concept (built in R, "" if unused)
+     @limit           : max rows returned
+     @offset          : pagination offset
+*/
 
 WITH name_matched AS (
     SELECT concept_id
     FROM @schema.concept
-    WHERE LOWER(concept_name) LIKE LOWER('%@keyword%')
+    WHERE concept_name ILIKE '%@keyword%'
       AND invalid_reason IS NULL
     @domainFilter
     @standardFilter
@@ -24,7 +30,7 @@ WITH name_matched AS (
 code_matched AS (
     SELECT concept_id
     FROM @schema.concept
-    WHERE LOWER(concept_code) LIKE LOWER('%@keyword%')
+    WHERE concept_code ILIKE '%@keyword%'
       AND invalid_reason IS NULL
     LIMIT 200
 ),
@@ -35,7 +41,7 @@ matched_ids AS (
 ),
 syn_scores AS (
     SELECT concept_id,
-           MAX(JAROWINKLER_SIMILARITY(concept_synonym_name, '@keyword') / 100.0) AS max_syn_sim
+           MAX(similarity(concept_synonym_name, '@keyword')) AS max_syn_sim
     FROM @schema.concept_synonym
     WHERE concept_id IN (SELECT concept_id FROM matched_ids)
     GROUP BY concept_id
@@ -50,14 +56,14 @@ scored AS (
         c.concept_class_id,
         c.standard_concept,
         GREATEST(
-            JAROWINKLER_SIMILARITY(c.concept_name, '@keyword') / 100.0,
-            COALESCE(JAROWINKLER_SIMILARITY(c.concept_code, '@keyword') / 100.0, 0),
+            similarity(c.concept_name, '@keyword'),
+            COALESCE(similarity(c.concept_code, '@keyword'), 0),
             COALESCE(s.max_syn_sim, 0)
         )
         + CASE
             WHEN LOWER(c.concept_name) = LOWER('@keyword')     THEN 0.5
-            WHEN LOWER(c.concept_name) LIKE LOWER('@keyword%') THEN 0.3
-            WHEN c.concept_name RLIKE CONCAT('\\b@keyword')    THEN 0.15
+            WHEN c.concept_name ILIKE '@keyword%'              THEN 0.3
+            WHEN c.concept_name ~* '\y@keyword'                THEN 0.15
             ELSE 0
           END
         + COALESCE(map_counts.mapping_count, 0) * 0.01        AS relevance,
