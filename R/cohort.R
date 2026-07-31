@@ -423,7 +423,7 @@ remapCirceCodesetIdsToOriginal <- function(circe, guidTable, codesetKeys = c(
   circe
 }
 
-compile.Cohort <- function(object, ..., includeConceptSets = NULL) {
+serializeCohortToJson <- function(object, ..., includeConceptSets = NULL) {
   guidTable <- if (length(includeConceptSets) > 0L) collectGuid(object) else NULL
   circe <- toCirce(object)
   if (length(includeConceptSets) > 0L) {
@@ -443,15 +443,32 @@ compile.Cohort <- function(object, ..., includeConceptSets = NULL) {
   as.character(jsonlite::toJSON(circe, auto_unbox = TRUE, ...))
 }
 
+compile.Cohort <- function(object, ..., includeConceptSets = NULL) {
+  .Deprecated(new = "toCohortJson", package = "Capr", old = "compile")
+  serializeCohortToJson(object, ..., includeConceptSets = includeConceptSets)
+}
+
 
 #' @rdname as.json
 #' @aliases as.json,Cohort-method
 setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
-  # Use the existing toCirce function to get the proper structure
-  circe_data <- toCirce(x)
-  # Convert to JSON using jsonlite and ensure it's a character string
-  as.character(jsonlite::toJSON(x = circe_data, pretty = pretty, auto_unbox = TRUE, ...))
+  toCohortJson(x, pretty = pretty, ...)
 })
+
+#' Convert a Capr cohort to JSON
+#'
+#' @param object A Capr cohort.
+#' @param ... Arguments passed on to jsonlite::toJSON (e.g. \code{pretty = TRUE}).
+#' @param includeConceptSets Optional list of \code{ConceptSet} objects to include
+#'   in the JSON even if not referenced in the cohort (e.g. for round-trip equivalence).
+#'
+#' @return A JSON character string for the cohort.
+#' @export
+toCohortJson <- function(object, ..., includeConceptSets = NULL) {
+
+  checkmate::assertClass(object, "Cohort")
+  serializeCohortToJson(object, ..., includeConceptSets = includeConceptSets)
+}
 
 #' Compile a Capr cohort to json
 #'
@@ -468,9 +485,27 @@ setMethod("as.json", "Cohort", function(x, pretty = TRUE, ...) {
 #' compile(ch)
 setMethod("compile", "Cohort", compile.Cohort)
 
-compile.ConceptSet <- function(object, ...) {
+serializeConceptSetToJson <- function(object, ...) {
   x <- list(items = lapply(object@Expression, as.list))
   as.character(jsonlite::toJSON(x, auto_unbox = TRUE, ...))
+}
+
+compile.ConceptSet <- function(object, ...) {
+  .Deprecated(new = "toConceptSetJson", package = "Capr", old = "compile")
+  serializeConceptSetToJson(object, ...)
+}
+
+#' Convert a Capr concept set to JSON
+#'
+#' @param object A Capr concept set created with \code{cs()}.
+#' @param ... Arguments passed on to jsonlite::toJSON.
+#'
+#' @return A JSON character string for the concept set expression.
+#' @export
+toConceptSetJson <- function(object, ...) {
+
+  checkmate::assertClass(object, "ConceptSet")
+  serializeConceptSetToJson(object, ...)
 }
 
 #' Compile a Capr Concept Set to json

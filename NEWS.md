@@ -1,3 +1,28 @@
+Capr 3.0.0 (draft)
+==================
+
+This release focuses on making Capr easier to integrate into real cohort-development workflows.
+
+- **New: Atlas JSON to Capr code (`jsonToCapr`)**
+  Convert Atlas/Circe cohort JSON into executable Capr R code using `jsonToCapr()` and `jsonToCaprFile()`.
+  This makes it easier to move existing Atlas definitions into version-controlled Capr pipelines.
+
+- **Expanded attribute support and Circe alignment**
+  Added broader attribute coverage (including key-value and type-exclude style attributes), plus improved
+  serialization behavior to better match Circe expectations and support reliable round-trip workflows.
+
+- **Improved round-trip and compile behavior**
+  Added `includeConceptSets` support in `compile.Cohort()` and multiple decompilation/compilation fixes to
+  better preserve concept set handling and generated JSON fidelity.
+
+- **LLM skills bundle included and improved**
+  Expanded the bundled LLM guidance under `inst/llm` to support validated local generation of Capr cohort
+  definitions, including workflow instructions, API reference content, and validation helpers.
+
+- **Quality and reliability improvements**
+  Added substantial test coverage for `jsonToCapr`, round-trip conversion, and edge cases to improve stability
+  of the new workflow features.
+
 Capr 2.1.1
 ==========
 - add functions to include source concepts as attributes to a query
