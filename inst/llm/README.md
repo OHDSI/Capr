@@ -79,6 +79,13 @@ The pattern is always the same: make `SKILL.md` part of the agent's instructions
   which also makes batch generation trivial: `lapply(conceptSetList, createMyCohort)`.
 - **Everything runs without a database.** Capr builds and serializes cohort JSON in memory; a
   CDM connection is only ever an optional nicety to fill in display names for Atlas.
+- **Phenotype archetypes reduce boilerplate.** The package exports `chronicCohort()`,
+  `incidentCohort()`, `acuteCohort()`, `newUserCohort()`, `allDrugCohort()`,
+  `measurementCohort()`, `procedureCohort()`, and `observationCohort()` — functions that encode
+  common clinical patterns (prevalent conditions, first-ever diagnoses, drug new-user, lab
+  thresholds, etc.). When a description matches an archetype, the deliverable is a one-line
+  wrapper function. See `CAPR_REFERENCE.md` § *Phenotype Archetypes* for the full catalog and
+  sensitivity-tuning guidance.
 - **The delivery step is overridable by host frameworks.** The generation contract (clarify,
   function form, Scope check, validate) always applies, but a host project's own instructions
   may redirect where the code lands and how it is serialized — e.g. the
