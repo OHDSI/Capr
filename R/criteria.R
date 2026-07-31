@@ -93,7 +93,10 @@ exactly <- function(x,
                     countColumn = NA_character_) {
 
   if (methods::is(aperture, "EventWindow")) {
-    aperture <- duringInterval(aperture)
+    cli::cli_abort(c(
+      "{.arg aperture} must be an {.cls EventAperture}.",
+      "i" = "Wrap your window with {.fn duringInterval}, e.g. {.code duringInterval(eventStarts(-365, 0))}."
+    ))
   }
 
   occurrence <- methods::new("Occurrence",
@@ -126,7 +129,10 @@ atLeast <- function(x,
                     countColumn = NA_character_) {
 
   if (methods::is(aperture, "EventWindow")) {
-    aperture <- duringInterval(aperture)
+    cli::cli_abort(c(
+      "{.arg aperture} must be an {.cls EventAperture}.",
+      "i" = "Wrap your window with {.fn duringInterval}, e.g. {.code duringInterval(eventStarts(-365, 0))}."
+    ))
   }
 
   occurrence <- methods::new("Occurrence",
@@ -158,7 +164,10 @@ atMost <- function(x,
                    countColumn = NA_character_) {
 
   if (methods::is(aperture, "EventWindow")) {
-    aperture <- duringInterval(aperture)
+    cli::cli_abort(c(
+      "{.arg aperture} must be an {.cls EventAperture}.",
+      "i" = "Wrap your window with {.fn duringInterval}, e.g. {.code duringInterval(eventStarts(-365, 0))}."
+    ))
   }
 
   occurrence <- methods::new("Occurrence",

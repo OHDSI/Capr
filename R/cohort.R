@@ -251,7 +251,13 @@ setMethod("as.list", "CohortEntry", function(x) {
   # Emit CriteriaList as domain-keyed query only (matches Atlas/CIRCE format);
   # each item is { "Measurement": {...} } not { "Criteria": {...}, "Occurrence": ..., ... }
   criteriaList <- purrr::map(x@entryEvents, function(ev) {
-    if (methods::is(ev, "Criteria")) as.list(ev@query) else as.list(ev)
+    if (methods::is(ev, "Criteria")) {
+      cli::cli_abort(c(
+        "{.fn entry} only accepts {.cls Query} objects, not {.cls Criteria}.",
+        "i" = "Pass the Query directly, e.g. {.code conditionOccurrence(...)} without wrapping it in {.fn atLeast}/{.fn atMost}/{.fn exactly}."
+      ))
+    }
+    as.list(ev)
   })
   pc <- list(
     'CriteriaList' = criteriaList,

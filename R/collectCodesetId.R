@@ -408,6 +408,19 @@ setMethod("listConceptSets", "Cohort", function(x) {
   ll <- purrr::keep(ll, function(x) length(x$id) == 1L)
   ids <- purrr::map_chr(ll, ~as.character(.x$id))
 
+  # Warn when same-content concept sets with different names are silently merged
+  dup_idx <- which(duplicated(ids))
+  for (i in dup_idx) {
+    kept_name  <- ll[[which(ids == ids[[i]])[[1]]]]$name
+    dropped_name <- ll[[i]]$name
+    if (!identical(kept_name, dropped_name)) {
+      cli::cli_warn(c(
+        "Concept sets {.val {dropped_name}} and {.val {kept_name}} have identical contents and were merged.",
+        "i" = "{.val {dropped_name}} was dropped; {.val {kept_name}} was kept."
+      ))
+    }
+  }
+
   rr <- ll[!duplicated(ids)]
   return(rr)
 })
