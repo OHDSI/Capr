@@ -72,7 +72,7 @@ By convention, generated scripts define a `cohortDef` object.
 source(outRPath)
 
 # cohortDef should now exist in your environment
-cohortJson <- compile(cohortDef)
+cohortJson <- toCohortJson(cohortDef)
 ```
 
 At this point, `cohortJson` can be:
@@ -129,7 +129,7 @@ A practical migration pattern is:
 
 1. `jsonToCaprFile()` from Atlas JSON.
 2. `source()` generated script.
-3. `compile()` to JSON.
+3. `toCohortJson()` to JSON.
 4. `CirceR::cohortExpressionFromJson()` + `buildCohortQuery()` as a final validation.
 
 This creates a reproducible, version-controlled bridge from Atlas-authored cohorts

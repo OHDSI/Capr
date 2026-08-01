@@ -58,7 +58,7 @@ Cohort
 - `R/attrition.R` — `CohortAttrition`; grouping functions `withAll()`, `withAny()`, `withAtLeast()`, `withAtMost()`
 - `R/exit.R` — `CohortExit`; exit strategy constructors
 - `R/era.R` — `CohortEra`; `era()` constructor
-- `R/cohort.R` — top-level `Cohort` class; `cohort()`, `compile()`, `toCirce()`, `as.json()`, `writeCohort()`
+- `R/cohort.R` — top-level `Cohort` class; `cohort()`, `toCohortJson()`, `toCirce()`, `as.json()`, `writeCohort()`
 - `R/attributes-op.R` — value/comparison attribute functions (`valueAsNumber()`, `valueAsConcept()`, `age()`, etc.)
 - `R/attributes-logic.R` — logical attribute modifiers
 - `R/attributes-nested.R` — nested group operations

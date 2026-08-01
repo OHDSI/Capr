@@ -1,8 +1,8 @@
 # test-jsonToCapr.R
-# Round-trip: PhenotypeLibrary JSON -> jsonToCapr -> R code -> evaluate -> compile -> compare.
+# Round-trip: PhenotypeLibrary JSON -> jsonToCapr -> R code -> evaluate -> toCohortJson -> compare.
 # Not every file is expected to pass (some use unsupported features). We expect most to pass
 # and report failures so they can be debugged.
-# To debug a single cohort: jsonToCaprFile(<json_path>, "out.R", mode = "skip"); source("out.R"); compile(cohortDef)
+# To debug a single cohort: jsonToCaprFile(<json_path>, "out.R", mode = "skip"); source("out.R"); toCohortJson(cohortDef)
 
 # Strip concept metadata (CONCEPT_NAME etc.) so we compare structure and IDs only; Capr does not preserve names.
 stripConceptMetadata <- function(x) {
@@ -90,9 +90,9 @@ run_one_roundtrip <- function(jsonPath, outRPath, envParent = baseenv()) {
     return(list(ok = FALSE, name = name, stage = "source", msg = "Generated R did not create cohortDef"))
   }
 
-  # 3. compile(cohortDef) -> round-trip JSON
+  # 3. toCohortJson(cohortDef) -> round-trip JSON
   roundTripList <- tryCatch(
-    jsonlite::fromJSON(compile(cohortDef), simplifyVector = FALSE),
+    jsonlite::fromJSON(toCohortJson(cohortDef), simplifyVector = FALSE),
     error = function(e) return(list(ok = FALSE, name = name, stage = "compile", msg = conditionMessage(e)))
   )
   if (is.list(roundTripList) && !is.null(roundTripList$ok) && identical(roundTripList$ok, FALSE)) {
@@ -297,7 +297,7 @@ test_that("PhenotypeLibrary cohort 10 round-trip produces equivalent Circe SQL",
   err <- tryCatch(sys.source(rPath, envir = env), error = identity)
   if (inherits(err, "error")) fail(paste0("Sourcing generated R failed: ", conditionMessage(err)))
   if (is.null(env$cohortDef)) fail("Generated R did not create cohortDef")
-  roundTripJsonStr <- compile(env$cohortDef)
+  roundTripJsonStr <- toCohortJson(env$cohortDef)
 
   # 3. Equivalence: prefer same Circe SQL (when CirceR available); else semantic comparison
   sqlEq <- roundtrip_circe_sql_equivalent(originalRaw, roundTripJsonStr)
@@ -427,7 +427,7 @@ test_that("ObservationPeriod round-trip compiles to JSON with UserDefinedPeriod"
   cohortDef <- env$cohortDef
   expect_false(is.null(cohortDef))
   allCs <- Filter(function(x) methods::is(x, "ConceptSet"), mget(ls(env), envir = env, ifnotfound = list(NULL)))
-  rtJson <- if (length(allCs) > 0L) compile(cohortDef, includeConceptSets = allCs) else compile(cohortDef)
+  rtJson <- if (length(allCs) > 0L) toCohortJson(cohortDef, includeConceptSets = allCs) else toCohortJson(cohortDef)
   rt <- jsonlite::fromJSON(rtJson, simplifyVector = FALSE)
   obsCriterion <- rt$PrimaryCriteria$CriteriaList[[1]]$ObservationPeriod
   expect_true("UserDefinedPeriod" %in% names(obsCriterion),

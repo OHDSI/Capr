@@ -110,9 +110,9 @@ test_that("read/writeConceptSet works", {
   expect_true(nrow(as.data.frame(cs4)) == 2)
 })
 
-test_that("compile concept set to json", {
+test_that("toConceptSetJson serializes a concept set to json", {
   giBleed <- cs(descendants(35208414), name = "Gastrointestinal hemorrhage")
-  expect_gt(nchar(compile(giBleed)), 5)
+  expect_gt(nchar(toConceptSetJson(giBleed)), 5)
 })
 
 test_that("integer64 concept ids are coerced correctly", {

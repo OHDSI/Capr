@@ -250,7 +250,7 @@ library(Capr)
 #   t2dmCs    - ConceptSet for type 2 diabetes (entry event)
 #   insulinCs - ConceptSet for insulin exposures (exclusion)
 # Returns:
-#   A Capr Cohort object; serialize with writeCohort() or compile()
+#   A Capr Cohort object; serialize with writeCohort() or toCohortJson()
 createT2dmCohort <- function(t2dmCs, insulinCs) {
   cohort(
     entry = entry(

@@ -19,7 +19,7 @@ test_that("Empty PrimaryCriteria.CriteriaList is accepted and round-trips", {
   expect_error(eval(parse(text = code), envir = env), NA)
   expect_false(is.null(env$cohortDef))
 
-  rtJson <- compile(env$cohortDef)
+  rtJson <- toCohortJson(env$cohortDef)
   rt <- jsonlite::fromJSON(rtJson, simplifyVector = FALSE)
   expect_equal(length(rt$PrimaryCriteria$CriteriaList), 0L,
     info = "Round-trip JSON should have empty CriteriaList"
@@ -46,7 +46,7 @@ test_that("Primary criteria with no CodesetId (any condition) is supported", {
   env <- new.env(parent = .GlobalEnv)
   expect_error(eval(parse(text = code), envir = env), NA)
   expect_false(is.null(env$cohortDef))
-  rtJson <- compile(env$cohortDef)
+  rtJson <- toCohortJson(env$cohortDef)
   expect_type(rtJson, "character")
   rt <- jsonlite::fromJSON(rtJson, simplifyVector = FALSE)
   expect_equal(length(rt$PrimaryCriteria$CriteriaList), 1L)
@@ -69,7 +69,7 @@ test_that("InclusionRule with OccurrenceStartDate produces startDate(..., type =
   env <- new.env(parent = .GlobalEnv)
   expect_error(eval(parse(text = code), envir = env), NA)
   expect_false(is.null(env$cohortDef))
-  rtJson <- compile(env$cohortDef, includeConceptSets = list(env$cs1))
+  rtJson <- toCohortJson(env$cohortDef, includeConceptSets = list(env$cs1))
   rt <- jsonlite::fromJSON(rtJson, simplifyVector = FALSE)
   expect_true(length(rt$InclusionRules %||% list()) >= 1L,
     info = "Round-trip should preserve inclusion rule(s)"
@@ -89,7 +89,7 @@ test_that("CensoringCriteria Death with no CodesetId produces death(NULL)", {
   env <- new.env(parent = .GlobalEnv)
   expect_error(eval(parse(text = code), envir = env), NA)
   expect_false(is.null(env$cohortDef))
-  rtJson <- compile(env$cohortDef, includeConceptSets = list(env$cs1))
+  rtJson <- toCohortJson(env$cohortDef, includeConceptSets = list(env$cs1))
   rt <- jsonlite::fromJSON(rtJson, simplifyVector = FALSE)
   expect_true(length(rt$CensoringCriteria %||% list()) >= 1L,
     info = "Round-trip should preserve censoring criteria"
@@ -107,7 +107,7 @@ test_that("ObservationPeriod with UserDefinedPeriod round-trips", {
   cohortDef <- env$cohortDef
   expect_false(is.null(cohortDef))
   allCs <- Filter(function(x) methods::is(x, "ConceptSet"), mget(ls(env), envir = env, ifnotfound = list(NULL)))
-  rtJson <- if (length(allCs) > 0L) compile(cohortDef, includeConceptSets = allCs) else compile(cohortDef)
+  rtJson <- if (length(allCs) > 0L) toCohortJson(cohortDef, includeConceptSets = allCs) else toCohortJson(cohortDef)
   rt <- jsonlite::fromJSON(rtJson, simplifyVector = FALSE)
   obsCriterion <- rt$PrimaryCriteria$CriteriaList[[1]]$ObservationPeriod
   expect_true("UserDefinedPeriod" %in% names(obsCriterion),
@@ -145,7 +145,7 @@ test_that("VisitOccurrence with ProviderSpecialty round-trips", {
   )
   env <- new.env(parent = .GlobalEnv)
   expect_error(eval(parse(text = code), envir = env), NA)
-  rtJson <- compile(env$cohortDef, includeConceptSets = list(env$cs1))
+  rtJson <- toCohortJson(env$cohortDef, includeConceptSets = list(env$cs1))
   rt <- jsonlite::fromJSON(rtJson, simplifyVector = FALSE)
   visitCrit <- rt$PrimaryCriteria$CriteriaList[[1]]$VisitOccurrence
   expect_true("ProviderSpecialty" %in% names(visitCrit),
@@ -169,7 +169,7 @@ test_that("Type/provenance attribute lists decompile to ids-based constructors",
   expect_error(eval(parse(text = code), envir = env), NA)
   expect_false(is.null(env$cohortDef))
 
-  rtJson <- compile(env$cohortDef)
+  rtJson <- toCohortJson(env$cohortDef)
   rt <- jsonlite::fromJSON(rtJson, simplifyVector = FALSE)
   co <- rt$PrimaryCriteria$CriteriaList[[1]]$ConditionOccurrence
   expect_equal(purrr::map_int(co$ConditionType, ~.$CONCEPT_ID), c(32817L, 32810L))
@@ -203,7 +203,7 @@ test_that("Edge-case fixtures are valid Atlas schema (minItems 0, etc.)", {
 
 test_that("Edge-case fixtures round-trip and produce valid Circe SQL", {
   skip_if_not_installed("CirceR")
-  # Each fixture: jsonToCapr -> source -> compile -> CirceR accepts round-trip JSON and builds SQL.
+  # Each fixture: jsonToCapr -> source -> toCohortJson -> CirceR accepts round-trip JSON and builds SQL.
   fixtures <- c(
     "primaryNoCodesetId.json",
     "inclusionRuleOccurrenceStartDate.json",
@@ -226,8 +226,8 @@ test_that("Edge-case fixtures round-trip and produce valid Circe SQL", {
     }
     expect_false(is.null(env$cohortDef), info = paste0(f, ": cohortDef not created"))
     allCs <- Filter(function(x) methods::is(x, "ConceptSet"), mget(ls(env), envir = env, ifnotfound = list(NULL)))
-    rtJson <- if (length(allCs) > 0L) compile(env$cohortDef, includeConceptSets = allCs) else compile(env$cohortDef)
-    expect_true(is.character(rtJson) && length(rtJson) == 1L, info = paste0(f, ": compile() should return JSON string"))
+    rtJson <- if (length(allCs) > 0L) toCohortJson(env$cohortDef, includeConceptSets = allCs) else toCohortJson(env$cohortDef)
+    expect_true(is.character(rtJson) && length(rtJson) == 1L, info = paste0(f, ": toCohortJson() should return JSON string"))
 
     sqlRt <- tryCatch(
       CirceR::buildCohortQuery(

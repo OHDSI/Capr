@@ -335,12 +335,12 @@ test_that("type attributes survive Circe SQL generation", {
 test_that("conceptSetAttribute builds", {
   test_cs <- cs(c(123, 456), name = "test source concepts")
   attr <- conditionSourceConcept(test_cs)
-  
+
   expect_s4_class(attr, "conceptSetAttribute")
   expect_equal(attr@name, "ConditionSourceConcept")
   expect_s4_class(attr@conceptSet, "ConceptSet")
   expect_equal(attr@conceptSet@id, test_cs@id)
-  
+
   # Test as.list conversion
   as_list <- as.list(attr)
   expect_named(as_list, "ConditionSourceConcept")
@@ -539,13 +539,13 @@ test_that("all TypeCS functions build with correct Circe names", {
            "visitDetailTypeCS")
   for (fn in fns) {
     tt <- do.call(fn, list(cs1))
-    expect_s4_class(tt, "conceptSetSelectionAttribute",
-                    label = paste(fn, "returns conceptSetSelectionAttribute"))
+    # returns conceptSetSelectionAttribute
+    expect_s4_class(tt, "conceptSetSelectionAttribute")
     jj <- as.list(tt)
-    expect_true("CodesetId" %in% names(jj[[tt@name]]),
-                label = paste(fn, "serializes CodesetId"))
-    expect_true("IsExclusion" %in% names(jj[[tt@name]]),
-                label = paste(fn, "serializes IsExclusion"))
+    # serializes codeset id
+    expect_true("CodesetId" %in% names(jj[[tt@name]]))
+    # serializes isExclusion
+    expect_true("IsExclusion" %in% names(jj[[tt@name]]))
   }
 })
 

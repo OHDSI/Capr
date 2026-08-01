@@ -4,7 +4,7 @@ test_that("chronicOutcomeCohort returns a Cohort and compiles to valid Circe JSO
   cd <- chronicOutcomeCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
-  json <- compile(cd)
+  json <- toCohortJson(cd)
   expect_type(json, "character")
 
   sql <- CirceR::cohortExpressionFromJson(json) |>
@@ -41,7 +41,7 @@ test_that("firstEverDiagnosisCohort returns a Cohort and compiles to valid Circe
   cd <- firstEverDiagnosisCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
-  json <- compile(cd)
+  json <- toCohortJson(cd)
   expect_type(json, "character")
 
   sql <- CirceR::cohortExpressionFromJson(json) |>
@@ -65,7 +65,7 @@ test_that("acuteOutcomeCohort returns a Cohort and compiles to valid Circe JSON"
   cd <- acuteOutcomeCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
-  json <- compile(cd)
+  json <- toCohortJson(cd)
   expect_type(json, "character")
 
   sql <- CirceR::cohortExpressionFromJson(json) |>
@@ -97,7 +97,7 @@ test_that("newUserDrugCohort returns a Cohort and compiles to valid Circe JSON",
   cd <- newUserDrugCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
-  json <- compile(cd)
+  json <- toCohortJson(cd)
   expect_type(json, "character")
 
   sql <- CirceR::cohortExpressionFromJson(json) |>
@@ -121,7 +121,7 @@ test_that("allDrugCohort returns a Cohort and compiles to valid Circe JSON", {
   cd <- allDrugCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
-  json <- compile(cd)
+  json <- toCohortJson(cd)
   expect_type(json, "character")
 
   sql <- CirceR::cohortExpressionFromJson(json) |>
@@ -146,7 +146,7 @@ test_that("measurementCohort returns a Cohort and compiles to valid Circe JSON",
   cd <- measurementCohort(cs_test, valueFilter = valueAsNumber(gt(5.0)))
   expect_s4_class(cd, "Cohort")
 
-  json <- compile(cd)
+  json <- toCohortJson(cd)
   expect_type(json, "character")
 
   sql <- CirceR::cohortExpressionFromJson(json) |>
@@ -175,7 +175,7 @@ test_that("procedureCohort returns a Cohort and compiles to valid Circe JSON", {
   cd <- procedureCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
-  json <- compile(cd)
+  json <- toCohortJson(cd)
   expect_type(json, "character")
 
   sql <- CirceR::cohortExpressionFromJson(json) |>
@@ -191,7 +191,7 @@ test_that("observationCohort returns a Cohort and compiles to valid Circe JSON",
   cd <- observationCohort(cs_test)
   expect_s4_class(cd, "Cohort")
 
-  json <- compile(cd)
+  json <- toCohortJson(cd)
   expect_type(json, "character")
 
   sql <- CirceR::cohortExpressionFromJson(json) |>
@@ -216,7 +216,7 @@ test_that("firstEverDiagnosisCohort applies firstOccurrence on entry", {
   cs_test <- cs(descendants(320128), name = "test")
   cd <- firstEverDiagnosisCohort(cs_test)
 
-  json <- compile(cd)
+  json <- toCohortJson(cd)
   expect_match(json, "First", fixed = TRUE)
 })
 

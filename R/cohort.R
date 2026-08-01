@@ -678,7 +678,7 @@ makeCohortSet <- function(...) {
   cohortName <- names(cohortList)
 
   # get cohort json
-  cohortJson <- purrr::map_chr(cohortList, ~compile(.x))
+  cohortJson <- purrr::map_chr(cohortList, ~toCohortJson(.x))
 
   # get ohdsi sql
   ohdsiSql <- purrr::map_chr(

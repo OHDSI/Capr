@@ -12,3 +12,4 @@ hidden/
 diff*
 sql_failures.rds
 .cursor/
+.positai

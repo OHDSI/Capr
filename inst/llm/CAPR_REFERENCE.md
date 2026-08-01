@@ -1214,7 +1214,7 @@ with the required primitives, and deliver as described in SKILL.md Step 2.
 ## Anti-Patterns & Common Mistakes
 
 Most hallucinated function names or wrong argument types throw an immediate R error and are
-caught by executing the code. The items below are different: **`compile()` accepts them without
+caught by executing the code. The items below are different: **`toCohortJson()` accepts them without
 error**, but the result is silently wrong or silently redundant.
 
 ### 1. Passing a bare `Criteria` as a named `attrition()` rule
@@ -1235,7 +1235,7 @@ attrition(
 
 Every named attrition rule must be a `Group` (`withAll()` / `withAny()` / `withAtLeast()` /
 `withAtMost()`), even for a single criterion. A bare `Criteria` serializes as the wrong JSON
-shape for an inclusion rule — `compile()` will not error, the JSON is well-formed, but Atlas
+shape for an inclusion rule — `toCohortJson()` will not error, the JSON is well-formed, but Atlas
 cannot render the rule (it silently disappears in the UI).
 
 ### 2. Qualifying the index event outside the entry Query
@@ -1278,7 +1278,7 @@ on the entry Query cover the same logic with clearer semantics — avoid it.
 Once the `Cohort` object is built with `cohort()`, finish with one of:
 
 ```r
-json <- compile(cohortObject)          # returns the OHDSI cohort definition as a JSON string
+json <- toCohortJson(cohortObject)          # returns the OHDSI cohort definition as a JSON string
 writeCohort(cohortObject, "cohort.json")  # writes the JSON to a file (path must end in .json)
 ```
 
@@ -1335,6 +1335,6 @@ visitType(ids)  conditionType(ids)  conditionStatus(ids)   # provenance/type fil
 male()  female()  genderConcepts(<ids>)  age(op)
 
 # Serialize:
-compile(cd)                 # -> JSON string
+toCohortJson(cd)             # -> JSON string
 writeCohort(cd, "cd.json")  # -> file
 ```

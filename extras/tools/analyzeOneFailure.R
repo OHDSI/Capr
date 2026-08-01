@@ -29,7 +29,7 @@ err <- tryCatch(sys.source(outR, envir = env), error = identity)
 if (inherits(err, "error")) stop("Source failed: ", conditionMessage(err))
 if (is.null(env$cohortDef)) stop("Generated R did not create cohortDef")
 allCs <- Filter(function(x) methods::is(x, "ConceptSet"), mget(ls(env), envir = env, ifnotfound = list(NULL)))
-rtRaw <- compile(env$cohortDef, includeConceptSets = allCs)
+rtRaw <- toCohortJson(env$cohortDef, includeConceptSets = allCs)
 
 origRaw <- readChar(jsonPath, file.info(jsonPath)$size)
 orig <- fromJSON(origRaw, simplifyVector = FALSE)

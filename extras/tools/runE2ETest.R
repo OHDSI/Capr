@@ -102,7 +102,7 @@ runOneRoundtrip <- function(jsonPath, outRPath) {
     Filter(function(x) methods::is(x, "ConceptSet"), objs)
   }, error = function(e) list())
   roundTripJsonStr <- tryCatch(
-    if (length(allCs) > 0L) Capr::compile(cohortDef, includeConceptSets = allCs) else Capr::compile(cohortDef),
+    if (length(allCs) > 0L) Capr::toCohortJson(cohortDef, includeConceptSets = allCs) else Capr::toCohortJson(cohortDef),
     error = function(e) return(list(ok = FALSE, name = name, stage = "compile", msg = conditionMessage(e)))
   )
   if (inherits(roundTripJsonStr, "list")) return(roundTripJsonStr)
@@ -111,7 +111,7 @@ runOneRoundtrip <- function(jsonPath, outRPath) {
 
 #' Run end-to-end tests on cohort JSON files
 #'
-#' For each JSON file: decompile (jsonToCapr -> source -> compile), then
+#' For each JSON file: decompile (jsonToCapr -> source -> toCohortJson), then
 #' compare the decompiled round-trip JSON and Circe SQL to the original.
 #' Prints nothing when both JSON and SQL are equivalent; prints the file name
 #' and which check failed when not.

@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Run round-trip test on all PhenotypeLibrary cohorts: JSON -> jsonToCapr -> R -> source -> compile.
+# Run round-trip test on all PhenotypeLibrary cohorts: JSON -> jsonToCapr -> R -> source -> toCohortJson.
 # Reports JSON (semantic) equivalence and SQL equivalence (original vs reordered round-trip JSON).
 # Usage: Rscript extras/runRoundtripTest.R
 # Requires: Capr (load_all from repo or install), PhenotypeLibrary, CirceR (for SQL comparison).
@@ -141,7 +141,7 @@ runOneRoundtrip <- function(jsonPath, outRPath) {
     Filter(function(x) methods::is(x, "ConceptSet"), objs)
   }, error = function(e) list())
   roundTripJsonStr <- tryCatch(
-    if (length(allCs) > 0L) compile(cohortDef, includeConceptSets = allCs) else compile(cohortDef),
+    if (length(allCs) > 0L) toCohortJson(cohortDef, includeConceptSets = allCs) else toCohortJson(cohortDef),
     error = function(e) return(list(ok = FALSE, name = name, stage = "compile", msg = conditionMessage(e)))
   )
   if (inherits(roundTripJsonStr, "list")) return(roundTripJsonStr)
@@ -175,8 +175,8 @@ sqlNa <- sum(vapply(sqlResults, function(x) identical(x$ok, NA), logical(1L)))
 
 message("")
 message("Round-trip (PhenotypeLibrary cohorts):")
-message("  Round-trip succeeded: ", nRoundtrip, " (decompile -> source -> compile)")
-message("  Round-trip failed:   ", nNoRoundtrip, " (write/source/compile)")
+message("  Round-trip succeeded: ", nRoundtrip, " (decompile -> source -> toCohortJson)")
+message("  Round-trip failed:   ", nNoRoundtrip, " (write/source/toCohortJson)")
 message("  Total:               ", nTotal)
 message("")
 message("JSON equivalence (semantic: concept sets, primary criteria domains, end strategy; reordered round-trip):")

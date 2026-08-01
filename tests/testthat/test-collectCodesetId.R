@@ -66,7 +66,7 @@ test_that("listConceptSets - Entry with multiple entryEvents that each have nest
 
   cd <- cohort(entry = e, attrition = attrition(expressionLimit = "First"),
                exit = exit(endStrategy = observationExit()))
-  compiledConceptSets <- jsonlite::fromJSON(compile(cd), simplifyVector = FALSE)$ConceptSets
+  compiledConceptSets <- jsonlite::fromJSON(toCohortJson(cd), simplifyVector = FALSE)$ConceptSets
   expect_length(compiledConceptSets, 1)
 })
 

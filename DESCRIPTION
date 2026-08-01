@@ -17,7 +17,6 @@ License: Apache License (>= 2)
 URL: https://ohdsi.github.io/Capr/, https://github.com/OHDSI/Capr/
 BugReports: https://github.com/OHDSI/Capr/issues/
 Encoding: UTF-8
-RoxygenNote: 7.3.3
 Depends: 
   R (>= 4.2.0)
 Imports: 
@@ -70,3 +69,4 @@ Collate:
     'phenotypeTemplates.R'
 Remotes: 
     ohdsi/PhenotypeLibrary
+Config/roxygen2/version: 8.0.0

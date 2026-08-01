@@ -11,10 +11,10 @@ test_that("cohort entry works", {
   expect_s4_class(x, "Cohort")
   expect_type(as.list(x), "list") # TODO Do we keep as.list and as.json?
   expect_type(toCirce(x), "list")
-  expect_type(compile(x), "character")
+  expect_type(toCohortJson(x), "character")
 
 
-  sql <- CirceR::cohortExpressionFromJson(compile(x)) |>
+  sql <- CirceR::cohortExpressionFromJson(toCohortJson(x)) |>
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
   expect_type(sql, "character")
 
@@ -25,9 +25,9 @@ test_that("cohort entry works", {
   expect_s4_class(x, "Cohort")
   expect_type(as.list(x), "list")
   expect_type(toCirce(x), "list")
-  expect_type(compile(x), "character")
+  expect_type(toCohortJson(x), "character")
 
-  sql <- CirceR::cohortExpressionFromJson(compile(x)) |>
+  sql <- CirceR::cohortExpressionFromJson(toCohortJson(x)) |>
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
   expect_type(sql, "character")
 

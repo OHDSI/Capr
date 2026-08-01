@@ -20,3 +20,4 @@ compare_versions
 ^CLAUDE_PLAN\.md
 ^CLAUDE\.md
 ^\.claude$
+^\.positai$

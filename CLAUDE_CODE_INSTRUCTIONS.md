@@ -90,9 +90,9 @@ The "DO NOT / DO" list from Step 4.
 ## Output
 Once the `Cohort` object is fully built (via `cohort()`), tell the LLM exactly what to do with it —
 this is the last step of every generation, so keep it to a few lines, not full API docs:
-- `compile(cohortObject)` → JSON string
+- `toCohortJson(cohortObject)` → JSON string
 - `writeCohort(cohortObject, path)` → writes JSON straight to a `.json` file
-Don't document `toCirce()` or `as.json()` here — they're redundant with `compile()`/`writeCohort()` for this workflow.
+Don't document `toCirce()` or `as.json()` here — they're redundant with `toCohortJson()`/`writeCohort()` for this workflow.
 
 ## Quick Reference Card
 A compact cheat-sheet of the most-used functions and patterns.
@@ -135,7 +135,7 @@ Iterate on `inst/llm/CAPR_REFERENCE.md` directly:
 
 - **New failure modes → the right section of the reference.** Hallucinated names / wrong
   arguments that errored and self-corrected via the validation loop need no documentation. Only
-  add to the "Anti-Patterns & Common Mistakes" section what `compile()` accepts silently — that
+  add to the "Anti-Patterns & Common Mistakes" section what `toCohortJson()` accepts silently — that
   section's admission rule. Recurring *correct* patterns the model struggled to find go in
   "Worked Examples" as new entries (validate each by executing it against the current package
   source before adding; keep the Intent / code / Demonstrates structure).
@@ -158,7 +158,7 @@ Once testing stabilizes the content, package the three-layer skill:
    should hold: role framing, the code-generation conventions, the **Agent Workflow section
    lifted out of `CAPR_REFERENCE.md`** (move it — the reference then reverts to pure API
    content), the validation-loop instruction (execute generated code in R with Capr loaded, no
-   DB needed; fix errors and re-run), and the Output instructions (`compile()`/`writeCohort()`).
+   DB needed; fix errors and re-run), and the Output instructions (`toCohortJson()`/`writeCohort()`).
    It references `CAPR_REFERENCE.md` as a supporting file to read before writing code.
 2. **Layer 2 (concept-set inventory):** superseded — the function-form output (concept sets as
    `ConceptSet` parameters) makes a session inventory optional rather than required; see
@@ -201,7 +201,7 @@ established empirically. Record of how, so they aren't re-litigated or accidenta
   `primaryCriteriaLimit`; see `R/cohort.R`.)
 - **`observationPeriod()` + `startDate()` → `UserDefinedPeriod`:** the `as.list,Query` method in
   `R/query.R` special-cases `x@domain == "ObservationPeriod"`, converting the
-  `OccurrenceStartDate` op to `UserDefinedPeriod` at serialization; confirmed in `compile()`
+  `OccurrenceStartDate` op to `UserDefinedPeriod` at serialization; confirmed in `toCohortJson()`
   output.
 - **`measurementUnit()` legacy signatures:** older Capr versions accepted a raw integer concept
   ID or a unit string (`"%"`, `"mmol/mol"`) — see `git log -p R/attributes-concept.R` — which is

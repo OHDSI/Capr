@@ -29,7 +29,7 @@ runOne <- function(jsonPath) {
   err <- tryCatch(sys.source(rPath, envir = env), error = function(e) e)
   if (inherits(err, "error")) return(NULL)
   if (is.null(env$cohortDef)) return(NULL)
-  rt <- tryCatch(compile(env$cohortDef), error = function(e) NULL)
+  rt <- tryCatch(toCohortJson(env$cohortDef), error = function(e) NULL)
   if (is.null(rt)) return(NULL)
   opts <- CirceR::createGenerateOptions(generateStats = FALSE)
   sqlO <- tryCatch(
