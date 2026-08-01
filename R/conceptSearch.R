@@ -1,4 +1,4 @@
-﻿# Vocabulary / Concept Search ----------------------------------------------------
+# Vocabulary / Concept Search ----------------------------------------------------
 #
 # These functions require a live connection to an OMOP CDM vocabulary schema.
 # SQL is stored in inst/sql/sql_server/ following the OHDSI/HADES convention.

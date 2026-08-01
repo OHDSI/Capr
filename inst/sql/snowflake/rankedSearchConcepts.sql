@@ -1,4 +1,4 @@
-﻿/*
+/*
    rankedSearchConcepts.sql (snowflake)
   
    Uses JAROWINKLER_SIMILARITY (0 to 100, normalized to 0 to 1) for ranking.

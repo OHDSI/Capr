@@ -19,14 +19,30 @@ This release focuses on making Capr easier to integrate into real cohort-develop
   Added `toCohortJson()` and `toConceptSetJson()` as the primary user-facing serialization
   functions. `compile()` is soft-deprecated in favor of these explicit replacements.
 
+- **Human-readable console printing and summaries**
+  Added compact `show()` methods for every user-facing class and a new `summary()` S4 method
+  that expands the cohort structure, including nested correlated criteria.
+  `summary(x, listConceptSets = TRUE)` appends a concept-set section showing each set's id and
+  `descendants`/`excluded`/`mapped` logic, with concept names and domains once the cohort is
+  hydrated via `getConceptSetDetails()`.
+
+- **Robust concept-set collection in nested criteria**
+  Fixed `listConceptSets()` so multi-layer nested criteria where an outer nested group has a
+  single element no longer return an empty list (OHDSI/Capr#123). The recursion now follows a
+  flat-list invariant with unconditional flattening instead of shape-based guessing, and
+  regression tests guard the previously failing scenarios.
+
 - **Concept set identity is now always content-derived**
   Removed the `id` parameter from `cs()`. Concept set IDs are always an md5 hash of the
   concept set contents, decoupling them from any specific cohort definition or Atlas context.
 
-- **Phenotype archetype template renames**
-  Renamed built-in templates for clarity: `acuteCohort()` → `acuteOutcomeCohort()`,
-  `chronicCohort()` → `chronicOutcomeCohort()`, `incidentCohort()` → `firstEverDiagnosisCohort()`,
-  `newUser()` → `newUserDrugCohort()`.
+- **Phenotype archetype templates**
+  Added eight exported archetype functions that capture standard phenotype patterns —
+  prevalent chronic condition, first-ever diagnosis, short-duration acute event,
+  first-time drug exposure, any drug exposure, lab-value threshold, procedure, and
+  observation — so common cohort definitions can be built from a template (a thin wrapper
+  around an archetype) rather than written from scratch. Archetypes are the recommended
+  starting point for the LLM-assisted cohort workflow. 
 
 - **Vocabulary concept search functions**
   Added `searchConcepts()`, `rankedSearchConcepts()`, `getConceptDescendants()`,

@@ -1,4 +1,4 @@
-﻿/*
+/*
    rankedSearchConcepts.sql (sql_server / universal fallback)
 
    Two-phase approach: ILIKE narrows candidates, then boost-ranking scores them.
