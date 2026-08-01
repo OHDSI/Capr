@@ -565,8 +565,8 @@ test_that("payerPlanPeriod concept reference attributes build", {
   )
   for (fn in names(expected)) {
     tt <- do.call(fn, list(cs1))
-    expect_s4_class(tt, "conceptSetAttribute",
-                    label = paste(fn, "returns conceptSetAttribute"))
+    # returns conceptSetAttribute
+    expect_s4_class(tt, "conceptSetAttribute")
     expect_equal(tt@name, expected[[fn]])
   }
 })

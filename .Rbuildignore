@@ -21,3 +21,4 @@ compare_versions
 ^CLAUDE\.md
 ^\.claude$
 ^\.positai$
+hidden/

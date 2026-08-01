@@ -142,8 +142,7 @@ test_that("listConceptSets - Query with double nested criteria", {
 })
 
 test_that("listConceptSets - nested Query", {
-  skip("failing test") # TODO fix listConceptSets so this passes
-
+  
   # this works fine
   x <- visit(cs(descendants(9201, 9203, 262), name = "test"),
     nestedWithAll(
@@ -164,24 +163,59 @@ test_that("listConceptSets - nested Query", {
   expect_length(conceptSets, 3)
   expect_true(all(purrr::map_lgl(conceptSets, ~all(names(.) == c("id", "name", "expression")))))
 
-  # this does not work
+  # this works add in an attribute
   x <- visit(cs(descendants(9201, 9203, 262), name = "test"),
     nestedWithAll(
       atLeast(1,
         conditionOccurrence(cs(descendants(316139), name = "heart failure"),
-          attributes = list(male(), nestedWithAll(
+          attributes = male(), nestedWithAll(
             atLeast(1,
               conditionOccurrence(cs(descendants(316139), name = "heart failure"))
             )
-          ))
+          )
         )
       )
     )
   )
 
-  # str(a, max.level = 5) # I'm not sure if this Capr object is correct - attribute under attribute
+
   conceptSets <- listConceptSets(x) # error
+  expect_length(conceptSets, 3)
   expect_true(all(purrr::map_lgl(conceptSets, ~all(names(.) == c("id", "name", "expression")))))
+})
+
+test_that("listConceptSets invariant: flat, well-formed sets for adversarial nesting", {
+  # Regression guard for issue #123: multi-layer nested criteria where an outer
+  # nest has a single element must never return an empty list or nested shapes.
+  shapes <- list(
+    # single-element outer nest (the issue #123 trigger)
+    visit(cs(1L, name = "test"),
+          nestedWithAll(
+            atLeast(1, conditionOccurrence(cs(3L, name = "test3"),
+              nestedWithAll(atLeast(1, conditionOccurrence(cs(1L, name = "test")))))))),
+    # deep single-element chain, distinct sets at every level
+    visit(cs(1L, name = "cs1"),
+          nestedWithAll(atLeast(1, conditionOccurrence(cs(2L, name = "cs2"),
+            nestedWithAll(atLeast(1, conditionOccurrence(cs(3L, name = "cs3"),
+              nestedWithAll(atLeast(1, conditionOccurrence(cs(4L, name = "cs4"),
+                nestedWithAll(atLeast(1, conditionOccurrence(cs(5L, name = "cs5")))))))))))))),
+    # outer nest mixing a criterion and a nested sub-group
+    visit(cs(1L, name = "test"),
+          nestedWithAll(
+            atLeast(1, conditionOccurrence(cs(2L, name = "test2"))),
+            withAll(atLeast(1, conditionOccurrence(cs(3L, name = "test3"))))))
+  )
+
+  for (x in shapes) {
+    conceptSets <- listConceptSets(x)
+    # not empty (issue #123 symptom)
+    expect_gt(length(conceptSets), 0L)
+    # every element is a flat concept set, i.e. no nested list-of-sets survived
+    expect_true(all(purrr::map_lgl(
+      conceptSets,
+      ~all(names(.) == c("id", "name", "expression"))
+    )), info = "every element must be a flat concept set (id/name/expression)")
+  }
 })
 
 
@@ -302,9 +336,12 @@ test_that("listConceptSets works with conceptSetAttribute", {
 
   concept_sets <- listConceptSets(attr)
 
+  # Leaf methods return a flat list of concept sets (invariant), so unwrap one
+  # level to get the single set.
   expect_true(is.list(concept_sets))
-  expect_equal(concept_sets$id, test_cs@id)
-  expect_equal(concept_sets$name, "test source concepts")
+  expect_length(concept_sets, 1)
+  expect_equal(concept_sets[[1]]$id, test_cs@id)
+  expect_equal(concept_sets[[1]]$name, "test source concepts")
 })
 
 test_that("as.list works with conceptSetAttribute", {

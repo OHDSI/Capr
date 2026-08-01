@@ -44,6 +44,8 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
+    Eunomia,
+    bit64,
     PhenotypeLibrary (>= 3.36.0),
     rstudioapi,
     waldo

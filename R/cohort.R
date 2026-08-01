@@ -541,9 +541,9 @@ toCohortJson <- function(object, ..., includeConceptSets = NULL) {
 #' @return The json representation of Capr cohorts
 #' @export
 #' @rdname compile-methods
-#' @examples
-#' ch <- cohort(conditionOccurrence(cs(1,2, name = "concepts")))
-#' compile(ch)
+#'
+#' @details
+#' Deprecated; use \code{\link{toCohortJson}} instead.
 setMethod("compile", "Cohort", compile.Cohort)
 
 serializeConceptSetToJson <- function(object, ...) {

@@ -271,10 +271,15 @@ setMethod("replaceCodesetId", "Cohort", function(x, guidTable = guidTable) {
 
 # list Concept Set ------------------
 
+# Invariant: every listConceptSets() method returns a FLAT list of concept sets,
+# where each concept set is a named list with id/name/expression. Leaf methods
+# wrap a single set in list(...); container methods concatenate their children's
+# flat lists with a single unconditional flatten -- never guess shape (regression
+# guard for issue #123, where a single-element outer nest returned an empty list).
 setGeneric("listConceptSets", function(x) standardGeneric("listConceptSets"))
 
 setMethod("listConceptSets", "conceptSetAttribute", function(x) {
-  as.list(x@conceptSet)
+  list(as.list(x@conceptSet))
 })
 
 setMethod("listConceptSets", "conceptAttribute", function(x) {
@@ -305,7 +310,9 @@ setMethod("listConceptSets", "Query", function(x) {
   # handle listing concept sets from conceptSetAttribute objects
   conceptSetAttrs <- purrr::keep(x@attributes, ~methods::is(.x, "conceptSetAttribute"))
   if (length(conceptSetAttrs) > 0) {
-    conceptSetsFromAttrs <- purrr::map(conceptSetAttrs, ~listConceptSets(.x))
+    conceptSetsFromAttrs <- purrr::list_flatten(
+      purrr::map(conceptSetAttrs, ~listConceptSets(.x))
+    )
     out <- c(out, conceptSetsFromAttrs)
   }
 
@@ -317,45 +324,13 @@ setMethod("listConceptSets", "Criteria", function(x) {
  listConceptSets(x@query)
 })
 
-check_names <- function(x) {
-  check <- names(x) %in% c("id", "name", "expression")
-  if (length(check) == 0) {
-    FALSE
-  } else{
-    all(check)
-  }
-}
-
 #' @include criteria.R
 setMethod("listConceptSets", "Group", function(x) {
 
-  #Start with criteria
-  a <- purrr::map(x@criteria, ~listConceptSets(.x))
-  if (length(a) == 0) {
-    ll1 <- list()
-  } else {
-    la1 <- purrr::keep(a, ~check_names(.x))
-    la2 <- purrr::discard(a, ~check_names(.x))
-    if (length(la2) > 0) {
-      la2 <- purrr::list_flatten(la2)
-    }
-
-    ll1 <- c(la1, la2)
-  }
-
-  # Next Group
-  b <- purrr::map(x@group, ~listConceptSets(.x))
-  if (length(b) == 0) {
-    ll2 <- list()
-  } else {
-    lb1 <- purrr::keep(b, ~check_names(.x))
-    lb2 <- purrr::discard(b, ~check_names(.x))
-    if (length(lb2) > 0) {
-      lb2 <- purrr::list_flatten(lb2)
-    }
-
-    ll2 <- c(lb1, lb2)
-  }
+  # Every child method returns a flat list of concept sets (see invariant above),
+  # so a single unconditional flatten is always correct -- no shape-guessing.
+  ll1 <- purrr::list_flatten(purrr::map(x@criteria, ~listConceptSets(.x)))
+  ll2 <- purrr::list_flatten(purrr::map(x@group, ~listConceptSets(.x)))
 
   c(ll1, ll2)
 })
