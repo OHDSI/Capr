@@ -4,17 +4,20 @@
 \alias{drugType}
 \title{Add a drug type attribute to determine the provenance of the record}
 \usage{
-drugType(ids, connection, vocabularyDatabaseSchema)
+drugType(ids, connection = NULL, vocabularyDatabaseSchema = NULL)
 }
 \arguments{
-\item{ids}{the concept ids for the attribute}
+\item{ids}{integer concept ids for the attribute}
 
-\item{connection}{a connection to an OMOP dbms to get vocab info about the concept}
+\item{connection}{an optional connection to an OMOP CDM database, used only to look up
+concept names for display (e.g. in Atlas). When NULL (default) the attribute is built
+from the ids alone, which produces identical SQL.}
 
-\item{vocabularyDatabaseSchema}{the database schema for the vocabularies}
+\item{vocabularyDatabaseSchema}{the schema of the OMOP vocabulary tables; only used
+when `connection` is supplied}
 }
 \value{
-An attribute that can be used in a query function
+An attribute for use in \code{drugExposure()}.
 }
 \description{
 Add a drug type attribute to determine the provenance of the record

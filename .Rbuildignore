@@ -16,3 +16,9 @@ compare_versions
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^LICENSE\.md$
+^CLAUDE_CODE_INSTRUCTIONS\.md
+^CLAUDE_PLAN\.md
+^CLAUDE\.md
+^\.claude$
+^\.positai$
+hidden/

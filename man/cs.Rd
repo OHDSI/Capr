@@ -7,7 +7,7 @@
 \alias{descendants}
 \title{Create a concept set}
 \usage{
-cs(..., name, id = NULL)
+cs(..., name)
 
 exclude(...)
 
@@ -20,8 +20,6 @@ descendants(...)
 Calls to helper functions "exclude", "descendants", or "mapped".}
 
 \item{name}{A name for the concept set}
-
-\item{id}{An id for the concept set}
 }
 \value{
 A Capr Concept Set Object

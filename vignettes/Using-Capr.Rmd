@@ -16,8 +16,8 @@ knitr::opts_chunk$set(
 ```
 
 Capr provides R users with a language for building computable cohort definitions; 
-i.e. definitions that can be translated to SQL code and executed on a observational 
-health database in the OMOP Common Data Model format.
+i.e. definitions that can be translated to SQL code and executed on an observational
+health database mapped to the OMOP Common Data Model.
 
 While some familiarity with the OMOP Common Data Model standard and the Observational 
 Health Data Science and Informatics (OHDSI) open source ecosystem is recommended, this 
@@ -75,7 +75,7 @@ giBleedCohort <- cohort(
 giBleedCohort
 ```
 
-Cohort definitions may get more complex than this example. In general there are four slots that need to be filled for a Capr cohort: first, entry which defines the index event; second, attrition which defines the persons that are withdrawn from the cohort given inclusion or exclusion criteria; third, exit which defines when the person leaves the cohort and is no longer observation; and fourth, the era which defines the span of time of which successive periods are combined into one as well as the truncation of the patient timeline. Capr allows you to define different permutations of this cohort structure given the clinical idea under analysis for the study. 
+Cohort definitions may get more complex than this example. In general there are four slots that need to be filled for a Capr cohort: first, entry which defines the index event; second, attrition which defines the persons that are withdrawn from the cohort given inclusion or exclusion criteria; third, exit which defines when the person leaves the cohort; and fourth, the era which defines the collapse gap between successive periods and the optional study date window. Capr allows you to define any combination of these components to match the clinical question under study. 
 
 ## Generating a cohort
 

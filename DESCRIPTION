@@ -1,6 +1,6 @@
 Package: Capr
 Title: Cohort Definition Application Programming
-Version: 2.1.1
+Version: 3.0.0
 Authors@R: c(
     person("Martin", "Lavallee", , "martin.lavallee@boehringer-ingelheim.com", role = c("aut", "cre")),
     person("Adam", "Black", , "black@ohdsi.org", role = c("aut")),
@@ -17,7 +17,6 @@ License: Apache License (>= 2)
 URL: https://ohdsi.github.io/Capr/, https://github.com/OHDSI/Capr/
 BugReports: https://github.com/OHDSI/Capr/issues/
 Encoding: UTF-8
-RoxygenNote: 7.3.2
 Depends: 
   R (>= 4.2.0)
 Imports: 
@@ -39,18 +38,24 @@ Imports:
     DBI,
     DatabaseConnector,
     SqlRender,
-    generics,
-    CirceR
+    CirceR,
+    jsonvalidate
 Suggests:
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    Eunomia,
+    bit64,
+    PhenotypeLibrary (>= 3.36.0),
+    rstudioapi,
+    waldo
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
     'Capr.R'
     'conceptSet.R'
     'attributes-concept.R'
+    'attributes-conceptSetSelection.R'
     'attributes-dateAdjustment.R'
     'attributes-logic.R'
     'query.R'
@@ -61,3 +66,10 @@ Collate:
     'exit.R'
     'cohort.R'
     'collectCodesetId.R'
+    'conceptSearch.R'
+    'jsonToCapr.R'
+    'phenotypeTemplates.R'
+    'print.R'
+Remotes: 
+    ohdsi/PhenotypeLibrary
+Config/roxygen2/version: 8.0.0

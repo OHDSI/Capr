@@ -7,13 +7,17 @@
 conditionEra(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A condition concept set (optional)}
+\item{conceptSet}{A \code{ConceptSet} for the condition.}
 
-\item{...}{optional attributes}
+\item{...}{Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+\code{eraLength()}, \code{occurrenceCount()}, \code{ageAtStart()}, \code{ageAtEnd()}, etc.}
 }
 \value{
-A Capr Query
+A \code{Query} object.
 }
 \description{
 Query the condition era domain
+}
+\seealso{
+\code{\link{conditionOccurrence}}, \code{\link{entry}}
 }

@@ -27,12 +27,25 @@ setClass("dateAdjustmentAttribute",
 
 # Builder -----------------
 
-#' Function to create age attribute
-#' @param startWith character string either START_DATE or END_DATE
-#' @param startOffset an integer value, default 0
-#' @param endWith character string either START_DATE or END_DATE
-#' @param endOffset an integer value, default 0
-#' @return A dateAdjustment attribute class that can be used with a query
+#' Shift the start and/or end date of a query event
+#'
+#' Adds a \code{DateAdjustment} attribute to a domain query, shifting the event's effective
+#' start and/or end date relative to a reference anchor (\code{START_DATE} or \code{END_DATE})
+#' and an offset in days. Used in Circe wherever \code{DateAdjustment} is supported.
+#'
+#' For \code{observationPeriod()} and \code{payerPlanPeriod()}, \code{dateAdjustment()} also
+#' fulfils the role of Circe's \code{UserDefinedPeriod}: when a \code{dateAdjustmentAttribute}
+#' with \code{name = "DateAdjustment"} is present on an ObservationPeriod or PayerPlanPeriod
+#' query, Capr serializes it as \code{UserDefinedPeriod \{ StartDate, EndDate \}} in the
+#' Circe JSON, which constrains the period to a caller-specified date window.
+#'
+#' @param startWith character; anchor for the adjusted start date, either
+#'   \code{"START_DATE"} (default) or \code{"END_DATE"}.
+#' @param startOffset integer offset in days added to the \code{startWith} anchor. Default 0.
+#' @param endWith character; anchor for the adjusted end date, either
+#'   \code{"END_DATE"} (default) or \code{"START_DATE"}.
+#' @param endOffset integer offset in days added to the \code{endWith} anchor. Default 0.
+#' @return A \code{dateAdjustmentAttribute} for use in any domain query constructor.
 #' @export
 dateAdjustment <- function(startWith = "START_DATE",
                            startOffset = 0L,

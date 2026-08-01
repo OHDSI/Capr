@@ -2,21 +2,38 @@
 % Please edit documentation in R/criteria.R
 \name{exactly}
 \alias{exactly}
-\title{Function to enumerate an exact count of occurrences}
+\title{Require exactly N occurrences of a query within a window}
 \usage{
-exactly(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
+exactly(
+  x,
+  query,
+  aperture = duringInterval(eventStarts(-Inf, Inf)),
+  distinct = NA,
+  countColumn = NA_character_
+)
 }
 \arguments{
-\item{x}{the integer counting the number of occurrences}
+\item{x}{Integer count of required occurrences.}
 
-\item{query}{a query object that provides context to the clinical event of interest}
+\item{query}{A \code{Query} object (e.g. from \code{conditionOccurrence()}).}
 
-\item{aperture}{an eventAperture object that shows the temporal span where the event is to be observed
-relative to the index event}
+\item{aperture}{An \code{EventAperture} built with \code{\link{duringInterval}}. Defaults to all time.}
+
+\item{distinct}{If \code{TRUE}, count distinct values of \code{countColumn}.}
+
+\item{countColumn}{Column to use for distinct counting (e.g. \code{"DOMAIN_CONCEPT"}).}
 }
 \value{
-A criteria that can be used in a cohort definition specifying satisfaction of exactly x instances of a query
+A \code{Criteria} object for use in \code{\link{withAll}}, \code{\link{withAny}}, etc.
 }
 \description{
-Function to enumerate an exact count of occurrences
+Require exactly N occurrences of a query within a window
+}
+\examples{
+t2dm <- cs(descendants(201826L), name = "T2DM")
+# No prior T2DM diagnosis at any time before index
+exactly(0, conditionOccurrence(t2dm), duringInterval(eventStarts(-Inf, 0)))
+}
+\seealso{
+\code{\link{atLeast}}, \code{\link{atMost}}, \code{\link{duringInterval}}
 }

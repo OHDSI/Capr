@@ -175,7 +175,6 @@ newConcept <- function(id,
 #' Calls to helper functions "exclude", "descendants", or "mapped". Negative
 #' integers will be marked as excluded from the concept set.
 #' @param name A name for the concept set
-#' @param id An id for the concept set
 #'
 #' @return A Capr Concept Set Object
 #' @export
@@ -188,8 +187,8 @@ newConcept <- function(id,
 #' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), name = "concepts")
 #' cs(1, 2, 3, exclude(4, 5), mapped(6, 7), descendants(8, 9), name = "concepts")
 #' cs(descendants(1, 2, 3),  exclude(descendants(8, 9)), name = "concepts")
-cs <- function(..., name, id = NULL) {
-  dots <- unlist(list(...), recursive = F)
+cs <- function(..., name) {
+  dots <- unlist(lapply(list(...), function(x) if (inherits(x, "integer64")) as.integer(x) else x), recursive = F)
 
   conceptList <- lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
@@ -211,16 +210,14 @@ cs <- function(..., name, id = NULL) {
 
   # TODO decide how to handle duplicate ids in `cs`. For now we throw warning.
 
-  if (is.null(id)) {
-    id <- purrr::map_chr(conceptList, ~paste0(.@Concept@concept_id,
-                                              .@isExcluded,
-                                              .@includeDescendants,
-                                              .@includeMapped)) |>
-      sort() |>
-      paste0(collapse = "") |>
-      digest::digest(algo = "md5") |>
-      as.character()
-  }
+  id <- purrr::map_chr(conceptList, ~paste0(.@Concept@concept_id,
+                                            .@isExcluded,
+                                            .@includeDescendants,
+                                            .@includeMapped)) |>
+    sort() |>
+    paste0(collapse = "") |>
+    digest::digest(algo = "md5") |>
+    as.character()
 
   methods::new("ConceptSet",
                id = id,
@@ -241,7 +238,7 @@ cs <- function(..., name, id = NULL) {
 #' @export
 #' @describeIn cs exclude concepts
 exclude <- function(...) {
-  dots <- unlist(list(...), recursive = F)
+  dots <- unlist(lapply(list(...), function(x) if (inherits(x, "integer64")) as.integer(x) else x), recursive = F)
 
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
@@ -264,7 +261,7 @@ exclude <- function(...) {
 #' @export
 #' @describeIn cs Include mapped concepts
 mapped <- function(...) {
-  dots <- unlist(list(...), recursive = F)
+  dots <- unlist(lapply(list(...), function(x) if (inherits(x, "integer64")) as.integer(x) else x), recursive = F)
 
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
@@ -287,7 +284,7 @@ mapped <- function(...) {
 #' @export
 #' @describeIn cs Include descendants
 descendants <- function(...) {
-  dots <- unlist(list(...), recursive = F)
+  dots <- unlist(lapply(list(...), function(x) if (inherits(x, "integer64")) as.integer(x) else x), recursive = F)
 
   lapply(dots, function(x) {
     if (is.numeric(x) && length(x) == 1) {
@@ -424,7 +421,6 @@ writeConceptSet <- function(x, path, format = "auto", ...) {
 #'
 #' @param path Name of concept set file to read in csv or json format. (e.g. "concepts.json")
 #' @param name the name of the concept set
-#' @param id the id for the concept set (keep?)
 #' @importFrom rlang %||%
 #'
 #' @examples
@@ -436,7 +432,7 @@ writeConceptSet <- function(x, path, format = "auto", ...) {
 #' concepts <- readConceptSet(path)
 #'
 #' @export
-readConceptSet <- function(path, name, id = NULL) {
+readConceptSet <- function(path, name) {
 
   checkmate::assertFileExists(path)
 
@@ -506,7 +502,7 @@ readConceptSet <- function(path, name, id = NULL) {
     conceptList <- purrr::pmap(conceptDf, newConcept)
   }
 
-  rlang::inject(cs(!!!conceptList, name = name, id = id))
+  rlang::inject(cs(!!!conceptList, name = name))
 }
 
 # Other ----
@@ -515,14 +511,20 @@ readConceptSet <- function(path, name, id = NULL) {
 #'
 #' Concept sets created in R using the `cs` function do not contain details like
 #' "CONCEPT_NAME", "DOMAIN_ID", etc. If an OMOP CDM vocabulary is available then
-#' these details can be filled in by the the `getConceptSetDetails` function.
+#' these details can be filled in by the `getConceptSetDetails` function.
 #'
-#' @param x A concept set created by `cs`
+#' Pass a \code{ConceptSet} to hydrate a single set, or a \code{\link{Cohort}} to
+#' hydrate every concept set in the cohort (entry events, attrition rules,
+#' censoring events, the drug-exit concept set, and concept-set attributes such
+#' as \code{conditionSourceConcept()}) in one call. Concept sets are hydrated
+#' once each, even when the same set is reused across the cohort.
+#'
+#' @param x A concept set created by \code{cs()}, or a \code{Cohort}.
 #' @param con A connection to an OMOP CDM database
 #' @param vocabularyDatabaseSchema   Schema name where your OMOP vocabulary format resides. Note that
 #'                                   for SQL Server, this should include both the database and schema
 #'                                   name, for example 'vocabulary.dbo'.
-#' @return A modified version of the input concept set with concept details filled in.
+#' @return A modified version of the input (concept set or cohort) with concept details filled in.
 #'
 #' @importFrom methods slot<-
 #' @export
@@ -537,10 +539,15 @@ readConceptSet <- function(path, name, id = NULL) {
 #' library(DatabaseConnector)
 #' con <- connect(dbms = "postgresql", user = "postgres", password = "", server = "localhost/cdm")
 #' anemia <- getConceptSetDetails(condition_anemia, con, vocabularyDatabaseSchema = "cdm5")
+#'
+#' # hydrate every concept set in a cohort definition
+#' cd <- cohort(conditionOccurrence(anemia))
+#' cd <- getConceptSetDetails(cd, con, vocabularyDatabaseSchema = "cdm5")
 #' }
-getConceptSetDetails <- function(x,
-                                con,
-                                vocabularyDatabaseSchema = NULL) {
+setGeneric("getConceptSetDetails", function(x, con, vocabularyDatabaseSchema = NULL) standardGeneric("getConceptSetDetails"))
+
+#' @describeIn getConceptSetDetails Fill in the details for a single concept set
+setMethod("getConceptSetDetails", "ConceptSet", function(x, con, vocabularyDatabaseSchema = NULL) {
 
   checkmate::assertClass(x, "ConceptSet")
   checkmate::assertTRUE(DBI::dbIsValid(con))
@@ -585,6 +592,74 @@ getConceptSetDetails <- function(x,
     }
   }
   return(x)
+})
+
+# Internal: walk a Capr object and hydrate every unique ConceptSet once.
+# `hydrate_one` is a unary function ConceptSet -> ConceptSet (e.g. a closure over
+# getConceptSetDetails + a connection). `seen` is a hash env mapping concept set
+# id -> hydrated ConceptSet; reused sets (same id from cs()) get the SAME hydrated
+# copy, so they are only hydrated once and stay consistent across the cohort.
+hydrate_concept_sets <- function(x, hydrate_one, seen = new.env(parent = emptyenv())) {
+  if (methods::is(x, "ConceptSet")) {
+    id <- as.character(x@id)
+    can_dedupe <- length(id) == 1L && !is.na(id)
+    if (can_dedupe && !is.null(seen[[id]])) {
+      return(seen[[id]])
+    }
+    x <- hydrate_one(x)
+    if (can_dedupe) seen[[id]] <- x
+    return(x)
+  }
+  if (methods::is(x, "Query")) {
+    x@conceptSet <- hydrate_concept_sets(x@conceptSet, hydrate_one, seen)
+    for (i in seq_along(x@attributes)) {
+      a <- x@attributes[[i]]
+      if (methods::is(a, "conceptSetAttribute")) {
+        a@conceptSet <- hydrate_concept_sets(a@conceptSet, hydrate_one, seen)
+        x@attributes[[i]] <- a
+      } else if (methods::is(a, "nestedAttribute")) {
+        a@group <- hydrate_concept_sets(a@group, hydrate_one, seen)
+        x@attributes[[i]] <- a
+      }
+    }
+    return(x)
+  }
+  if (methods::is(x, "Criteria")) {
+    x@query <- hydrate_concept_sets(x@query, hydrate_one, seen)
+    return(x)
+  }
+  if (methods::is(x, "Group")) {
+    x@criteria <- lapply(x@criteria, hydrate_concept_sets, hydrate_one = hydrate_one, seen = seen)
+    x@group <- lapply(x@group, hydrate_concept_sets, hydrate_one = hydrate_one, seen = seen)
+    return(x)
+  }
+  if (methods::is(x, "CohortEntry")) {
+    x@entryEvents <- lapply(x@entryEvents, hydrate_concept_sets, hydrate_one = hydrate_one, seen = seen)
+    x@additionalCriteria <- hydrate_concept_sets(x@additionalCriteria, hydrate_one, seen)
+    return(x)
+  }
+  if (methods::is(x, "CohortAttrition")) {
+    x@rules <- lapply(x@rules, hydrate_concept_sets, hydrate_one = hydrate_one, seen = seen)
+    return(x)
+  }
+  if (methods::is(x, "CohortExit")) {
+    es_nm_check <- "conceptSet" %in% methods::slotNames(methods::is(x@endStrategy))
+    if (es_nm_check) {
+      x@endStrategy@conceptSet <- hydrate_concept_sets(x@endStrategy@conceptSet, hydrate_one, seen)
+    }
+    x@censoringCriteria@criteria <- lapply(
+      x@censoringCriteria@criteria,
+      hydrate_concept_sets, hydrate_one = hydrate_one, seen = seen
+    )
+    return(x)
+  }
+  if (methods::is(x, "Cohort")) {
+    x@entry <- hydrate_concept_sets(x@entry, hydrate_one, seen)
+    x@attrition <- hydrate_concept_sets(x@attrition, hydrate_one, seen)
+    x@exit <- hydrate_concept_sets(x@exit, hydrate_one, seen)
+    return(x)
+  }
+  x
 }
 
 #' FUnction checks if two concept set class objects are equivalent

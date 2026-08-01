@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
       </span>
     </div>
 
@@ -44,7 +44,13 @@
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
+      <a href="../articles/conceptSearch.html">Searching the OMOP Vocabulary with Capr</a>
+    </li>
+    <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/jsonToCapr.html">Decompiling Atlas JSON with jsonToCapr</a>
     </li>
     <li>
       <a href="../articles/Using-Capr.html">Using Capr</a>
@@ -79,9 +85,25 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="acuteOutcomeCohort.html">acuteOutcomeCohort()</a></code> </p>
+        </td>
+        <td><p>Acute event cohort</p></td>
+      </tr><tr><td>
           <p><code><a href="age.html">age()</a></code> </p>
         </td>
-        <td><p>Function to create age attribute</p></td>
+        <td><p>Age attribute for a query</p></td>
+      </tr><tr><td>
+          <p><code><a href="ageAtEnd.html">ageAtEnd()</a></code> </p>
+        </td>
+        <td><p>Age at era end attribute (for era and period domains)</p></td>
+      </tr><tr><td>
+          <p><code><a href="ageAtStart.html">ageAtStart()</a></code> </p>
+        </td>
+        <td><p>Age at era start attribute (for era and period domains)</p></td>
+      </tr><tr><td>
+          <p><code><a href="allDrugCohort.html">allDrugCohort()</a></code> </p>
+        </td>
+        <td><p>All drug exposures cohort</p></td>
       </tr><tr><td>
           <p><code><a href="as.data.frame-ConceptSet-method.html">as.data.frame(<i>&lt;ConceptSet&gt;</i>)</a></code> </p>
         </td>
@@ -93,19 +115,19 @@
       </tr><tr><td>
           <p><code><a href="atLeast.html">atLeast()</a></code> </p>
         </td>
-        <td><p>Function to enumerate an minimal count of occurrences</p></td>
+        <td><p>Require at least N occurrences of a query within a window</p></td>
       </tr><tr><td>
           <p><code><a href="atMost.html">atMost()</a></code> </p>
         </td>
-        <td><p>Function to enumerate a maximum count of occurrences</p></td>
+        <td><p>Require at most N occurrences of a query within a window</p></td>
       </tr><tr><td>
-          <p><code><a href="attributes.html">male()</a></code> <code><a href="attributes.html">female()</a></code> </p>
+          <p><code><a href="attributes.html">male()</a></code> <code><a href="attributes.html">female()</a></code> <code><a href="attributes.html">raceConcepts()</a></code> <code><a href="attributes.html">ethnicityConcepts()</a></code> </p>
         </td>
         <td><p>Add male attribute to a query</p></td>
       </tr><tr><td>
           <p><code><a href="attrition.html">attrition()</a></code> </p>
         </td>
-        <td><p>Create a cohort attrition object</p></td>
+        <td><p>Define cohort inclusion/exclusion rules (attrition)</p></td>
       </tr><tr><td>
           <p><code><a href="bt.html">bt()</a></code> </p>
         </td>
@@ -119,9 +141,13 @@
         </td>
         <td><p>Constructor for a set of censoring events</p></td>
       </tr><tr><td>
+          <p><code><a href="chronicOutcomeCohort.html">chronicOutcomeCohort()</a></code> </p>
+        </td>
+        <td><p>Chronic condition cohort</p></td>
+      </tr><tr><td>
           <p><code><a href="cohort.html">cohort()</a></code> </p>
         </td>
-        <td><p>Function that creates a cohort object</p></td>
+        <td><p>Build a cohort definition</p></td>
       </tr><tr><td>
           <p><code><a href="compile-methods.html">compile(<i>&lt;Cohort&gt;</i>)</a></code> <code><a href="compile-methods.html">compile(<i>&lt;ConceptSet&gt;</i>)</a></code> </p>
         </td>
@@ -157,7 +183,7 @@
       </tr><tr><td>
           <p><code><a href="conditionOccurrence.html">conditionOccurrence()</a></code> </p>
         </td>
-        <td><p>Query the condition domain</p></td>
+        <td><p>Query the condition occurrence domain</p></td>
       </tr><tr><td>
           <p><code><a href="conditionSourceConcept.html">conditionSourceConcept()</a></code> </p>
         </td>
@@ -167,9 +193,21 @@
         </td>
         <td><p>Add a condition status attribute</p></td>
       </tr><tr><td>
+          <p><code><a href="conditionStatusCS.html">conditionStatusCS()</a></code> </p>
+        </td>
+        <td><p>Condition status filter via concept set — ConditionOccurrence</p></td>
+      </tr><tr><td>
           <p><code><a href="conditionType.html">conditionType()</a></code> </p>
         </td>
         <td><p>Add a condition type attribute to determine the provenance of the record</p></td>
+      </tr><tr><td>
+          <p><code><a href="conditionTypeCS.html">conditionTypeCS()</a></code> </p>
+        </td>
+        <td><p>ConditionType filter via concept set (ConceptSetSelection)</p></td>
+      </tr><tr><td>
+          <p><code><a href="conditionTypeExclude.html">conditionTypeExclude()</a></code> </p>
+        </td>
+        <td><p>ConditionTypeExclude query attribute</p></td>
       </tr><tr><td>
           <p><code><a href="continuousObservation.html">continuousObservation()</a></code> </p>
         </td>
@@ -185,7 +223,7 @@
       </tr><tr><td>
           <p><code><a href="dateAdjustment.html">dateAdjustment()</a></code> </p>
         </td>
-        <td><p>Function to create age attribute</p></td>
+        <td><p>Shift the start and/or end date of a query event</p></td>
       </tr><tr><td>
           <p><code><a href="dateAdjustmentAttribute-class.html">dateAdjustmentAttribute-class</a></code> </p>
         </td>
@@ -199,9 +237,53 @@
         </td>
         <td><p>Query the death domain</p></td>
       </tr><tr><td>
+          <p><code><a href="deathType.html">deathType()</a></code> </p>
+        </td>
+        <td><p>Add a death type attribute to determine the provenance of the record</p></td>
+      </tr><tr><td>
+          <p><code><a href="deathTypeCS.html">deathTypeCS()</a></code> </p>
+        </td>
+        <td><p>DeathType filter via concept set (ConceptSetSelection)</p></td>
+      </tr><tr><td>
+          <p><code><a href="deathTypeExclude.html">deathTypeExclude()</a></code> </p>
+        </td>
+        <td><p>DeathTypeExclude query attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="detectUnsupportedKeys.html">detectUnsupportedKeys()</a></code> </p>
+        </td>
+        <td><p>Detect domain keys not in the supported set and emit skipOrStop for each (non-null/non-empty). Prevents silent semantic drift when new Circe fields appear.</p></td>
+      </tr><tr><td>
           <p><code><a href="deviceExposure.html">deviceExposure()</a></code> </p>
         </td>
-        <td><p>Query the drug domain</p></td>
+        <td><p>Query the device exposure domain</p></td>
+      </tr><tr><td>
+          <p><code><a href="deviceType.html">deviceType()</a></code> </p>
+        </td>
+        <td><p>Add a device type attribute to determine the provenance of the record</p></td>
+      </tr><tr><td>
+          <p><code><a href="deviceTypeCS.html">deviceTypeCS()</a></code> </p>
+        </td>
+        <td><p>DeviceType filter via concept set (ConceptSetSelection)</p></td>
+      </tr><tr><td>
+          <p><code><a href="deviceTypeExclude.html">deviceTypeExclude()</a></code> </p>
+        </td>
+        <td><p>DeviceTypeExclude query attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="doseEra.html">doseEra()</a></code> </p>
+        </td>
+        <td><p>Query the dose era domain</p></td>
+      </tr><tr><td>
+          <p><code><a href="doseUnit.html">doseUnit()</a></code> </p>
+        </td>
+        <td><p>Dose unit attribute for drug exposure</p></td>
+      </tr><tr><td>
+          <p><code><a href="doseUnitCS.html">doseUnitCS()</a></code> </p>
+        </td>
+        <td><p>Dose unit filter via concept set — DrugExposure</p></td>
+      </tr><tr><td>
+          <p><code><a href="doseValue.html">doseValue()</a></code> </p>
+        </td>
+        <td><p>Dose value attribute for DoseEra</p></td>
       </tr><tr><td>
           <p><code><a href="drugEra.html">drugEra()</a></code> </p>
         </td>
@@ -213,7 +295,7 @@
       </tr><tr><td>
           <p><code><a href="drugExposure.html">drugExposure()</a></code> </p>
         </td>
-        <td><p>Query the drug domain</p></td>
+        <td><p>Query the drug exposure domain</p></td>
       </tr><tr><td>
           <p><code><a href="DrugExposureExit-class.html">DrugExposureExit-class</a></code> </p>
         </td>
@@ -235,6 +317,14 @@
         </td>
         <td><p>Add a drug type attribute to determine the provenance of the record</p></td>
       </tr><tr><td>
+          <p><code><a href="drugTypeCS.html">drugTypeCS()</a></code> </p>
+        </td>
+        <td><p>DrugType filter via concept set (ConceptSetSelection)</p></td>
+      </tr><tr><td>
+          <p><code><a href="drugTypeExclude.html">drugTypeExclude()</a></code> </p>
+        </td>
+        <td><p>DrugTypeExclude query attribute</p></td>
+      </tr><tr><td>
           <p><code><a href="duringInterval.html">duringInterval()</a></code> </p>
         </td>
         <td><p>Function that creates an eventAperture an opening where an event can occur relative to the index event</p></td>
@@ -249,7 +339,7 @@
       </tr><tr><td>
           <p><code><a href="entry.html">entry()</a></code> </p>
         </td>
-        <td><p>Create a cohort entry criteria</p></td>
+        <td><p>Create a cohort entry definition</p></td>
       </tr><tr><td>
           <p><code><a href="eq.html">eq()</a></code> </p>
         </td>
@@ -261,7 +351,15 @@
       </tr><tr><td>
           <p><code><a href="era.html">era()</a></code> </p>
         </td>
-        <td><p>Create a Cohort Era class object</p></td>
+        <td><p>Define cohort era collapse settings</p></td>
+      </tr><tr><td>
+          <p><code><a href="eraLength.html">eraLength()</a></code> </p>
+        </td>
+        <td><p>Era length attribute for DrugEra</p></td>
+      </tr><tr><td>
+          <p><code><a href="ethnicityCS.html">ethnicityCS()</a></code> </p>
+        </td>
+        <td><p>Ethnicity filter via concept set (ConceptSetSelection, for demographic criteria)</p></td>
       </tr><tr><td>
           <p><code><a href="EventAperture-class.html">EventAperture-class</a></code> </p>
         </td>
@@ -281,11 +379,15 @@
       </tr><tr><td>
           <p><code><a href="exactly.html">exactly()</a></code> </p>
         </td>
-        <td><p>Function to enumerate an exact count of occurrences</p></td>
+        <td><p>Require exactly N occurrences of a query within a window</p></td>
       </tr><tr><td>
           <p><code><a href="exit.html">exit()</a></code> </p>
         </td>
-        <td><p>Function that creates a cohort exit object</p></td>
+        <td><p>Define cohort exit strategy</p></td>
+      </tr><tr><td>
+          <p><code><a href="firstEverDiagnosisCohort.html">firstEverDiagnosisCohort()</a></code> </p>
+        </td>
+        <td><p>First-ever condition cohort</p></td>
       </tr><tr><td>
           <p><code><a href="firstOccurrence.html">firstOccurrence()</a></code> </p>
         </td>
@@ -298,6 +400,22 @@
           <p><code><a href="fixedExit.html">fixedExit()</a></code> </p>
         </td>
         <td><p>Function to create an exit based on exit based on the end of a continuous drug exposure</p></td>
+      </tr><tr><td>
+          <p><code><a href="genderConcepts.html">genderConcepts()</a></code> </p>
+        </td>
+        <td><p>Add gender attribute with one or more concept IDs (e.g. both sexes)</p></td>
+      </tr><tr><td>
+          <p><code><a href="genderCS.html">genderCS()</a></code> </p>
+        </td>
+        <td><p>Gender filter via concept set (ConceptSetSelection, for demographic criteria)</p></td>
+      </tr><tr><td>
+          <p><code><a href="getConceptDescendants.html">getConceptDescendants()</a></code> </p>
+        </td>
+        <td><p>Get all descendants of one or more standard concepts</p></td>
+      </tr><tr><td>
+          <p><code><a href="getConceptInfo.html">getConceptInfo()</a></code> </p>
+        </td>
+        <td><p>Look up concept details by concept ID</p></td>
       </tr><tr><td>
           <p><code><a href="getConceptSetCall.html">getConceptSetCall()</a></code> </p>
         </td>
@@ -319,9 +437,29 @@
         </td>
         <td><p>Greater than or equal to operator</p></td>
       </tr><tr><td>
+          <p><code><a href="insertCaprCode.html">insertCaprCode()</a></code> </p>
+        </td>
+        <td><p>Insert decompiled Capr code into the current document (RStudio only)</p></td>
+      </tr><tr><td>
+          <p><code><a href="jsonToCapr.html">jsonToCapr()</a></code> </p>
+        </td>
+        <td><p>Decompile Atlas/Circe cohort JSON to Capr R code</p></td>
+      </tr><tr><td>
+          <p><code><a href="jsonToCaprFile.html">jsonToCaprFile()</a></code> </p>
+        </td>
+        <td><p>Write decompiled Capr R code to a file</p></td>
+      </tr><tr><td>
+          <p><code><a href="keyValueAttribute-class.html">keyValueAttribute-class</a></code> </p>
+        </td>
+        <td><p>Attribute that serializes to a single key-value pair in query JSON. Used for boolean query options like ConditionTypeExclude. Has a <code>name</code> slot (same as key) so compile/collectGuid work.</p></td>
+      </tr><tr><td>
           <p><code><a href="logicAttribute-class.html">logicAttribute-class</a></code> </p>
         </td>
         <td><p>An S4 class for a logical attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="lotNumber.html">lotNumber()</a></code> </p>
+        </td>
+        <td><p>Lot number attribute for DrugExposure</p></td>
       </tr><tr><td>
           <p><code><a href="lt.html">lt()</a></code> </p>
         </td>
@@ -335,17 +473,45 @@
         </td>
         <td><p>Make a cohort dataframe for cohort generator</p></td>
       </tr><tr><td>
+          <p><code><a href="mapSourceToStandard.html">mapSourceToStandard()</a></code> </p>
+        </td>
+        <td><p>Map source (non-standard) codes to their standard OMOP concepts</p></td>
+      </tr><tr><td>
           <p><code><a href="measurement.html">measurement()</a></code> </p>
         </td>
         <td><p>Query the measurement domain</p></td>
+      </tr><tr><td>
+          <p><code><a href="measurementCohort.html">measurementCohort()</a></code> </p>
+        </td>
+        <td><p>Measurement threshold cohort</p></td>
+      </tr><tr><td>
+          <p><code><a href="measurementOperator.html">measurementOperator()</a></code> </p>
+        </td>
+        <td><p>Measurement operator attribute (e.g. equal to, less than)</p></td>
+      </tr><tr><td>
+          <p><code><a href="measurementOperatorCS.html">measurementOperatorCS()</a></code> </p>
+        </td>
+        <td><p>Measurement operator filter via concept set</p></td>
+      </tr><tr><td>
+          <p><code><a href="measurementSourceConcept.html">measurementSourceConcept()</a></code> </p>
+        </td>
+        <td><p>Add a measurement source concept attribute</p></td>
       </tr><tr><td>
           <p><code><a href="measurementType.html">measurementType()</a></code> </p>
         </td>
         <td><p>Add a measurement type attribute to determine the provenance of the record</p></td>
       </tr><tr><td>
+          <p><code><a href="measurementTypeCS.html">measurementTypeCS()</a></code> </p>
+        </td>
+        <td><p>MeasurementType filter via concept set (ConceptSetSelection)</p></td>
+      </tr><tr><td>
+          <p><code><a href="measurementTypeExclude.html">measurementTypeExclude()</a></code> </p>
+        </td>
+        <td><p>MeasurementTypeExclude query attribute</p></td>
+      </tr><tr><td>
           <p><code><a href="measurementUnit.html">measurementUnit()</a></code> </p>
         </td>
-        <td><p>Add unit attribute to a query</p></td>
+        <td><p>Unit attribute for a query</p></td>
       </tr><tr><td>
           <p><code><a href="nbt.html">nbt()</a></code> </p>
         </td>
@@ -371,9 +537,17 @@
         </td>
         <td><p>Function to construct a nested group where at most some of the criteria or groups must be satisfied</p></td>
       </tr><tr><td>
+          <p><code><a href="newUserDrugCohort.html">newUserDrugCohort()</a></code> </p>
+        </td>
+        <td><p>New user drug cohort</p></td>
+      </tr><tr><td>
           <p><code><a href="observation.html">observation()</a></code> </p>
         </td>
         <td><p>Query the observation domain</p></td>
+      </tr><tr><td>
+          <p><code><a href="observationCohort.html">observationCohort()</a></code> </p>
+        </td>
+        <td><p>Observation-based cohort</p></td>
       </tr><tr><td>
           <p><code><a href="ObservationExit-class.html">ObservationExit-class</a></code> </p>
         </td>
@@ -391,13 +565,29 @@
         </td>
         <td><p>Add a observation period type attribute to determine the provenance of the record</p></td>
       </tr><tr><td>
+          <p><code><a href="observationQualifier.html">observationQualifier()</a></code> </p>
+        </td>
+        <td><p>Observation qualifier attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="observationQualifierCS.html">observationQualifierCS()</a></code> </p>
+        </td>
+        <td><p>Observation qualifier filter via concept set</p></td>
+      </tr><tr><td>
           <p><code><a href="observationSourceConcept.html">observationSourceConcept()</a></code> </p>
         </td>
         <td><p>Add a observation source concept attribute</p></td>
       </tr><tr><td>
           <p><code><a href="observationType.html">observationType()</a></code> </p>
         </td>
-        <td><p>Add a observation type attribute to determine the provenance of the record</p></td>
+        <td><p>Add an observation type attribute to determine the provenance of the record</p></td>
+      </tr><tr><td>
+          <p><code><a href="observationTypeCS.html">observationTypeCS()</a></code> </p>
+        </td>
+        <td><p>ObservationType filter via concept set (ConceptSetSelection)</p></td>
+      </tr><tr><td>
+          <p><code><a href="observationTypeExclude.html">observationTypeExclude()</a></code> </p>
+        </td>
+        <td><p>ObservationTypeExclude query attribute</p></td>
       </tr><tr><td>
           <p><code><a href="ObservationWindow-class.html">ObservationWindow-class</a></code> </p>
         </td>
@@ -406,6 +596,14 @@
           <p><code><a href="Occurrence-class.html">Occurrence-class</a></code> </p>
         </td>
         <td><p>An S4 class for an occurrence.</p></td>
+      </tr><tr><td>
+          <p><code><a href="occurrenceCount.html">occurrenceCount()</a></code> </p>
+        </td>
+        <td><p>Occurrence count attribute for ConditionEra</p></td>
+      </tr><tr><td>
+          <p><code><a href="opAttributeCharacter-class.html">opAttributeCharacter-class</a></code> </p>
+        </td>
+        <td><p>An S4 class for a op attribute that is a character</p></td>
       </tr><tr><td>
           <p><code><a href="opAttributeDate-class.html">opAttributeDate-class</a></code> </p>
         </td>
@@ -423,9 +621,57 @@
         </td>
         <td><p>An S4 super class for other opAttribute objects to inherit.</p></td>
       </tr><tr><td>
+          <p><code><a href="payerConcept.html">payerConcept()</a></code> </p>
+        </td>
+        <td><p>Payer concept attribute for PayerPlanPeriod</p></td>
+      </tr><tr><td>
+          <p><code><a href="payerPlanPeriod.html">payerPlanPeriod()</a></code> </p>
+        </td>
+        <td><p>Query the payer plan period domain (CDM ≥ 5.3)</p></td>
+      </tr><tr><td>
+          <p><code><a href="payerSourceConcept.html">payerSourceConcept()</a></code> </p>
+        </td>
+        <td><p>Payer source concept attribute for PayerPlanPeriod</p></td>
+      </tr><tr><td>
+          <p><code><a href="periodLength.html">periodLength()</a></code> </p>
+        </td>
+        <td><p>Period length attribute — ObservationPeriod, PayerPlanPeriod</p></td>
+      </tr><tr><td>
+          <p><code><a href="periodTypeCS.html">periodTypeCS()</a></code> </p>
+        </td>
+        <td><p>ObservationPeriod period type filter via concept set (ConceptSetSelection)</p></td>
+      </tr><tr><td>
+          <p><code><a href="placeOfService.html">placeOfService()</a></code> </p>
+        </td>
+        <td><p>Place of service attribute for visit occurrence</p></td>
+      </tr><tr><td>
+          <p><code><a href="placeOfServiceCS.html">placeOfServiceCS()</a></code> </p>
+        </td>
+        <td><p>Place of service filter via concept set — VisitOccurrence, VisitDetail</p></td>
+      </tr><tr><td>
+          <p><code><a href="planConcept.html">planConcept()</a></code> </p>
+        </td>
+        <td><p>Plan concept attribute for PayerPlanPeriod</p></td>
+      </tr><tr><td>
+          <p><code><a href="planSourceConcept.html">planSourceConcept()</a></code> </p>
+        </td>
+        <td><p>Plan source concept attribute for PayerPlanPeriod</p></td>
+      </tr><tr><td>
           <p><code><a href="procedure.html">procedure()</a></code> </p>
         </td>
-        <td><p>Query the procedure domain</p></td>
+        <td><p>Query the procedure occurrence domain</p></td>
+      </tr><tr><td>
+          <p><code><a href="procedureCohort.html">procedureCohort()</a></code> </p>
+        </td>
+        <td><p>Procedure-based cohort</p></td>
+      </tr><tr><td>
+          <p><code><a href="procedureModifier.html">procedureModifier()</a></code> </p>
+        </td>
+        <td><p>Procedure modifier attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="procedureModifierCS.html">procedureModifierCS()</a></code> </p>
+        </td>
+        <td><p>Procedure modifier filter via concept set</p></td>
       </tr><tr><td>
           <p><code><a href="procedureSourceConcept.html">procedureSourceConcept()</a></code> </p>
         </td>
@@ -435,41 +681,209 @@
         </td>
         <td><p>Add a procedure type attribute to determine the provenance of the record</p></td>
       </tr><tr><td>
+          <p><code><a href="procedureTypeCS.html">procedureTypeCS()</a></code> </p>
+        </td>
+        <td><p>ProcedureType filter via concept set (ConceptSetSelection)</p></td>
+      </tr><tr><td>
+          <p><code><a href="procedureTypeExclude.html">procedureTypeExclude()</a></code> </p>
+        </td>
+        <td><p>ProcedureTypeExclude query attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="providerSpecialtyConcepts.html">providerSpecialtyConcepts()</a></code> </p>
+        </td>
+        <td><p>Add provider specialty filter to a visit (round-trip from Atlas JSON)</p></td>
+      </tr><tr><td>
+          <p><code><a href="providerSpecialtyCS.html">providerSpecialtyCS()</a></code> </p>
+        </td>
+        <td><p>Provider specialty filter via concept set — multiple domains</p></td>
+      </tr><tr><td>
+          <p><code><a href="quantityValue.html">quantityValue()</a></code> </p>
+        </td>
+        <td><p>Quantity attribute — ProcedureOccurrence, DeviceExposure, Specimen</p></td>
+      </tr><tr><td>
           <p><code><a href="Query-class.html">Query-class</a></code> </p>
         </td>
         <td><p>An S4 class for a Circe Query</p></td>
+      </tr><tr><td>
+          <p><code><a href="raceCS.html">raceCS()</a></code> </p>
+        </td>
+        <td><p>Race filter via concept set (ConceptSetSelection, for demographic criteria)</p></td>
       </tr><tr><td>
           <p><code><a href="rangeHigh.html">rangeHigh()</a></code> </p>
         </td>
         <td><p>Function to create rangeHigh attribute</p></td>
       </tr><tr><td>
+          <p><code><a href="rangeHighRatio.html">rangeHighRatio()</a></code> </p>
+        </td>
+        <td><p>Range high ratio attribute for Measurement</p></td>
+      </tr><tr><td>
           <p><code><a href="rangeLow.html">rangeLow()</a></code> </p>
         </td>
         <td><p>Function to create rangeLow attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="rankedSearchConcepts.html">rankedSearchConcepts()</a></code> </p>
+        </td>
+        <td><p>Ranked vocabulary search with dialect-specific similarity scoring</p></td>
       </tr><tr><td>
           <p><code><a href="readConceptSet.html">readConceptSet()</a></code> </p>
         </td>
         <td><p>Read a concept set json or csv into R</p></td>
       </tr><tr><td>
+          <p><code><a href="routeConcept.html">routeConcept()</a></code> </p>
+        </td>
+        <td><p>Route concept attribute for drug exposure</p></td>
+      </tr><tr><td>
+          <p><code><a href="routeConceptCS.html">routeConceptCS()</a></code> </p>
+        </td>
+        <td><p>Route concept filter via concept set — DrugExposure</p></td>
+      </tr><tr><td>
+          <p><code><a href="searchConcepts.html">searchConcepts()</a></code> </p>
+        </td>
+        <td><p>Search the OMOP vocabulary by keyword</p></td>
+      </tr><tr><td>
+          <p><code><a href="specimen.html">specimen()</a></code> </p>
+        </td>
+        <td><p>Query the specimen domain</p></td>
+      </tr><tr><td>
+          <p><code><a href="specimenAnatomicSite.html">specimenAnatomicSite()</a></code> </p>
+        </td>
+        <td><p>Specimen anatomic site attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="specimenAnatomicSiteCS.html">specimenAnatomicSiteCS()</a></code> </p>
+        </td>
+        <td><p>Specimen anatomic site filter via concept set</p></td>
+      </tr><tr><td>
+          <p><code><a href="specimenDiseaseStatus.html">specimenDiseaseStatus()</a></code> </p>
+        </td>
+        <td><p>Specimen disease status attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="specimenDiseaseStatusCS.html">specimenDiseaseStatusCS()</a></code> </p>
+        </td>
+        <td><p>Specimen disease status filter via concept set</p></td>
+      </tr><tr><td>
+          <p><code><a href="specimenSourceId.html">specimenSourceId()</a></code> </p>
+        </td>
+        <td><p>Filter by specimen source ID text — Specimen</p></td>
+      </tr><tr><td>
+          <p><code><a href="specimenType.html">specimenType()</a></code> </p>
+        </td>
+        <td><p>Add a specimen type attribute to determine the provenance of the record</p></td>
+      </tr><tr><td>
+          <p><code><a href="specimenTypeCS.html">specimenTypeCS()</a></code> </p>
+        </td>
+        <td><p>SpecimenType filter via concept set (ConceptSetSelection)</p></td>
+      </tr><tr><td>
+          <p><code><a href="specimenTypeExclude.html">specimenTypeExclude()</a></code> </p>
+        </td>
+        <td><p>SpecimenTypeExclude query attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="sponsorConcept.html">sponsorConcept()</a></code> </p>
+        </td>
+        <td><p>Sponsor concept attribute for PayerPlanPeriod</p></td>
+      </tr><tr><td>
+          <p><code><a href="sponsorSourceConcept.html">sponsorSourceConcept()</a></code> </p>
+        </td>
+        <td><p>Sponsor source concept attribute for PayerPlanPeriod</p></td>
+      </tr><tr><td>
           <p><code><a href="startDate.html">startDate()</a></code> </p>
         </td>
         <td><p>Function that creates a start date attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="stopReason.html">stopReason()</a></code> </p>
+        </td>
+        <td><p>Filter by stop reason text — ConditionOccurrence or DrugExposure</p></td>
+      </tr><tr><td>
+          <p><code><a href="stopReasonConcept.html">stopReasonConcept()</a></code> </p>
+        </td>
+        <td><p>Stop reason concept attribute for PayerPlanPeriod</p></td>
+      </tr><tr><td>
+          <p><code><a href="stopReasonSourceConcept.html">stopReasonSourceConcept()</a></code> </p>
+        </td>
+        <td><p>Stop reason source concept attribute for PayerPlanPeriod</p></td>
+      </tr><tr><td>
+          <p><code><a href="stringContains.html">stringContains()</a></code> </p>
+        </td>
+        <td><p>String contains operator</p></td>
+      </tr><tr><td>
+          <p><code><a href="stringEndsWith.html">stringEndsWith()</a></code> </p>
+        </td>
+        <td><p>String ends with operator</p></td>
+      </tr><tr><td>
+          <p><code><a href="stringNotContains.html">stringNotContains()</a></code> </p>
+        </td>
+        <td><p>String does not contain operator</p></td>
+      </tr><tr><td>
+          <p><code><a href="stringNotEndsWith.html">stringNotEndsWith()</a></code> </p>
+        </td>
+        <td><p>String does not end with operator</p></td>
+      </tr><tr><td>
+          <p><code><a href="stringNotStartsWith.html">stringNotStartsWith()</a></code> </p>
+        </td>
+        <td><p>String does not start with operator</p></td>
+      </tr><tr><td>
+          <p><code><a href="stringStartsWith.html">stringStartsWith()</a></code> </p>
+        </td>
+        <td><p>String starts with operator</p></td>
+      </tr><tr><td>
+          <p><code><a href="summary.html">summary()</a></code> </p>
+        </td>
+        <td><p>Summarise a Capr object</p></td>
       </tr><tr><td>
           <p><code><a href="toCirce.html">toCirce()</a></code> </p>
         </td>
         <td><p>Function to coerce cohort to circe</p></td>
       </tr><tr><td>
+          <p><code><a href="toCohortJson.html">toCohortJson()</a></code> </p>
+        </td>
+        <td><p>Convert a Capr cohort to JSON</p></td>
+      </tr><tr><td>
+          <p><code><a href="toConceptSetJson.html">toConceptSetJson()</a></code> </p>
+        </td>
+        <td><p>Convert a Capr concept set to JSON</p></td>
+      </tr><tr><td>
+          <p><code><a href="uniqueDeviceId.html">uniqueDeviceId()</a></code> </p>
+        </td>
+        <td><p>Filter by unique device ID text — DeviceExposure</p></td>
+      </tr><tr><td>
+          <p><code><a href="unitCS.html">unitCS()</a></code> </p>
+        </td>
+        <td><p>Unit filter via concept set — Measurement, Observation, DoseEra, Specimen</p></td>
+      </tr><tr><td>
           <p><code><a href="valueAsConcept.html">valueAsConcept()</a></code> </p>
         </td>
         <td><p>Add a value as concept attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="valueAsConceptSet.html">valueAsConceptSet()</a></code> </p>
+        </td>
+        <td><p>ValueAsConcept attribute from a concept set (for round-trip without DB)</p></td>
       </tr><tr><td>
           <p><code><a href="valueAsNumber.html">valueAsNumber()</a></code> </p>
         </td>
         <td><p>Function to create valueAsNumber attribute</p></td>
       </tr><tr><td>
+          <p><code><a href="valueAsString.html">valueAsString()</a></code> </p>
+        </td>
+        <td><p>Attribute for Observation value_as_string filter (round-trip from Atlas ValueAsString)</p></td>
+      </tr><tr><td>
           <p><code><a href="visit.html">visit()</a></code> </p>
         </td>
         <td><p>Query the visit occurrence domain</p></td>
+      </tr><tr><td>
+          <p><code><a href="visitDetail.html">visitDetail()</a></code> </p>
+        </td>
+        <td><p>Query the visit detail domain</p></td>
+      </tr><tr><td>
+          <p><code><a href="visitDetailSourceConcept.html">visitDetailSourceConcept()</a></code> </p>
+        </td>
+        <td><p>Add a visit detail source concept attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="visitDetailTypeCS.html">visitDetailTypeCS()</a></code> </p>
+        </td>
+        <td><p>Visit detail type filter via concept set — VisitDetail</p></td>
+      </tr><tr><td>
+          <p><code><a href="visitLength.html">visitLength()</a></code> </p>
+        </td>
+        <td><p>Visit length attribute for VisitOccurrence</p></td>
       </tr><tr><td>
           <p><code><a href="visitSourceConcept.html">visitSourceConcept()</a></code> </p>
         </td>
@@ -478,6 +892,18 @@
           <p><code><a href="visitType.html">visitType()</a></code> </p>
         </td>
         <td><p>Add a visit type attribute to determine the provenance of the record</p></td>
+      </tr><tr><td>
+          <p><code><a href="visitTypeCS.html">visitTypeCS()</a></code> </p>
+        </td>
+        <td><p>VisitType filter via concept set (ConceptSetSelection)</p></td>
+      </tr><tr><td>
+          <p><code><a href="visitTypeExclude.html">visitTypeExclude()</a></code> </p>
+        </td>
+        <td><p>VisitTypeExclude query attribute</p></td>
+      </tr><tr><td>
+          <p><code><a href="visitTypeSet.html">visitTypeSet()</a></code> </p>
+        </td>
+        <td><p>Add a visit type attribute (filter by visit_concept_id) from a concept set</p></td>
       </tr><tr><td>
           <p><code><a href="withAll.html">withAll()</a></code> </p>
         </td>

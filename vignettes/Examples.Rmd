@@ -23,15 +23,6 @@ knitr::opts_chunk$set(
 
 library(Capr)
 
-# Function to test that cohort compiles
-assertCohortCompiles <- function(cohortDefinition) {
-  sql <- CirceR::cohortExpressionFromJson(as.json(ch))
-  sql <- CirceR::buildCohortQuery(sql, options = CirceR::createGenerateOptions(generateStats = TRUE))
-  
-  stopifnot(nchar(sql) > 1)
-  invisible(NULL)
-}
-
 ```
 
 This vignette provides a number of example cohorts built with Capr from the OHDSI *Phenotype Phebruary* event.
@@ -42,34 +33,7 @@ This vignette provides a number of example cohorts built with Capr from the OHDS
 
 https://atlas-phenotype.ohdsi.org/#/cohortdefinition/88/definition
 
-```{r, include=FALSE, eval=FALSE}
-
-# DRAFT version that uses observationPeriod Query type
-# TODO implement observation period Query type
-cs1 <- cs(descendants(443238, 201820, 442793), 
-          descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
-          name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
-
-ch <- cohort(
-  entry = conditionOccurrence(cs1),
-  attrition = attrition(
-    withAll(
-          atLeast(1, 
-            observationPeriod(), #function not currently in Capr
-            duringInterval(eventStarts(-Inf, -365, "startDate"))
-    )
-    )
-  ),
-  exit = exit(
-    endStrategy = observationExit()
-  )
-)
-```
-
-
 ```{r, eval=FALSE}
-library(Capr)
-
 cs0 <- cs(descendants(443238, 201820, 442793), 
           descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
           name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
@@ -84,20 +48,15 @@ ch <- cohort(
   )
 )
 
-```
+chJson <- toCohortJson(ch)
 
-```{r, include=FALSE}
-assertCohortCompiles(ch)
 ```
-
 
 **Persons with new type 2 diabetes and no prior T1DM or secondary diabetes**
 
 https://atlas-phenotype.ohdsi.org/#/cohortdefinition/89/export
 
 ```{r, eval=FALSE}
-library(Capr)
-
 cs0 <- cs(descendants(443238, 201820, 442793), 
           descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
           name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
@@ -126,20 +85,15 @@ ch <- cohort(
   )
 )
 
-```
+chJson <- toCohortJson(ch)
 
-```{r, include=FALSE}
-assertCohortCompiles(ch)
 ```
-
 
 **Persons with new type 2 diabetes mellitus at first dx rx or lab**
 
 https://atlas-phenotype.ohdsi.org/#/cohortdefinition/90
 
 ```{r, eval=FALSE}
-library(Capr)
-
 cs0 <- cs(descendants(443238, 201820, 442793), 
           descendants(exclude(195771, 201254, 435216, 761051, 4058243, 40484648)),
           name = "Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)")
@@ -161,15 +115,15 @@ ch <- cohort(
   entry = entry(
     conditionOccurrence(cs0),
     drugExposure(cs4),
-    measurement(cs3, valueAsNumber(bt(6.5, 30)), measurementUnit("%")),
-    measurement(cs3, valueAsNumber(bt(48, 99)), measurementUnit("mmol/mol")),
+    measurement(cs3, valueAsNumber(bt(6.5, 30)), measurementUnit(8554L)),   # percent
+    measurement(cs3, valueAsNumber(bt(48, 99)), measurementUnit(9579L)),    # mmol/mol
     observationWindow = continuousObservation(priorDays = 365)
   ),
   attrition = attrition(
     'no T1D' = withAll(
       exactly(0, conditionOccurrence(cs1), duringInterval(eventStarts(-Inf, 0)))
       ),
-    'no secondary diabettes' = withAll(
+    'no secondary diabetes' = withAll(
       exactly(0, conditionOccurrence(cs2), duringInterval(eventStarts(-Inf, 0)))
     )
   ),
@@ -178,10 +132,8 @@ ch <- cohort(
   )
 )
 
-```
+chJson <- toCohortJson(ch)
 
-```{r, include=FALSE}
-assertCohortCompiles(ch)
 ```
 
 # Type 1 diabetes mellitus
@@ -201,10 +153,8 @@ ch <- cohort(
   )
 )
 
-```
+chJson <- toCohortJson(ch)
 
-```{r}
-assertCohortCompiles(ch)
 ```
 
 **Persons with new type 1 diabetes and no prior T2DM or secondary diabetes**
@@ -235,12 +185,9 @@ ch <- cohort(
   )
 )
 
-```
+chJson <- toCohortJson(ch)
 
-```{r, include=FALSE}
-assertCohortCompiles(ch)
 ```
-
 
 # Atrial Fibrillation
 
@@ -255,12 +202,9 @@ cs0 <- cs(descendants(313217),
 
 ch <- cohort(conditionOccurrence(cs0))
 
-```
+chJson <- toCohortJson(ch)
 
-```{r, include=FALSE}
-assertCohortCompiles(ch)
 ```
-
 
 **Persons with atrial fibrillation per Subramanya et al 2021**
 
@@ -323,13 +267,9 @@ ch <- cohort(
   )
 )
 
-```
+chJson <- toCohortJson(ch)
 
-```{r, include=FALSE, eval=FALSE}
-# not compiling
-assertCohortCompiles(ch)
 ```
-
 
 # Source Concept Example
 
@@ -353,5 +293,83 @@ cd <- cohort(
     primaryCriteriaLimit = "First"
   )
 )
+
+cdJson <- toCohortJson(cd)
+```
+
+# Primary Criteria Limit: First vs All
+
+Regardless of entry criteria complexity:
+
+- **Era cohort** -> `primaryCriteriaLimit = "First"`, `expressionLimit = "First"`, no era collapse
+- **Occ cohort** -> `primaryCriteriaLimit = "All"`, `expressionLimit = "All"`, `era = era(eraDays = 99999L)`
+
+The two patterns below show different ways to get one row per person:
+
+- **Era version**: take the first qualifying event and follow until end of continuous observation.
+- **Occ version**: take all qualifying events and stitch them into one long era from first to last event.
+
+## Example 1: Nested criteria with prior diagnosis requirement
+
+### 1a. Era version
+
+```{r}
+# Placeholder concept IDs for disease of interest
+disease_concept_set <- c(201826L)
+
+# Index event: first diagnosis with a prior diagnosis at least 365 days earlier
+diagnosisEraCohort <- cohort(
+  entry = entry(
+    conditionOccurrence(
+      conceptSet = cs(disease_concept_set, name = "Disease"),
+      nestedWithAll(
+        atLeast(
+          1,
+          conditionOccurrence(conceptSet = cs(disease_concept_set, name = "Disease")),
+          aperture = duringInterval(eventStarts(-Inf, -365))
+        )
+      )
+    ),
+    primaryCriteriaLimit = "First"
+  ),
+  attrition = attrition(
+    expressionLimit = "First"
+  ),
+  exit = exit(
+    endStrategy = observationExit()
+  )
+)
+
+diagnosisEraJson <- toCohortJson(diagnosisEraCohort)
+```
+
+### 1b. Occ version (same cohort logic, different type)
+
+```{r}
+# Entry at each diagnosis with a prior diagnosis at least 365 days earlier
+diagnosisOccCohort <- cohort(
+  entry = entry(
+    conditionOccurrence(
+      conceptSet = cs(disease_concept_set, name = "Disease"),
+      nestedWithAll(
+        atLeast(
+          1,
+          conditionOccurrence(conceptSet = cs(disease_concept_set, name = "Disease")),
+          aperture = duringInterval(eventStarts(-Inf, -365))
+        )
+      )
+    ),
+    primaryCriteriaLimit = "All"
+  ),
+  attrition = attrition(
+    expressionLimit = "All"
+  ),
+  exit = exit(
+    endStrategy = fixedExit(offsetDays = 0L)
+  ),
+  era = era(eraDays = 99999L)
+)
+
+diagnosisOccJson <- toCohortJson(diagnosisOccCohort)
 ```
 

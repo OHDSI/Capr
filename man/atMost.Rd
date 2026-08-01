@@ -2,21 +2,38 @@
 % Please edit documentation in R/criteria.R
 \name{atMost}
 \alias{atMost}
-\title{Function to enumerate a maximum count of occurrences}
+\title{Require at most N occurrences of a query within a window}
 \usage{
-atMost(x, query, aperture = duringInterval(eventStarts(-Inf, Inf)))
+atMost(
+  x,
+  query,
+  aperture = duringInterval(eventStarts(-Inf, Inf)),
+  distinct = NA,
+  countColumn = NA_character_
+)
 }
 \arguments{
-\item{x}{the integer counting the number of occurrences}
+\item{x}{Maximum integer count of allowed occurrences.}
 
-\item{query}{a query object that provides context to the clinical event of interest}
+\item{query}{A \code{Query} object (e.g. from \code{conditionOccurrence()}).}
 
-\item{aperture}{an eventAperture object that shows the temporal span where the event
-is to be observed relative to the index event}
+\item{aperture}{An \code{EventAperture} built with \code{\link{duringInterval}}. Defaults to all time.}
+
+\item{distinct}{If \code{TRUE}, count distinct values of \code{countColumn}.}
+
+\item{countColumn}{Column to use for distinct counting (e.g. \code{"DOMAIN_CONCEPT"}).}
 }
 \value{
-A criteria that can be used in a cohort definition specifying satisfaction of at most x instances of a query
+A \code{Criteria} object for use in \code{\link{withAll}}, \code{\link{withAny}}, etc.
 }
 \description{
-Function to enumerate a maximum count of occurrences
+Require at most N occurrences of a query within a window
+}
+\examples{
+t2dm <- cs(descendants(201826L), name = "T2DM")
+# At most 1 T2DM diagnosis before index
+atMost(1, conditionOccurrence(t2dm), duringInterval(eventStarts(-365, 0)))
+}
+\seealso{
+\code{\link{exactly}}, \code{\link{atLeast}}, \code{\link{duringInterval}}
 }

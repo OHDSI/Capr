@@ -8,14 +8,20 @@
 #' @slot type a character string determine the logic for counting occurrences. Can be
 #' all, any, exactly, atLeast, or atMost
 #' @slot count an integer specifying the number of occurrences for a criteria
+#' @slot isDistinct optional logical; if TRUE, count distinct (e.g. by CountColumn)
+#' @slot countColumn optional character; when counting, use this column for distinct (e.g. "DOMAIN_CONCEPT")
 setClass("Occurrence",
          slots = c(
            type = "character",
-           count = "integer"
+           count = "integer",
+           isDistinct = "logical",
+           countColumn = "character"
          ),
          prototype = list(
            type = NA_character_,
-           count = NA_integer_
+           count = NA_integer_,
+           isDistinct = as.logical(NA),
+           countColumn = NA_character_
          )
 )
 ## Criteria ----------------
@@ -71,24 +77,38 @@ is.Group <- function(x) {
 
 ## Criteria ----------------
 
-#' Function to enumerate an exact count of occurrences
-#' @param x the integer counting the number of occurrences
-#' @param query a query object that provides context to the clinical event of interest
-#' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
-#' relative to the index event
-#' @return A criteria that can be used in a cohort definition specifying satisfaction of exactly x instances of a query
+#' Require exactly N occurrences of a query within a window
+#'
+#' @param x Integer count of required occurrences.
+#' @param query A \code{Query} object (e.g. from \code{conditionOccurrence()}).
+#' @param aperture An \code{EventAperture} built with \code{\link{duringInterval}}. Defaults to all time.
+#' @param distinct If \code{TRUE}, count distinct values of \code{countColumn}.
+#' @param countColumn Column to use for distinct counting (e.g. \code{"DOMAIN_CONCEPT"}).
+#' @return A \code{Criteria} object for use in \code{\link{withAll}}, \code{\link{withAny}}, etc.
+#' @seealso \code{\link{atLeast}}, \code{\link{atMost}}, \code{\link{duringInterval}}
+#' @examples
+#' t2dm <- cs(descendants(201826L), name = "T2DM")
+#' # No prior T2DM diagnosis at any time before index
+#' exactly(0, conditionOccurrence(t2dm), duringInterval(eventStarts(-Inf, 0)))
 #' @export
 exactly <- function(x,
                     query,
-                    aperture = duringInterval(eventStarts(-Inf, Inf))) {
+                    aperture = duringInterval(eventStarts(-Inf, Inf)),
+                    distinct = NA,
+                    countColumn = NA_character_) {
 
   if (methods::is(aperture, "EventWindow")) {
-    aperture <- duringInterval(aperture)
+    cli::cli_abort(c(
+      "{.arg aperture} must be an {.cls EventAperture}.",
+      "i" = "Wrap your window with {.fn duringInterval}, e.g. {.code duringInterval(eventStarts(-365, 0))}."
+    ))
   }
 
   occurrence <- methods::new("Occurrence",
       type = "exactly",
-      count = as.integer(x))
+      count = as.integer(x),
+      isDistinct = as.logical(distinct)[1L],
+      countColumn = as.character(countColumn)[1L])
 
   res <- methods::new("Criteria",
       occurrence = occurrence,
@@ -97,25 +117,38 @@ exactly <- function(x,
   return(res)
 }
 
-#' Function to enumerate an minimal count of occurrences
+#' Require at least N occurrences of a query within a window
 #'
-#' @param x the integer counting the number of occurrences
-#' @param query a query object that provides context to the clinical event of interest
-#' @param aperture an eventAperture object that shows the temporal span where the event is to be observed
-#' relative to the index event
-#' @return A criteria that can be used in a cohort definition specifying satisfaction of at least x instances of a query
+#' @param x Minimum integer count of required occurrences.
+#' @param query A \code{Query} object (e.g. from \code{conditionOccurrence()}).
+#' @param aperture An \code{EventAperture} built with \code{\link{duringInterval}}. Defaults to all time.
+#' @param distinct If \code{TRUE}, count distinct values of \code{countColumn}.
+#' @param countColumn Column to use for distinct counting (e.g. \code{"DOMAIN_CONCEPT"}).
+#' @return A \code{Criteria} object for use in \code{\link{withAll}}, \code{\link{withAny}}, etc.
+#' @seealso \code{\link{exactly}}, \code{\link{atMost}}, \code{\link{duringInterval}}
+#' @examples
+#' metformin <- cs(descendants(1503297L), name = "Metformin")
+#' # At least 2 metformin fills in the 365 days before index
+#' atLeast(2, drugExposure(metformin), duringInterval(eventStarts(-365, 0)))
 #' @export
 atLeast <- function(x,
                     query,
-                    aperture = duringInterval(eventStarts(-Inf, Inf))) {
+                    aperture = duringInterval(eventStarts(-Inf, Inf)),
+                    distinct = NA,
+                    countColumn = NA_character_) {
 
   if (methods::is(aperture, "EventWindow")) {
-    aperture <- duringInterval(aperture)
+    cli::cli_abort(c(
+      "{.arg aperture} must be an {.cls EventAperture}.",
+      "i" = "Wrap your window with {.fn duringInterval}, e.g. {.code duringInterval(eventStarts(-365, 0))}."
+    ))
   }
 
   occurrence <- methods::new("Occurrence",
       type = "atLeast",
-      count = as.integer(x))
+      count = as.integer(x),
+      isDistinct = as.logical(distinct)[1L],
+      countColumn = as.character(countColumn)[1L])
 
   res <- methods::new("Criteria",
       occurrence = occurrence,
@@ -124,24 +157,38 @@ atLeast <- function(x,
   return(res)
 }
 
-#' Function to enumerate a maximum count of occurrences
-#' @param x the integer counting the number of occurrences
-#' @param query a query object that provides context to the clinical event of interest
-#' @param aperture an eventAperture object that shows the temporal span where the event
-#' is to be observed relative to the index event
-#' @return A criteria that can be used in a cohort definition specifying satisfaction of at most x instances of a query
+#' Require at most N occurrences of a query within a window
+#'
+#' @param x Maximum integer count of allowed occurrences.
+#' @param query A \code{Query} object (e.g. from \code{conditionOccurrence()}).
+#' @param aperture An \code{EventAperture} built with \code{\link{duringInterval}}. Defaults to all time.
+#' @param distinct If \code{TRUE}, count distinct values of \code{countColumn}.
+#' @param countColumn Column to use for distinct counting (e.g. \code{"DOMAIN_CONCEPT"}).
+#' @return A \code{Criteria} object for use in \code{\link{withAll}}, \code{\link{withAny}}, etc.
+#' @seealso \code{\link{exactly}}, \code{\link{atLeast}}, \code{\link{duringInterval}}
+#' @examples
+#' t2dm <- cs(descendants(201826L), name = "T2DM")
+#' # At most 1 T2DM diagnosis before index
+#' atMost(1, conditionOccurrence(t2dm), duringInterval(eventStarts(-365, 0)))
 #' @export
 atMost <- function(x,
                    query,
-                   aperture = duringInterval(eventStarts(-Inf, Inf))) {
+                   aperture = duringInterval(eventStarts(-Inf, Inf)),
+                   distinct = NA,
+                   countColumn = NA_character_) {
 
   if (methods::is(aperture, "EventWindow")) {
-    aperture <- duringInterval(aperture)
+    cli::cli_abort(c(
+      "{.arg aperture} must be an {.cls EventAperture}.",
+      "i" = "Wrap your window with {.fn duringInterval}, e.g. {.code duringInterval(eventStarts(-365, 0))}."
+    ))
   }
 
   occurrence <- methods::new("Occurrence",
       type = "atMost",
-      count = as.integer(x))
+      count = as.integer(x),
+      isDistinct = as.logical(distinct)[1L],
+      countColumn = as.character(countColumn)[1L])
 
   res <- methods::new("Criteria",
       occurrence = occurrence,
@@ -228,8 +275,13 @@ codeOccurrenceType <- function(x) {
 setMethod("as.list", "Occurrence", function(x) {
   ll <- list('Type' = codeOccurrenceType(x@type),
              'Count' = x@count)
+  if (!is.na(x@isDistinct) && isTRUE(x@isDistinct)) {
+    ll[["IsDistinct"]] <- TRUE
+  }
+  if (!is.na(x@countColumn) && nzchar(x@countColumn)) {
+    ll[["CountColumn"]] <- x@countColumn
+  }
   return(ll)
-
 })
 
 ## Coerce Criteria (Count) -----
@@ -247,8 +299,14 @@ setMethod("as.list", "Group", function(x) {
 
   criteriaList <- purrr::keep(x@criteria, is.Criteria) |>
     purrr::map(~as.list(.x))
-  demographicsList <- purrr::discard(x@criteria, is.Criteria) |>
-    purrr::map(~as.list(.x))
+  # Circe expects one demographic criterion per group when combining age + gender (single WHERE branch)
+  demoAttrs <- purrr::discard(x@criteria, is.Criteria)
+  demographicsList <- if (length(demoAttrs) == 0L) {
+    list()
+  } else {
+    merged <- purrr::map(demoAttrs, ~as.list(.x)) |> purrr::reduce(append)
+    list(merged)
+  }
 
   if (length(x@group) == 0) {
     groupsList <- list()
@@ -256,7 +314,10 @@ setMethod("as.list", "Group", function(x) {
     groupsList <- purrr::map(x@group, ~as.list(.x))
   }
 
-  ll <- list('Type' = toupper(x@occurrence@type),
+  typeStr <- switch(x@occurrence@type,
+    all = "ALL", any = "ANY", atLeast = "AT_LEAST", atMost = "AT_MOST",
+    toupper(x@occurrence@type))
+  ll <- list('Type' = typeStr,
              'Count' = x@occurrence@count,
              'CriteriaList' = criteriaList,
              'DemographicCriteriaList' = demographicsList,

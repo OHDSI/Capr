@@ -1,3 +1,70 @@
+﻿Capr 3.0.0
+==================
+
+This release focuses on making Capr easier to integrate into real cohort-development workflows.
+
+- **New: Atlas JSON to Capr code (`jsonToCapr`)**
+  Convert Atlas/Circe cohort JSON into executable Capr R code using `jsonToCapr()` and `jsonToCaprFile()`.
+  This makes it easier to move existing Atlas definitions into version-controlled Capr pipelines.
+
+- **Expanded attribute support and Circe alignment**
+  Added broader attribute coverage (including key-value and type-exclude style attributes), plus improved
+  serialization behavior to better match Circe expectations and support reliable round-trip workflows.
+
+- **Improved round-trip fidelity**
+  Added `includeConceptSets` support in `toCohortJson()` and multiple decompilation fixes to
+  better preserve concept set handling and generated JSON fidelity.
+
+- **Cleaner JSON serialization API**
+  Added `toCohortJson()` and `toConceptSetJson()` as the primary user-facing serialization
+  functions. `compile()` is soft-deprecated in favor of these explicit replacements.
+
+- **Human-readable console printing and summaries**
+  Added compact `show()` methods for every user-facing class and a new `summary()` S4 method
+  that expands the cohort structure, including nested correlated criteria.
+  `summary(x, listConceptSets = TRUE)` appends a concept-set section showing each set's id and
+  `descendants`/`excluded`/`mapped` logic, with concept names and domains once the cohort is
+  hydrated via `getConceptSetDetails()`.
+
+- **Robust concept-set collection in nested criteria**
+  Fixed `listConceptSets()` so multi-layer nested criteria where an outer nested group has a
+  single element no longer return an empty list (OHDSI/Capr#123). The recursion now follows a
+  flat-list invariant with unconditional flattening instead of shape-based guessing, and
+  regression tests guard the previously failing scenarios.
+
+- **Concept set identity is now always content-derived**
+  Removed the `id` parameter from `cs()`. Concept set IDs are always an md5 hash of the
+  concept set contents, decoupling them from any specific cohort definition or Atlas context.
+
+- **Phenotype archetype templates**
+  Added eight exported archetype functions that capture standard phenotype patterns —
+  prevalent chronic condition, first-ever diagnosis, short-duration acute event,
+  first-time drug exposure, any drug exposure, lab-value threshold, procedure, and
+  observation — so common cohort definitions can be built from a template (a thin wrapper
+  around an archetype) rather than written from scratch. Archetypes are the recommended
+  starting point for the LLM-assisted cohort workflow. 
+
+- **Vocabulary concept search functions**
+  Added `searchConcepts()`, `rankedSearchConcepts()`, `getConceptDescendants()`,
+  `mapSourceToStandard()`, and `getConceptInfo()` for interactive vocabulary exploration
+  from any OMOP CDM connection. `rankedSearchConcepts()` automatically uses dialect-specific
+  similarity ranking (pg_trgm on PostgreSQL, Jarowinkler on Snowflake, Levenshtein on Spark)
+  with a universal fallback. SQL lives in `inst/sql/sql_server/` following the HADES convention.
+
+- **Expanded Circe attribute coverage**
+  Added many previously missing attributes including `ageAtStart()`, `ageAtEnd()`, `visitLength()`,
+  `periodLength()`, `raceConcepts()`, `ethnicityConcepts()`, `quantityValue()`, `stopReason()`,
+  `uniqueDeviceId()`, `specimenSourceId()`, and the full set of `*TypeCS()` concept-set-selection
+  variants for every domain. Added `payerPlanPeriod()` query domain.
+
+- **LLM skills bundle included and improved**
+  Expanded the bundled LLM guidance under `inst/llm` to support validated local generation of Capr cohort
+  definitions, including workflow instructions, API reference content, and validation helpers.
+
+- **Quality and reliability improvements**
+  Added substantial test coverage for `jsonToCapr`, round-trip conversion, and edge cases to improve stability
+  of the new workflow features.
+
 Capr 2.1.1
 ==========
 - add functions to include source concepts as attributes to a query
