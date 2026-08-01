@@ -71,21 +71,7 @@ setValidity("Query", function(object) {
 
 #' @aliases show,Query-method
 setMethod("show", "Query", function(object) {
-  cat(glue::glue("<Capr {object@domain} Query> {object@conceptSet@Name}"), "\n")
-
-  # TODO make this a one line print method
-  # cli::console_width() can give the available space in the console
-
-  # cat("Attributes:", "\n")
-  # if (length(object@Attributes) > 0) {
-  #   for (i in seq_along(object@Attributes)) {
-  #     cat("\t",paste0(i, ") "))
-  #     show(object@Attributes[[i]])
-  #     cat("\n")
-  #   }
-  # } else {
-  #   cat("None", "\n")
-  # }
+  cat("<Capr Query> ", fmt_query(object), "\n", sep = "")
 })
 
 

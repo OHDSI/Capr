@@ -183,6 +183,36 @@ Capr uses S4 classes in order to define the underpinnings of the cohort definiti
 
 <!--Add more info on connection to circe--->
 
+### Inspecting a cohort definition
+
+Capr provides `show()` and `summary()` methods so a cohort can be inspected in
+the console without dumping the raw S4 slots. Typing an object (or calling
+`show()`) gives a compact, one-block overview; `summary()` expands the
+structure, including nested correlated criteria.
+
+```{r inspect, eval = FALSE}
+t2dm <- cs(descendants(201826L), name = "T2DM")
+hf   <- cs(descendants(316139L), name = "Heart failure")
+
+cd <- cohort(
+  entry = entry(
+    conditionOccurrence(t2dm, male()),
+    conditionOccurrence(hf, nestedWithAll(atLeast(1, conditionOccurrence(hf))))
+  ),
+  exit = exit(endStrategy = fixedExit(offsetDays = 30L))
+)
+
+cd                                    # compact overview (calls show())
+summary(cd)                           # fuller view, expands nested criteria
+summary(cd, listConceptSets = TRUE)   # also lists concept sets (id + logic)
+```
+
+Passing `listConceptSets = TRUE` appends a concept-set section to the bottom of
+the summary showing each set's id and per-concept `descendants`/`excluded`/
+`mapped` logic. If the cohort has been hydrated with `getConceptSetDetails()`
+(see the *Capr-conceptSets* vignette), that section also shows each concept's
+name and domain.
+
 # Appendix
 
 <!--Add Appendicies for classes, attributes, domains--->

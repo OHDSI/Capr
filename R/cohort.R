@@ -580,10 +580,8 @@ toConceptSetJson <- function(object, ...) {
 #' @return The json representation of Capr cohorts
 setMethod("compile", "ConceptSet", compile.ConceptSet)
 
-setMethod("show", "Cohort", function(object) {
-  # TODO make this pretty on the console
-  utils::str(object, max.level = 2)
-})
+# show("Cohort") is defined in R/print.R (compact cli-based summary).
+# Previously this was a raw utils::str(object, max.level = 2) dump.
 
 #' Write Cohort json file
 #'
@@ -614,6 +612,18 @@ writeCohort <- function(x, path) {
     )
   invisible(path)
 }
+
+#' @describeIn getConceptSetDetails Hydrate every concept set in a cohort
+setMethod("getConceptSetDetails", "Cohort", function(x, con, vocabularyDatabaseSchema = NULL) {
+  checkmate::assertClass(x, "Cohort")
+  checkmate::assertTRUE(DBI::dbIsValid(con))
+  checkmate::assertCharacter(vocabularyDatabaseSchema, len = 1, null.ok = TRUE)
+
+  hydrate_one <- function(cs) {
+    getConceptSetDetails(cs, con, vocabularyDatabaseSchema = vocabularyDatabaseSchema)
+  }
+  hydrate_concept_sets(x, hydrate_one)
+})
 
 # Templates ------------
 # Generate a Capr cohort using a template

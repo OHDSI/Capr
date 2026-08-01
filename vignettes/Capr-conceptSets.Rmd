@@ -73,3 +73,19 @@ diclofenac <- getConceptSetDetails(diclofenac, con, vocabularyDatabaseSchema = "
 cat(as.json(diclofenac))
 ```
 
+`getConceptSetDetails()` also accepts a whole `Cohort`. It walks the definition and
+fills in the details for *every* concept set in one call — entry events, attrition
+rules, censoring events, the drug-exit concept set, and concept-set attributes such
+as `conditionSourceConcept()`. Each unique concept set is queried from the
+vocabulary only once, even when the same set is reused across the cohort.
+
+```{r fillCohort, eval=FALSE}
+cd <- cohort(
+  entry(conditionOccurrence(diclofenac)),
+  exit = exit(endStrategy = drugExit(diclofenac))
+)
+cd <- getConceptSetDetails(cd, con, vocabularyDatabaseSchema = "main")
+writeCohort(cd, "diclofenac_cohort.json")
+```
+
+
