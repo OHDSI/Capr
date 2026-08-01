@@ -6,7 +6,9 @@ articles:
   capr_design: capr_design.html
   capr_objects: capr_objects.html
   capr_templates: capr_templates.html
+  conceptSearch: conceptSearch.html
   Examples: Examples.html
+  jsonToCapr: jsonToCapr.html
   Using-Capr: Using-Capr.html
-last_built: 2026-01-14T14:59Z
+last_built: 2026-08-01T14:02Z
 

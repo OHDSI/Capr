@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
       </span>
     </div>
 
@@ -69,7 +69,13 @@
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
+      <a href="../articles/conceptSearch.html">Searching the OMOP Vocabulary with Capr</a>
+    </li>
+    <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/jsonToCapr.html">Decompiling Atlas JSON with jsonToCapr</a>
     </li>
     <li>
       <a href="../articles/Using-Capr.html">Using Capr</a>
@@ -115,16 +121,7 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/Capr/" class="external-link">Capr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Function to test that cohort compiles</span></span>
-<span><span class="va">assertCohortCompiles</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">cohortDefinition</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CirceR/reference/cohortExpressionFromJson.html" class="external-link">cohortExpressionFromJson</a></span><span class="op">(</span><span class="fu"><a href="../reference/as.json.html">as.json</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CirceR/reference/buildCohortQuery.html" class="external-link">buildCohortQuery</a></span><span class="op">(</span><span class="va">sql</span>, options <span class="op">=</span> <span class="fu">CirceR</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CirceR/reference/createGenerateOptions.html" class="external-link">createGenerateOptions</a></span><span class="op">(</span>generateStats <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">sql</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/Capr/" class="external-link">Capr</a></span><span class="op">)</span></span></code></pre></div>
 <p>This vignette provides a number of example cohorts built with Capr
 from the OHDSI <em>Phenotype Phebruary</em> event.</p>
 <div class="section level2">
@@ -134,9 +131,7 @@ from the OHDSI <em>Phenotype Phebruary</em> event.</p>
 diagnosis</strong></p>
 <p><a href="https://atlas-phenotype.ohdsi.org/#/cohortdefinition/88/definition" class="external-link uri">https://atlas-phenotype.ohdsi.org/#/cohortdefinition/88/definition</a></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/Capr/" class="external-link">Capr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">cs0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">443238</span>, <span class="fl">201820</span>, <span class="fl">442793</span><span class="op">)</span>, </span>
+<code class="sourceCode R"><span><span class="va">cs0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">443238</span>, <span class="fl">201820</span>, <span class="fl">442793</span><span class="op">)</span>, </span>
 <span>          <span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">exclude</a></span><span class="op">(</span><span class="fl">195771</span>, <span class="fl">201254</span>, <span class="fl">435216</span>, <span class="fl">761051</span>, <span class="fl">4058243</span>, <span class="fl">40484648</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>          name <span class="op">=</span> <span class="st">"Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)"</span><span class="op">)</span></span>
 <span></span>
@@ -148,14 +143,14 @@ diagnosis</strong></p>
 <span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span></span>
 <span>    endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/observationExit.html">observationExit</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toCohortJson.html">toCohortJson</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Persons with new type 2 diabetes and no prior T1DM or
 secondary diabetes</strong></p>
 <p><a href="https://atlas-phenotype.ohdsi.org/#/cohortdefinition/89/export" class="external-link uri">https://atlas-phenotype.ohdsi.org/#/cohortdefinition/89/export</a></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/Capr/" class="external-link">Capr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">cs0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">443238</span>, <span class="fl">201820</span>, <span class="fl">442793</span><span class="op">)</span>, </span>
+<code class="sourceCode R"><span><span class="va">cs0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">443238</span>, <span class="fl">201820</span>, <span class="fl">442793</span><span class="op">)</span>, </span>
 <span>          <span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">exclude</a></span><span class="op">(</span><span class="fl">195771</span>, <span class="fl">201254</span>, <span class="fl">435216</span>, <span class="fl">761051</span>, <span class="fl">4058243</span>, <span class="fl">40484648</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>          name <span class="op">=</span> <span class="st">"Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)"</span><span class="op">)</span></span>
 <span></span>
@@ -181,14 +176,14 @@ secondary diabetes</strong></p>
 <span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span></span>
 <span>    endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/observationExit.html">observationExit</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toCohortJson.html">toCohortJson</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Persons with new type 2 diabetes mellitus at first dx rx or
 lab</strong></p>
 <p><a href="https://atlas-phenotype.ohdsi.org/#/cohortdefinition/90" class="external-link uri">https://atlas-phenotype.ohdsi.org/#/cohortdefinition/90</a></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/Capr/" class="external-link">Capr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">cs0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">443238</span>, <span class="fl">201820</span>, <span class="fl">442793</span><span class="op">)</span>, </span>
+<code class="sourceCode R"><span><span class="va">cs0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">443238</span>, <span class="fl">201820</span>, <span class="fl">442793</span><span class="op">)</span>, </span>
 <span>          <span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">exclude</a></span><span class="op">(</span><span class="fl">195771</span>, <span class="fl">201254</span>, <span class="fl">435216</span>, <span class="fl">761051</span>, <span class="fl">4058243</span>, <span class="fl">40484648</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>          name <span class="op">=</span> <span class="st">"Type 2 diabetes mellitus (diabetes mellitus excluding T1DM and secondary)"</span><span class="op">)</span></span>
 <span></span>
@@ -209,22 +204,24 @@ lab</strong></p>
 <span>  entry <span class="op">=</span> <span class="fu"><a href="../reference/entry.html">entry</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">cs0</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="../reference/drugExposure.html">drugExposure</a></span><span class="op">(</span><span class="va">cs4</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="../reference/measurement.html">measurement</a></span><span class="op">(</span><span class="va">cs3</span>, <span class="fu"><a href="../reference/valueAsNumber.html">valueAsNumber</a></span><span class="op">(</span><span class="fu"><a href="../reference/bt.html">bt</a></span><span class="op">(</span><span class="fl">6.5</span>, <span class="fl">30</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/measurementUnit.html">measurementUnit</a></span><span class="op">(</span><span class="st">"%"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="../reference/measurement.html">measurement</a></span><span class="op">(</span><span class="va">cs3</span>, <span class="fu"><a href="../reference/valueAsNumber.html">valueAsNumber</a></span><span class="op">(</span><span class="fu"><a href="../reference/bt.html">bt</a></span><span class="op">(</span><span class="fl">48</span>, <span class="fl">99</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/measurementUnit.html">measurementUnit</a></span><span class="op">(</span><span class="st">"mmol/mol"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/measurement.html">measurement</a></span><span class="op">(</span><span class="va">cs3</span>, <span class="fu"><a href="../reference/valueAsNumber.html">valueAsNumber</a></span><span class="op">(</span><span class="fu"><a href="../reference/bt.html">bt</a></span><span class="op">(</span><span class="fl">6.5</span>, <span class="fl">30</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/measurementUnit.html">measurementUnit</a></span><span class="op">(</span><span class="fl">8554L</span><span class="op">)</span><span class="op">)</span>,   <span class="co"># percent</span></span>
+<span>    <span class="fu"><a href="../reference/measurement.html">measurement</a></span><span class="op">(</span><span class="va">cs3</span>, <span class="fu"><a href="../reference/valueAsNumber.html">valueAsNumber</a></span><span class="op">(</span><span class="fu"><a href="../reference/bt.html">bt</a></span><span class="op">(</span><span class="fl">48</span>, <span class="fl">99</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/measurementUnit.html">measurementUnit</a></span><span class="op">(</span><span class="fl">9579L</span><span class="op">)</span><span class="op">)</span>,    <span class="co"># mmol/mol</span></span>
 <span>    observationWindow <span class="op">=</span> <span class="fu"><a href="../reference/continuousObservation.html">continuousObservation</a></span><span class="op">(</span>priorDays <span class="op">=</span> <span class="fl">365</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  attrition <span class="op">=</span> <span class="fu"><a href="../reference/attrition.html">attrition</a></span><span class="op">(</span></span>
 <span>    <span class="st">'no T1D'</span> <span class="op">=</span> <span class="fu"><a href="../reference/withAll.html">withAll</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">cs1</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="op">)</span>,</span>
-<span>    <span class="st">'no secondary diabettes'</span> <span class="op">=</span> <span class="fu"><a href="../reference/withAll.html">withAll</a></span><span class="op">(</span></span>
+<span>    <span class="st">'no secondary diabetes'</span> <span class="op">=</span> <span class="fu"><a href="../reference/withAll.html">withAll</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">cs2</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span></span>
 <span>    endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/observationExit.html">observationExit</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toCohortJson.html">toCohortJson</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="type-1-diabetes-mellitus">Type 1 diabetes mellitus<a class="anchor" aria-label="anchor" href="#type-1-diabetes-mellitus"></a>
@@ -240,13 +237,13 @@ lab</strong></p>
 <span>    <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">cs0</span><span class="op">)</span>,</span>
 <span>    observationWindow <span class="op">=</span> <span class="fu"><a href="../reference/continuousObservation.html">continuousObservation</a></span><span class="op">(</span>priorDays <span class="op">=</span> <span class="fl">365</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">assertCohortCompiles</span><span class="op">(</span><span class="va">ch</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toCohortJson.html">toCohortJson</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Persons with new type 1 diabetes and no prior T2DM or
 secondary diabetes</strong></p>
 <p><a href="https://atlas-phenotype.ohdsi.org/#/cohortdefinition/91" class="external-link uri">https://atlas-phenotype.ohdsi.org/#/cohortdefinition/91</a></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">cs0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">443238</span>, <span class="fl">201820</span>, <span class="fl">442793</span><span class="op">)</span>, </span>
 <span>          <span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">exclude</a></span><span class="op">(</span><span class="fl">195771</span>, <span class="fl">201254</span>, <span class="fl">435216</span>, <span class="fl">761051</span>, <span class="fl">4058243</span>, <span class="fl">40484648</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -267,7 +264,9 @@ secondary diabetes</strong></p>
 <span>    <span class="st">"no prior T2DM"</span> <span class="op">=</span> <span class="fu"><a href="../reference/withAll.html">withAll</a></span><span class="op">(</span><span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">cs0</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    <span class="st">"no prior secondary T1DM"</span> <span class="op">=</span> <span class="fu"><a href="../reference/withAll.html">withAll</a></span><span class="op">(</span><span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">cs2</span><span class="op">)</span>, <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toCohortJson.html">toCohortJson</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="atrial-fibrillation">Atrial Fibrillation<a class="anchor" aria-label="anchor" href="#atrial-fibrillation"></a>
@@ -275,16 +274,18 @@ secondary diabetes</strong></p>
 <p><strong>Persons with atrial fibrillation per Wharton et al
 2021</strong></p>
 <p><a href="https://atlas-phenotype.ohdsi.org/#/cohortdefinition/93" class="external-link uri">https://atlas-phenotype.ohdsi.org/#/cohortdefinition/93</a></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">cs0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">313217</span><span class="op">)</span>,</span>
 <span>          name <span class="op">=</span> <span class="st">"Atrial fibrillation"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span><span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">cs0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span><span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">cs0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toCohortJson.html">toCohortJson</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Persons with atrial fibrillation per Subramanya et al
 2021</strong></p>
 <p><a href="https://atlas-phenotype.ohdsi.org/#/cohortdefinition/94" class="external-link uri">https://atlas-phenotype.ohdsi.org/#/cohortdefinition/94</a></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">afib</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">313217</span><span class="op">)</span>,</span>
 <span>           name <span class="op">=</span> <span class="st">"Atrial fibrillation"</span><span class="op">)</span></span>
@@ -339,12 +340,14 @@ secondary diabetes</strong></p>
 <span>    <span class="op">)</span></span>
 <span>    </span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toCohortJson.html">toCohortJson</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="source-concept-example">Source Concept Example<a class="anchor" aria-label="anchor" href="#source-concept-example"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">lf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">4197819</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"lung fibrosis"</span><span class="op">)</span></span>
 <span><span class="va">lfSource</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span></span>
@@ -363,7 +366,102 @@ secondary diabetes</strong></p>
 <span>    observationWindow <span class="op">=</span> <span class="fu"><a href="../reference/continuousObservation.html">continuousObservation</a></span><span class="op">(</span><span class="fl">365L</span>, <span class="fl">0L</span><span class="op">)</span>,</span>
 <span>    primaryCriteriaLimit <span class="op">=</span> <span class="st">"First"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cdJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toCohortJson.html">toCohortJson</a></span><span class="op">(</span><span class="va">cd</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="primary-criteria-limit-first-vs-all">Primary Criteria Limit: First vs All<a class="anchor" aria-label="anchor" href="#primary-criteria-limit-first-vs-all"></a>
+</h2>
+<p>Regardless of entry criteria complexity:</p>
+<ul>
+<li>
+<strong>Era cohort</strong> -&gt;
+<code>primaryCriteriaLimit = "First"</code>,
+<code>expressionLimit = "First"</code>, no era collapse</li>
+<li>
+<strong>Occ cohort</strong> -&gt;
+<code>primaryCriteriaLimit = "All"</code>,
+<code>expressionLimit = "All"</code>,
+<code>era = era(eraDays = 99999L)</code>
+</li>
+</ul>
+<p>The two patterns below show different ways to get one row per
+person:</p>
+<ul>
+<li>
+<strong>Era version</strong>: take the first qualifying event and
+follow until end of continuous observation.</li>
+<li>
+<strong>Occ version</strong>: take all qualifying events and stitch
+them into one long era from first to last event.</li>
+</ul>
+<div class="section level3">
+<h3 id="example-1-nested-criteria-with-prior-diagnosis-requirement">Example 1: Nested criteria with prior diagnosis requirement<a class="anchor" aria-label="anchor" href="#example-1-nested-criteria-with-prior-diagnosis-requirement"></a>
+</h3>
+<div class="section level4">
+<h4 id="a--era-version">1a. Era version<a class="anchor" aria-label="anchor" href="#a--era-version"></a>
+</h4>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Placeholder concept IDs for disease of interest</span></span>
+<span><span class="va">disease_concept_set</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Index event: first diagnosis with a prior diagnosis at least 365 days earlier</span></span>
+<span><span class="va">diagnosisEraCohort</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span></span>
+<span>  entry <span class="op">=</span> <span class="fu"><a href="../reference/entry.html">entry</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span></span>
+<span>      conceptSet <span class="op">=</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="va">disease_concept_set</span>, name <span class="op">=</span> <span class="st">"Disease"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="../reference/nestedWithAll.html">nestedWithAll</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span></span>
+<span>          <span class="fl">1</span>,</span>
+<span>          <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span>conceptSet <span class="op">=</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="va">disease_concept_set</span>, name <span class="op">=</span> <span class="st">"Disease"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          aperture <span class="op">=</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="op">-</span><span class="fl">365</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    primaryCriteriaLimit <span class="op">=</span> <span class="st">"First"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  attrition <span class="op">=</span> <span class="fu"><a href="../reference/attrition.html">attrition</a></span><span class="op">(</span></span>
+<span>    expressionLimit <span class="op">=</span> <span class="st">"First"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span></span>
+<span>    endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/observationExit.html">observationExit</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">diagnosisEraJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toCohortJson.html">toCohortJson</a></span><span class="op">(</span><span class="va">diagnosisEraCohort</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="b--occ-version-same-cohort-logic-different-type">1b. Occ version (same cohort logic, different type)<a class="anchor" aria-label="anchor" href="#b--occ-version-same-cohort-logic-different-type"></a>
+</h4>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Entry at each diagnosis with a prior diagnosis at least 365 days earlier</span></span>
+<span><span class="va">diagnosisOccCohort</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span></span>
+<span>  entry <span class="op">=</span> <span class="fu"><a href="../reference/entry.html">entry</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span></span>
+<span>      conceptSet <span class="op">=</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="va">disease_concept_set</span>, name <span class="op">=</span> <span class="st">"Disease"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="../reference/nestedWithAll.html">nestedWithAll</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span></span>
+<span>          <span class="fl">1</span>,</span>
+<span>          <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span>conceptSet <span class="op">=</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="va">disease_concept_set</span>, name <span class="op">=</span> <span class="st">"Disease"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          aperture <span class="op">=</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="op">-</span><span class="fl">365</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    primaryCriteriaLimit <span class="op">=</span> <span class="st">"All"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  attrition <span class="op">=</span> <span class="fu"><a href="../reference/attrition.html">attrition</a></span><span class="op">(</span></span>
+<span>    expressionLimit <span class="op">=</span> <span class="st">"All"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span></span>
+<span>    endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/fixedExit.html">fixedExit</a></span><span class="op">(</span>offsetDays <span class="op">=</span> <span class="fl">0L</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  era <span class="op">=</span> <span class="fu"><a href="../reference/era.html">era</a></span><span class="op">(</span>eraDays <span class="op">=</span> <span class="fl">99999L</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">diagnosisOccJson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toCohortJson.html">toCohortJson</a></span><span class="op">(</span><span class="va">diagnosisOccCohort</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
 </div>
   </div>
 

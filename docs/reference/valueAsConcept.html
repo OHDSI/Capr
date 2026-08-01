@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
       </span>
     </div>
 
@@ -44,7 +44,13 @@
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
+      <a href="../articles/conceptSearch.html">Searching the OMOP Vocabulary with Capr</a>
+    </li>
+    <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/jsonToCapr.html">Decompiling Atlas JSON with jsonToCapr</a>
     </li>
     <li>
       <a href="../articles/Using-Capr.html">Using Capr</a>
@@ -81,21 +87,24 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">valueAsConcept</span><span class="op">(</span><span class="va">ids</span>, <span class="va">connection</span>, <span class="va">vocabularyDatabaseSchema</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">valueAsConcept</span><span class="op">(</span><span class="va">ids</span>, connection <span class="op">=</span> <span class="cn">NULL</span>, vocabularyDatabaseSchema <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>ids</dt>
-<dd><p>the concept ids for the attribute</p></dd>
+<dd><p>integer concept ids for the attribute</p></dd>
 
 
 <dt>connection</dt>
-<dd><p>a connection to an OMOP dbms to get vocab info about the concept</p></dd>
+<dd><p>an optional connection to an OMOP CDM database, used only to look up
+concept names for display (e.g. in Atlas). When NULL (default) the attribute is built
+from the ids alone, which produces identical SQL.</p></dd>
 
 
 <dt>vocabularyDatabaseSchema</dt>
-<dd><p>the database schema for the vocabularies</p></dd>
+<dd><p>the schema of the OMOP vocabulary tables; only used
+when `connection` is supplied</p></dd>
 
 </dl></div>
     <div id="value">

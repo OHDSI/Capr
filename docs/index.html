@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
       </span>
     </div>
 
@@ -69,7 +69,13 @@
       <a href="articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
+      <a href="articles/conceptSearch.html">Searching the OMOP Vocabulary with Capr</a>
+    </li>
+    <li>
       <a href="articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="articles/jsonToCapr.html">Decompiling Atlas JSON with jsonToCapr</a>
     </li>
     <li>
       <a href="articles/Using-Capr.html">Using Capr</a>
@@ -115,7 +121,7 @@
 <div class="section level1">
 <h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h1>
-<p>The goal of Capr, pronounced ‘kay-pr’ like the edible flower, is to provide a language for expressing OHDSI Cohort definitions in R code. OHDSI defines a cohort as “a set of persons who satisfy one or more inclusion criteria for a duration of time” and provides a standardized approach for defining them (Circe-be). Capr exposes the standardized approach to cohort building through a programmatic interface in R which is particularly helpful when creating a large number of similar cohorts. Capr version 2 introduces a new user interface designed for readability with the goal that Capr code being a human readable description of a cohort while also being executable on an OMOP Common Data Model.</p>
+<p>The goal of Capr, pronounced ‘kay-pr’ like the edible flower, is to provide a language for expressing OHDSI cohort definitions in R code. OHDSI defines a cohort as “a set of persons who satisfy one or more inclusion criteria for a duration of time” and provides a standardized approach for defining them (Circe). Capr exposes that standardized approach through a programmatic interface in R, making it easier to build, version, and reuse cohort definitions — particularly when creating a large number of similar cohorts. Capr code is designed to be human-readable while remaining directly executable against an OMOP Common Data Model.</p>
 <p>Learn more about the OHDSI approach to cohort building in the <a href="https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html" class="external-link">cohorts chapter of the Book of OHDSI.</a></p>
 </div>
 <div class="section level1">
@@ -130,21 +136,70 @@
 <h1 id="user-documentation">User Documentation<a class="anchor" aria-label="anchor" href="#user-documentation"></a>
 </h1>
 <p>Documentation can be found on the <a href="https://ohdsi.github.io/Capr/" class="external-link">package website</a>.</p>
-<p>PDF versions of the documentation are also available:</p>
+<p><strong>Start here</strong> based on your goal:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Goal</th>
+<th>Vignette</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Build your first cohort</td>
+<td><a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Using-Capr.pdf" class="external-link">Using Capr</a></td>
+</tr>
+<tr class="even">
+<td>Understand queries, criteria, and groups</td>
+<td><a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_objects.pdf" class="external-link">Capr components</a></td>
+</tr>
+<tr class="odd">
+<td>Work with concept sets</td>
+<td><a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Capr-conceptSets.pdf" class="external-link">Working with Concept Sets</a></td>
+</tr>
+<tr class="even">
+<td>Convert Atlas JSON to Capr code</td>
+<td><a href="https://ohdsi.github.io/Capr/articles/jsonToCapr.html" class="external-link">Decompiling Atlas JSON</a></td>
+</tr>
+<tr class="odd">
+<td>Build many cohorts from a template</td>
+<td><a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_templates.pdf" class="external-link">Capr for Templating</a></td>
+</tr>
+<tr class="even">
+<td>See clinical cohort examples</td>
+<td><a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Examples.pdf" class="external-link">Cohort Definition Examples</a></td>
+</tr>
+</tbody>
+</table>
+<p>PDF versions of the documentation are also available on the <a href="https://ohdsi.github.io/Capr/" class="external-link">package website</a>.</p>
+</div>
+<div class="section level1">
+<h1 id="using-capr-with-llm-coding-agents">Using Capr with LLM Coding Agents<a class="anchor" aria-label="anchor" href="#using-capr-with-llm-coding-agents"></a>
+</h1>
+<p>Capr ships with a self-contained skill bundle for LLM coding agents (Claude Code, GitHub Copilot, Cursor, etc.) that generates validated cohort definitions from natural-language descriptions — no MCP servers, no network infrastructure, no database connection. The bundle is installed with the package, so it always matches the Capr version you have installed:</p>
 <ul>
-<li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Using-Capr.pdf" class="external-link">Using Capr</a>
-</li>
-<li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Examples.pdf" class="external-link">Capr Examples</a>
-</li>
-<li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/Capr-conceptSets.pdf" class="external-link">Working with Concept Sets in Capr</a>
-</li>
-<li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_templates.pdf" class="external-link">Capr for Templating Cohort Definitions</a>
-</li>
-<li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_objects.pdf" class="external-link">Capr components</a>
-</li>
-<li><a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/pdf_vignette/capr_design.pdf" class="external-link">Design Document</a></li>
-<li><a href="https://raw.githubusercontent.com/OHDSI/Capr/main/extras/Capr.pdf" class="external-link">Package manual</a></li>
+<li>
+<code>SKILL.md</code> — the agent workflow: confirm the design questions, generate a cohort-template function, execute to validate, deliver.</li>
+<li>
+<code>CAPR_REFERENCE.md</code> — the compact API reference the skill depends on (signatures, valid values, worked examples).</li>
+<li>
+<code>validate.R</code> — standalone checker that executes a generated script and confirms CirceR can compile its JSON to SQL.</li>
+<li>
+<code>README.md</code> — per-agent setup instructions and design notes.</li>
 </ul>
+<p><strong>Requires a reasoning-capable, frontier-tier model.</strong> In tools with automatic model selection (e.g., GitHub Copilot’s “Auto”), explicitly pick a frontier model — Claude Sonnet/Opus-class, GPT-5-class, Gemini Pro-class or better — before invoking the skill. Lightweight “mini” / “flash” / non-reasoning tiers may produce cohort definitions that pass validation but are clinically wrong, and this is not fixable by refining the skill instructions.</p>
+<p>There are two ways to wire it up:</p>
+<p><strong>Copy the bundle into your project</strong> (recommended — works with every agent, including ones that can only read files inside the workspace):</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"llm"</span>, package <span class="op">=</span> <span class="st">"Capr"</span><span class="op">)</span>, <span class="st">"docs/"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Then follow the per-agent setup instructions in the copied <code>docs/llm/README.md</code>. Re-run the copy when you upgrade Capr — <code>CAPR_REFERENCE.md</code> states the Capr version it was verified against, so a stale copy is detectable.</p>
+<p><strong>Or point the agent at the installed copy</strong> (for agents that can run commands and read files outside the workspace) — add to your project’s agent instruction file (<code>CLAUDE.md</code>, <code>AGENTS.md</code>, or equivalent):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">## Capr cohort definitions</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>When asked to build an OHDSI cohort definition, follow the workflow in SKILL.md and use only</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>the API documented in CAPR_REFERENCE.md, both found under:</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="in">`Rscript -e 'cat(system.file("llm", package = "Capr"))'`</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="support">Support<a class="anchor" aria-label="anchor" href="#support"></a>
@@ -168,7 +223,7 @@
 <div class="section level1">
 <h1 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
 </h1>
-<p>Capr is being developed in R Studio.</p>
+<p>Capr is developed and maintained as part of the <a href="https://ohdsi.github.io/Hades/" class="external-link">HADES</a> ecosystem.</p>
 </div>
 <div class="section level1">
 <h1 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>

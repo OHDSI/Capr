@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
       </span>
     </div>
 
@@ -44,7 +44,13 @@
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
+      <a href="../articles/conceptSearch.html">Searching the OMOP Vocabulary with Capr</a>
+    </li>
+    <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/jsonToCapr.html">Decompiling Atlas JSON with jsonToCapr</a>
     </li>
     <li>
       <a href="../articles/Using-Capr.html">Using Capr</a>
@@ -75,6 +81,22 @@
       <small>Source: <a href="https://github.com/OHDSI/Capr/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="3.0.0" id="capr-300">Capr 3.0.0<a class="anchor" aria-label="anchor" href="#capr-300"></a></h2>
+<p>This release focuses on making Capr easier to integrate into real cohort-development workflows.</p>
+<ul><li><p><strong>New: Atlas JSON to Capr code (<code>jsonToCapr</code>)</strong> Convert Atlas/Circe cohort JSON into executable Capr R code using <code><a href="../reference/jsonToCapr.html">jsonToCapr()</a></code> and <code><a href="../reference/jsonToCaprFile.html">jsonToCaprFile()</a></code>. This makes it easier to move existing Atlas definitions into version-controlled Capr pipelines.</p></li>
+<li><p><strong>Expanded attribute support and Circe alignment</strong> Added broader attribute coverage (including key-value and type-exclude style attributes), plus improved serialization behavior to better match Circe expectations and support reliable round-trip workflows.</p></li>
+<li><p><strong>Improved round-trip fidelity</strong> Added <code>includeConceptSets</code> support in <code><a href="../reference/toCohortJson.html">toCohortJson()</a></code> and multiple decompilation fixes to better preserve concept set handling and generated JSON fidelity.</p></li>
+<li><p><strong>Cleaner JSON serialization API</strong> Added <code><a href="../reference/toCohortJson.html">toCohortJson()</a></code> and <code><a href="../reference/toConceptSetJson.html">toConceptSetJson()</a></code> as the primary user-facing serialization functions. <code><a href="../reference/compile.html">compile()</a></code> is soft-deprecated in favor of these explicit replacements.</p></li>
+<li><p><strong>Human-readable console printing and summaries</strong> Added compact <code>show()</code> methods for every user-facing class and a new <code><a href="../reference/summary.html">summary()</a></code> S4 method that expands the cohort structure, including nested correlated criteria. <code>summary(x, listConceptSets = TRUE)</code> appends a concept-set section showing each set’s id and <code>descendants</code>/<code>excluded</code>/<code>mapped</code> logic, with concept names and domains once the cohort is hydrated via <code><a href="../reference/getConceptSetDetails.html">getConceptSetDetails()</a></code>.</p></li>
+<li><p><strong>Robust concept-set collection in nested criteria</strong> Fixed <code>listConceptSets()</code> so multi-layer nested criteria where an outer nested group has a single element no longer return an empty list (OHDSI/Capr#123). The recursion now follows a flat-list invariant with unconditional flattening instead of shape-based guessing, and regression tests guard the previously failing scenarios.</p></li>
+<li><p><strong>Concept set identity is now always content-derived</strong> Removed the <code>id</code> parameter from <code><a href="../reference/cs.html">cs()</a></code>. Concept set IDs are always an md5 hash of the concept set contents, decoupling them from any specific cohort definition or Atlas context.</p></li>
+<li><p><strong>Phenotype archetype templates</strong> Added eight exported archetype functions that capture standard phenotype patterns — prevalent chronic condition, first-ever diagnosis, short-duration acute event, first-time drug exposure, any drug exposure, lab-value threshold, procedure, and observation — so common cohort definitions can be built from a template (a thin wrapper around an archetype) rather than written from scratch. Archetypes are the recommended starting point for the LLM-assisted cohort workflow.</p></li>
+<li><p><strong>Vocabulary concept search functions</strong> Added <code><a href="../reference/searchConcepts.html">searchConcepts()</a></code>, <code><a href="../reference/rankedSearchConcepts.html">rankedSearchConcepts()</a></code>, <code><a href="../reference/getConceptDescendants.html">getConceptDescendants()</a></code>, <code><a href="../reference/mapSourceToStandard.html">mapSourceToStandard()</a></code>, and <code><a href="../reference/getConceptInfo.html">getConceptInfo()</a></code> for interactive vocabulary exploration from any OMOP CDM connection. <code><a href="../reference/rankedSearchConcepts.html">rankedSearchConcepts()</a></code> automatically uses dialect-specific similarity ranking (pg_trgm on PostgreSQL, Jarowinkler on Snowflake, Levenshtein on Spark) with a universal fallback. SQL lives in <code>inst/sql/sql_server/</code> following the HADES convention.</p></li>
+<li><p><strong>Expanded Circe attribute coverage</strong> Added many previously missing attributes including <code><a href="../reference/ageAtStart.html">ageAtStart()</a></code>, <code><a href="../reference/ageAtEnd.html">ageAtEnd()</a></code>, <code><a href="../reference/visitLength.html">visitLength()</a></code>, <code><a href="../reference/periodLength.html">periodLength()</a></code>, <code><a href="../reference/attributes.html">raceConcepts()</a></code>, <code><a href="../reference/attributes.html">ethnicityConcepts()</a></code>, <code><a href="../reference/quantityValue.html">quantityValue()</a></code>, <code><a href="../reference/stopReason.html">stopReason()</a></code>, <code><a href="../reference/uniqueDeviceId.html">uniqueDeviceId()</a></code>, <code><a href="../reference/specimenSourceId.html">specimenSourceId()</a></code>, and the full set of <code>*TypeCS()</code> concept-set-selection variants for every domain. Added <code><a href="../reference/payerPlanPeriod.html">payerPlanPeriod()</a></code> query domain.</p></li>
+<li><p><strong>LLM skills bundle included and improved</strong> Expanded the bundled LLM guidance under <code>inst/llm</code> to support validated local generation of Capr cohort definitions, including workflow instructions, API reference content, and validation helpers.</p></li>
+<li><p><strong>Quality and reliability improvements</strong> Added substantial test coverage for <code>jsonToCapr</code>, round-trip conversion, and edge cases to improve stability of the new workflow features.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.1.1" id="capr-211">Capr 2.1.1<a class="anchor" aria-label="anchor" href="#capr-211"></a></h2>
 <ul><li>add functions to include source concepts as attributes to a query</li>
