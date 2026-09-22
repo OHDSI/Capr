@@ -389,7 +389,7 @@ observationPeriod <- function(...) {
   query(domain = "ObservationPeriod", conceptSet = NULL, ...)
 }
 
-#' Query the payer plan period domain (CDM ≥ 5.3)
+#' Query the payer plan period domain (CDM >= 5.3)
 #'
 #' @param ... optional attributes (e.g. \code{firstOccurrence()}, \code{startDate()},
 #'   \code{periodLength()}, \code{ageAtStart()}, \code{ageAtEnd()}, \code{genderCS()})

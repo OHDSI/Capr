@@ -751,7 +751,7 @@ require prior observation; `measurement()` with `valueAsNumber()` + `measurement
 
 ### 3. Entry + absence criteria (no prior related diagnosis)
 
-**Intent:** Persons with type 2 diabetes, entering at their first T2DM diagnosis, require ≥365 days of
+**Intent:** Persons with type 2 diabetes, entering at their first T2DM diagnosis, require >=365 days of
 prior observation, exclude anyone with a type 1 or secondary diabetes diagnosis at any time on or
 before index; exit at end of continuous observation.
 
@@ -786,7 +786,7 @@ ch <- cohort(
 
 ### 4. Demographic criteria (age, gender)
 
-**Intent:** Persons with type 2 diabetes, entering at their first T2DM diagnosis with ≥365 days
+**Intent:** Persons with type 2 diabetes, entering at their first T2DM diagnosis with >= 365 days
 of prior continuous observation, restricted to males aged 18 or older at index; exit at end of
 continuous observation.
 
@@ -978,7 +978,7 @@ wants concept names displayed in Atlas (see "Query Attributes — Type / Status"
 ### 10. Fixed-date yearly denominator cohort
 
 **Intent:** A denominator cohort where every person enters on January 1st of each calendar year
-(2017–2019) in which they have ≥365 days of prior continuous observation, and stays in the cohort
+(2017–2019) in which they have >= 365 days of prior continuous observation, and stays in the cohort
 for exactly one year — a person present across all three years gets three separate yearly
 episodes. (Translated from a real Atlas-exported rate-denominator definition.)
 

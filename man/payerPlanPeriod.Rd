@@ -2,7 +2,7 @@
 % Please edit documentation in R/query.R
 \name{payerPlanPeriod}
 \alias{payerPlanPeriod}
-\title{Query the payer plan period domain (CDM ≥ 5.3)}
+\title{Query the payer plan period domain (CDM >= 5.3)}
 \usage{
 payerPlanPeriod(...)
 }
@@ -14,5 +14,5 @@ payerPlanPeriod(...)
 A Capr Query of domain PayerPlanPeriod
 }
 \description{
-Query the payer plan period domain (CDM ≥ 5.3)
+Query the payer plan period domain (CDM >= 5.3)
 }
