@@ -68,8 +68,8 @@ Collate:
     'collectCodesetId.R'
     'conceptSearch.R'
     'jsonToCapr.R'
-    'phenotypeTemplates.R'
     'print.R'
 Remotes: 
     ohdsi/PhenotypeLibrary
 Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.2

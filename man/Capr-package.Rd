@@ -24,7 +24,6 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Martin Lavallee \email{martin.lavallee@boehringer-ingelheim.com}
   \item Adam Black \email{black@ohdsi.org}
 }
 

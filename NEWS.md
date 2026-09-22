@@ -36,14 +36,6 @@ This release focuses on making Capr easier to integrate into real cohort-develop
   Removed the `id` parameter from `cs()`. Concept set IDs are always an md5 hash of the
   concept set contents, decoupling them from any specific cohort definition or Atlas context.
 
-- **Phenotype archetype templates**
-  Added eight exported archetype functions that capture standard phenotype patterns —
-  prevalent chronic condition, first-ever diagnosis, short-duration acute event,
-  first-time drug exposure, any drug exposure, lab-value threshold, procedure, and
-  observation — so common cohort definitions can be built from a template (a thin wrapper
-  around an archetype) rather than written from scratch. Archetypes are the recommended
-  starting point for the LLM-assisted cohort workflow. 
-
 - **Vocabulary concept search functions**
   Added `searchConcepts()`, `rankedSearchConcepts()`, `getConceptDescendants()`,
   `mapSourceToStandard()`, and `getConceptInfo()` for interactive vocabulary exploration
