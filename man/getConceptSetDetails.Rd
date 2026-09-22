@@ -30,7 +30,7 @@ Concept sets created in R using the `cs` function do not contain details like
 these details can be filled in by the `getConceptSetDetails` function.
 }
 \details{
-Pass a \code{ConceptSet} to hydrate a single set, or a \code{\link{Cohort}} to
+Pass a \code{ConceptSet} class to hydrate a single set, or a \code{Cohort} class to
 hydrate every concept set in the cohort (entry events, attrition rules,
 censoring events, the drug-exit concept set, and concept-set attributes such
 as \code{conditionSourceConcept()}) in one call. Concept sets are hydrated

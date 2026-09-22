@@ -387,10 +387,12 @@ print_concept_sets <- function(cs_list) {
 #' @param object A Capr object (e.g. \code{Cohort}, \code{CohortEntry},
 #'   \code{Query}, \code{Criteria}, \code{Group}).
 #' @param ... Additional arguments (currently unused).
+#' @param listConceptSets Logical; whether to print the cohort's concept sets.
 #' @return The object, invisibly.
 #' @export
 setGeneric("summary")
 
+#' @rdname summary
 setMethod("summary", "Cohort", function(object, ..., listConceptSets = FALSE) {
   cli::cat_rule("<Capr Cohort>")
   cat("\n")
@@ -408,6 +410,7 @@ setMethod("summary", "Cohort", function(object, ..., listConceptSets = FALSE) {
   invisible(object)
 })
 
+#' @rdname summary
 setMethod("summary", "CohortEntry", function(object, ...) {
   cat("Entry: ", fmt_entry(object), "\n", sep = "")
   for (i in seq_along(object@entryEvents)) {
@@ -424,6 +427,7 @@ setMethod("summary", "CohortEntry", function(object, ...) {
   invisible(object)
 })
 
+#' @rdname summary
 setMethod("summary", "CohortAttrition", function(object, ...) {
   cat("Attrition: ", fmt_attrition(object), "\n", sep = "")
   nms <- names(object@rules)
@@ -438,6 +442,7 @@ setMethod("summary", "CohortAttrition", function(object, ...) {
   invisible(object)
 })
 
+#' @rdname summary
 setMethod("summary", "CohortExit", function(object, ...) {
   cat("Exit: ", fmt_exit(object), "\n", sep = "")
   cat("  endStrategy: ", fmt_endstrategy(object@endStrategy), "\n", sep = "")
@@ -450,11 +455,13 @@ setMethod("summary", "CohortExit", function(object, ...) {
   invisible(object)
 })
 
+#' @rdname summary
 setMethod("summary", "CohortEra", function(object, ...) {
   cat("Era: ", fmt_era(object), "\n", sep = "")
   invisible(object)
 })
 
+#' @rdname summary
 setMethod("summary", "Query", function(object, ...) {
   cat("Query: ", fmt_query(object), "\n", sep = "")
   if (length(object@attributes) > 0L) {
@@ -472,6 +479,7 @@ setMethod("summary", "Query", function(object, ...) {
   invisible(object)
 })
 
+#' @rdname summary
 setMethod("summary", "Criteria", function(object, ...) {
   cat("Criteria: ", fmt_criteria(object), "\n", sep = "")
   cat("  occurrence: ", fmt_occurrence(object@occurrence), "\n", sep = "")
@@ -481,18 +489,21 @@ setMethod("summary", "Criteria", function(object, ...) {
   invisible(object)
 })
 
+#' @rdname summary
 setMethod("summary", "Group", function(object, ...) {
   cat("Group: ", fmt_group(object), "\n", sep = "")
   print_group(object, indent = "  ")
   invisible(object)
 })
 
+#' @rdname summary
 setMethod("summary", "nestedAttribute", function(object, ...) {
   cat("nested (", object@name, "):\n", sep = "")
   print_group(object@group, indent = "  ")
   invisible(object)
 })
 
+#' @rdname summary
 setMethod("summary", "ConceptSet", function(object, ...) {
   cat("ConceptSet ", fmt_conceptset(object), "\n", sep = "")
   print(as.data.frame(object))

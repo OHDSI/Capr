@@ -18,10 +18,6 @@ A \code{Query} object.
 \description{
 Query the death domain
 }
-\examples{
-# Any death (no concept set)
-death(NULL)
-}
 \seealso{
 \code{\link{censoringEvents}}, \code{\link{exit}}
 }

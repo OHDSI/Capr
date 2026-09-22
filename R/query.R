@@ -308,9 +308,6 @@ visit <- function(conceptSet, ...) {
 #' @param ... Optional attributes: \code{startDate()}, \code{deathType()}, \code{age()}, etc.
 #' @return A \code{Query} object.
 #' @seealso \code{\link{censoringEvents}}, \code{\link{exit}}
-#' @examples
-#' # Any death (no concept set)
-#' death(NULL)
 #' @export
 death <- function(conceptSet = NULL, ...) {
 

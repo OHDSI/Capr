@@ -91,7 +91,37 @@ invisibly.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for Cohort</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span>, listConceptSets <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for CohortEntry</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for CohortAttrition</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for CohortExit</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for CohortEra</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for Query</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for Criteria</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for Group</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for nestedAttribute</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for ConceptSet</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -103,6 +133,10 @@ invisibly.</p>
 
 <dt>...</dt>
 <dd><p>Additional arguments (currently unused).</p></dd>
+
+
+<dt>listConceptSets</dt>
+<dd><p>Logical; whether to print the cohort's concept sets.</p></dd>
 
 </dl></div>
     <div id="value">

@@ -2,15 +2,47 @@
 % Please edit documentation in R/print.R
 \name{summary}
 \alias{summary}
+\alias{summary,Cohort-method}
+\alias{summary,CohortEntry-method}
+\alias{summary,CohortAttrition-method}
+\alias{summary,CohortExit-method}
+\alias{summary,CohortEra-method}
+\alias{summary,Query-method}
+\alias{summary,Criteria-method}
+\alias{summary,Group-method}
+\alias{summary,nestedAttribute-method}
+\alias{summary,ConceptSet-method}
 \title{Summarise a Capr object}
 \usage{
 summary(object, ...)
+
+\S4method{summary}{Cohort}(object, ..., listConceptSets = FALSE)
+
+\S4method{summary}{CohortEntry}(object, ...)
+
+\S4method{summary}{CohortAttrition}(object, ...)
+
+\S4method{summary}{CohortExit}(object, ...)
+
+\S4method{summary}{CohortEra}(object, ...)
+
+\S4method{summary}{Query}(object, ...)
+
+\S4method{summary}{Criteria}(object, ...)
+
+\S4method{summary}{Group}(object, ...)
+
+\S4method{summary}{nestedAttribute}(object, ...)
+
+\S4method{summary}{ConceptSet}(object, ...)
 }
 \arguments{
 \item{object}{A Capr object (e.g. \code{Cohort}, \code{CohortEntry},
 \code{Query}, \code{Criteria}, \code{Group}).}
 
 \item{...}{Additional arguments (currently unused).}
+
+\item{listConceptSets}{Logical; whether to print the cohort's concept sets.}
 }
 \value{
 The object, invisibly.
