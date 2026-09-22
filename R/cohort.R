@@ -593,7 +593,7 @@ setMethod("compile", "ConceptSet", compile.ConceptSet)
 #' \dontrun{
 #' cs1 <- cs(descendants(exclude(436665),440383,442306,4175329), name = "concepts")
 #' # optional step to fill in concept set details. Requires database connection.
-#' con <- {A CDM datbase connection}
+#' 
 #' cs1 <- getConceptSetDetails(cs1, con)
 #'
 #' x <- cohort(conditionOccurrence(cs1))

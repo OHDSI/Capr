@@ -59,7 +59,7 @@ setValidity("Query", function(object) {
   if ((object@domain %in% names(domainMap)) &&
       (length(domainsInConceptSet) > 0) &&
       !(domainMap[object@domain] %in% domainsInConceptSet)) {
-    rlang::warn(glue::glue("{object@domain} query does contain concepts in {domainMap[object@domain]} domain."))
+    rlang::warn(glue::glue("{object@domain} query does not contain concepts in {domainMap[object@domain]} domain."))
   }
 
   # TODO validation of attributes. Allowed attributes are query specific.
