@@ -16,16 +16,31 @@
     <loc>/articles/capr_templates.html</loc>
   </url>
   <url>
+    <loc>/articles/conceptSearch.html</loc>
+  </url>
+  <url>
     <loc>/articles/Examples.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
+    <loc>/articles/jsonToCapr.html</loc>
+  </url>
+  <url>
     <loc>/articles/Using-Capr.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
+  </url>
+  <url>
+    <loc>/CLAUDE.html</loc>
+  </url>
+  <url>
+    <loc>/CLAUDE_CODE_INSTRUCTIONS.html</loc>
+  </url>
+  <url>
+    <loc>/CLAUDE_PLAN.html</loc>
   </url>
   <url>
     <loc>/index.html</loc>
@@ -37,7 +52,19 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/acuteOutcomeCohort.html</loc>
+  </url>
+  <url>
     <loc>/reference/age.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ageAtEnd.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ageAtStart.html</loc>
+  </url>
+  <url>
+    <loc>/reference/allDrugCohort.html</loc>
   </url>
   <url>
     <loc>/reference/as.data.frame-ConceptSet-method.html</loc>
@@ -68,6 +95,9 @@
   </url>
   <url>
     <loc>/reference/censoringEvents.html</loc>
+  </url>
+  <url>
+    <loc>/reference/chronicOutcomeCohort.html</loc>
   </url>
   <url>
     <loc>/reference/cohort.html</loc>
@@ -106,7 +136,16 @@
     <loc>/reference/conditionStatus.html</loc>
   </url>
   <url>
+    <loc>/reference/conditionStatusCS.html</loc>
+  </url>
+  <url>
     <loc>/reference/conditionType.html</loc>
+  </url>
+  <url>
+    <loc>/reference/conditionTypeCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/conditionTypeExclude.html</loc>
   </url>
   <url>
     <loc>/reference/continuousObservation.html</loc>
@@ -130,7 +169,40 @@
     <loc>/reference/death.html</loc>
   </url>
   <url>
+    <loc>/reference/deathType.html</loc>
+  </url>
+  <url>
+    <loc>/reference/deathTypeCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/deathTypeExclude.html</loc>
+  </url>
+  <url>
+    <loc>/reference/detectUnsupportedKeys.html</loc>
+  </url>
+  <url>
     <loc>/reference/deviceExposure.html</loc>
+  </url>
+  <url>
+    <loc>/reference/deviceType.html</loc>
+  </url>
+  <url>
+    <loc>/reference/deviceTypeCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/deviceTypeExclude.html</loc>
+  </url>
+  <url>
+    <loc>/reference/doseEra.html</loc>
+  </url>
+  <url>
+    <loc>/reference/doseUnit.html</loc>
+  </url>
+  <url>
+    <loc>/reference/doseUnitCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/doseValue.html</loc>
   </url>
   <url>
     <loc>/reference/drugEra.html</loc>
@@ -157,6 +229,12 @@
     <loc>/reference/drugType.html</loc>
   </url>
   <url>
+    <loc>/reference/drugTypeCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/drugTypeExclude.html</loc>
+  </url>
+  <url>
     <loc>/reference/duringInterval.html</loc>
   </url>
   <url>
@@ -178,6 +256,12 @@
     <loc>/reference/era.html</loc>
   </url>
   <url>
+    <loc>/reference/eraLength.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ethnicityCS.html</loc>
+  </url>
+  <url>
     <loc>/reference/EventAperture-class.html</loc>
   </url>
   <url>
@@ -196,6 +280,9 @@
     <loc>/reference/exit.html</loc>
   </url>
   <url>
+    <loc>/reference/firstEverDiagnosisCohort.html</loc>
+  </url>
+  <url>
     <loc>/reference/firstOccurrence.html</loc>
   </url>
   <url>
@@ -205,7 +292,19 @@
     <loc>/reference/fixedExit.html</loc>
   </url>
   <url>
+    <loc>/reference/genderConcepts.html</loc>
+  </url>
+  <url>
+    <loc>/reference/genderCS.html</loc>
+  </url>
+  <url>
     <loc>/reference/generateCaprTemplate.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getConceptDescendants.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getConceptInfo.html</loc>
   </url>
   <url>
     <loc>/reference/getConceptSetCall.html</loc>
@@ -226,7 +325,22 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/insertCaprCode.html</loc>
+  </url>
+  <url>
+    <loc>/reference/jsonToCapr.html</loc>
+  </url>
+  <url>
+    <loc>/reference/jsonToCaprFile.html</loc>
+  </url>
+  <url>
+    <loc>/reference/keyValueAttribute-class.html</loc>
+  </url>
+  <url>
     <loc>/reference/logicAttribute-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lotNumber.html</loc>
   </url>
   <url>
     <loc>/reference/lt.html</loc>
@@ -238,10 +352,31 @@
     <loc>/reference/makeCohortSet.html</loc>
   </url>
   <url>
+    <loc>/reference/mapSourceToStandard.html</loc>
+  </url>
+  <url>
     <loc>/reference/measurement.html</loc>
   </url>
   <url>
+    <loc>/reference/measurementCohort.html</loc>
+  </url>
+  <url>
+    <loc>/reference/measurementOperator.html</loc>
+  </url>
+  <url>
+    <loc>/reference/measurementOperatorCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/measurementSourceConcept.html</loc>
+  </url>
+  <url>
     <loc>/reference/measurementType.html</loc>
+  </url>
+  <url>
+    <loc>/reference/measurementTypeCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/measurementTypeExclude.html</loc>
   </url>
   <url>
     <loc>/reference/measurementUnit.html</loc>
@@ -265,7 +400,13 @@
     <loc>/reference/nestedWithAtMost.html</loc>
   </url>
   <url>
+    <loc>/reference/newUserDrugCohort.html</loc>
+  </url>
+  <url>
     <loc>/reference/observation.html</loc>
+  </url>
+  <url>
+    <loc>/reference/observationCohort.html</loc>
   </url>
   <url>
     <loc>/reference/ObservationExit-class.html</loc>
@@ -280,16 +421,34 @@
     <loc>/reference/observationPeriodType.html</loc>
   </url>
   <url>
+    <loc>/reference/observationQualifier.html</loc>
+  </url>
+  <url>
+    <loc>/reference/observationQualifierCS.html</loc>
+  </url>
+  <url>
     <loc>/reference/observationSourceConcept.html</loc>
   </url>
   <url>
     <loc>/reference/observationType.html</loc>
   </url>
   <url>
+    <loc>/reference/observationTypeCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/observationTypeExclude.html</loc>
+  </url>
+  <url>
     <loc>/reference/ObservationWindow-class.html</loc>
   </url>
   <url>
     <loc>/reference/Occurrence-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/occurrenceCount.html</loc>
+  </url>
+  <url>
+    <loc>/reference/opAttributeCharacter-class.html</loc>
   </url>
   <url>
     <loc>/reference/opAttributeDate-class.html</loc>
@@ -304,10 +463,46 @@
     <loc>/reference/opAttributeSuper-class.html</loc>
   </url>
   <url>
+    <loc>/reference/payerConcept.html</loc>
+  </url>
+  <url>
+    <loc>/reference/payerPlanPeriod.html</loc>
+  </url>
+  <url>
+    <loc>/reference/payerSourceConcept.html</loc>
+  </url>
+  <url>
+    <loc>/reference/periodLength.html</loc>
+  </url>
+  <url>
+    <loc>/reference/periodTypeCS.html</loc>
+  </url>
+  <url>
     <loc>/reference/pipe.html</loc>
   </url>
   <url>
+    <loc>/reference/placeOfService.html</loc>
+  </url>
+  <url>
+    <loc>/reference/placeOfServiceCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/planConcept.html</loc>
+  </url>
+  <url>
+    <loc>/reference/planSourceConcept.html</loc>
+  </url>
+  <url>
     <loc>/reference/procedure.html</loc>
+  </url>
+  <url>
+    <loc>/reference/procedureCohort.html</loc>
+  </url>
+  <url>
+    <loc>/reference/procedureModifier.html</loc>
+  </url>
+  <url>
+    <loc>/reference/procedureModifierCS.html</loc>
   </url>
   <url>
     <loc>/reference/procedureSourceConcept.html</loc>
@@ -316,40 +511,175 @@
     <loc>/reference/procedureType.html</loc>
   </url>
   <url>
+    <loc>/reference/procedureTypeCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/procedureTypeExclude.html</loc>
+  </url>
+  <url>
+    <loc>/reference/providerSpecialtyConcepts.html</loc>
+  </url>
+  <url>
+    <loc>/reference/providerSpecialtyCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/quantityValue.html</loc>
+  </url>
+  <url>
     <loc>/reference/Query-class.html</loc>
+  </url>
+  <url>
+    <loc>/reference/raceCS.html</loc>
   </url>
   <url>
     <loc>/reference/rangeHigh.html</loc>
   </url>
   <url>
+    <loc>/reference/rangeHighRatio.html</loc>
+  </url>
+  <url>
     <loc>/reference/rangeLow.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rankedSearchConcepts.html</loc>
   </url>
   <url>
     <loc>/reference/readConceptSet.html</loc>
   </url>
   <url>
+    <loc>/reference/routeConcept.html</loc>
+  </url>
+  <url>
+    <loc>/reference/routeConceptCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/searchConcepts.html</loc>
+  </url>
+  <url>
+    <loc>/reference/specimen.html</loc>
+  </url>
+  <url>
+    <loc>/reference/specimenAnatomicSite.html</loc>
+  </url>
+  <url>
+    <loc>/reference/specimenAnatomicSiteCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/specimenDiseaseStatus.html</loc>
+  </url>
+  <url>
+    <loc>/reference/specimenDiseaseStatusCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/specimenSourceId.html</loc>
+  </url>
+  <url>
+    <loc>/reference/specimenType.html</loc>
+  </url>
+  <url>
+    <loc>/reference/specimenTypeCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/specimenTypeExclude.html</loc>
+  </url>
+  <url>
+    <loc>/reference/sponsorConcept.html</loc>
+  </url>
+  <url>
+    <loc>/reference/sponsorSourceConcept.html</loc>
+  </url>
+  <url>
     <loc>/reference/startDate.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stopReason.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stopReasonConcept.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stopReasonSourceConcept.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stringContains.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stringEndsWith.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stringNotContains.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stringNotEndsWith.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stringNotStartsWith.html</loc>
+  </url>
+  <url>
+    <loc>/reference/stringStartsWith.html</loc>
+  </url>
+  <url>
+    <loc>/reference/summary.html</loc>
   </url>
   <url>
     <loc>/reference/toCirce.html</loc>
   </url>
   <url>
+    <loc>/reference/toCohortJson.html</loc>
+  </url>
+  <url>
+    <loc>/reference/toConceptSetJson.html</loc>
+  </url>
+  <url>
+    <loc>/reference/uniqueDeviceId.html</loc>
+  </url>
+  <url>
     <loc>/reference/unit.html</loc>
+  </url>
+  <url>
+    <loc>/reference/unitCS.html</loc>
   </url>
   <url>
     <loc>/reference/valueAsConcept.html</loc>
   </url>
   <url>
+    <loc>/reference/valueAsConceptSet.html</loc>
+  </url>
+  <url>
     <loc>/reference/valueAsNumber.html</loc>
   </url>
   <url>
+    <loc>/reference/valueAsString.html</loc>
+  </url>
+  <url>
     <loc>/reference/visit.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visitDetail.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visitDetailSourceConcept.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visitDetailTypeCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visitLength.html</loc>
   </url>
   <url>
     <loc>/reference/visitSourceConcept.html</loc>
   </url>
   <url>
     <loc>/reference/visitType.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visitTypeCS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visitTypeExclude.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visitTypeSet.html</loc>
   </url>
   <url>
     <loc>/reference/withAll.html</loc>

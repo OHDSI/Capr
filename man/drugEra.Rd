@@ -7,13 +7,17 @@
 drugEra(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A drug ingredient concept set (optional)}
+\item{conceptSet}{A \code{ConceptSet} for the drug ingredient.}
 
-\item{...}{optional attributes}
+\item{...}{Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+\code{eraLength()}, \code{occurrenceCount()}, \code{ageAtStart()}, \code{ageAtEnd()}, etc.}
 }
 \value{
-A Capr Query
+A \code{Query} object.
 }
 \description{
 Query the drug era domain
+}
+\seealso{
+\code{\link{drugExposure}}, \code{\link{drugExit}}, \code{\link{entry}}
 }

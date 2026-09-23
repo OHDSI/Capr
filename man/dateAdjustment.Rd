@@ -2,7 +2,7 @@
 % Please edit documentation in R/attributes-dateAdjustment.R
 \name{dateAdjustment}
 \alias{dateAdjustment}
-\title{Function to create age attribute}
+\title{Shift the start and/or end date of a query event}
 \usage{
 dateAdjustment(
   startWith = "START_DATE",
@@ -12,17 +12,28 @@ dateAdjustment(
 )
 }
 \arguments{
-\item{startWith}{character string either START_DATE or END_DATE}
+\item{startWith}{character; anchor for the adjusted start date, either
+\code{"START_DATE"} (default) or \code{"END_DATE"}.}
 
-\item{startOffset}{an integer value, default 0}
+\item{startOffset}{integer offset in days added to the \code{startWith} anchor. Default 0.}
 
-\item{endWith}{character string either START_DATE or END_DATE}
+\item{endWith}{character; anchor for the adjusted end date, either
+\code{"END_DATE"} (default) or \code{"START_DATE"}.}
 
-\item{endOffset}{an integer value, default 0}
+\item{endOffset}{integer offset in days added to the \code{endWith} anchor. Default 0.}
 }
 \value{
-A dateAdjustment attribute class that can be used with a query
+A \code{dateAdjustmentAttribute} for use in any domain query constructor.
 }
 \description{
-Function to create age attribute
+Adds a \code{DateAdjustment} attribute to a domain query, shifting the event's effective
+start and/or end date relative to a reference anchor (\code{START_DATE} or \code{END_DATE})
+and an offset in days. Used in Circe wherever \code{DateAdjustment} is supported.
+}
+\details{
+For \code{observationPeriod()} and \code{payerPlanPeriod()}, \code{dateAdjustment()} also
+fulfils the role of Circe's \code{UserDefinedPeriod}: when a \code{dateAdjustmentAttribute}
+with \code{name = "DateAdjustment"} is present on an ObservationPeriod or PayerPlanPeriod
+query, Capr serializes it as \code{UserDefinedPeriod \{ StartDate, EndDate \}} in the
+Circe JSON, which constrains the period to a caller-specified date window.
 }

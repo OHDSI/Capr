@@ -7,13 +7,19 @@
 observation(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A condition concept set (optional)}
+\item{conceptSet}{A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any observation.}
 
-\item{...}{optional attributes}
+\item{...}{Optional attributes: \code{firstOccurrence()}, \code{startDate()},
+\code{valueAsNumber()}, \code{valueAsString()}, \code{valueAsConcept()},
+\code{observationType()}, \code{observationQualifier()}, \code{observationSourceConcept()},
+\code{age()}, etc.}
 }
 \value{
-A Capr Query
+A \code{Query} object.
 }
 \description{
 Query the observation domain
+}
+\seealso{
+\code{\link{entry}}, \code{\link{cs}}
 }

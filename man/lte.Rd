@@ -17,9 +17,20 @@ lte(x)
 \S4method{lte}{Date}(x)
 }
 \arguments{
-\item{x}{the value to used as a bound in the op logic. This can either be an integer, numeric, or
-Date data type. Different data types will return the appropriate opAttribute type}
+\item{x}{Comparison bound (integer, numeric, or Date).}
+}
+\value{
+An opAttribute for use inside attribute constructor functions.
 }
 \description{
-function that builds an opAttribute based on less than or equal to than logic
+Builds a comparison operator for use inside attribute functions such as \code{\link{age}},
+\code{\link{valueAsNumber}}, \code{\link{startDate}}, etc.
+Accepts integer, numeric, or Date inputs; returns the matching opAttribute type.
+}
+\examples{
+# Age 65 or younger
+conditionOccurrence(cs(1L, name = "test"), age(lte(65L)))
+}
+\seealso{
+\code{\link{lt}}, \code{\link{gt}}, \code{\link{gte}}, \code{\link{eq}}, \code{\link{bt}}
 }

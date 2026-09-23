@@ -17,12 +17,21 @@ nbt(x, y)
 \S4method{nbt}{Date}(x, y)
 }
 \arguments{
-\item{x}{the left side bound of the between logic This can either be an integer, numeric, or Date
-data type. Different data types will return the appropriate opAttribute type}
+\item{x}{Lower bound (integer, numeric, or Date).}
 
-\item{y}{the right side bound of the between logic. This can either be an integer, numeric, or
-Date data type. Different data types will return the appropriate opAttribute type}
+\item{y}{Upper bound; must match type of \code{x}.}
+}
+\value{
+An opAttribute for use inside attribute constructor functions.
 }
 \description{
-function that builds an opAttribute based on not between logic
+Builds an exclusion range comparison for use inside attribute functions.
+Accepts integer, numeric, or Date inputs.
+}
+\examples{
+# Age outside 18-65
+conditionOccurrence(cs(1L, name = "test"), age(nbt(18L, 65L)))
+}
+\seealso{
+\code{\link{bt}}, \code{\link{lt}}, \code{\link{gt}}
 }

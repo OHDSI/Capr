@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
       </span>
     </div>
 
@@ -69,7 +69,13 @@
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
+      <a href="../articles/conceptSearch.html">Searching the OMOP Vocabulary with Capr</a>
+    </li>
+    <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/jsonToCapr.html">Decompiling Atlas JSON with jsonToCapr</a>
     </li>
     <li>
       <a href="../articles/Using-Capr.html">Using Capr</a>
@@ -229,7 +235,7 @@ diagnosed with Type 1 Diabetes any time prior.</p>
 <span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span></span>
 <span>    endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/observationExit.html">observationExit</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    censor <span class="op">=</span> <span class="fu"><a href="../reference/censoringEvents.html">censoringEvents</a></span><span class="op">(</span></span>
-<span>      <span class="co">#exit based on observence of t1d condition</span></span>
+<span>      <span class="co"># exit based on occurrence of T1D condition</span></span>
 <span>      <span class="co"># query for t1d occurrence for censor</span></span>
 <span>      <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">t1dConceptSet</span><span class="op">)</span> </span>
 <span>    <span class="op">)</span></span>
@@ -285,7 +291,7 @@ point. The index point may be the entry event of the cohort definition.
 It could also be a prior event if we are building a nested query. The
 purpose of this object is to count whether a person has experienced
 certain events that would either include or exclude them from the
-cohort. Its easiest to show a <em>criteria</em> using a figure. Say
+cohort. It’s easiest to show a <em>criteria</em> using a figure. Say
 relative from index we want to see two exposures of a drug within 365
 days and 30 days before index. Those that fit that criteria remain in
 the cohort, those that do not are excluded from the cohort. See the
@@ -561,7 +567,7 @@ to build one complex expression.</p>
 there are a few important comments on how these objects are used within
 <code>circe-be</code>.</p>
 <p><strong>1) Criteria must be placed within a group</strong></p>
-<p>A <em>criteria</em> can not be used on its own, it must be wrapped in
+<p>A <em>criteria</em> cannot be used on its own; it must be wrapped in
 a <em>group</em>. Even if only one <em>criteria</em> is needed, still
 wrap it in a <em>group</em>. An example would be:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -669,10 +675,10 @@ definition.</p>
 <div class="section level2">
 <h2 id="concluding-remarks">Concluding Remarks<a class="anchor" aria-label="anchor" href="#concluding-remarks"></a>
 </h2>
-<p>For more information on sub-components of a cohort definition via
-<code>circe-be</code>, users should watch the <a href="https://www.youtube.com/@chrisknoll2007" class="external-link">videos</a> created by
-Chris Knoll outlining these ideas. while these videos utilize ATLAS,
-<code>Capr</code> follows the same principles.</p>
+<p>For more information on cohort definition sub-components, users can
+watch the <a href="https://www.youtube.com/@chrisknoll2007" class="external-link">videos</a>
+created by Chris Knoll. While those videos use Atlas, Capr follows the
+same underlying principles.</p>
 </div>
   </div>
 

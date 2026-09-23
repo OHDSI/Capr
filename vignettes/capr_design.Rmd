@@ -41,57 +41,6 @@ Capr is a programmatic interface to defining cohort definition for the OMOP CDM.
 
 A Capr user is someone who has knowledge of OHDSI and the OMOP CDM and is comfortable programming in R. Capr is intended to be used by data scientists to help create a scripted representation of a cohort definition that has been defined and reviewed by a clinical team. Defining cohorts is a team effort, however Capr gives programmatically inclined users a tool to produce cohort definitions for their clinical team.
 
-# Roadmap
-
-## Goals
-
-The goal of this software is to provide a programmatic alternative to ATLAS for defining cohort definitions. A programmatic interface provides many advantages to users trying to handle complex studies. Sub-goals are listed as follows:
-
--   **Templating**: Through a programmatic interface, users can create cohort templates. Templates are representations of the cohort logic where the input parameters are concept sets. Templates serve as a solution for minimizing clerical errors when users are trying to create several definitions for a study.
-
--   **Organization**: An issue when running OHDSI studies is organization. There are several components that need to be managed over the course of the study. This becomes even more complicated when using multiple platforms to achieve an analysis (i.e. ATLAS and R). A goal of Capr is provide a tool to allow OHDSI studies to be developed on a single interface.
-
-## Development Timelines
-
-### Anticipated release cycle
-
-Capr v2 will be gradually released in order to receive feedback from the OHDSI community and identify areas of improvement. The official v2 release on HADES is anticipated for early spring. Complementary to this release will be v2.1 which will contain additions that were not essential for the 2.0 release. This includes methods for the Capr objects including validity checks and print statements. We will also add functionality to import json into R as a Capr object.
-
-| Release  | Date         | Notes                                            |
-|----------|--------------|--------------------------------------------------|
-| v2 alpha | 01/19/23     | Proof of concept demo on HADES call              |
-| v2 beta  | 02/13/23     | Soft release to specific developers for feedback |
-| v2 HADES | 03/15/23     | HADES release of v2 on OHDSI github              |
-| v2 CRAN  | 03/17/23     | Submission of Capr to CRAN                       |
-| v2.0.x   | 04/23 - 7/23 | Period of observation, do patches and bug fixes  |
-| v2.1     | \~08/23      | Complimentary functions to v2 (show, import etc) |
-
-### Feature Proposals
-
-The following is a list of proposed future features for Capr that have been discussed during development. They are listed in order of priority.
-
-#### 1) Previewing the cohort definition
-
-There is a desire to preview a cohort definition both textually and pictographically to help the user understand the cohort definition in development. The cohort preview functions will yield: 1) a markdown text description of the cohort definition (similar to CirceR) and 2) a diagram of the definition as a png. The preview functions will be rendered using the proposed signatures: `jot` for the text preview and `draw` for the graphical preview. This feature is intended to be used for protocol and report development since clients desire both a text and graphical representation of a cohort definition. The text preview will use simple markdown and the graphical preview will use the grid package to build a diagram.
-
-#### 2) Cohort Algebra
-
-Often times, users want to add aspects of two cohort definitions together. A future feature would be to construct cohort algebra where the addition of a cohort (or a component) would add the detail into the cohort definition. For example, if we wanted to add another set of rules to a cohort this would be expressed as:
-
-```{r algebra}
-newCohort <- cohort + inclusionRule
-cohortAB <- cohortA + cohortB
-```
-
-Line 1 of code snippet 7 demonstrates how one would add the inclusion rule Capr object to the cohort definition. Line 2 of code snippet 7 demonstrates how a user would add the components of two cohorts together to build a new cohort. These functions would only impact the primary criteria, additional criteria and censoring criteria. The end strategy and cohort eras would be adopted from the left-hand side. The value add of this feature would be to simplify cohort modification during development. It has been a common suggested request from other users.
-
-#### 3) Enumeration of Sub-components
-
-When developing a cohort definition, we often need to know how much information is available in the database before adding it to our definition. A future feature for Capr would be a series of functions for each class that would run a query based on the specification on the class. This would be done through a CDMConnector connection. The proposed signature would be `inquire` which would retrieve the amount available from a component of the cohort definition. We could also use this as feasibility for building towards a ohdsiSql serialization directly from the Capr object. This would also provide feasibility in terms of building cohort attrition as a return of a Capr object. The value add of this feature would be to help users navigate the database during cohort construction.
-
-## Maintenance Plan
-
-Maintenance of Capr will be done by Martin Lavallee and Adam Black. We plan to respond to bug fixes and feature requests via github issues. Between v2.0.0 release and v2.1.0 release, Capr maintenance team will source feature requests but will delay production implementation until v2.1 release on the main branch. New features will be add to the develop branch, which will remain stable, as a experimental release.
 
 # Design
 
@@ -143,7 +92,7 @@ A query is constructed via the name of the domain table in the OMOP CDM. For exa
 
 ```{r query}
 visit(conceptSet, ...)
-condition(concept, ...)
+conditionOccurrence(conceptSet, ...)
 
 ```
 
@@ -161,9 +110,9 @@ An attribute has its own set of constructor functions that are variations on fou
 An example of using an attribute within a query is shown in code snippet 4:
 
 ```{r attr}
-condition(cs(descendants(201826L), name = "T2D"), male())
-condition(cs(descendants(201826L), name = "T2D"), age(gte(18)))
-condition(cs(descendants(201826L), name = "T2D"), first())
+conditionOccurrence(cs(descendants(201826L), name = "T2D"), male())
+conditionOccurrence(cs(descendants(201826L), name = "T2D"), age(gte(18)))
+conditionOccurrence(cs(descendants(201826L), name = "T2D"), firstOccurrence())
 
 ```
 
@@ -187,7 +136,7 @@ A criteria is constructed first on an operator that specifies the number of time
 
 ```{r criteria}
 exactly(0, 
-        query = condition(cs(descendants(201826L), name = "T2D")),
+  query = conditionOccurrence(cs(descendants(201826L), name = "T2D")),
         aperture = duringInterval(eventStarts(-Inf, -1))
         )
 ```
@@ -233,6 +182,36 @@ Once the object is coerced into an S3 list it can be converted into json using t
 Capr uses S4 classes in order to define the underpinnings of the cohort definition. These S4 classes are closely related to the circe-be java classes that specify the structure of the cohort definition. The Capr classes assume a few differences in order to allow for parameterization of the cohort definition via templating and provided suggested organizational improvements to the structure. The decision to use S4 classes was made because of the need to have a strict interface to adhere to the circe-be class. S4 classes are well suited for very complex codebases, according to Advanced R. Capr's relation to circe-be has the sort of complexity, particularly for the coercion aspect of Capr where the same method is applied slightly differently to each class. Classes are an important aspect of Capr and S4 provides a good balance between functional and object-oriented programming.
 
 <!--Add more info on connection to circe--->
+
+### Inspecting a cohort definition
+
+Capr provides `show()` and `summary()` methods so a cohort can be inspected in
+the console without dumping the raw S4 slots. Typing an object (or calling
+`show()`) gives a compact, one-block overview; `summary()` expands the
+structure, including nested correlated criteria.
+
+```{r inspect, eval = FALSE}
+t2dm <- cs(descendants(201826L), name = "T2DM")
+hf   <- cs(descendants(316139L), name = "Heart failure")
+
+cd <- cohort(
+  entry = entry(
+    conditionOccurrence(t2dm, male()),
+    conditionOccurrence(hf, nestedWithAll(atLeast(1, conditionOccurrence(hf))))
+  ),
+  exit = exit(endStrategy = fixedExit(offsetDays = 30L))
+)
+
+cd                                    # compact overview (calls show())
+summary(cd)                           # fuller view, expands nested criteria
+summary(cd, listConceptSets = TRUE)   # also lists concept sets (id + logic)
+```
+
+Passing `listConceptSets = TRUE` appends a concept-set section to the bottom of
+the summary showing each set's id and per-concept `descendants`/`excluded`/
+`mapped` logic. If the cohort has been hydrated with `getConceptSetDetails()`
+(see the *Capr-conceptSets* vignette), that section also shows each concept's
+name and domain.
 
 # Appendix
 

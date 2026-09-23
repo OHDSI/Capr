@@ -11,10 +11,10 @@ test_that("cohort entry works", {
   expect_s4_class(x, "Cohort")
   expect_type(as.list(x), "list") # TODO Do we keep as.list and as.json?
   expect_type(toCirce(x), "list")
-  expect_type(compile(x), "character")
+  expect_type(toCohortJson(x), "character")
 
 
-  sql <- CirceR::cohortExpressionFromJson(compile(x)) |>
+  sql <- CirceR::cohortExpressionFromJson(toCohortJson(x)) |>
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
   expect_type(sql, "character")
 
@@ -25,9 +25,9 @@ test_that("cohort entry works", {
   expect_s4_class(x, "Cohort")
   expect_type(as.list(x), "list")
   expect_type(toCirce(x), "list")
-  expect_type(compile(x), "character")
+  expect_type(toCohortJson(x), "character")
 
-  sql <- CirceR::cohortExpressionFromJson(compile(x)) |>
+  sql <- CirceR::cohortExpressionFromJson(toCohortJson(x)) |>
     CirceR::buildCohortQuery(options = CirceR::createGenerateOptions(generateStats = TRUE))
   expect_type(sql, "character")
 
@@ -47,6 +47,34 @@ test_that("cohort entry works", {
 #   DatabaseConnector::disconnect(con)
 # })
 
+
+test_that("misspelled or invalid dot arguments error instead of being silently swallowed", {
+  csX <- cs(descendants(201826L), name = "test")
+
+  # typo'd parameter name lands in `...` -> must error, not silently revert to default
+  expect_error(
+    entry(conditionOccurrence(csX), primaryCriterialimit = "All"),
+    "primaryCriterialimit"
+  )
+  # non-Query positional argument
+  expect_error(entry(csX), "Query")
+
+  # attrition rules must be Groups or Criteria, not e.g. a swallowed typo'd argument
+  expect_error(attrition(expresionLimit = "All"), "expresionLimit")
+  expect_s4_class(attrition("rule" = atLeast(1, conditionOccurrence(csX))), "CohortAttrition")
+
+  # censoring events must be Queries
+  expect_error(censoringEvents(csX), "Query")
+
+  # query attributes must be attribute objects; misspelled conceptSet is caught
+  expect_error(measurement(csX, "bogus"), "attribute")
+  expect_error(conditionOccurrence(coneptSet = csX), "conceptSet")
+
+  # valid calls still work
+  expect_s4_class(entry(conditionOccurrence(csX), primaryCriteriaLimit = "All"), "CohortEntry")
+  expect_s4_class(attrition("rule" = withAll(atLeast(1, conditionOccurrence(csX)))), "CohortAttrition")
+  expect_s4_class(censoringEvents(conditionOccurrence(csX)), "CensoringCriteria")
+})
 
 test_that("full cohort works", {
   skip_if_not_installed("CirceR")
@@ -252,13 +280,6 @@ test_that("full cohort works with domains without concepts", {
 #   expect_true(df$cohortEntries > 1)
 #
 # })
-
-test_that("compile generic works", {
-  ch <- cohort(conditionOccurrence(cs(1,2, name = "test")))
-  expect_gt(nchar(generics::compile(ch)), 10)
-})
-
-
 test_that("makeCohortSet works", {
   skip_if_not_installed("CirceR")
   #make concept set for celecoxib

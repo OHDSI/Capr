@@ -7,13 +7,23 @@
 measurement(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A measurement concept set (optional)}
+\item{conceptSet}{A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any measurement.}
 
-\item{...}{optional attributes}
+\item{...}{Optional attributes: \code{firstOccurrence()}, \code{startDate()},
+\code{valueAsNumber()}, \code{valueAsConcept()}, \code{measurementUnit()},
+\code{measurementType()}, \code{rangeLow()}, \code{rangeHigh()},
+\code{measurementSourceConcept()}, \code{age()}, etc.}
 }
 \value{
-A Capr Query
+A \code{Query} object.
 }
 \description{
 Query the measurement domain
+}
+\examples{
+hba1c <- cs(descendants(4184637L), name = "HbA1c")
+measurement(hba1c, valueAsNumber(gt(6.5)), measurementUnit(8554L))
+}
+\seealso{
+\code{\link{valueAsNumber}}, \code{\link{measurementUnit}}, \code{\link{entry}}
 }

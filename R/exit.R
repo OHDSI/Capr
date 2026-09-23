@@ -185,6 +185,7 @@ fixedExit <- function(index = c("startDate", "endDate"), offsetDays){
 #' @export
 censoringEvents <- function(...) {
   dots <- list(...)
+  checkCaprDots(dots, "Query", "censoringEvents", "Capr Query objects", character(0))
   ee <- methods::new("CensoringCriteria",
       criteria = dots)
   return(ee)

@@ -2,18 +2,22 @@
 % Please edit documentation in R/query.R
 \name{deviceExposure}
 \alias{deviceExposure}
-\title{Query the drug domain}
+\title{Query the device exposure domain}
 \usage{
 deviceExposure(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A drug concept set (optional)}
+\item{conceptSet}{A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any device.}
 
-\item{...}{optional attributes}
+\item{...}{Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+\code{age()}, \code{deviceType()}, \code{uniqueDeviceId()}, \code{quantityValue()}, etc.}
 }
 \value{
-A Capr Query
+A \code{Query} object.
 }
 \description{
-Query the drug domain
+Query the device exposure domain
+}
+\seealso{
+\code{\link{entry}}, \code{\link{cs}}
 }

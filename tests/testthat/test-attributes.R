@@ -251,32 +251,100 @@ test_that("concept attributes build", {
 
 
   #test units
-  tt <- measurementUnit(8713L) #gram per deciliter
+  tt <- measurementUnit(8713L)
   expect_s4_class(tt, "conceptAttribute")
   expect_equal(tt@name, "Unit")
   expect_equal(tt@conceptSet[[1]]@concept_id, 8713L)
 
-  tt <- measurementUnit("%") #gram per deciliter
+  tt <- measurementUnit(c(8554L, 8713L))
   expect_s4_class(tt, "conceptAttribute")
   expect_equal(tt@name, "Unit")
-  expect_equal(tt@conceptSet[[1]]@concept_id, 8554L)
-  expect_equal(tt@conceptSet[[1]]@concept_name, "%")
+  expect_equal(purrr::map_int(tt@conceptSet, ~.@concept_id), c(8554L, 8713L))
+
+  # Concept ids are the only supported input - everything else errors
+  expect_error(measurementUnit(cs(8554L, name = "%")), "concept ids")
+  expect_error(measurementUnit("%"))
+})
+
+test_that("type attributes build from ids without a connection", {
+
+  # attribute names must match the Circe JSON keys exactly (case-sensitive)
+  expected <- c(
+    conditionType = "ConditionType",
+    conditionStatus = "ConditionStatus",
+    drugType = "DrugType",
+    visitType = "VisitType",
+    measurementType = "MeasurementType",
+    observationType = "ObservationType",
+    procedureType = "ProcedureType",
+    deathType = "DeathType",
+    deviceType = "DeviceType",
+    specimenType = "SpecimenType",
+    observationPeriodType = "PeriodType",
+    valueAsConcept = "ValueAsConcept"
+  )
+
+  for (fn in names(expected)) {
+    tt <- do.call(fn, list(32817L))
+    expect_s4_class(tt, "conceptAttribute")
+    expect_equal(tt@name, expected[[fn]])
+    expect_equal(tt@conceptSet[[1]]@concept_id, 32817L)
+    expect_true(is.na(tt@conceptSet[[1]]@concept_name))
+  }
+
+  # multiple ids
+  tt <- conditionType(c(32817L, 32810L))
+  expect_equal(purrr::map_int(tt@conceptSet, ~.@concept_id), c(32817L, 32810L))
+
+  # serialization keys the attribute by its Circe name
+  jj <- as.list(measurementType(32817L))
+  expect_named(jj, "MeasurementType")
+  expect_equal(jj$MeasurementType[[1]]$CONCEPT_ID, 32817L)
+
+  # invalid inputs error
+  expect_error(conditionType(cs(32817L, name = "EHR")), "concept ids")
+  expect_error(drugType("EHR"))
+})
+
+test_that("type attributes survive Circe SQL generation", {
+  skip_if_not_installed("CirceR")
+
+  ch <- cohort(
+    entry = entry(
+      measurement(cs(3004410L, name = "hba1c"), measurementType(32817L), measurementUnit(8554L))
+    )
+  )
+  sql <- CirceR::cohortExpressionFromJson(as.json(ch)) |>
+    CirceR::buildCohortQuery(CirceR::createGenerateOptions(generateStats = FALSE))
+  expect_true(grepl("measurement_type_concept_id", sql))
+  expect_true(grepl("32817", sql))
+  expect_true(grepl("unit_concept_id", sql))
+  expect_true(grepl("8554", sql))
+
+  ch <- cohort(
+    entry = entry(
+      observationPeriod(observationPeriodType(32817L))
+    )
+  )
+  sql <- CirceR::cohortExpressionFromJson(as.json(ch)) |>
+    CirceR::buildCohortQuery(CirceR::createGenerateOptions(generateStats = FALSE))
+  expect_true(grepl("period_type_concept_id", sql))
+  expect_true(grepl("32817", sql))
 })
 
 test_that("conceptSetAttribute builds", {
-  # Test the new conceptSetAttribute class
-  test_cs <- cs(c(123, 456), name = "test source concepts", id = "test-id-123")
+  test_cs <- cs(c(123, 456), name = "test source concepts")
   attr <- conditionSourceConcept(test_cs)
-  
+
   expect_s4_class(attr, "conceptSetAttribute")
   expect_equal(attr@name, "ConditionSourceConcept")
   expect_s4_class(attr@conceptSet, "ConceptSet")
-  expect_equal(attr@conceptSet@id, "test-id-123")
-  
+  expect_equal(attr@conceptSet@id, test_cs@id)
+
   # Test as.list conversion
   as_list <- as.list(attr)
   expect_named(as_list, "ConditionSourceConcept")
-  expect_equal(as_list$ConditionSourceConcept, "test-id-123")
+  expect_equal(as_list$ConditionSourceConcept, test_cs@id)
 })
 
 test_that("logical attributes build", {
@@ -306,4 +374,199 @@ test_that("dateAdjustment attributes build", {
   t2 <- as.list(t1)
   expect_named(t2, "DateAdjustment")
   expect_equal(t2$DateAdjustment$StartOffset, 30L)
+})
+
+# --- New op integer attributes (era / period / visit) -------------------------
+
+test_that("ageAtStart, ageAtEnd, visitLength, periodLength build", {
+  tt <- ageAtStart(gte(18L))
+  expect_s4_class(tt, "opAttributeInteger")
+  expect_equal(tt@name, "AgeAtStart")
+  expect_equal(tt@op, "gte")
+  expect_equal(tt@value, 18L)
+
+  tt <- ageAtEnd(lte(65L))
+  expect_s4_class(tt, "opAttributeInteger")
+  expect_equal(tt@name, "AgeAtEnd")
+  expect_equal(tt@op, "lte")
+  expect_equal(tt@value, 65L)
+
+  tt <- visitLength(gt(1L))
+  expect_s4_class(tt, "opAttributeInteger")
+  expect_equal(tt@name, "VisitLength")
+  expect_equal(tt@op, "gt")
+  expect_equal(tt@value, 1L)
+
+  tt <- periodLength(bt(30L, 365L))
+  expect_s4_class(tt, "opAttributeInteger")
+  expect_equal(tt@name, "PeriodLength")
+  expect_equal(tt@op, "bt")
+  expect_equal(tt@value, 30L)
+  expect_equal(tt@extent, 365L)
+})
+
+# --- New op numeric attribute (quantityValue) ---------------------------------
+
+test_that("quantityValue builds as opAttributeNumeric", {
+  tt <- quantityValue(gt(0))
+  expect_s4_class(tt, "opAttributeNumeric")
+  expect_equal(tt@name, "Quantity")
+  expect_equal(tt@op, "gt")
+  expect_equal(tt@value, 0)
+
+  jj <- listOpAttribute(tt)
+  expect_named(jj, "Quantity")
+})
+
+# --- New text filter attributes (TextFilter / opAttributeCharacter) -----------
+
+test_that("stopReason, uniqueDeviceId, specimenSourceId build as opAttributeCharacter", {
+  tt <- stopReason(stringContains("adverse"))
+  expect_s4_class(tt, "opAttributeCharacter")
+  expect_equal(tt@name, "StopReason")
+  expect_equal(tt@op, "contains")
+  expect_equal(tt@value, "adverse")
+
+  tt <- uniqueDeviceId(stringStartsWith("DV"))
+  expect_s4_class(tt, "opAttributeCharacter")
+  expect_equal(tt@name, "UniqueDeviceId")
+  expect_equal(tt@op, "startsWith")
+
+  tt <- specimenSourceId(stringEndsWith("123"))
+  expect_s4_class(tt, "opAttributeCharacter")
+  expect_equal(tt@name, "SourceId")
+  expect_equal(tt@op, "endsWith")
+})
+
+# --- New demographic concept attributes (race, ethnicity) ---------------------
+
+test_that("raceConcepts and ethnicityConcepts build as conceptAttribute", {
+  tt <- raceConcepts(8527L)
+  expect_s4_class(tt, "conceptAttribute")
+  expect_equal(tt@name, "Race")
+  expect_equal(tt@conceptSet[[1]]@concept_id, 8527L)
+
+  tt <- raceConcepts(c(8527L, 8516L))
+  expect_equal(purrr::map_int(tt@conceptSet, ~.@concept_id), c(8527L, 8516L))
+
+  jj <- as.list(tt)
+  expect_named(jj, "Race")
+
+  tt <- ethnicityConcepts(38003563L)
+  expect_s4_class(tt, "conceptAttribute")
+  expect_equal(tt@name, "Ethnicity")
+  expect_equal(tt@conceptSet[[1]]@concept_id, 38003563L)
+
+  jj <- as.list(tt)
+  expect_named(jj, "Ethnicity")
+})
+
+# --- New concept array attributes (domain-specific) --------------------------
+
+test_that("new domain concept attributes build with correct Circe names", {
+  expected <- c(
+    routeConcept         = "RouteConcept",
+    doseUnit             = "DoseUnit",
+    measurementOperator  = "Operator",
+    observationQualifier = "Qualifier",
+    procedureModifier    = "Modifier",
+    placeOfService       = "PlaceOfService",
+    specimenAnatomicSite = "AnatomicSite",
+    specimenDiseaseStatus = "DiseaseStatus"
+  )
+  for (fn in names(expected)) {
+    tt <- do.call(fn, list(99999L))
+    expect_s4_class(tt, "conceptAttribute")
+    expect_equal(tt@name, expected[[fn]])
+    expect_equal(tt@conceptSet[[1]]@concept_id, 99999L)
+  }
+})
+
+# --- New TypeExclude boolean attributes ---------------------------------------
+
+test_that("TypeExclude keyValueAttributes build with correct names and values", {
+  expected <- c(
+    drugTypeExclude        = "DrugTypeExclude",
+    deviceTypeExclude      = "DeviceTypeExclude",
+    observationTypeExclude = "ObservationTypeExclude",
+    procedureTypeExclude   = "ProcedureTypeExclude",
+    visitTypeExclude       = "VisitTypeExclude"
+  )
+  for (fn in names(expected)) {
+    tt <- do.call(fn, list(FALSE))
+    expect_s4_class(tt, "keyValueAttribute")
+    expect_equal(tt@name, expected[[fn]])
+    expect_false(tt@value)
+
+    tt_true <- do.call(fn, list(TRUE))
+    expect_true(tt_true@value)
+
+    jj <- as.list(tt)
+    expect_named(jj, expected[[fn]])
+    expect_false(jj[[expected[[fn]]]])
+  }
+})
+
+# --- New conceptSetSelectionAttribute (TypeCS variants) -----------------------
+
+test_that("conditionTypeCS builds as conceptSetSelectionAttribute", {
+  cs1 <- cs(32817L, name = "EHR type")
+  tt <- conditionTypeCS(cs1)
+  expect_s4_class(tt, "conceptSetSelectionAttribute")
+  expect_equal(tt@name, "ConditionTypeCS")
+  expect_false(tt@isExclusion)
+
+  tt_excl <- conditionTypeCS(cs1, isExclusion = TRUE)
+  expect_true(tt_excl@isExclusion)
+
+  jj <- as.list(tt)
+  expect_named(jj, "ConditionTypeCS")
+  expect_false(jj$ConditionTypeCS$IsExclusion)
+  expect_equal(jj$ConditionTypeCS$CodesetId, cs1@id)
+})
+
+test_that("all TypeCS functions build with correct Circe names", {
+  cs1 <- cs(99999L, name = "test")
+  fns <- c("conditionTypeCS", "drugTypeCS", "measurementTypeCS",
+           "observationTypeCS", "procedureTypeCS", "deviceTypeCS",
+           "deathTypeCS", "specimenTypeCS", "visitTypeCS",
+           "periodTypeCS", "genderCS", "raceCS", "ethnicityCS",
+           "unitCS", "doseUnitCS", "routeConceptCS",
+           "measurementOperatorCS", "observationQualifierCS",
+           "procedureModifierCS", "placeOfServiceCS",
+           "providerSpecialtyCS", "conditionStatusCS",
+           "specimenAnatomicSiteCS", "specimenDiseaseStatusCS",
+           "visitDetailTypeCS")
+  for (fn in fns) {
+    tt <- do.call(fn, list(cs1))
+    # returns conceptSetSelectionAttribute
+    expect_s4_class(tt, "conceptSetSelectionAttribute")
+    jj <- as.list(tt)
+    # serializes codeset id
+    expect_true("CodesetId" %in% names(jj[[tt@name]]))
+    # serializes isExclusion
+    expect_true("IsExclusion" %in% names(jj[[tt@name]]))
+  }
+})
+
+# --- PayerPlanPeriod concept attributes (integer CodesetId references) --------
+
+test_that("payerPlanPeriod concept reference attributes build", {
+  cs1 <- cs(99999L, name = "payer")
+  expected <- c(
+    payerConcept           = "PayerConcept",
+    planConcept            = "PlanConcept",
+    sponsorConcept         = "SponsorConcept",
+    stopReasonConcept      = "StopReasonConcept",
+    payerSourceConcept     = "PayerSourceConcept",
+    planSourceConcept      = "PlanSourceConcept",
+    sponsorSourceConcept   = "SponsorSourceConcept",
+    stopReasonSourceConcept = "StopReasonSourceConcept"
+  )
+  for (fn in names(expected)) {
+    tt <- do.call(fn, list(cs1))
+    # returns conceptSetAttribute
+    expect_s4_class(tt, "conceptSetAttribute")
+    expect_equal(tt@name, expected[[fn]])
+  }
 })

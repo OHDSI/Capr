@@ -2,22 +2,29 @@
 % Please edit documentation in R/cohort.R
 \name{era}
 \alias{era}
-\title{Create a Cohort Era class object}
+\title{Define cohort era collapse settings}
 \usage{
 era(eraDays = 0L, studyStartDate = NULL, studyEndDate = NULL)
 }
 \arguments{
-\item{eraDays}{a numeric that specifies the number of days for the era padding}
+\item{eraDays}{Gap in days between consecutive episodes below which they are collapsed
+into a single era. Default \code{0L} (no collapse).}
 
-\item{studyStartDate}{a date string that specifies the starting date of registration}
+\item{studyStartDate}{Optional date to truncate cohort membership before this date.}
 
-\item{studyEndDate}{a date string that specifies the end date of registration}
+\item{studyEndDate}{Optional date to truncate cohort membership after this date.}
 }
 \value{
-a S4 CohortEra class object defining the eras of the cohort definition
+A \code{CohortEra} object.
 }
 \description{
-The Cohort Era depicts the time span of the cohort. The Censor Window includes
-the date window for which we register events. The Collapse Settings identify the era padding
-between events before exiting a cohort.
+Controls how adjacent cohort episodes are collapsed (merged) and optionally constrains
+the study window. Episodes separated by fewer than \code{eraDays} days are merged.
+}
+\examples{
+era(eraDays = 30L)
+era(eraDays = 99999L)  # Occ cohort: collapse all episodes into one long era
+}
+\seealso{
+\code{\link{cohort}}
 }

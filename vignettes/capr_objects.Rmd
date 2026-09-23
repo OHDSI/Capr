@@ -83,7 +83,7 @@ metforminCohort <- cohort(
   exit = exit(
     endStrategy = observationExit(),
     censor = censoringEvents(
-      #exit based on observence of t1d condition
+      # exit based on occurrence of T1D condition
       # query for t1d occurrence for censor
       conditionOccurrence(t1dConceptSet) 
     )
@@ -112,7 +112,7 @@ One special type of attribute is a nested query. This construct is more complex 
 
 ## Definition
 
-A *criteria* object is one that enumerates the presence or absence of an event within a window of observation relative to an index point. The index point may be the entry event of the cohort definition. It could also be a prior event if we are building a nested query. The purpose of this object is to count whether a person has experienced certain events that would either include or exclude them from the cohort. Its easiest to show a *criteria* using a figure. Say relative from index we want to see two exposures of a drug within 365 days and 30 days before index. Those that fit that criteria remain in the cohort, those that do not are excluded from the cohort. See the figure below as an example:
+A *criteria* object is one that enumerates the presence or absence of an event within a window of observation relative to an index point. The index point may be the entry event of the cohort definition. It could also be a prior event if we are building a nested query. The purpose of this object is to count whether a person has experienced certain events that would either include or exclude them from the cohort. It's easiest to show a *criteria* using a figure. Say relative from index we want to see two exposures of a drug within 365 days and 30 days before index. Those that fit that criteria remain in the cohort, those that do not are excluded from the cohort. See the figure below as an example:
 
 ![Example of Criteria](images/criteria_example.png)
 
@@ -338,7 +338,7 @@ Now that we have introduced the *criteria* and *group*, there are a few importan
 
 **1) Criteria must be placed within a group**   
 
-A *criteria* can not be used on its own, it must be wrapped in a *group*. Even if only one *criteria* is needed, still wrap it in a *group*. An example would be:
+A *criteria* cannot be used on its own; it must be wrapped in a *group*. Even if only one *criteria* is needed, still wrap it in a *group*. An example would be:
 
 ```{r criteriaInGroup, eval=FALSE}
 noT1d <- withAll(
@@ -437,4 +437,4 @@ query <- visit(
 
 # Concluding Remarks
 
-For more information on sub-components of a cohort definition via `circe-be`, users should watch the [videos](https://www.youtube.com/@chrisknoll2007) created by Chris Knoll outlining these ideas. while these videos utilize ATLAS, `Capr` follows the same principles. 
+For more information on cohort definition sub-components, users can watch the [videos](https://www.youtube.com/@chrisknoll2007) created by Chris Knoll. While those videos use Atlas, Capr follows the same underlying principles. 

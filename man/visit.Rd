@@ -7,13 +7,22 @@
 visit(conceptSet, ...)
 }
 \arguments{
-\item{conceptSet}{A condition concept set (optional)}
+\item{conceptSet}{A \code{ConceptSet} built with \code{\link{cs}()}, or \code{NULL} for any visit.}
 
-\item{...}{optional attributes}
+\item{...}{Optional attributes: \code{firstOccurrence()}, \code{startDate()}, \code{endDate()},
+\code{visitType()}, \code{visitLength()}, \code{visitSourceConcept()}, \code{placeOfService()},
+\code{age()}, \code{nestedWithAll()}, etc.}
 }
 \value{
-A Capr Query
+A \code{Query} object.
 }
 \description{
 Query the visit occurrence domain
+}
+\examples{
+ip <- cs(descendants(9201L, 262L), name = "Inpatient")
+visit(ip)
+}
+\seealso{
+\code{\link{entry}}, \code{\link{cs}}
 }

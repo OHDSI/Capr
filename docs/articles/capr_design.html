@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
       </span>
     </div>
 
@@ -69,7 +69,13 @@
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
+      <a href="../articles/conceptSearch.html">Searching the OMOP Vocabulary with Capr</a>
+    </li>
+    <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/jsonToCapr.html">Decompiling Atlas JSON with jsonToCapr</a>
     </li>
     <li>
       <a href="../articles/Using-Capr.html">Using Capr</a>
@@ -206,159 +212,6 @@ team.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>
-</h2>
-<div class="section level3">
-<h3 id="goals">Goals<a class="anchor" aria-label="anchor" href="#goals"></a>
-</h3>
-<p>The goal of this software is to provide a programmatic alternative to
-ATLAS for defining cohort definitions. A programmatic interface provides
-many advantages to users trying to handle complex studies. Sub-goals are
-listed as follows:</p>
-<ul>
-<li><p><strong>Templating</strong>: Through a programmatic interface,
-users can create cohort templates. Templates are representations of the
-cohort logic where the input parameters are concept sets. Templates
-serve as a solution for minimizing clerical errors when users are trying
-to create several definitions for a study.</p></li>
-<li><p><strong>Organization</strong>: An issue when running OHDSI
-studies is organization. There are several components that need to be
-managed over the course of the study. This becomes even more complicated
-when using multiple platforms to achieve an analysis (i.e. ATLAS and R).
-A goal of Capr is provide a tool to allow OHDSI studies to be developed
-on a single interface.</p></li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="development-timelines">Development Timelines<a class="anchor" aria-label="anchor" href="#development-timelines"></a>
-</h3>
-<div class="section level4">
-<h4 id="anticipated-release-cycle">Anticipated release cycle<a class="anchor" aria-label="anchor" href="#anticipated-release-cycle"></a>
-</h4>
-<p>Capr v2 will be gradually released in order to receive feedback from
-the OHDSI community and identify areas of improvement. The official v2
-release on HADES is anticipated for early spring. Complementary to this
-release will be v2.1 which will contain additions that were not
-essential for the 2.0 release. This includes methods for the Capr
-objects including validity checks and print statements. We will also add
-functionality to import json into R as a Capr object.</p>
-<table class="table">
-<colgroup>
-<col width="13%">
-<col width="18%">
-<col width="67%">
-</colgroup>
-<thead><tr class="header">
-<th>Release</th>
-<th>Date</th>
-<th>Notes</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>v2 alpha</td>
-<td>01/19/23</td>
-<td>Proof of concept demo on HADES call</td>
-</tr>
-<tr class="even">
-<td>v2 beta</td>
-<td>02/13/23</td>
-<td>Soft release to specific developers for feedback</td>
-</tr>
-<tr class="odd">
-<td>v2 HADES</td>
-<td>03/15/23</td>
-<td>HADES release of v2 on OHDSI github</td>
-</tr>
-<tr class="even">
-<td>v2 CRAN</td>
-<td>03/17/23</td>
-<td>Submission of Capr to CRAN</td>
-</tr>
-<tr class="odd">
-<td>v2.0.x</td>
-<td>04/23 - 7/23</td>
-<td>Period of observation, do patches and bug fixes</td>
-</tr>
-<tr class="even">
-<td>v2.1</td>
-<td>~08/23</td>
-<td>Complimentary functions to v2 (show, import etc)</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level4">
-<h4 id="feature-proposals">Feature Proposals<a class="anchor" aria-label="anchor" href="#feature-proposals"></a>
-</h4>
-<p>The following is a list of proposed future features for Capr that
-have been discussed during development. They are listed in order of
-priority.</p>
-<div class="section level5">
-<h5 id="previewing-the-cohort-definition">1) Previewing the cohort definition<a class="anchor" aria-label="anchor" href="#previewing-the-cohort-definition"></a>
-</h5>
-<p>There is a desire to preview a cohort definition both textually and
-pictographically to help the user understand the cohort definition in
-development. The cohort preview functions will yield: 1) a markdown text
-description of the cohort definition (similar to CirceR) and 2) a
-diagram of the definition as a png. The preview functions will be
-rendered using the proposed signatures: <code>jot</code> for the text
-preview and <code>draw</code> for the graphical preview. This feature is
-intended to be used for protocol and report development since clients
-desire both a text and graphical representation of a cohort definition.
-The text preview will use simple markdown and the graphical preview will
-use the grid package to build a diagram.</p>
-</div>
-<div class="section level5">
-<h5 id="cohort-algebra">2) Cohort Algebra<a class="anchor" aria-label="anchor" href="#cohort-algebra"></a>
-</h5>
-<p>Often times, users want to add aspects of two cohort definitions
-together. A future feature would be to construct cohort algebra where
-the addition of a cohort (or a component) would add the detail into the
-cohort definition. For example, if we wanted to add another set of rules
-to a cohort this would be expressed as:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">newCohort</span> <span class="op">&lt;-</span> <span class="va">cohort</span> <span class="op">+</span> <span class="va">inclusionRule</span></span>
-<span><span class="va">cohortAB</span> <span class="op">&lt;-</span> <span class="va">cohortA</span> <span class="op">+</span> <span class="va">cohortB</span></span></code></pre></div>
-<p>Line 1 of code snippet 7 demonstrates how one would add the inclusion
-rule Capr object to the cohort definition. Line 2 of code snippet 7
-demonstrates how a user would add the components of two cohorts together
-to build a new cohort. These functions would only impact the primary
-criteria, additional criteria and censoring criteria. The end strategy
-and cohort eras would be adopted from the left-hand side. The value add
-of this feature would be to simplify cohort modification during
-development. It has been a common suggested request from other
-users.</p>
-</div>
-<div class="section level5">
-<h5 id="enumeration-of-sub-components">3) Enumeration of Sub-components<a class="anchor" aria-label="anchor" href="#enumeration-of-sub-components"></a>
-</h5>
-<p>When developing a cohort definition, we often need to know how much
-information is available in the database before adding it to our
-definition. A future feature for Capr would be a series of functions for
-each class that would run a query based on the specification on the
-class. This would be done through a CDMConnector connection. The
-proposed signature would be <code>inquire</code> which would retrieve
-the amount available from a component of the cohort definition. We could
-also use this as feasibility for building towards a ohdsiSql
-serialization directly from the Capr object. This would also provide
-feasibility in terms of building cohort attrition as a return of a Capr
-object. The value add of this feature would be to help users navigate
-the database during cohort construction.</p>
-</div>
-</div>
-</div>
-<div class="section level3">
-<h3 id="maintenance-plan">Maintenance Plan<a class="anchor" aria-label="anchor" href="#maintenance-plan"></a>
-</h3>
-<p>Maintenance of Capr will be done by Martin Lavallee and Adam Black.
-We plan to respond to bug fixes and feature requests via github issues.
-Between v2.0.0 release and v2.1.0 release, Capr maintenance team will
-source feature requests but will delay production implementation until
-v2.1 release on the main branch. New features will be add to the develop
-branch, which will remain stable, as a experimental release.</p>
-</div>
-</div>
-<div class="section level2">
 <h2 id="design">Design<a class="anchor" aria-label="anchor" href="#design"></a>
 </h2>
 <div class="section level3">
@@ -407,7 +260,7 @@ released.</p>
 Capr provides functionality to build concept sets off standardized OMOP
 concept IDs. How the user finds these IDs is left to other tools. A
 concept set is built in Capr as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fl">201826L</span>, <span class="fl">201254L</span>, name <span class="op">=</span> <span class="st">"Diabetes"</span><span class="op">)</span></span></code></pre></div>
 <p>The first example in code snippet 1 provides the concept set and
@@ -436,7 +289,7 @@ therefore Capr provides functionality to define a cohort definition and
 sub-components of the cohort definition. Capr provides a constructor for
 each circe-be element (i.e. query, count, group, windows). A cohort is
 defined using the function:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span><span class="va">entry</span>, <span class="va">attrition</span>, <span class="va">exit</span>, <span class="va">era</span><span class="op">)</span></span></code></pre></div>
 <p>The inputs for the cohort function are the four components for
 defining a cohort: entry which accrues the initial set of patients,
@@ -465,9 +318,9 @@ sub-groups as a single expression.</li>
 </h5>
 <p>A query is constructed via the name of the domain table in the OMOP
 CDM. For example:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/visit.html">visit</a></span><span class="op">(</span><span class="va">conceptSet</span>, <span class="va">...</span><span class="op">)</span></span>
-<span><span class="fu">condition</span><span class="op">(</span><span class="va">concept</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">conceptSet</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <p>The conceptSet input takes on a a concept set built from the cs
 command. The dots argument is where the user can supply attributes that
 contextualize the query to a specific subpopulation.</p>
@@ -493,10 +346,10 @@ object</li>
 </ul>
 <p>An example of using an attribute within a query is shown in code
 snippet 4:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">condition</span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/attributes.html">male</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">condition</span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/age.html">age</a></span><span class="op">(</span><span class="fu"><a href="../reference/gte.html">gte</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">condition</span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu">first</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/attributes.html">male</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/age.html">age</a></span><span class="op">(</span><span class="fu"><a href="../reference/gte.html">gte</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span>, <span class="fu"><a href="../reference/firstOccurrence.html">firstOccurrence</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The first example in code snippet 4 utilizes a concept attribute. The
 <code><a href="../reference/attributes.html">male()</a></code> function automatically maps the concept to the male
 concept id. Other concept attribute functions will have mappers and
@@ -559,9 +412,9 @@ criteria is based on and finally an aperture (i.e. a time window)
 specifying the timing relative to the index event at which we are to
 observe the specified criteria. Code snippet 5 shows an example of a
 criteria call:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/exactly.html">exactly</a></span><span class="op">(</span><span class="fl">0</span>, </span>
-<span>        query <span class="op">=</span> <span class="fu">condition</span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  query <span class="op">=</span> <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2D"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        aperture <span class="op">=</span> <span class="fu"><a href="../reference/duringInterval.html">duringInterval</a></span><span class="op">(</span><span class="fu"><a href="../reference/eventStarts.html">eventStarts</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
 <p>A note for the criteria is that its meaning is tethered to an event
@@ -585,7 +438,7 @@ the candidate to enter the cohort they have to satisfy the
 specifications of the group, whether that is at least 1 criteria or all.
 In the example below we assume that the query and aperture have been
 specified elsewhere in a script.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/withAny.html">withAny</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span><span class="fl">1</span>, query <span class="op">=</span> <span class="va">abLabHb</span>, aperture <span class="op">=</span> <span class="va">ap1</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span><span class="fl">1</span>, query <span class="op">=</span> <span class="va">abLabRan</span>, aperture <span class="op">=</span> <span class="va">ap1</span><span class="op">)</span>,</span>
@@ -670,6 +523,36 @@ where the same method is applied slightly differently to each class.
 Classes are an important aspect of Capr and S4 provides a good balance
 between functional and object-oriented programming.</p>
 <!--Add more info on connection to circe--->
+<div class="section level4">
+<h4 id="inspecting-a-cohort-definition">Inspecting a cohort definition<a class="anchor" aria-label="anchor" href="#inspecting-a-cohort-definition"></a>
+</h4>
+<p>Capr provides <code>show()</code> and <code><a href="../reference/summary.html">summary()</a></code> methods
+so a cohort can be inspected in the console without dumping the raw S4
+slots. Typing an object (or calling <code>show()</code>) gives a
+compact, one-block overview; <code><a href="../reference/summary.html">summary()</a></code> expands the
+structure, including nested correlated criteria.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">t2dm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">201826L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"T2DM"</span><span class="op">)</span></span>
+<span><span class="va">hf</span>   <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cs.html">cs</a></span><span class="op">(</span><span class="fu"><a href="../reference/cs.html">descendants</a></span><span class="op">(</span><span class="fl">316139L</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"Heart failure"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cohort.html">cohort</a></span><span class="op">(</span></span>
+<span>  entry <span class="op">=</span> <span class="fu"><a href="../reference/entry.html">entry</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">t2dm</span>, <span class="fu"><a href="../reference/attributes.html">male</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">hf</span>, <span class="fu"><a href="../reference/nestedWithAll.html">nestedWithAll</a></span><span class="op">(</span><span class="fu"><a href="../reference/atLeast.html">atLeast</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="../reference/conditionOccurrence.html">conditionOccurrence</a></span><span class="op">(</span><span class="va">hf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  exit <span class="op">=</span> <span class="fu"><a href="../reference/exit.html">exit</a></span><span class="op">(</span>endStrategy <span class="op">=</span> <span class="fu"><a href="../reference/fixedExit.html">fixedExit</a></span><span class="op">(</span>offsetDays <span class="op">=</span> <span class="fl">30L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cd</span>                                    <span class="co"># compact overview (calls show())</span></span>
+<span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">cd</span><span class="op">)</span>                           <span class="co"># fuller view, expands nested criteria</span></span>
+<span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">cd</span>, listConceptSets <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>   <span class="co"># also lists concept sets (id + logic)</span></span></code></pre></div>
+<p>Passing <code>listConceptSets = TRUE</code> appends a concept-set
+section to the bottom of the summary showing each set’s id and
+per-concept <code>descendants</code>/<code>excluded</code>/
+<code>mapped</code> logic. If the cohort has been hydrated with
+<code><a href="../reference/getConceptSetDetails.html">getConceptSetDetails()</a></code> (see the <em>Capr-conceptSets</em>
+vignette), that section also shows each concept’s name and domain.</p>
+</div>
 </div>
 </div>
 <div class="section level2">

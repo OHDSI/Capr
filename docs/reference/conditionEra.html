@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Capr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
       </span>
     </div>
 
@@ -44,7 +44,13 @@
       <a href="../articles/capr_templates.html">Capr for Templating Cohort Definitions</a>
     </li>
     <li>
+      <a href="../articles/conceptSearch.html">Searching the OMOP Vocabulary with Capr</a>
+    </li>
+    <li>
       <a href="../articles/Examples.html">Cohort Definition Examples</a>
+    </li>
+    <li>
+      <a href="../articles/jsonToCapr.html">Decompiling Atlas JSON with jsonToCapr</a>
     </li>
     <li>
       <a href="../articles/Using-Capr.html">Using Capr</a>
@@ -87,18 +93,23 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>conceptSet</dt>
-<dd><p>A condition concept set (optional)</p></dd>
+<dd><p>A <code>ConceptSet</code> for the condition.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>optional attributes</p></dd>
+<dd><p>Optional attributes: <code><a href="firstOccurrence.html">firstOccurrence()</a></code>, <code><a href="startDate.html">startDate()</a></code>, <code><a href="endDate.html">endDate()</a></code>,
+<code><a href="eraLength.html">eraLength()</a></code>, <code><a href="occurrenceCount.html">occurrenceCount()</a></code>, <code><a href="ageAtStart.html">ageAtStart()</a></code>, <code><a href="ageAtEnd.html">ageAtEnd()</a></code>, etc.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>A Capr Query</p>
+<p>A <code>Query</code> object.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="conditionOccurrence.html">conditionOccurrence</a></code>, <code><a href="entry.html">entry</a></code></p></div>
     </div>
 
   </div>

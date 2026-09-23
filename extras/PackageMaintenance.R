@@ -79,6 +79,22 @@ rmarkdown::render("vignettes/capr_objects.Rmd",
   rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
 unlink("extras/pdf_vignette/capr_objects.tex")
 
+
+# capr concept search
+rmarkdown::render("vignettes/conceptSearch.Rmd",
+                  output_file = "../extras/pdf_vignette/conceptSearch.pdf",
+
+  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
+unlink("extras/pdf_vignette/conceptSearch.tex")
+
+
+# capr jsonToCapr
+rmarkdown::render("vignettes/jsonToCapr.Rmd",
+                  output_file = "../extras/pdf_vignette/jsonToCapr.pdf",
+
+  rmarkdown::pdf_document(latex_engine = "pdflatex", toc = TRUE, number_sections = TRUE))
+unlink("extras/pdf_vignette/jsonToCapr.tex")
+
 # build site
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()

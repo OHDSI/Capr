@@ -2,18 +2,33 @@
 % Please edit documentation in R/cohort.R
 \name{attrition}
 \alias{attrition}
-\title{Create a cohort attrition object}
+\title{Define cohort inclusion/exclusion rules (attrition)}
 \usage{
 attrition(..., expressionLimit = c("First", "All", "Last"))
 }
 \arguments{
-\item{...}{Capr groups}
+\item{...}{Named \code{Group} objects, each representing one inclusion or exclusion rule.}
 
-\item{expressionLimit}{how to limit initial events per person either First, All, or Last}
+\item{expressionLimit}{Which qualifying events per person survive attrition —
+\code{"First"} (default), \code{"All"}, or \code{"Last"}. Should align with
+\code{primaryCriteriaLimit} in \code{\link{entry}}.}
 }
 \value{
-A cohort attrition object that can be used in a cohort definition
+A \code{CohortAttrition} object.
 }
 \description{
-Create a cohort attrition object
+Each named argument is one attrition rule — a \code{Group} built with
+\code{\link{withAll}}, \code{\link{withAny}}, \code{\link{withAtLeast}}, or
+\code{\link{withAtMost}}. Rules are applied in order after the index event is selected.
+}
+\examples{
+t2dm <- cs(descendants(201826L), name = "T2DM")
+attrition(
+  noT2DM = withAll(exactly(0, conditionOccurrence(t2dm),
+                           duringInterval(eventStarts(-Inf, 0)))),
+  expressionLimit = "First"
+)
+}
+\seealso{
+\code{\link{cohort}}, \code{\link{entry}}, \code{\link{withAll}}, \code{\link{withAny}}
 }

@@ -8,3 +8,8 @@ work/*
 scratch/
 inst/doc
 hidden/
+.vscode/
+diff*
+sql_failures.rds
+.cursor/
+.positai
