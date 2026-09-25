@@ -501,6 +501,8 @@ serializeCohortToJson <- function(object, ..., includeConceptSets = NULL) {
     # Restore original concept set ids in cohort structure (replaceCodesetId had assigned 0,1,2,...; map back to original ids).
     circe <- remapCirceCodesetIdsToOriginal(circe, guidTable)
   }
+  # Named lists causes a de-serialization error in circe-be
+  names(circe$ConceptSets) <- NULL
   as.character(jsonlite::toJSON(circe, auto_unbox = TRUE, ...))
 }
 
