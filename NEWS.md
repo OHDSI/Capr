@@ -1,4 +1,11 @@
-﻿Capr 3.0.0
+﻿Capr 3.0.0.9000
+==================
+
+- Add `episode()` and Episode attributes (`episodeStartDate()`, `episodeEndDate()`, `episodeNumber()`, `episodeTypeCS()`, `episodeObjectConceptCS()`) for Circe's CDM 5.4 `episode` criteria.
+- Add `jsonToCapr()` support for Episode criteria.
+- Add `customEra()` and CustomEra attributes (`criteriaList()`, `customEraGapDays()`, `customEraStartDate()`, `customEraEndDate()`, `customEraDuration()`) for new Circe CustomEra criteria; add `jsonToCapr()` support.
+
+Capr 3.0.0
 ==================
 
 This release focuses on making Capr easier to integrate into real cohort-development workflows.

@@ -783,6 +783,19 @@ periodLength <- function(op) {
                value = as.integer(op@value), extent = as.integer(op@extent))
 }
 
+#' Episode number attribute for Episode
+#'
+#' Filter episode criteria by \code{episode_number}.
+#' @param op an opAttribute object (integer) defining the episode number comparison.
+#' @return An attribute for use in \code{\link{episode}()}.
+#' @export
+episodeNumber <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  methods::new("opAttributeInteger", name = "EpisodeNumber", op = op@op,
+               value = as.integer(op@value), extent = as.integer(op@extent))
+}
+
 #' Dose value attribute for DoseEra
 #'
 #' Filter dose era criteria by dose value (e.g. \code{gt(92)} for dose > 92).
@@ -941,6 +954,61 @@ endDate <- function(op, type = "occurrence") {
   }
   return(ed)
 
+}
+
+#' Episode start date attribute
+#' @param op an opAttribute date object defining the episode start date comparison.
+#' @return An attribute for use in \code{\link{episode}()}.
+#' @export
+episodeStartDate <- function(op) {
+  check <- all(grepl("opAttribute(Date|Super)", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeDate.")
+  methods::new("opAttributeDate", name = "EpisodeStartDate", op = op@op,
+               value = op@value, extent = op@extent)
+}
+
+#' Episode end date attribute
+#' @param op an opAttribute date object defining the episode end date comparison.
+#' @return An attribute for use in \code{\link{episode}()}.
+#' @export
+episodeEndDate <- function(op) {
+  check <- all(grepl("opAttribute(Date|Super)", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeDate.")
+  methods::new("opAttributeDate", name = "EpisodeEndDate", op = op@op,
+               value = op@value, extent = op@extent)
+}
+
+#' Custom era start date attribute
+#' @param op an opAttribute date object defining the custom era start date comparison.
+#' @return An attribute for use in \code{\link{customEra}()}.
+#' @export
+customEraStartDate <- function(op) {
+  check <- all(grepl("opAttribute(Date|Super)", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeDate.")
+  methods::new("opAttributeDate", name = "StartDate", op = op@op,
+               value = op@value, extent = op@extent)
+}
+
+#' Custom era end date attribute
+#' @param op an opAttribute date object defining the custom era end date comparison.
+#' @return An attribute for use in \code{\link{customEra}()}.
+#' @export
+customEraEndDate <- function(op) {
+  check <- all(grepl("opAttribute(Date|Super)", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeDate.")
+  methods::new("opAttributeDate", name = "EndDate", op = op@op,
+               value = op@value, extent = op@extent)
+}
+
+#' Custom era duration attribute
+#' @param op an opAttribute object (integer) defining the era duration comparison.
+#' @return An attribute for use in \code{\link{customEra}()}.
+#' @export
+customEraDuration <- function(op) {
+  check <- all(grepl("opAttribute", methods::is(op)))
+  if (!check) stop("Input must be an opAttributeNumeric or opAttributeInteger.")
+  methods::new("opAttributeInteger", name = "Duration", op = op@op,
+               value = as.integer(op@value), extent = as.integer(op@extent))
 }
 
 # Coercion ------------

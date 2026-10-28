@@ -54,6 +54,14 @@ setMethod("collectGuid", "valueAsStringAttribute", function(x) {
 #   collectGuid(x@group)
 # })
 
+setMethod("collectGuid", "criteriaListAttribute", function(x) {
+  purrr::map_dfr(x@criteria, ~collectGuid(.x))
+})
+
+setMethod("collectGuid", "gapDaysAttribute", function(x) {
+  return(NULL)
+})
+
 #' @include query.R
 setMethod("collectGuid", "Query", function(x) {
   ids <- getGuid(x)
@@ -74,7 +82,14 @@ setMethod("collectGuid", "Query", function(x) {
     conceptSetIds <- purrr::map_dfr(conceptSetAttrs, ~collectGuid(.x))
     ids <- dplyr::bind_rows(ids, conceptSetIds)
   }
-  
+
+  # collect guids from custom-era criteria lists
+  criteriaListAttrs <- purrr::keep(x@attributes, ~methods::is(.x, "criteriaListAttribute"))
+  if (length(criteriaListAttrs) > 0) {
+    nestedIds <- purrr::map_dfr(criteriaListAttrs, ~collectGuid(.x))
+    ids <- dplyr::bind_rows(ids, nestedIds)
+  }
+
   return(ids)
 
 })
@@ -161,6 +176,15 @@ setMethod("replaceCodesetId", "opAttributeSuper", function(x, guidTable) {
 })
 
 
+setMethod("replaceCodesetId", "criteriaListAttribute", function(x, guidTable) {
+  x@criteria <- purrr::map(x@criteria, ~replaceCodesetId(.x, guidTable))
+  return(x)
+})
+
+setMethod("replaceCodesetId", "gapDaysAttribute", function(x, guidTable) {
+  return(x)
+})
+
 setMethod("replaceCodesetId", "Query", function(x, guidTable) {
 
   if (nrow(getGuid(x)) > 0) {
@@ -188,6 +212,14 @@ setMethod("replaceCodesetId", "Query", function(x, guidTable) {
   conceptSetAttrIndices <- which(purrr::map_lgl(x@attributes, ~methods::is(.x, "conceptSetAttribute")))
   if (length(conceptSetAttrIndices) > 0) {
     for (i in conceptSetAttrIndices) {
+      x@attributes[[i]] <- replaceCodesetId(x@attributes[[i]], guidTable)
+    }
+  }
+
+  # replace codeset ids from custom-era criteria lists
+  criteriaListIndices <- which(purrr::map_lgl(x@attributes, ~methods::is(.x, "criteriaListAttribute")))
+  if (length(criteriaListIndices) > 0) {
+    for (i in criteriaListIndices) {
       x@attributes[[i]] <- replaceCodesetId(x@attributes[[i]], guidTable)
     }
   }
@@ -278,6 +310,10 @@ setMethod("replaceCodesetId", "Cohort", function(x, guidTable = guidTable) {
 # guard for issue #123, where a single-element outer nest returned an empty list).
 setGeneric("listConceptSets", function(x) standardGeneric("listConceptSets"))
 
+setMethod("listConceptSets", "criteriaListAttribute", function(x) {
+  purrr::list_flatten(purrr::map(x@criteria, ~listConceptSets(.x)))
+})
+
 setMethod("listConceptSets", "conceptSetAttribute", function(x) {
   list(as.list(x@conceptSet))
 })
@@ -314,6 +350,15 @@ setMethod("listConceptSets", "Query", function(x) {
       purrr::map(conceptSetAttrs, ~listConceptSets(.x))
     )
     out <- c(out, conceptSetsFromAttrs)
+  }
+
+  # handle listing concept sets from custom-era criteria lists
+  criteriaListAttrs <- purrr::keep(x@attributes, ~methods::is(.x, "criteriaListAttribute"))
+  if (length(criteriaListAttrs) > 0) {
+    nestedSets <- purrr::list_flatten(
+      purrr::map(criteriaListAttrs, ~listConceptSets(.x))
+    )
+    out <- c(out, nestedSets)
   }
 
   return(out)
@@ -417,6 +462,11 @@ setMethod("listConceptSets", "Cohort", function(x) {
 # Used to exclude ValueAsConcept-only concept sets from ConceptSets when we inline them.
 setGeneric("collectConceptSetAttributeUsage", function(x) standardGeneric("collectConceptSetAttributeUsage"))
 
+setMethod("collectConceptSetAttributeUsage", "criteriaListAttribute", function(x) {
+  purrr::list_flatten(purrr::map(x@criteria, collectConceptSetAttributeUsage))
+})
+setMethod("collectConceptSetAttributeUsage", "gapDaysAttribute", function(x) list())
+
 setMethod("collectConceptSetAttributeUsage", "conceptSetAttribute", function(x) {
   list(list(id = x@conceptSet@id, name = x@name))
 })
@@ -433,6 +483,10 @@ setMethod("collectConceptSetAttributeUsage", "Query", function(x) {
   conceptSetAttrs <- purrr::keep(x@attributes, ~methods::is(.x, "conceptSetAttribute"))
   if (length(conceptSetAttrs) > 0) {
     out <- c(out, purrr::list_flatten(purrr::map(conceptSetAttrs, collectConceptSetAttributeUsage)))
+  }
+  criteriaListAttrs <- purrr::keep(x@attributes, ~methods::is(.x, "criteriaListAttribute"))
+  if (length(criteriaListAttrs) > 0) {
+    out <- c(out, purrr::list_flatten(purrr::map(criteriaListAttrs, collectConceptSetAttributeUsage)))
   }
   out
 })

@@ -108,6 +108,22 @@ visitTypeCS <- function(conceptSet, isExclusion = FALSE) {
   newConceptSetSelection(conceptSet, "VisitTypeCS", isExclusion)
 }
 
+#' Episode type filter via concept set (ConceptSetSelection)
+#' @inheritParams conditionTypeCS
+#' @return An attribute for use in \code{episode()}.
+#' @export
+episodeTypeCS <- function(conceptSet, isExclusion = FALSE) {
+  newConceptSetSelection(conceptSet, "EpisodeTypeCS", isExclusion)
+}
+
+#' Episode object concept filter via concept set (ConceptSetSelection)
+#' @inheritParams conditionTypeCS
+#' @return An attribute for use in \code{episode()}.
+#' @export
+episodeObjectConceptCS <- function(conceptSet, isExclusion = FALSE) {
+  newConceptSetSelection(conceptSet, "EpisodeObjectConceptCS", isExclusion)
+}
+
 #' ObservationPeriod period type filter via concept set (ConceptSetSelection)
 #' @inheritParams conditionTypeCS
 #' @return An attribute for use in \code{observationPeriod()}.

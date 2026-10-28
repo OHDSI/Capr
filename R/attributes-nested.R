@@ -70,3 +70,52 @@ setMethod("as.list", "nestedAttribute", function(x) {
   nm <- x@name
   tibble::lst(`:=`(!!nm, as.list(x@group)))
 })
+
+# Custom Era attributes ----------------------------
+
+#' An S4 class for a CustomEra criteria list
+#' @slot criteria a list of Query objects
+setClass("criteriaListAttribute",
+         slots = c(name = "character", criteria = "list"),
+         prototype = list(name = "CriteriaList", criteria = list()))
+
+#' An S4 class for a CustomEra gap-days value
+#' @slot value integer number of gap days
+setClass("gapDaysAttribute",
+         slots = c(name = "character", value = "integer"),
+         prototype = list(name = "GapDays", value = 0L))
+
+#' Construct the criteria list for a custom era
+#' @param criteria A list of \code{Query} objects.
+#' @return An attribute for use in \code{\link{customEra}()}.
+#' @export
+customEraCriteria <- function(criteria) {
+  if (!is.list(criteria) || length(criteria) == 0) {
+    stop("criteria must be a non-empty list of Query objects.")
+  }
+  isQuery <- vapply(criteria, function(x) methods::is(x, "Query"), logical(1))
+  if (!all(isQuery)) {
+    stop("criteria must contain only Query objects.")
+  }
+  methods::new("criteriaListAttribute", criteria = criteria)
+}
+
+#' Set the gap days for a custom era
+#' @param x Integer number of days between adjacent events to merge.
+#' @return An attribute for use in \code{\link{customEra}()}.
+#' @export
+customEraGapDays <- function(x) {
+  x <- as.integer(x)
+  if (length(x) != 1L || is.na(x) || x < 0L) {
+    stop("x must be a single non-negative integer.")
+  }
+  methods::new("gapDaysAttribute", value = x)
+}
+
+setMethod("as.list", "criteriaListAttribute", function(x) {
+  list(CriteriaList = lapply(x@criteria, as.list))
+})
+
+setMethod("as.list", "gapDaysAttribute", function(x) {
+  list(GapDays = as.integer(x@value))
+})

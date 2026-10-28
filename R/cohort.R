@@ -413,7 +413,7 @@ toCirce <- function(cd) {
 
   # ValueAsConcept and VisitType are serialized inline (array of concepts); do not list those
   # concept sets in ConceptSets or Circe would create an extra codeset and concept set count would differ.
-  allSets <- listConceptSets(cd2)
+  allSets <- unname(listConceptSets(cd2))
   usage <- collectConceptSetAttributeUsage(cd2)
   idsByUsage <- split(
     vapply(usage, function(u) u$id, integer(1L)),
